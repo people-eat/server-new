@@ -1,0 +1,23 @@
+type Query {
+    termsUpdates: TermsUpdateQuery!
+}
+
+type Mutation {
+    termsUpdates: TermsUpdateMutation!
+}
+
+type TermsUpdateQuery {
+    findMany: [TermsUpdate!]
+}
+
+type TermsUpdateMutation {
+    createOne: Boolean!
+}
+
+type TermsUpdate {
+    termsUpdateId: String!
+    germanText: String!
+    englishText: String!
+    adminId: String!
+    createdAt: DateTime!
+}

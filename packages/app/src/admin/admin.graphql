@@ -1,0 +1,21 @@
+type Query {
+    admins: AdminQuery!
+}
+
+type Mutation {
+    admins: AdminMutation!
+}
+
+type AdminQuery {
+    findOne(adminId: String!): Admin
+    findMany: [Admin!]
+}
+
+type AdminMutation {
+    createOne(adminId: String!): Boolean!
+}
+
+type Admin {
+    adminId: String!
+    createdAt: DateTime!
+}

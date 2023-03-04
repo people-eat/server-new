@@ -1,0 +1,21 @@
+{
+    "extends": "./tsconfig.build.json",
+    "compilerOptions": {
+        "baseUrl": "./packages",
+        "paths": {
+            "@people-eat/server-app": ["app/src"],
+            "@people-eat/server-domain": ["domain/src"],
+            "@people-eat/server-adapter-database-typeorm": ["adapter-database-typeorm/src"],
+            "@people-eat/server-adapter-logger": ["adapter-logger/src"],
+            "@people-eat/server-adapter-file-store": ["adapter-file-store/src"],
+            "@people-eat/server-adapter-email-nodemailer": ["adapter-email-nodemailer/src"],
+            "@people-eat/server-adapter-sms-twilio": ["adapter-sms-twilio/src"],
+            "@people-eat/server-adapter-email-renderer": ["adapter-email-renderer/src"],
+            "@people-eat/server-adapter-identity-provider": ["adapter-identity-provider/src"],
+            "@people-eat/server-adapter-payment-provider": ["adapter-payment-provider/src"],
+            "@people-eat/server-adapter-host-development": ["adapter-host-development/src"],
+            "@people-eat/server-adapter-host-integration": ["adapter-host-integration/src"],
+            "@people-eat/server-adapter-host-production": ["adapter-host-production/src"]
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "name": "@people-eat/server-adapter-host-production",
+    "version": "0.0.0",
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "build": "npm run clean && npm run compile",
+        "clean": "rm -rf ./dist",
+        "compile": "tsc -p tsconfig.build.json",
+        "npm-check": "npm-check -i @people-eat/*",
+        "watch": "tsc -p tsconfig.build.json --watch"
+    },
+    "dependencies": {
+        "@people-eat/server-adapter-database-typeorm": "*",
+        "@people-eat/server-adapter-email-nodemailer": "*",
+        "@people-eat/server-adapter-email-renderer": "*",
+        "@people-eat/server-adapter-identity-provider": "*",
+        "@people-eat/server-adapter-logger": "*",
+        "@people-eat/server-adapter-payment-provider": "*",
+        "@people-eat/server-adapter-sms-twilio": "*",
+        "@people-eat/server-app": "*",
+        "@people-eat/server-domain": "*",
+        "dotenv": "^16.0.3"
+    },
+    "devDependencies": {}
+}

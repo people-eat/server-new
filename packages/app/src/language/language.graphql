@@ -1,0 +1,24 @@
+type Query {
+    languages: LanguageQuery!
+}
+
+type Mutation {
+    languages: LanguageMutation!
+}
+
+type LanguageQuery {
+    findMany: [Language!]
+}
+
+type LanguageMutation {
+    createOne(request: CreateOneLanguageRequest!): Boolean!
+}
+
+type Language {
+    languageId: String!
+    title: String!
+}
+
+input CreateOneLanguageRequest {
+    title: String!
+}

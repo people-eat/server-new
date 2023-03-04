@@ -1,0 +1,57 @@
+type CookQuery {
+    menus(cookId: String!): MenuQuery!
+}
+
+type CookMutation {
+    menus(cookId: String!): MenuMutation!
+}
+
+type Menu {
+    menuId: String!
+    cookId: String!
+    isVisible: Boolean!
+    title: String!
+    description: String!
+    preparationTime: UInt!
+    kitchenId: String
+    greetingFromKitchen: Boolean!
+    basePrice: UInt!
+    basePriceCustomers: UInt!
+    pricePerAdult: UInt!
+    pricePerChild: UInt
+    currencyCode: CurrencyCode!
+    createdAt: DateTime!
+
+    cook: Cook!
+    kitchen: Kitchen
+    categories: [Category!]!
+}
+
+type MenuQuery {
+    cookId: String!
+    findOne(menuId: String!): Menu
+    findMany(request: FindManyMenusRequest!): [Menu!]
+}
+
+input FindManyMenusRequest {
+    searchText: String
+}
+
+type MenuMutation {
+    cookId: String!
+    createOne(menu: CreateOneMenuRequest!): Boolean!
+}
+
+input CreateOneMenuRequest {
+    isVisible: Boolean!
+    title: String!
+    description: String!
+    preparationTime: UInt!
+    kitchenId: String
+    greetingFromKitchen: Boolean!
+    basePrice: UInt!
+    basePriceCustomers: UInt!
+    pricePerAdult: UInt!
+    pricePerChild: UInt
+    currencyCode: CurrencyCode!
+}

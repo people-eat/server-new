@@ -1,0 +1,21 @@
+type UserQuery {
+    notificationConfigurations(userId: String!): NotificationConfigurationQuery!
+}
+
+type UserMutation {
+    notificationConfigurations(userId: String!): NotificationConfigurationMutation!
+}
+
+type NotificationConfiguration {
+    userId: String!
+    createdAt: DateTime!
+}
+
+type NotificationConfigurationQuery {
+    userId: String!
+    findOne: NotificationConfiguration
+}
+
+type NotificationConfigurationMutation {
+    userId: String!
+}

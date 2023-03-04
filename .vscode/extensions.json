@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "editorconfig.editorconfig",
+        "graphql.vscode-graphql",
+        "nrwl.angular-console",
+        "streetsidesoftware.code-spell-checker"
+    ]
+}

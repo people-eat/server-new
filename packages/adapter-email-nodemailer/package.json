@@ -1,0 +1,22 @@
+{
+    "name": "@people-eat/server-adapter-email-nodemailer",
+    "version": "0.0.0",
+    "license": "MIT",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.js",
+    "scripts": {
+        "build": "npm run clean && npm run compile",
+        "clean": "rm -rf ./dist",
+        "compile": "tsc -p tsconfig.build.json",
+        "npm-check": "npm-check -i @people-eat/*",
+        "watch": "tsc -p tsconfig.build.json --watch"
+    },
+    "dependencies": {
+        "@people-eat/server-domain": "*",
+        "nodemailer": "^6.9.1"
+    },
+    "devDependencies": {
+        "@types/nodemailer": "^6.4.7"
+    }
+}

@@ -1,0 +1,4 @@
+type PublicUser {
+    firstName: String!
+    profilePictureUrl: Url
+}

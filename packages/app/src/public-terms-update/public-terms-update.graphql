@@ -1,0 +1,14 @@
+type Query {
+    publicTermsUpdates: PublicTermsUpdateQuery!
+}
+
+type PublicTermsUpdateQuery {
+    findMany: [PublicTermsUpdate!]
+    findLatest: PublicTermsUpdate
+}
+
+type PublicTermsUpdate {
+    germanText: String!
+    englishText: String!
+    createdAt: DateTime
+}

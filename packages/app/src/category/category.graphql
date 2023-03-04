@@ -1,0 +1,24 @@
+type Query {
+    categories: CategoryQuery!
+}
+
+type Mutation {
+    categories: CategoryMutation!
+}
+
+type CategoryQuery {
+    findMany: [Category!]
+}
+
+type CategoryMutation {
+    createOne(request: CreateOneCategoryRequest!): Boolean!
+}
+
+type Category {
+    categoryId: String!
+    title: String!
+}
+
+input CreateOneCategoryRequest {
+    title: String!
+}

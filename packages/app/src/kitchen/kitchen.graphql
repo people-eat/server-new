@@ -1,0 +1,24 @@
+type Query {
+    kitchens: KitchenQuery!
+}
+
+type Mutation {
+    kitchens: KitchenMutation!
+}
+
+type KitchenQuery {
+    findMany: [Kitchen!]
+}
+
+type KitchenMutation {
+    createOne(request: CreateOneKitchenRequest!): Boolean!
+}
+
+type Kitchen {
+    kitchenId: String!
+    title: String!
+}
+
+input CreateOneKitchenRequest {
+    title: String!
+}

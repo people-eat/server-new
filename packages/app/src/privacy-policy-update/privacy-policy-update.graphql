@@ -1,0 +1,26 @@
+type Query {
+    privacyPolicyUpdates: PrivacyPolicyUpdateQuery!
+}
+
+type Mutation {
+    privacyPolicyUpdates: PrivacyPolicyUpdateMutation!
+}
+
+type PrivacyPolicyUpdateQuery {
+    findMany: [PrivacyPolicyUpdate!]
+    findLatest: PrivacyPolicyUpdate
+}
+
+type PrivacyPolicyUpdateMutation {
+    createOne: Boolean!
+}
+
+type PrivacyPolicyUpdate {
+    privacyPolicyUpdateId: String!
+    germanText: String!
+    englishText: String!
+    adminId: String!
+    createdAt: DateTime
+
+    admin: Admin!
+}

@@ -1,0 +1,14 @@
+type Query {
+    publicPrivacyPolicyUpdates: PublicPrivacyPolicyUpdateQuery!
+}
+
+type PublicPrivacyPolicyUpdateQuery {
+    findMany: [PublicPrivacyPolicyUpdate!]
+    findLatest: PublicPrivacyPolicyUpdate
+}
+
+type PublicPrivacyPolicyUpdate {
+    germanText: String!
+    englishText: String!
+    createdAt: DateTime
+}

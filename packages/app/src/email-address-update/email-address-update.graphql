@@ -1,0 +1,23 @@
+type UserQuery {
+    emailAddressUpdates(userId: String!): EmailAddressUpdateQuery!
+}
+
+type UserMutation {
+    emailAddressUpdates(userId: String!): EmailAddressUpdateMutation!
+}
+
+type EmailAddressUpdate {
+    userId: String!
+    emailAddress: EmailAddress!
+    createdAt: DateTime!
+}
+
+type EmailAddressUpdateQuery {
+    userId: String!
+    findOne: EmailAddressUpdate
+}
+
+type EmailAddressUpdateMutation {
+    userId: String!
+    createOne(emailAddress: EmailAddress!): Boolean!
+}

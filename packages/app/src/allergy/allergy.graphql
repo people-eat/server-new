@@ -1,0 +1,24 @@
+type Query {
+    allergies: AllergyQuery!
+}
+
+type Mutation {
+    allergies: AllergyMutation!
+}
+
+type AllergyQuery {
+    findMany: [Allergy!]
+}
+
+type AllergyMutation {
+    createOne(request: CreateOneAllergyRequest!): Boolean!
+}
+
+type Allergy {
+    allergyId: String!
+    title: String!
+}
+
+input CreateOneAllergyRequest {
+    title: String!
+}

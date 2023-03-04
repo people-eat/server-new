@@ -1,0 +1,102 @@
+scalar UUID
+scalar EmailAddress
+scalar PhoneNumber
+scalar Latitude
+scalar Longitude
+scalar Date
+scalar DateTime
+scalar UInt
+scalar Url
+
+type Query {
+    payments: PaymentQuery!
+    status: StatusQuery!
+}
+
+type PaymentQuery {
+    stripe: StripeQuery!
+}
+
+type StripeQuery {
+    publishableKey: String!
+}
+
+type StatusQuery {
+    latestIosVersion: String!
+}
+
+# type Mutation {}
+# type Subscription {}
+
+enum Gender {
+    MALE
+    FEMALE
+    DIVERSE
+    NO_INFORMATION
+}
+
+enum Platform {
+    IOS
+    ANDROID
+    BROWSER
+    NO_INFORMATION
+}
+
+enum UserLanguage {
+    GERMAN
+    ENGLISH
+}
+
+enum IdentityProvider {
+    APPLE
+    GOOGLE
+}
+
+enum CurrencyCode {
+    EUR
+    USD
+}
+
+input LocationInput {
+    latitude: Latitude!
+    longitude: Longitude!
+}
+
+input PriceInput {
+    amount: UInt!
+    currencyCode: CurrencyCode!
+}
+
+type Location {
+    latitude: Latitude!
+    longitude: Longitude!
+}
+
+type Price {
+    amount: UInt!
+    currencyCode: CurrencyCode!
+}
+
+enum CookRank {
+    HOBBY
+    PROFESSIONAL
+    MASTER
+}
+
+type PublicUser {
+    userId: String!
+    firstName: String!
+    profilePictureUrl: Url
+}
+
+enum MealType {
+    STARTER
+    MAIN_COURSE
+    DESSERT
+}
+
+input FindManyRequest {
+    searchText: String
+    skip: UInt
+    take: UInt
+}
