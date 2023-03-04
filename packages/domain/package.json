@@ -1,0 +1,23 @@
+{
+    "name": "@people-eat/server-domain",
+    "version": "0.0.0",
+    "license": "MIT",
+    "type": "module",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "npm run clean && npm run compile",
+        "clean": "rm -rf ./dist",
+        "compile": "tsc -p tsconfig.build.json",
+        "npm-check": "npm-check -i @people-eat/*",
+        "watch": "tsc -p tsconfig.build.json --watch"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "nanoid": "^4.0.1",
+        "uuid": "^9.0.0"
+    },
+    "devDependencies": {
+        "@types/bcryptjs": "^2.4.2",
+        "@types/uuid": "^9.0.1"
+    }
+}

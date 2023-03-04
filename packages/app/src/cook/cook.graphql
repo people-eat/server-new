@@ -1,0 +1,49 @@
+type Query {
+    cooks: CookQuery!
+}
+
+type Mutation {
+    cooks: CookMutation!
+}
+
+type Cook {
+    cookId: String!
+    isLocked: Boolean!
+    isVisible: Boolean!
+    location: Location!
+    rank: CookRank!
+    biography: String!
+    travelExpenses: UInt!
+    maximumTravelDistance: UInt
+    minimumPrice: UInt
+    maximumPrice: UInt
+    minimumParticipants: UInt
+    maximumParticipants: UInt
+    createdAt: DateTime!
+}
+
+type CookQuery {
+    findOne(cookId: String!): Cook
+    findMany(request: FindManyCooksRequest!): [Cook!]
+}
+
+input FindManyCooksRequest {
+    searchText: String
+}
+
+type CookMutation {
+    createOne(cook: CreateOneCookRequest!): Boolean!
+}
+
+input CreateOneCookRequest {
+    isVisible: Boolean!
+    location: LocationInput!
+    rank: CookRank!
+    biography: String!
+    travelExpenses: UInt!
+    maximumTravelDistance: UInt
+    minimumPrice: UInt
+    maximumPrice: UInt
+    minimumParticipants: UInt
+    maximumParticipants: UInt
+}

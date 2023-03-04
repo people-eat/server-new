@@ -1,0 +1,23 @@
+type Query {
+    phoneNumberUpdates(userId: String!): PhoneNumberUpdateQuery!
+}
+
+type Mutation {
+    phoneNumberUpdates(userId: String!): PhoneNumberUpdateMutation!
+}
+
+type PhoneNumberUpdate {
+    userId: String!
+    phoneNumber: PhoneNumber!
+    createdAt: DateTime!
+}
+
+type PhoneNumberUpdateQuery {
+    userId: String!
+    findMany: [PhoneNumberUpdate!]
+}
+
+type PhoneNumberUpdateMutation {
+    userId: String!
+    createOne(phoneNumber: PhoneNumber!): Boolean!
+}

@@ -1,0 +1,40 @@
+{
+    "name": "@people-eat/server-app",
+    "version": "0.0.0",
+    "license": "MIT",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.js",
+    "scripts": {
+        "build": "npm run clean && npm run compile",
+        "clean": "rm -rf ./dist",
+        "compile": "tsc -p tsconfig.build.json",
+        "generate-graphql": "gql-gen --config graphql-codegen.yaml",
+        "npm-check": "npm-check -i @people-eat/*",
+        "watch": "tsc -p tsconfig.build.json --watch"
+    },
+    "dependencies": {
+        "@apollo/server": "^4.4.1",
+        "@graphql-tools/schema": "9.0.16",
+        "@people-eat/server-domain": "*",
+        "body-parser": "^1.20.2",
+        "cookie-parser": "^1.4.6",
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "graphql": "^16.6.0",
+        "graphql-scalars": "^1.20.1",
+        "graphql-subscriptions": "^2.0.0",
+        "graphql-upload": "^16.0.2",
+        "graphql-ws": "^5.11.2",
+        "ws": "8.12.1"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.21.0",
+        "@graphql-codegen/cli": "^3.2.1",
+        "@graphql-codegen/introspection": "^3.0.1",
+        "@graphql-codegen/typescript": "^3.0.1",
+        "@graphql-codegen/typescript-resolvers": "^3.1.0",
+        "@types/cookie-parser": "^1.4.3",
+        "@types/cors": "^2.8.13"
+    }
+}

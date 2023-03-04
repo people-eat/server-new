@@ -1,0 +1,39 @@
+type Query {
+    addresses(userId: String!): AddressQuery!
+}
+
+type Mutation {
+    addresses(userId: String!): AddressMutation!
+}
+
+type Address {
+    addressId: String!
+    title: String!
+    country: String!
+    city: String!
+    postCode: String!
+    street: String!
+    houseNumber: String!
+    location: Location!
+    createdAt: DateTime!
+}
+
+type AddressQuery {
+    userId: String!
+    findMany: [Address!]
+}
+
+type AddressMutation {
+    userId: String!
+    createOne(address: CreateOneAddressRequest!): Boolean!
+}
+
+input CreateOneAddressRequest {
+    title: String!
+    country: String!
+    city: String!
+    postCode: String!
+    street: String!
+    houseNumber: String!
+    location: LocationInput!
+}

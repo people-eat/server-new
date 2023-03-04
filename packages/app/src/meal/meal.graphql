@@ -1,0 +1,39 @@
+type Query {
+    meals(cookId: String!): MealQuery!
+}
+
+type Mutation {
+    meals(cookId: String!): MealMutation!
+}
+
+type Meal {
+    mealId: String!
+    cookId: String!
+    title: String!
+    description: String!
+    imageUrl: Url
+    type: MealType!
+    createdAt: DateTime!
+}
+
+type MealQuery {
+    cookId: String!
+    findOne(mealId: String!): Meal
+    findMany(request: FindManyMealsRequest!): [Meal!]
+}
+
+input FindManyMealsRequest {
+    searchText: String
+}
+
+type MealMutation {
+    cookId: String!
+    createOne(meal: CreateOneMealRequest!): Boolean!
+}
+
+input CreateOneMealRequest {
+    title: String!
+    description: String!
+    imageUrl: Url
+    type: MealType!
+}

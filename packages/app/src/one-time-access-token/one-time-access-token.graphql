@@ -1,0 +1,22 @@
+type Query {
+    oneTimeAccessTokens(userId: String!): OneTimeAccessTokenQuery!
+}
+
+type Mutation {
+    oneTimeAccessTokens(userId: String!): OneTimeAccessTokenMutation!
+}
+
+type OneTimeAccessToken {
+    userId: String!
+    createdAt: DateTime!
+}
+
+type OneTimeAccessTokenQuery {
+    userId: String!
+    findMany: [OneTimeAccessToken!]
+}
+
+type OneTimeAccessTokenMutation {
+    userId: String!
+    createOne: Boolean!
+}

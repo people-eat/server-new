@@ -1,0 +1,50 @@
+type Query {
+    sessions: SessionQuery!
+}
+
+type Mutation {
+    sessions: SessionMutation!
+}
+
+type Session {
+    sessionId: String!
+}
+
+type SessionQuery {
+    findMany(userId: String!): [Session!]
+}
+
+type SessionMutation {
+    assignOneByEmailAddress(request: CreateOneSessionByEmailAddressRequest!): Boolean!
+    assignOneByPhoneNumber(request: CreateOneSessionByPhoneNumberRequest!): Boolean!
+    assignOneByIdentityProvider(request: CreateOneSessionByIdentityProviderRequest!): Boolean!
+    expireOne(request: ExpireOneSessionRequest!): Boolean!
+}
+
+input CreateOneSessionByEmailAddressRequest {
+    emailAddress: EmailAddress!
+    password: String!
+    platform: Platform!
+    title: String!
+    pushToken: String
+}
+
+input CreateOneSessionByPhoneNumberRequest {
+    phoneNumber: String!
+    password: String!
+    platform: Platform!
+    title: String!
+    pushToken: String
+}
+
+input CreateOneSessionByIdentityProviderRequest {
+    identityProvider: IdentityProvider!
+    idToken: String!
+    title: String!
+    platform: Platform!
+}
+
+input ExpireOneSessionRequest {
+    sessionId: String!
+    userId: String!
+}

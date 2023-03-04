@@ -1,0 +1,71 @@
+type Query {
+    users: UserQuery!
+}
+
+type Mutation {
+    users: UserMutation!
+}
+
+type User {
+    userId: String!
+    emailAddress: EmailAddress
+    phoneNumber: PhoneNumber
+    firstName: String!
+    lastName: String!
+    gender: Gender!
+    birthDate: Date
+    profilePictureUrl: Url
+    acceptedPrivacyPolicy: DateTime!
+    acceptedTerms: DateTime!
+    createdAt: DateTime!
+}
+
+type UserQuery {
+    findMany(request: FindManyUsersRequest!): [User!]
+    findOne(userId: String!): User
+    me(pushToken: String): User
+}
+
+input FindManyUsersRequest {
+    pagination: FindManyRequest!
+}
+
+type UserMutation {
+    createOneByEmailAddress(request: CreateOneUserByEmailAddressRequest!): Boolean!
+    createOneByPhoneNumber(request: CreateOneUserByPhoneNumberRequest!): Boolean!
+    createOneByIdentityProvider(request: CreateOneUserByIdentityProviderRequest!): Boolean!
+
+    updateGender(gender: Gender!): Boolean!
+    acceptLatestPrivacyPolicy: Boolean!
+    acceptLatestTerms: Boolean!
+}
+
+input CreateOneUserByEmailAddressRequest {
+    emailAddress: EmailAddress!
+    password: String!
+    firstName: String!
+    lastName: String!
+    language: UserLanguage!
+    gender: Gender!
+    birthDate: Date
+}
+
+input CreateOneUserByPhoneNumberRequest {
+    phoneNumber: PhoneNumber!
+    password: String!
+    firstName: String!
+    lastName: String!
+    language: UserLanguage!
+    gender: Gender!
+    birthDate: Date
+}
+
+input CreateOneUserByIdentityProviderRequest {
+    identityProvider: IdentityProvider!
+    idToken: String!
+    firstName: String!
+    lastName: String!
+    language: UserLanguage!
+    gender: Gender!
+    birthDate: Date
+}

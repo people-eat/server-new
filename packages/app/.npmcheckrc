@@ -1,0 +1,10 @@
+{
+    "depcheck": {
+        "ignoreMatches": [
+            "@babel/core",
+            "@graphql-codegen/introspection",
+            "@graphql-codegen/typescript",
+            "@graphql-codegen/typescript-resolvers"
+        ]
+    }
+}
