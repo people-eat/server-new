@@ -1,0 +1,28 @@
+type Query {
+    publicMenus: PublicMenuQuery!
+}
+
+type PublicMenu {
+    menuId: String!
+    cookId: String!
+    cook: PublicCook
+    title: String!
+    description: String!
+    preparationTime: UInt!
+    kitchenId: String
+    greetingFromKitchen: Boolean!
+    basePrice: UInt!
+    basePriceCustomers: UInt!
+    pricePerAdult: UInt!
+    pricePerChild: UInt
+    createdAt: DateTime!
+}
+
+type PublicMenuQuery {
+    findOne(menuId: String!): PublicMenu
+    findMany(request: FindManyPublicMenusRequest!): [PublicMenu!]
+}
+
+input FindManyPublicMenusRequest {
+    searchText: String
+}

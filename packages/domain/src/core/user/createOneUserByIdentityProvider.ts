@@ -1,7 +1,7 @@
 import { Authorization, Database, IdentityProvider, Logger } from '../../index.js';
 import createNanoId from '../../utils/createNanoId.js';
 import { IdentityProvider as IdentityProviderEnum } from '../shared.js';
-import { CreateOneUserRequest } from './CreateOneUserRequest';
+import { CreateOneUserRequest } from './CreateOneUserRequest.js';
 
 export interface CreateOneUserByIdentityProviderInput {
     databaseAdapter: Database.Adapter;

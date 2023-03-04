@@ -17,4 +17,7 @@ export class SearchRequestEntity implements Database.DBSearchRequest {
 
     @Column('float', { unsigned: true })
     longitude: number;
+
+    @Column('datetime')
+    createdAt: Date;
 }

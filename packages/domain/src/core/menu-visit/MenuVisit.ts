@@ -6,5 +6,5 @@ export interface MenuVisit {
     sessionId: string;
     userId?: string;
     platform: Platform;
-    createdAt: string;
+    createdAt: Date;
 }

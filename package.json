@@ -8,8 +8,7 @@
     "scripts": {
         "build": "nx run-many --target=build",
         "graph": "nx graph",
-        "preinstall": "sort-package-json package.json packages/**/package.json",
-        "postinstall": "yarn npm-check-all",
+        "postinstall": "sort-package-json package.json packages/**/package.json && yarn npm-check-all",
         "lint": "eslint packages/**/**.ts",
         "npm-check": "npm-check -i @people-eat/*",
         "npm-check-all": "nx run-many --target=npm-check && yarn npm-check",

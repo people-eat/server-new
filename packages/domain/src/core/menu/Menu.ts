@@ -1,4 +1,4 @@
-import { CurrencyCode } from '../shared';
+import { CurrencyCode } from '../shared.js';
 
 export interface Menu {
     menuId: string;

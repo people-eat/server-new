@@ -13,7 +13,7 @@ generates:
             maybeValue: 'T | undefined'
             enumsAsTypes: true
             enumValues:
-                Gender: '@people-eat/server-domain/src/core/shared#Gender'
+                Gender: '@people-eat/server-domain/src/core/shared.js#Gender'
             scalars:
                 Date: string
                 DateTime: Date

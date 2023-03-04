@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { Authorization, Database, Logger, SMS } from '../../index.js';
 import createNanoId from '../../utils/createNanoId.js';
 import { createOnePhoneNumberUpdate } from '../phone-number-update/index.js';
-import { CreateOneUserRequest } from './CreateOneUserRequest';
+import { CreateOneUserRequest } from './CreateOneUserRequest.js';
 
 export interface CreateOneUserByPhoneNumberInput {
     databaseAdapter: Database.Adapter;

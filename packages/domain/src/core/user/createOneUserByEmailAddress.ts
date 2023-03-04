@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { Authorization, Database, Email, Logger } from '../../index.js';
 import createNanoId from '../../utils/createNanoId.js';
 import { createOneEmailAddressUpdate } from '../email-address-update/index.js';
-import { CreateOneUserRequest } from './CreateOneUserRequest';
+import { CreateOneUserRequest } from './CreateOneUserRequest.js';
 
 export interface CreateOneUserByEmailAddressInput {
     databaseAdapter: Database.Adapter;

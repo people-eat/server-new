@@ -22,5 +22,5 @@ export class CookVisitEntity implements Database.DBCookVisit {
     platform: Shared.Platform;
 
     @Column('datetime')
-    createdAt: string;
+    createdAt: Date;
 }

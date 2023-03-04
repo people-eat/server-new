@@ -1,6 +1,6 @@
 import { Logger, SMS } from '@people-eat/server-domain';
 import twilio from 'twilio';
-import { MessageInstance } from 'twilio/lib/rest/api/v2010/account/message';
+import { MessageInstance } from 'twilio/lib/rest/api/v2010/account/message.js';
 
 export interface CreateSMSAdapterInput {
     logger: Logger.Adapter;

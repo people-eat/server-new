@@ -5,9 +5,11 @@
         "source.fixAll.eslint": true
     },
     "cSpell.words": [
+        "codepaths",
         "datetime",
         "jwks",
         "tinyint",
+        "tsbuildinfo",
         "twilio",
         "typeorm"
     ]

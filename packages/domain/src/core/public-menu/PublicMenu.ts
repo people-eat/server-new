@@ -3,7 +3,7 @@ export interface PublicMenu {
     cookId: string;
     title: string;
     description: string;
-    preparationTime: string;
+    preparationTime: number;
     kitchenId: string;
     greetingFromKitchen: boolean;
     basePrice: number;

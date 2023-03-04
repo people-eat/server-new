@@ -1,4 +1,4 @@
-import { Platform } from '../shared';
+import { Platform } from '../shared.js';
 
 export interface Session {
     sessionId: string;

@@ -1,4 +1,4 @@
-import { Location } from '../shared';
+import { Location } from '../shared.js';
 
 export interface CreateOneAddressRequest {
     title: string;

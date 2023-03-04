@@ -20,6 +20,7 @@
                 "no-duplicate-imports": "error",
                 "spaced-comment": "error",
                 "no-inline-comments": "error",
+                "@typescript-eslint/naming-convention": ["error", { "selector": "variableLike", "format": ["camelCase"] }],
                 "@typescript-eslint/no-shadow": "error",
                 "no-alert": "error",
                 "@typescript-eslint/explicit-function-return-type": "error",

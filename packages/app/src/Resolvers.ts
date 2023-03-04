@@ -1,4 +1,4 @@
-import { GQLResolvers } from './generated';
+import { GQLResolvers } from './generated.js';
 
 type NonOptional<T> = { [P in keyof T]-?: T[P] };
 
