@@ -19,7 +19,7 @@ import {
     URLResolver,
     UUIDResolver,
 } from 'graphql-scalars';
-import { PubSub } from 'graphql-subscriptions';
+// import { PubSub } from 'graphql-subscriptions';
 import { Disposable } from 'graphql-ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { createServer as createHttpServer, IncomingMessage, Server } from 'http';
@@ -170,7 +170,7 @@ export async function createServer({
         wsServer,
     );
 
-    const pubSub: PubSub = new PubSub();
+    // const pubSub: PubSub = new PubSub();
 
     const server: ApolloServer<Authorization.Context> = new ApolloServer<Authorization.Context>({
         schema,
