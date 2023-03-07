@@ -17,6 +17,8 @@ export async function createOneNotification({
     context,
     request: { userId, message, url },
 }: CreateOneNotificationInput): Promise<boolean> {
+    console.log(message, url);
+
     await Authorization.canMutateUserData({ databaseAdapter, logger, context, userId });
 
     return false;

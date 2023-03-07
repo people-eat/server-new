@@ -4,19 +4,19 @@ import { ReadStream } from 'fs';
 export function createFileStore(): FileStore.Adapter {
     return {
         profilePictures: {
-            save: async (userId: string, profilePicture: ReadStream) => false,
-            get: async (userId: string) => undefined,
-            delete: async (userId: string) => false,
+            save: async (_userId: string, _profilePicture: ReadStream) => false,
+            get: async (_userId: string) => undefined,
+            delete: async (_userId: string) => false,
         },
         mealImages: {
-            save: async (mealId: string, image: ReadStream) => false,
-            get: async (mealId: string) => undefined,
-            delete: async (mealId: string) => false,
+            save: async (_mealId: string, _image: ReadStream) => false,
+            get: async (_mealId: string) => undefined,
+            delete: async (_mealId: string) => false,
         },
         menuImages: {
-            save: async (menuId: string, image: ReadStream) => false,
-            get: async (menuId: string) => undefined,
-            delete: async (menuId: string) => false,
+            save: async (_menuId: string, _image: ReadStream) => false,
+            get: async (_menuId: string) => undefined,
+            delete: async (_menuId: string) => false,
         },
     };
 }

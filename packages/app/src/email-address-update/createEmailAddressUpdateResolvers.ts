@@ -19,7 +19,8 @@ export function createEmailAddressUpdateResolvers(
                 { userId }: GQLEmailAddressUpdateQuery,
                 _input: unknown,
                 context: Authorization.Context,
-            ): Promise<GQLEmailAddressUpdate[] | undefined> => undefined,
+            ): Promise<GQLEmailAddressUpdate[] | undefined> =>
+                EmailAddressUpdate.findManyEmailAddressUpdates({ databaseAdapter, logger, context, request: { userId } }),
         },
         EmailAddressUpdateMutation: {
             createOne: async (

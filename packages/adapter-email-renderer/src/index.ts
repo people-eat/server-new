@@ -5,6 +5,7 @@ export interface CreateEmailRendererInput {
 }
 
 export function createEmailRenderer({ logger }: CreateEmailRendererInput): Email.EmailRendererAdapter {
+    logger.debug('initialized email renderer');
     return {
         renderReceivedBookingRequestEmail(): Email.RenderedEmail {
             return { subject: '', body: '' };
