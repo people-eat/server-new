@@ -1,11 +1,5 @@
 {
     "depcheck": {
-        "ignoreMatches": [
-            "prettier-plugin-organize-imports",
-            "sort-package-json",
-            "@types/node",
-            "ts-node",
-            "typescript"
-        ]
+        "ignoreMatches": ["prettier-plugin-organize-imports", "sort-package-json", "@types/node", "ts-node", "typescript"]
     }
 }

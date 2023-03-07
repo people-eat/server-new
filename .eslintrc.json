@@ -1,7 +1,13 @@
 {
     "parser": "@typescript-eslint/parser",
     "plugins": ["@typescript-eslint"],
-    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended", "plugin:import/recommended", "plugin:import/typescript"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript"
+    ],
     "overrides": [
         {
             "files": ["*.ts"],
@@ -20,7 +26,10 @@
                 "no-duplicate-imports": "error",
                 "spaced-comment": "error",
                 "no-inline-comments": "error",
-                "@typescript-eslint/naming-convention": ["error", { "selector": "variableLike", "modifiers": ["unused"], "leadingUnderscore": "require", "format": ["camelCase"] }],
+                "@typescript-eslint/naming-convention": [
+                    "error",
+                    { "selector": "variableLike", "modifiers": ["unused"], "leadingUnderscore": "require", "format": ["camelCase"] }
+                ],
                 "@typescript-eslint/no-shadow": "error",
                 "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
                 "no-alert": "error",
