@@ -14,7 +14,8 @@
             "@people-eat/server-adapter-identity-provider": ["adapter-identity-provider/src"],
             "@people-eat/server-adapter-payment-provider": ["adapter-payment-provider/src"],
             "@people-eat/server-adapter-host-development": ["adapter-host-development/src"],
-            "@people-eat/server-adapter-host-integration": ["adapter-host-integration/src"]
+            "@people-eat/server-adapter-host-integration": ["adapter-host-integration/src"],
+            "@people-eat/server-adapter-host-production": ["adapter-host-production/src"]
         }
     }
 }
