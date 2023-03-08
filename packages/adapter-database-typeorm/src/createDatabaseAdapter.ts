@@ -4,14 +4,25 @@ import { DataSource } from 'typeorm';
 import createGenericRepository from './createGenericEntityRepository.js';
 import * as entities from './entities/index.js';
 
-export async function createDatabaseAdapter(logger: Logger.Adapter): Promise<Database.Adapter> {
+export interface CreateDatabaseAdapterOptions {
+    logger: Logger.Adapter;
+    connection: {
+        databaseHost: string;
+        databasePort: number;
+        databaseName: string;
+        databaseUser: string;
+        databasePassword: string;
+    };
+}
+
+export async function createDatabaseAdapter({ logger, connection }: CreateDatabaseAdapterOptions): Promise<Database.Adapter> {
     const AppDataSource: DataSource = new DataSource({
         type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        database: 'PeopleEatDB',
-        username: 'people-eat-server',
-        password: 'password',
+        host: connection.databaseHost,
+        port: connection.databasePort,
+        database: connection.databaseName,
+        username: connection.databaseUser,
+        password: connection.databasePassword,
         entities,
         synchronize: true,
         dropSchema: true,

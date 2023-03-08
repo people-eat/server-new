@@ -10,7 +10,16 @@ import { Database, Email, IdentityProvider, Logger, Payment, SMS } from '@people
 
 const logger: Logger.Adapter = createLogger();
 
-const databaseAdapter: Database.Adapter = await createDatabaseAdapter(logger);
+const databaseAdapter: Database.Adapter = await createDatabaseAdapter({
+    logger,
+    connection: {
+        databaseHost: 'localhost',
+        databasePort: 3306,
+        databaseName: 'PeopleEatDB',
+        databaseUser: 'people-eat-server',
+        databasePassword: 'password',
+    },
+});
 
 const emailAdapter: Email.EmailAdapter = createEmailAdapter({
     logger,
