@@ -1,0 +1,17 @@
+name: Try
+
+on:
+  push:
+    branches: [integration, production]
+  pull_request:
+    branches: [integration, production]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: View context attributes
+        uses: actions/github-script@v6
+        with:
+          script: console.log(context); console.log(context.payload.repository.html_url);
