@@ -20,7 +20,13 @@ type User {
     createdAt: DateTime!
 
     isCook: Boolean!
+    cook: Cook
+
     isAdmin: Boolean!
+    admin: Admin
+
+    addresses: [Address!]!
+    addressCount: UInt!
 }
 
 type UserQuery {
@@ -38,9 +44,13 @@ type UserMutation {
     createOneByPhoneNumber(request: CreateOneUserByPhoneNumberRequest!): Boolean!
     createOneByIdentityProvider(request: CreateOneUserByIdentityProviderRequest!): Boolean!
 
-    updateGender(gender: Gender!): Boolean!
+    updateProfilePicture(userId: String!, profilePicture: Upload): Boolean!
+    updateGender(userId: String!, gender: Gender!): Boolean!
+    updatePassword(userId: String!, password: String!): Boolean!
     acceptLatestPrivacyPolicy: Boolean!
     acceptLatestTerms: Boolean!
+
+    lockOne(userId: String!): Boolean!
 }
 
 input CreateOneUserByEmailAddressRequest {

@@ -23,6 +23,7 @@ export type Scalars = {
     PhoneNumber: string;
     UInt: number;
     UUID: string;
+    Upload: any;
     Url: string;
 };
 
@@ -327,6 +328,26 @@ export type GQLEmailAddressUpdateQuery = {
 export type GQLExpireOneSessionRequest = {
     sessionId: Scalars['String'];
     userId: Scalars['String'];
+};
+
+export type GQLFavoriteCook = {
+    __typename?: 'FavoriteCook';
+    cook: GQLCook;
+    cookId: Scalars['String'];
+    createdAt: Scalars['DateTime'];
+    user: GQLUser;
+    userId: Scalars['String'];
+};
+
+export type GQLFavoriteCookMutation = {
+    __typename?: 'FavoriteCookMutation';
+    createOne: Scalars['Boolean'];
+    deleteOne: Scalars['Boolean'];
+};
+
+export type GQLFavoriteCookQuery = {
+    __typename?: 'FavoriteCookQuery';
+    findMany: Array<GQLFavoriteCook>;
 };
 
 export type GQLFindManyCooksRequest = {
@@ -816,7 +837,11 @@ export type GQLUser = {
     __typename?: 'User';
     acceptedPrivacyPolicy: Scalars['DateTime'];
     acceptedTerms: Scalars['DateTime'];
+    addressCount: Scalars['UInt'];
+    addresses: Array<GQLAddress>;
+    admin?: Maybe<GQLAdmin>;
     birthDate?: Maybe<Scalars['Date']>;
+    cook?: Maybe<GQLCook>;
     createdAt: Scalars['DateTime'];
     emailAddress?: Maybe<Scalars['EmailAddress']>;
     firstName: Scalars['String'];
@@ -840,12 +865,16 @@ export type GQLUserMutation = {
     createOneByIdentityProvider: Scalars['Boolean'];
     createOneByPhoneNumber: Scalars['Boolean'];
     emailAddressUpdates: GQLEmailAddressUpdateMutation;
+    favoriteCooks: GQLFavoriteCookQuery;
+    lockOne: Scalars['Boolean'];
     notificationConfigurations: GQLNotificationConfigurationMutation;
     notifications: GQLNotificationMutation;
     oneTimeAccessTokens: GQLOneTimeAccessTokenMutation;
     phoneNumberUpdates: GQLPhoneNumberUpdateMutation;
     sessions: GQLUserSessionMutation;
     updateGender: Scalars['Boolean'];
+    updatePassword: Scalars['Boolean'];
+    updateProfilePicture: Scalars['Boolean'];
 };
 
 export type GQLUserMutationAddressesArgs = {
@@ -865,6 +894,14 @@ export type GQLUserMutationCreateOneByPhoneNumberArgs = {
 };
 
 export type GQLUserMutationEmailAddressUpdatesArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserMutationFavoriteCooksArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserMutationLockOneArgs = {
     userId: Scalars['String'];
 };
 
@@ -890,12 +927,24 @@ export type GQLUserMutationSessionsArgs = {
 
 export type GQLUserMutationUpdateGenderArgs = {
     gender: Gender;
+    userId: Scalars['String'];
+};
+
+export type GQLUserMutationUpdatePasswordArgs = {
+    password: Scalars['String'];
+    userId: Scalars['String'];
+};
+
+export type GQLUserMutationUpdateProfilePictureArgs = {
+    profilePicture?: InputMaybe<Scalars['Upload']>;
+    userId: Scalars['String'];
 };
 
 export type GQLUserQuery = {
     __typename?: 'UserQuery';
     addresses: GQLAddressQuery;
     emailAddressUpdates: GQLEmailAddressUpdateQuery;
+    favoriteCooks: GQLFavoriteCookQuery;
     findMany?: Maybe<Array<GQLUser>>;
     findOne?: Maybe<GQLUser>;
     me?: Maybe<GQLUser>;
@@ -911,6 +960,10 @@ export type GQLUserQueryAddressesArgs = {
 };
 
 export type GQLUserQueryEmailAddressUpdatesArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserQueryFavoriteCooksArgs = {
     userId: Scalars['String'];
 };
 
@@ -1068,6 +1121,9 @@ export type GQLResolversTypes = {
     EmailAddressUpdateMutation: ResolverTypeWrapper<GQLEmailAddressUpdateMutation>;
     EmailAddressUpdateQuery: ResolverTypeWrapper<GQLEmailAddressUpdateQuery>;
     ExpireOneSessionRequest: GQLExpireOneSessionRequest;
+    FavoriteCook: ResolverTypeWrapper<GQLFavoriteCook>;
+    FavoriteCookMutation: ResolverTypeWrapper<GQLFavoriteCookMutation>;
+    FavoriteCookQuery: ResolverTypeWrapper<GQLFavoriteCookQuery>;
     FindManyCooksRequest: GQLFindManyCooksRequest;
     FindManyMealsRequest: GQLFindManyMealsRequest;
     FindManyMenusRequest: GQLFindManyMenusRequest;
@@ -1136,6 +1192,7 @@ export type GQLResolversTypes = {
     TermsUpdateQuery: ResolverTypeWrapper<GQLTermsUpdateQuery>;
     UInt: ResolverTypeWrapper<Scalars['UInt']>;
     UUID: ResolverTypeWrapper<Scalars['UUID']>;
+    Upload: ResolverTypeWrapper<Scalars['Upload']>;
     Url: ResolverTypeWrapper<Scalars['Url']>;
     User: ResolverTypeWrapper<GQLUser>;
     UserLanguage: GQLUserLanguage;
@@ -1183,6 +1240,9 @@ export type GQLResolversParentTypes = {
     EmailAddressUpdateMutation: GQLEmailAddressUpdateMutation;
     EmailAddressUpdateQuery: GQLEmailAddressUpdateQuery;
     ExpireOneSessionRequest: GQLExpireOneSessionRequest;
+    FavoriteCook: GQLFavoriteCook;
+    FavoriteCookMutation: GQLFavoriteCookMutation;
+    FavoriteCookQuery: GQLFavoriteCookQuery;
     FindManyCooksRequest: GQLFindManyCooksRequest;
     FindManyMealsRequest: GQLFindManyMealsRequest;
     FindManyMenusRequest: GQLFindManyMenusRequest;
@@ -1247,6 +1307,7 @@ export type GQLResolversParentTypes = {
     TermsUpdateQuery: GQLTermsUpdateQuery;
     UInt: Scalars['UInt'];
     UUID: Scalars['UUID'];
+    Upload: Scalars['Upload'];
     Url: Scalars['Url'];
     User: GQLUser;
     UserMutation: GQLUserMutation;
@@ -1456,6 +1517,35 @@ export type GQLEmailAddressUpdateQueryResolvers<
 > = {
     findOne?: Resolver<Maybe<GQLResolversTypes['EmailAddressUpdate']>, ParentType, ContextType>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLFavoriteCookResolvers<
+    ContextType = Context,
+    ParentType extends GQLResolversParentTypes['FavoriteCook'] = GQLResolversParentTypes['FavoriteCook'],
+> = {
+    cook?: Resolver<GQLResolversTypes['Cook'], ParentType, ContextType>;
+    cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    user?: Resolver<GQLResolversTypes['User'], ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLFavoriteCookMutationResolvers<
+    ContextType = Context,
+    ParentType extends GQLResolversParentTypes['FavoriteCookMutation'] = GQLResolversParentTypes['FavoriteCookMutation'],
+> = {
+    createOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    deleteOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLFavoriteCookQueryResolvers<
+    ContextType = Context,
+    ParentType extends GQLResolversParentTypes['FavoriteCookQuery'] = GQLResolversParentTypes['FavoriteCookQuery'],
+> = {
+    findMany?: Resolver<Array<GQLResolversTypes['FavoriteCook']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2050,6 +2140,10 @@ export interface GQLUuidScalarConfig extends GraphQLScalarTypeConfig<GQLResolver
     name: 'UUID';
 }
 
+export interface GQLUploadScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['Upload'], any> {
+    name: 'Upload';
+}
+
 export interface GQLUrlScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['Url'], any> {
     name: 'Url';
 }
@@ -2060,7 +2154,11 @@ export type GQLUserResolvers<
 > = {
     acceptedPrivacyPolicy?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     acceptedTerms?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    addressCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    addresses?: Resolver<Array<GQLResolversTypes['Address']>, ParentType, ContextType>;
+    admin?: Resolver<Maybe<GQLResolversTypes['Admin']>, ParentType, ContextType>;
     birthDate?: Resolver<Maybe<GQLResolversTypes['Date']>, ParentType, ContextType>;
+    cook?: Resolver<Maybe<GQLResolversTypes['Cook']>, ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     emailAddress?: Resolver<Maybe<GQLResolversTypes['EmailAddress']>, ParentType, ContextType>;
     firstName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2110,6 +2208,13 @@ export type GQLUserMutationResolvers<
         ContextType,
         RequireFields<GQLUserMutationEmailAddressUpdatesArgs, 'userId'>
     >;
+    favoriteCooks?: Resolver<
+        GQLResolversTypes['FavoriteCookQuery'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationFavoriteCooksArgs, 'userId'>
+    >;
+    lockOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType, RequireFields<GQLUserMutationLockOneArgs, 'userId'>>;
     notificationConfigurations?: Resolver<
         GQLResolversTypes['NotificationConfigurationMutation'],
         ParentType,
@@ -2144,7 +2249,19 @@ export type GQLUserMutationResolvers<
         GQLResolversTypes['Boolean'],
         ParentType,
         ContextType,
-        RequireFields<GQLUserMutationUpdateGenderArgs, 'gender'>
+        RequireFields<GQLUserMutationUpdateGenderArgs, 'gender' | 'userId'>
+    >;
+    updatePassword?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationUpdatePasswordArgs, 'password' | 'userId'>
+    >;
+    updateProfilePicture?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationUpdateProfilePictureArgs, 'userId'>
     >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2159,6 +2276,12 @@ export type GQLUserQueryResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLUserQueryEmailAddressUpdatesArgs, 'userId'>
+    >;
+    favoriteCooks?: Resolver<
+        GQLResolversTypes['FavoriteCookQuery'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserQueryFavoriteCooksArgs, 'userId'>
     >;
     findMany?: Resolver<
         Maybe<Array<GQLResolversTypes['User']>>,
@@ -2238,6 +2361,9 @@ export type GQLResolvers<ContextType = Context> = {
     EmailAddressUpdate?: GQLEmailAddressUpdateResolvers<ContextType>;
     EmailAddressUpdateMutation?: GQLEmailAddressUpdateMutationResolvers<ContextType>;
     EmailAddressUpdateQuery?: GQLEmailAddressUpdateQueryResolvers<ContextType>;
+    FavoriteCook?: GQLFavoriteCookResolvers<ContextType>;
+    FavoriteCookMutation?: GQLFavoriteCookMutationResolvers<ContextType>;
+    FavoriteCookQuery?: GQLFavoriteCookQueryResolvers<ContextType>;
     Gender?: GQLGenderResolvers;
     Kitchen?: GQLKitchenResolvers<ContextType>;
     KitchenMutation?: GQLKitchenMutationResolvers<ContextType>;
@@ -2293,6 +2419,7 @@ export type GQLResolvers<ContextType = Context> = {
     TermsUpdateQuery?: GQLTermsUpdateQueryResolvers<ContextType>;
     UInt?: GraphQLScalarType;
     UUID?: GraphQLScalarType;
+    Upload?: GraphQLScalarType;
     Url?: GraphQLScalarType;
     User?: GQLUserResolvers<ContextType>;
     UserMutation?: GQLUserMutationResolvers<ContextType>;

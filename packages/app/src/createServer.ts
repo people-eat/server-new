@@ -153,6 +153,9 @@ export async function createServer({
             readFileSync(pathResolve(__filename, '../../src/public-privacy-policy-update/public-privacy-policy-update.graphql'), {
                 encoding: 'utf-8',
             }),
+            readFileSync(pathResolve(__filename, '../../src/favorite-cook/favorite-cook.graphql'), {
+                encoding: 'utf-8',
+            }),
         ],
         resolvers,
     });

@@ -36,14 +36,16 @@ export function createUserResolvers(service: Service): Resolvers<'UserQuery' | '
 
             sessions: (_parent: GQLUserQuery, { userId }: GQLUserQuerySessionsArgs) => ({ userId } as any),
 
+            favoriteCooks: (_parent: GQLUserQuery, { userId }: GQLUserQuerySessionsArgs) => ({ userId } as any),
+
             findMany: async (_parent: GQLUserQuery, _input: unknown, context: Authorization.Context): Promise<GQLUser[] | undefined> =>
-                service.user.findMany(context, { searchText: undefined }),
+                service.user.findMany(context, {}) as any,
 
             findOne: async (
                 _parent: GQLUserQuery,
                 { userId }: GQLUserQueryFindOneArgs,
                 context: Authorization.Context,
-            ): Promise<GQLUser | undefined> => service.user.findOneByUserId(context, { userId }),
+            ): Promise<GQLUser | undefined> => service.user.findOneByUserId(context, { userId }) as any,
         },
         UserMutation: {
             addresses: (_parent: GQLUserMutation, { userId }: GQLUserMutationAddressesArgs) => ({ userId } as any),

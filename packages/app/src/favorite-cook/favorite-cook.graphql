@@ -1,0 +1,26 @@
+type UserQuery {
+    favoriteCooks(userId: String!): FavoriteCookQuery!
+}
+
+type FavoriteCookQuery {
+    findMany: [FavoriteCook!]!
+}
+
+type UserMutation {
+    favoriteCooks(userId: String!): FavoriteCookQuery!
+}
+
+type FavoriteCookMutation {
+    createOne: Boolean!
+    deleteOne: Boolean!
+}
+
+type FavoriteCook {
+    userId: String!
+    user: User!
+
+    cookId: String!
+    cook: Cook!
+
+    createdAt: DateTime!
+}
