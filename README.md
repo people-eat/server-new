@@ -1,5 +1,7 @@
 # PeopleEat Server
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2805a2173f4d437283cd3147df3087ba)](https://app.codacy.com/gh/people-eat/server/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 ## Development Prerequisites
 
 -   Make sure you have the [Node.js runtime](https://nodejs.org) installed.
