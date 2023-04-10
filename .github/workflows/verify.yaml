@@ -20,4 +20,4 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
       - name: Verify code (build, test, format check, lint check, spell check)
-        run: yarn verify
+        run: NX_BRANCH=${{ github.ref_name }} yarn verify
