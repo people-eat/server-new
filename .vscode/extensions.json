@@ -4,6 +4,7 @@
         "davidanson.vscode-markdownlint",
         "editorconfig.editorconfig",
         "esbenp.prettier-vscode",
+        "firsttris.vscode-jest-runner",
         "nrwl.angular-console",
         "streetsidesoftware.code-spell-checker"
     ]
