@@ -1,3 +1,9 @@
 {
-    "recommendations": ["davidanson.vscode-markdownlint", "editorconfig.editorconfig", "nrwl.angular-console", "streetsidesoftware.code-spell-checker"]
+    "recommendations": [
+        "davidanson.vscode-markdownlint",
+        "editorconfig.editorconfig",
+        "esbenp.prettier-vscode",
+        "nrwl.angular-console",
+        "streetsidesoftware.code-spell-checker"
+    ]
 }
