@@ -14,7 +14,8 @@
         "format:check": "prettier --check .",
         "lint": "eslint . --ext js,cjs,mjs,ts,cts,mts --fix",
         "lint:check": "eslint . --ext js,cjs,mjs,ts,cts,mts",
-        "spell:check": "cspell . --no-progress"
+        "spell:check": "cspell . --no-progress",
+        "verify": "nx run-many -t test && nx run-many -t build && yarn format:check && yarn lint:check && yarn spell:check"
     },
     "dependencies": {
         "tslib": "^2.5.0"
