@@ -28,6 +28,7 @@
         "esbuild": "^0.17.16",
         "nx": "15.9.2",
         "prettier": "^2.8.7",
+        "prettier-plugin-organize-imports": "^3.2.2",
         "typescript": "^4.9.5"
     },
     "workspaces": [
