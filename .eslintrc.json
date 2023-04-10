@@ -1,0 +1,59 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint"],
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
+    "ignorePatterns": ["dist", "tmp"],
+    "overrides": [
+        {
+            "files": ["*.js", "*.mjs", "*.cjs", "*.ts", "*.mts", "*.cts"],
+            "rules": {
+                "no-console": "warn",
+                "no-alert": "error",
+                "curly": ["error", "multi-or-nest"],
+                "no-return-await": "error",
+                "eqeqeq": "error",
+                "max-depth": ["error", 3],
+                "max-statements": ["warn", 16],
+                "no-else-return": "warn",
+                "yoda": "error",
+                "no-shadow": "off",
+                "no-duplicate-imports": "error",
+                "spaced-comment": "error",
+                "no-inline-comments": "error"
+            }
+        },
+        {
+            "files": ["*.ts", "*.mts", "*.cts"],
+            "parserOptions": {
+                "project": ["tsconfig.base.json"]
+            },
+            "rules": {
+                "@typescript-eslint/naming-convention": [
+                    "error",
+                    { "selector": "variableLike", "modifiers": ["unused"], "leadingUnderscore": "require", "format": ["camelCase"] }
+                ],
+                "@typescript-eslint/no-shadow": "error",
+                "@typescript-eslint/consistent-type-imports": ["error", { "prefer": "type-imports", "fixStyle": "inline-type-imports" }],
+                "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+                "@typescript-eslint/explicit-function-return-type": "error",
+                "@typescript-eslint/array-type": "error",
+                "@typescript-eslint/no-inferrable-types": "off",
+                "@typescript-eslint/no-floating-promises": "error",
+                "@typescript-eslint/explicit-member-accessibility": ["error", { "accessibility": "no-public" }],
+                "@typescript-eslint/typedef": [
+                    "error",
+                    {
+                        "arrayDestructuring": false,
+                        "objectDestructuring": false,
+                        "arrowParameter": true,
+                        "memberVariableDeclaration": true,
+                        "parameter": true,
+                        "propertyDeclaration": true,
+                        "variableDeclaration": true,
+                        "variableDeclarationIgnoreFunction": true
+                    }
+                ]
+            }
+        }
+    ]
+}
