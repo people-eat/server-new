@@ -35,6 +35,9 @@ type User {
 
     followings: [Following!]!
     followingCount: UInt!
+
+    addresses: [Address!]!
+    addressCount: UInt!
 }
 
 type UserQuery {

@@ -25,6 +25,19 @@ export type Scalars = {
     Url: string;
 };
 
+export type GQLAddress = {
+    __typename?: 'Address';
+    addressId: Scalars['String'];
+    city: Scalars['String'];
+    country: Scalars['String'];
+    createdAt: Scalars['DateTime'];
+    houseNumber: Scalars['String'];
+    location: GQLLocation;
+    postCode: Scalars['String'];
+    street: Scalars['String'];
+    title: Scalars['String'];
+};
+
 export type GQLAdmin = {
     __typename?: 'Admin';
     adminId: Scalars['String'];
@@ -663,6 +676,16 @@ export type GQLCreateBookingRequestRequest = {
     occasion: Scalars['String'];
     preparationTime: Scalars['UInt'];
     price: GQLPriceInput;
+};
+
+export type GQLCreateOneAddressRequest = {
+    city: Scalars['String'];
+    country: Scalars['String'];
+    houseNumber: Scalars['String'];
+    location: GQLLocationInput;
+    postCode: Scalars['String'];
+    street: Scalars['String'];
+    title: Scalars['String'];
 };
 
 export type GQLCreateOneAdminRequest = {
@@ -1345,6 +1368,8 @@ export type GQLUser = {
     acceptedTerms: Scalars['DateTime'];
     activeSessionCount: Scalars['UInt'];
     activeSessions: Array<GQLSession>;
+    addressCount: Scalars['UInt'];
+    addresses: Array<GQLAddress>;
     admin?: Maybe<GQLAdmin>;
     birthDate?: Maybe<Scalars['Date']>;
     bookingRequests: Array<GQLBookingRequest>;
@@ -1369,6 +1394,37 @@ export type GQLUser = {
     profilePictureUrl?: Maybe<Scalars['Url']>;
     unreadNotificationCount: Scalars['UInt'];
     userId: Scalars['String'];
+};
+
+export type GQLUserAddressMutation = {
+    __typename?: 'UserAddressMutation';
+    createOne: Scalars['Boolean'];
+    deleteOne: Scalars['Boolean'];
+    update: Scalars['Boolean'];
+    userId: Scalars['String'];
+};
+
+export type GQLUserAddressMutationCreateOneArgs = {
+    address: GQLCreateOneAddressRequest;
+};
+
+export type GQLUserAddressMutationDeleteOneArgs = {
+    addressId: Scalars['String'];
+};
+
+export type GQLUserAddressMutationUpdateArgs = {
+    address: GQLCreateOneAddressRequest;
+    addressId: Scalars['String'];
+};
+
+export type GQLUserAddressQuery = {
+    __typename?: 'UserAddressQuery';
+    findMany?: Maybe<Array<GQLAddress>>;
+    userId: Scalars['String'];
+};
+
+export type GQLUserAddressQueryFindManyArgs = {
+    request?: InputMaybe<GQLFindManyRequest>;
 };
 
 export type GQLUserBookingRequestMutation = {
@@ -1511,6 +1567,7 @@ export type GQLUserMutation = {
     __typename?: 'UserMutation';
     acceptLatestPrivacyPolicy: Scalars['Boolean'];
     acceptLatestTerms: Scalars['Boolean'];
+    addresses: GQLUserAddressMutation;
     bookingRequests: GQLUserBookingRequestMutation;
     createOneByEmailAddress: Scalars['Boolean'];
     createOneByIdentityProvider: Scalars['Boolean'];
@@ -1527,6 +1584,10 @@ export type GQLUserMutation = {
     updateIsLocked: Scalars['Boolean'];
     updatePassword: Scalars['Boolean'];
     updateProfilePicture: Scalars['Boolean'];
+};
+
+export type GQLUserMutationAddressesArgs = {
+    userId: Scalars['String'];
 };
 
 export type GQLUserMutationBookingRequestsArgs = {
@@ -1667,6 +1728,7 @@ export type GQLUserPhoneNumberUpdateQuery = {
 
 export type GQLUserQuery = {
     __typename?: 'UserQuery';
+    addresses: GQLUserAddressQuery;
     bookingRequests: GQLUserBookingRequestQuery;
     cookRatings: GQLUserCookRatingQuery;
     emailAddressUpdate: GQLUserEmailAddressUpdateQuery;
@@ -1681,6 +1743,10 @@ export type GQLUserQuery = {
     phoneNumberUpdate: GQLUserPhoneNumberUpdateQuery;
     sessions: GQLUserSessionQuery;
     userRatings: GQLUserUserRatingQuery;
+};
+
+export type GQLUserQueryAddressesArgs = {
+    userId: Scalars['String'];
 };
 
 export type GQLUserQueryBookingRequestsArgs = {
@@ -1840,6 +1906,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type GQLResolversTypes = {
+    Address: ResolverTypeWrapper<GQLAddress>;
     Admin: ResolverTypeWrapper<GQLAdmin>;
     AdminMutation: ResolverTypeWrapper<GQLAdminMutation>;
     AdminQuery: ResolverTypeWrapper<GQLAdminQuery>;
@@ -1877,6 +1944,7 @@ export type GQLResolversTypes = {
     CookUserRatingQuery: ResolverTypeWrapper<GQLCookUserRatingQuery>;
     Course: ResolverTypeWrapper<GQLCourse>;
     CreateBookingRequestRequest: GQLCreateBookingRequestRequest;
+    CreateOneAddressRequest: GQLCreateOneAddressRequest;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
     CreateOneCourseRequest: GQLCreateOneCourseRequest;
@@ -1963,6 +2031,8 @@ export type GQLResolversTypes = {
     Upload: ResolverTypeWrapper<Scalars['Upload']>;
     Url: ResolverTypeWrapper<Scalars['Url']>;
     User: ResolverTypeWrapper<GQLUser>;
+    UserAddressMutation: ResolverTypeWrapper<GQLUserAddressMutation>;
+    UserAddressQuery: ResolverTypeWrapper<GQLUserAddressQuery>;
     UserBookingRequestMutation: ResolverTypeWrapper<GQLUserBookingRequestMutation>;
     UserBookingRequestQuery: ResolverTypeWrapper<GQLUserBookingRequestQuery>;
     UserCookRatingQuery: ResolverTypeWrapper<GQLUserCookRatingQuery>;
@@ -1988,6 +2058,7 @@ export type GQLResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type GQLResolversParentTypes = {
+    Address: GQLAddress;
     Admin: GQLAdmin;
     AdminMutation: GQLAdminMutation;
     AdminQuery: GQLAdminQuery;
@@ -2024,6 +2095,7 @@ export type GQLResolversParentTypes = {
     CookUserRatingQuery: GQLCookUserRatingQuery;
     Course: GQLCourse;
     CreateBookingRequestRequest: GQLCreateBookingRequestRequest;
+    CreateOneAddressRequest: GQLCreateOneAddressRequest;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
     CreateOneCourseRequest: GQLCreateOneCourseRequest;
@@ -2104,6 +2176,8 @@ export type GQLResolversParentTypes = {
     Upload: Scalars['Upload'];
     Url: Scalars['Url'];
     User: GQLUser;
+    UserAddressMutation: GQLUserAddressMutation;
+    UserAddressQuery: GQLUserAddressQuery;
     UserBookingRequestMutation: GQLUserBookingRequestMutation;
     UserBookingRequestQuery: GQLUserBookingRequestQuery;
     UserCookRatingQuery: GQLUserCookRatingQuery;
@@ -2124,6 +2198,22 @@ export type GQLResolversParentTypes = {
     UserSessionMutation: GQLUserSessionMutation;
     UserSessionQuery: GQLUserSessionQuery;
     UserUserRatingQuery: GQLUserUserRatingQuery;
+};
+
+export type GQLAddressResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['Address'] = GQLResolversParentTypes['Address'],
+> = {
+    addressId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    city?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    country?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    houseNumber?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    location?: Resolver<GQLResolversTypes['Location'], ParentType, ContextType>;
+    postCode?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    street?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLAdminResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Admin'] = GQLResolversParentTypes['Admin']> = {
@@ -3447,6 +3537,8 @@ export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversP
     acceptedTerms?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     activeSessionCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     activeSessions?: Resolver<Array<GQLResolversTypes['Session']>, ParentType, ContextType>;
+    addressCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    addresses?: Resolver<Array<GQLResolversTypes['Address']>, ParentType, ContextType>;
     admin?: Resolver<Maybe<GQLResolversTypes['Admin']>, ParentType, ContextType>;
     birthDate?: Resolver<Maybe<GQLResolversTypes['Date']>, ParentType, ContextType>;
     bookingRequests?: Resolver<Array<GQLResolversTypes['BookingRequest']>, ParentType, ContextType>;
@@ -3470,6 +3562,41 @@ export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversP
     phoneNumberUpdate?: Resolver<Maybe<GQLResolversTypes['PhoneNumberUpdate']>, ParentType, ContextType>;
     profilePictureUrl?: Resolver<Maybe<GQLResolversTypes['Url']>, ParentType, ContextType>;
     unreadNotificationCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserAddressMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserAddressMutation'] = GQLResolversParentTypes['UserAddressMutation'],
+> = {
+    createOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserAddressMutationCreateOneArgs, 'address'>
+    >;
+    deleteOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserAddressMutationDeleteOneArgs, 'addressId'>
+    >;
+    update?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserAddressMutationUpdateArgs, 'address' | 'addressId'>
+    >;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserAddressQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserAddressQuery'] = GQLResolversParentTypes['UserAddressQuery'],
+> = {
+    findMany?: Resolver<Maybe<Array<GQLResolversTypes['Address']>>, ParentType, ContextType, Partial<GQLUserAddressQueryFindManyArgs>>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -3652,6 +3779,12 @@ export type GQLUserMutationResolvers<
 > = {
     acceptLatestPrivacyPolicy?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     acceptLatestTerms?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    addresses?: Resolver<
+        GQLResolversTypes['UserAddressMutation'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationAddressesArgs, 'userId'>
+    >;
     bookingRequests?: Resolver<
         GQLResolversTypes['UserBookingRequestMutation'],
         ParentType,
@@ -3843,6 +3976,12 @@ export type GQLUserQueryResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['UserQuery'] = GQLResolversParentTypes['UserQuery'],
 > = {
+    addresses?: Resolver<
+        GQLResolversTypes['UserAddressQuery'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserQueryAddressesArgs, 'userId'>
+    >;
     bookingRequests?: Resolver<
         GQLResolversTypes['UserBookingRequestQuery'],
         ParentType,
@@ -3966,6 +4105,7 @@ export type GQLUserUserRatingQueryResolvers<
 };
 
 export type GQLResolvers<ContextType = any> = {
+    Address?: GQLAddressResolvers<ContextType>;
     Admin?: GQLAdminResolvers<ContextType>;
     AdminMutation?: GQLAdminMutationResolvers<ContextType>;
     AdminQuery?: GQLAdminQueryResolvers<ContextType>;
@@ -4057,6 +4197,8 @@ export type GQLResolvers<ContextType = any> = {
     Upload?: GraphQLScalarType;
     Url?: GraphQLScalarType;
     User?: GQLUserResolvers<ContextType>;
+    UserAddressMutation?: GQLUserAddressMutationResolvers<ContextType>;
+    UserAddressQuery?: GQLUserAddressQueryResolvers<ContextType>;
     UserBookingRequestMutation?: GQLUserBookingRequestMutationResolvers<ContextType>;
     UserBookingRequestQuery?: GQLUserBookingRequestQueryResolvers<ContextType>;
     UserCookRatingQuery?: GQLUserCookRatingQueryResolvers<ContextType>;

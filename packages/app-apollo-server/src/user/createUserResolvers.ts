@@ -1,7 +1,8 @@
-import { type Admin, type Authorization, type Cook, type Service } from '@people-eat/server-domain';
+import { type Address, type Admin, type Authorization, type Cook, type Service } from '@people-eat/server-domain';
 import {
     type GQLUser,
     type GQLUserMutation,
+    type GQLUserMutationAddressesArgs,
     type GQLUserMutationBookingRequestsArgs,
     type GQLUserMutationCreateOneByEmailAddressArgs,
     type GQLUserMutationCreateOneByIdentityProviderArgs,
@@ -32,6 +33,12 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
             isCook: async ({ userId }: GQLUser, _input: unknown, context: Authorization.Context): Promise<boolean> => {
                 const cook: Cook | undefined = await service.cook.findOne(context, userId);
                 return Boolean(cook);
+            },
+            addresses: ({ userId }: GQLUser, _input: unknown, context: Authorization.Context) =>
+                service.address.findMany(context, { userId }) as any,
+            addressCount: async ({ userId }: GQLUser, _input: unknown, context: Authorization.Context): Promise<number> => {
+                const addresses: Address[] | undefined = await service.address.findMany(context, { userId });
+                return addresses?.length ?? 0;
             },
         },
         UserMutation: {
