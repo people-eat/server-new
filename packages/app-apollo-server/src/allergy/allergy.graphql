@@ -1,0 +1,20 @@
+type Allergy {
+    allergyId: String!
+    title: String!
+}
+
+type AllergyQuery {
+    findAll: [Allergy!]!
+}
+
+type Query {
+    allergies: AllergyQuery!
+}
+
+type AllergyMutation {
+    createOne: Boolean!
+}
+
+type Mutation {
+    allergies: AllergyMutation!
+}

@@ -24,6 +24,22 @@ export type Scalars = {
     Url: string;
 };
 
+export type GQLAllergy = {
+    __typename?: 'Allergy';
+    allergyId: Scalars['String'];
+    title: Scalars['String'];
+};
+
+export type GQLAllergyMutation = {
+    __typename?: 'AllergyMutation';
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLAllergyQuery = {
+    __typename?: 'AllergyQuery';
+    findAll: Array<GQLAllergy>;
+};
+
 export type GQLCategory = {
     __typename?: 'Category';
     categoryId: Scalars['String'];
@@ -74,6 +90,7 @@ export type GQLLanguageQuery = {
 
 export type GQLMutation = {
     __typename?: 'Mutation';
+    allergies: GQLAllergyMutation;
     categories: GQLCategoryMutation;
     kitchens: GQLKitchenMutation;
     languages: GQLLanguageMutation;
@@ -81,6 +98,7 @@ export type GQLMutation = {
 
 export type GQLQuery = {
     __typename?: 'Query';
+    allergies: GQLAllergyQuery;
     categories: GQLCategoryQuery;
     kitchens: GQLKitchenQuery;
     languages: GQLLanguageQuery;
@@ -154,6 +172,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type GQLResolversTypes = {
+    Allergy: ResolverTypeWrapper<GQLAllergy>;
+    AllergyMutation: ResolverTypeWrapper<GQLAllergyMutation>;
+    AllergyQuery: ResolverTypeWrapper<GQLAllergyQuery>;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
     Category: ResolverTypeWrapper<GQLCategory>;
     CategoryMutation: ResolverTypeWrapper<GQLCategoryMutation>;
@@ -181,6 +202,9 @@ export type GQLResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type GQLResolversParentTypes = {
+    Allergy: GQLAllergy;
+    AllergyMutation: GQLAllergyMutation;
+    AllergyQuery: GQLAllergyQuery;
     Boolean: Scalars['Boolean'];
     Category: GQLCategory;
     CategoryMutation: GQLCategoryMutation;
@@ -204,6 +228,31 @@ export type GQLResolversParentTypes = {
     UUID: Scalars['UUID'];
     Upload: Scalars['Upload'];
     Url: Scalars['Url'];
+};
+
+export type GQLAllergyResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['Allergy'] = GQLResolversParentTypes['Allergy'],
+> = {
+    allergyId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLAllergyMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['AllergyMutation'] = GQLResolversParentTypes['AllergyMutation'],
+> = {
+    createOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLAllergyQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['AllergyQuery'] = GQLResolversParentTypes['AllergyQuery'],
+> = {
+    findAll?: Resolver<Array<GQLResolversTypes['Allergy']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLCategoryResolvers<
@@ -305,6 +354,7 @@ export type GQLMutationResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['Mutation'] = GQLResolversParentTypes['Mutation'],
 > = {
+    allergies?: Resolver<GQLResolversTypes['AllergyMutation'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryMutation'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenMutation'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
@@ -315,6 +365,7 @@ export interface GQLPhoneNumberScalarConfig extends GraphQLScalarTypeConfig<GQLR
 }
 
 export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
+    allergies?: Resolver<GQLResolversTypes['AllergyQuery'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryQuery'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
@@ -337,6 +388,9 @@ export interface GQLUrlScalarConfig extends GraphQLScalarTypeConfig<GQLResolvers
 }
 
 export type GQLResolvers<ContextType = any> = {
+    Allergy?: GQLAllergyResolvers<ContextType>;
+    AllergyMutation?: GQLAllergyMutationResolvers<ContextType>;
+    AllergyQuery?: GQLAllergyQueryResolvers<ContextType>;
     Category?: GQLCategoryResolvers<ContextType>;
     CategoryMutation?: GQLCategoryMutationResolvers<ContextType>;
     CategoryQuery?: GQLCategoryQueryResolvers<ContextType>;
