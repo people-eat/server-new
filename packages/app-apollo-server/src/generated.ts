@@ -271,6 +271,11 @@ export type GQLCreateOneSessionByPhoneNumberRequest = {
     title: Scalars['String'];
 };
 
+export type GQLCreateOneTermsUpdateRequest = {
+    englishText: Scalars['String'];
+    germanText: Scalars['String'];
+};
+
 export type GQLCreateOneUserByEmailAddressRequest = {
     birthDate?: InputMaybe<Scalars['Date']>;
     cook?: InputMaybe<GQLCreateOneCookRequest>;
@@ -393,6 +398,7 @@ export type GQLMutation = {
     languages: GQLLanguageMutation;
     notifications: GQLNotificationMutation;
     sessions: GQLSessionMutation;
+    termsUpdates: GQLTermsUpdateMutation;
     users: GQLUserMutation;
 };
 
@@ -511,6 +517,7 @@ export type GQLQuery = {
     kitchens: GQLKitchenQuery;
     languages: GQLLanguageQuery;
     publicCooks: GQLPublicCookQuery;
+    termsUpdates: GQLTermsUpdateQuery;
     users: GQLUserQuery;
 };
 
@@ -542,6 +549,36 @@ export type GQLSessionMutationAssignOneByIdentityProviderArgs = {
 
 export type GQLSessionMutationAssignOneByPhoneNumberArgs = {
     request: GQLCreateOneSessionByPhoneNumberRequest;
+};
+
+export type GQLTermsUpdate = {
+    __typename?: 'TermsUpdate';
+    admin: GQLAdmin;
+    adminId: Scalars['String'];
+    createdAt: Scalars['DateTime'];
+    englishText: Scalars['String'];
+    germanText: Scalars['String'];
+    termsUpdateId: Scalars['String'];
+};
+
+export type GQLTermsUpdateMutation = {
+    __typename?: 'TermsUpdateMutation';
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLTermsUpdateMutationCreateOneArgs = {
+    request: GQLCreateOneTermsUpdateRequest;
+};
+
+export type GQLTermsUpdateQuery = {
+    __typename?: 'TermsUpdateQuery';
+    findAll: Array<GQLTermsUpdate>;
+    findLatest?: Maybe<GQLTermsUpdate>;
+    findOne?: Maybe<GQLTermsUpdate>;
+};
+
+export type GQLTermsUpdateQueryFindOneArgs = {
+    termsUpdateId: Scalars['String'];
 };
 
 export type GQLUser = {
@@ -797,6 +834,7 @@ export type GQLResolversTypes = {
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
+    CreateOneTermsUpdateRequest: GQLCreateOneTermsUpdateRequest;
     CreateOneUserByEmailAddressRequest: GQLCreateOneUserByEmailAddressRequest;
     CreateOneUserByIdentityProviderRequest: GQLCreateOneUserByIdentityProviderRequest;
     CreateOneUserByPhoneNumberRequest: GQLCreateOneUserByPhoneNumberRequest;
@@ -839,6 +877,9 @@ export type GQLResolversTypes = {
     Session: ResolverTypeWrapper<GQLSession>;
     SessionMutation: ResolverTypeWrapper<GQLSessionMutation>;
     String: ResolverTypeWrapper<Scalars['String']>;
+    TermsUpdate: ResolverTypeWrapper<GQLTermsUpdate>;
+    TermsUpdateMutation: ResolverTypeWrapper<GQLTermsUpdateMutation>;
+    TermsUpdateQuery: ResolverTypeWrapper<GQLTermsUpdateQuery>;
     UInt: ResolverTypeWrapper<Scalars['UInt']>;
     UUID: ResolverTypeWrapper<Scalars['UUID']>;
     Upload: ResolverTypeWrapper<Scalars['Upload']>;
@@ -875,6 +916,7 @@ export type GQLResolversParentTypes = {
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
+    CreateOneTermsUpdateRequest: GQLCreateOneTermsUpdateRequest;
     CreateOneUserByEmailAddressRequest: GQLCreateOneUserByEmailAddressRequest;
     CreateOneUserByIdentityProviderRequest: GQLCreateOneUserByIdentityProviderRequest;
     CreateOneUserByPhoneNumberRequest: GQLCreateOneUserByPhoneNumberRequest;
@@ -911,6 +953,9 @@ export type GQLResolversParentTypes = {
     Session: GQLSession;
     SessionMutation: GQLSessionMutation;
     String: Scalars['String'];
+    TermsUpdate: GQLTermsUpdate;
+    TermsUpdateMutation: GQLTermsUpdateMutation;
+    TermsUpdateQuery: GQLTermsUpdateQuery;
     UInt: Scalars['UInt'];
     UUID: Scalars['UUID'];
     Upload: Scalars['Upload'];
@@ -1228,6 +1273,7 @@ export type GQLMutationResolvers<
     languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
     notifications?: Resolver<GQLResolversTypes['NotificationMutation'], ParentType, ContextType>;
     sessions?: Resolver<GQLResolversTypes['SessionMutation'], ParentType, ContextType>;
+    termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateMutation'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserMutation'], ParentType, ContextType>;
 };
 
@@ -1370,6 +1416,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
     publicCooks?: Resolver<GQLResolversTypes['PublicCookQuery'], ParentType, ContextType>;
+    termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateQuery'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserQuery'], ParentType, ContextType>;
 };
 
@@ -1408,6 +1455,47 @@ export type GQLSessionMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLSessionMutationAssignOneByPhoneNumberArgs, 'request'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLTermsUpdateResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['TermsUpdate'] = GQLResolversParentTypes['TermsUpdate'],
+> = {
+    admin?: Resolver<GQLResolversTypes['Admin'], ParentType, ContextType>;
+    adminId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    englishText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    germanText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    termsUpdateId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLTermsUpdateMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['TermsUpdateMutation'] = GQLResolversParentTypes['TermsUpdateMutation'],
+> = {
+    createOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLTermsUpdateMutationCreateOneArgs, 'request'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLTermsUpdateQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['TermsUpdateQuery'] = GQLResolversParentTypes['TermsUpdateQuery'],
+> = {
+    findAll?: Resolver<Array<GQLResolversTypes['TermsUpdate']>, ParentType, ContextType>;
+    findLatest?: Resolver<Maybe<GQLResolversTypes['TermsUpdate']>, ParentType, ContextType>;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['TermsUpdate']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLTermsUpdateQueryFindOneArgs, 'termsUpdateId'>
     >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1650,6 +1738,9 @@ export type GQLResolvers<ContextType = any> = {
     Query?: GQLQueryResolvers<ContextType>;
     Session?: GQLSessionResolvers<ContextType>;
     SessionMutation?: GQLSessionMutationResolvers<ContextType>;
+    TermsUpdate?: GQLTermsUpdateResolvers<ContextType>;
+    TermsUpdateMutation?: GQLTermsUpdateMutationResolvers<ContextType>;
+    TermsUpdateQuery?: GQLTermsUpdateQueryResolvers<ContextType>;
     UInt?: GraphQLScalarType;
     UUID?: GraphQLScalarType;
     Upload?: GraphQLScalarType;

@@ -44,6 +44,7 @@ import { createNotificationResolvers } from './notification/createNotificationRe
 import { createPublicCookResolvers } from './public-cook/createPublicCookResolvers';
 import { createPublicUserResolvers } from './public-user/createPublicUserResolvers';
 import { createSessionResolvers } from './session/createSessionResolvers';
+import { createTermsUpdateResolvers } from './terms-update/createTermsUpdateResolvers';
 import { createUserResolvers } from './user/createUserResolvers';
 
 export interface StartApolloServerAppOptions {
@@ -113,6 +114,7 @@ export async function startApolloServerApp({
         ...createPublicCookResolvers(service),
         ...createNotificationResolvers(),
         ...createNotificationConfigurationResolvers(),
+        ...createTermsUpdateResolvers(),
     };
 
     const path: string = '/graphql';

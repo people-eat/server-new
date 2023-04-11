@@ -1,0 +1,32 @@
+type TermsUpdate {
+    termsUpdateId: String!
+    adminId: String!
+    germanText: String!
+    englishText: String!
+    createdAt: DateTime!
+
+    admin: Admin!
+}
+
+type TermsUpdateQuery {
+    findAll: [TermsUpdate!]!
+    findOne(termsUpdateId: String!): TermsUpdate
+    findLatest: TermsUpdate
+}
+
+type Query {
+    termsUpdates: TermsUpdateQuery!
+}
+
+input CreateOneTermsUpdateRequest {
+    germanText: String!
+    englishText: String!
+}
+
+type TermsUpdateMutation {
+    createOne(request: CreateOneTermsUpdateRequest!): Boolean!
+}
+
+type Mutation {
+    termsUpdates: TermsUpdateMutation!
+}
