@@ -1,0 +1,30 @@
+type CookRating {
+    bookingRequestId: String!
+    userId: String!
+    cookId: String!
+    value: UInt!
+    comment: String
+    createdAt: DateTime!
+
+    bookingRequest: BookingRequest!
+    user: PublicUser!
+    cook: PublicCook!
+}
+
+type UserCookRatingQuery {
+    userId: String!
+    findMany: [CookRating!]!
+}
+
+type UserQuery {
+    cookRatings(userId: String!): UserCookRatingQuery!
+}
+
+type CookCookRatingQuery {
+    cookId: String!
+    findMany: [CookRating!]!
+}
+
+type CookQuery {
+    cookRatings(cookId: String!): CookCookRatingQuery!
+}
