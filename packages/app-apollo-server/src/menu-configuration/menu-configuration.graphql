@@ -1,0 +1,21 @@
+type MenuConfiguration {
+    bookingRequestId: String!
+    menuId: String!
+    menuTitle: String!
+    menuDescription: String!
+    greetingsFromKitchen: Boolean!
+    courses: [MenuConfigurationCourse!]!
+    kitchenId: String!
+    categoryIds: [String!]!
+
+    kitchen: Kitchen!
+    categories: [Category!]!
+}
+
+type MenuConfigurationCourse {
+    courseTitle: String!
+    mealTitle: String!
+    mealDescription: String!
+    mealImageUrl: Url!
+    mealType: MealType!
+}

@@ -944,6 +944,29 @@ export type GQLMenu = {
     title: Scalars['String'];
 };
 
+export type GQLMenuConfiguration = {
+    __typename?: 'MenuConfiguration';
+    bookingRequestId: Scalars['String'];
+    categories: Array<GQLCategory>;
+    categoryIds: Array<Scalars['String']>;
+    courses: Array<GQLMenuConfigurationCourse>;
+    greetingsFromKitchen: Scalars['Boolean'];
+    kitchen: GQLKitchen;
+    kitchenId: Scalars['String'];
+    menuDescription: Scalars['String'];
+    menuId: Scalars['String'];
+    menuTitle: Scalars['String'];
+};
+
+export type GQLMenuConfigurationCourse = {
+    __typename?: 'MenuConfigurationCourse';
+    courseTitle: Scalars['String'];
+    mealDescription: Scalars['String'];
+    mealImageUrl: Scalars['Url'];
+    mealTitle: Scalars['String'];
+    mealType: GQLMealType;
+};
+
 export type GQLMutation = {
     __typename?: 'Mutation';
     admins: GQLAdminMutation;
@@ -1785,6 +1808,8 @@ export type GQLResolversTypes = {
     MealOption: ResolverTypeWrapper<GQLMealOption>;
     MealType: GQLMealType;
     Menu: ResolverTypeWrapper<GQLMenu>;
+    MenuConfiguration: ResolverTypeWrapper<GQLMenuConfiguration>;
+    MenuConfigurationCourse: ResolverTypeWrapper<GQLMenuConfigurationCourse>;
     Mutation: ResolverTypeWrapper<{}>;
     Notification: ResolverTypeWrapper<GQLNotification>;
     NotificationConfiguration: ResolverTypeWrapper<GQLNotificationConfiguration>;
@@ -1916,6 +1941,8 @@ export type GQLResolversParentTypes = {
     Meal: GQLMeal;
     MealOption: GQLMealOption;
     Menu: GQLMenu;
+    MenuConfiguration: GQLMenuConfiguration;
+    MenuConfigurationCourse: GQLMenuConfigurationCourse;
     Mutation: {};
     Notification: GQLNotification;
     NotificationConfiguration: GQLNotificationConfiguration;
@@ -2763,6 +2790,35 @@ export type GQLMenuResolvers<ContextType = any, ParentType extends GQLResolversP
     pricePerAdult?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     pricePerChild?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
     title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLMenuConfigurationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['MenuConfiguration'] = GQLResolversParentTypes['MenuConfiguration'],
+> = {
+    bookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    categories?: Resolver<Array<GQLResolversTypes['Category']>, ParentType, ContextType>;
+    categoryIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+    courses?: Resolver<Array<GQLResolversTypes['MenuConfigurationCourse']>, ParentType, ContextType>;
+    greetingsFromKitchen?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    kitchen?: Resolver<GQLResolversTypes['Kitchen'], ParentType, ContextType>;
+    kitchenId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    menuDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    menuId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    menuTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLMenuConfigurationCourseResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['MenuConfigurationCourse'] = GQLResolversParentTypes['MenuConfigurationCourse'],
+> = {
+    courseTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    mealDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    mealImageUrl?: Resolver<GQLResolversTypes['Url'], ParentType, ContextType>;
+    mealTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    mealType?: Resolver<GQLResolversTypes['MealType'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3684,6 +3740,8 @@ export type GQLResolvers<ContextType = any> = {
     Meal?: GQLMealResolvers<ContextType>;
     MealOption?: GQLMealOptionResolvers<ContextType>;
     Menu?: GQLMenuResolvers<ContextType>;
+    MenuConfiguration?: GQLMenuConfigurationResolvers<ContextType>;
+    MenuConfigurationCourse?: GQLMenuConfigurationCourseResolvers<ContextType>;
     Mutation?: GQLMutationResolvers<ContextType>;
     Notification?: GQLNotificationResolvers<ContextType>;
     NotificationConfiguration?: GQLNotificationConfigurationResolvers<ContextType>;
