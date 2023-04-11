@@ -1,0 +1,20 @@
+type Language {
+    languageId: String!
+    title: String!
+}
+
+type LanguageQuery {
+    findAll: [Language!]!
+}
+
+type Query {
+    languages: LanguageQuery!
+}
+
+type LanguageMutation {
+    createOne: Boolean!
+}
+
+type Mutation {
+    languages: LanguageMutation!
+}

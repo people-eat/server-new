@@ -31,6 +31,7 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import { createServer as createHttpServer, type IncomingMessage, type Server as HttpServer } from 'http';
 import { WebSocketServer } from 'ws';
 import { type GQLResolvers } from './generated';
+import { createLanguageResolvers } from './language/createLanguageResolvers';
 
 export interface StartApolloServerAppOptions {
     dataSourceAdapter: DataSource.Adapter;
@@ -67,8 +68,13 @@ export async function startApolloServerApp({
         UUID: UUIDResolver,
         Url: URLResolver,
         Upload: GraphQLUpload,
-        Query: {},
-        Mutation: {},
+        Query: {
+            languages: () => ({} as any),
+        },
+        Mutation: {
+            languages: () => ({} as any),
+        },
+        ...createLanguageResolvers(service),
     };
 
     const path: string = '/graphql';

@@ -24,6 +24,32 @@ export type Scalars = {
     Url: string;
 };
 
+export type GQLLanguage = {
+    __typename?: 'Language';
+    languageId: Scalars['String'];
+    title: Scalars['String'];
+};
+
+export type GQLLanguageMutation = {
+    __typename?: 'LanguageMutation';
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLLanguageQuery = {
+    __typename?: 'LanguageQuery';
+    findAll: Array<GQLLanguage>;
+};
+
+export type GQLMutation = {
+    __typename?: 'Mutation';
+    languages: GQLLanguageMutation;
+};
+
+export type GQLQuery = {
+    __typename?: 'Query';
+    languages: GQLLanguageQuery;
+};
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
@@ -96,9 +122,14 @@ export type GQLResolversTypes = {
     Date: ResolverTypeWrapper<Scalars['Date']>;
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
     EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
+    Language: ResolverTypeWrapper<GQLLanguage>;
+    LanguageMutation: ResolverTypeWrapper<GQLLanguageMutation>;
+    LanguageQuery: ResolverTypeWrapper<GQLLanguageQuery>;
     Latitude: ResolverTypeWrapper<Scalars['Latitude']>;
     Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
+    Mutation: ResolverTypeWrapper<{}>;
     PhoneNumber: ResolverTypeWrapper<Scalars['PhoneNumber']>;
+    Query: ResolverTypeWrapper<{}>;
     String: ResolverTypeWrapper<Scalars['String']>;
     UInt: ResolverTypeWrapper<Scalars['UInt']>;
     UUID: ResolverTypeWrapper<Scalars['UUID']>;
@@ -112,9 +143,14 @@ export type GQLResolversParentTypes = {
     Date: Scalars['Date'];
     DateTime: Scalars['DateTime'];
     EmailAddress: Scalars['EmailAddress'];
+    Language: GQLLanguage;
+    LanguageMutation: GQLLanguageMutation;
+    LanguageQuery: GQLLanguageQuery;
     Latitude: Scalars['Latitude'];
     Longitude: Scalars['Longitude'];
+    Mutation: {};
     PhoneNumber: Scalars['PhoneNumber'];
+    Query: {};
     String: Scalars['String'];
     UInt: Scalars['UInt'];
     UUID: Scalars['UUID'];
@@ -134,6 +170,31 @@ export interface GQLEmailAddressScalarConfig extends GraphQLScalarTypeConfig<GQL
     name: 'EmailAddress';
 }
 
+export type GQLLanguageResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['Language'] = GQLResolversParentTypes['Language'],
+> = {
+    languageId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLLanguageMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['LanguageMutation'] = GQLResolversParentTypes['LanguageMutation'],
+> = {
+    createOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLLanguageQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['LanguageQuery'] = GQLResolversParentTypes['LanguageQuery'],
+> = {
+    findAll?: Resolver<Array<GQLResolversTypes['Language']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface GQLLatitudeScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['Latitude'], any> {
     name: 'Latitude';
 }
@@ -142,9 +203,20 @@ export interface GQLLongitudeScalarConfig extends GraphQLScalarTypeConfig<GQLRes
     name: 'Longitude';
 }
 
+export type GQLMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['Mutation'] = GQLResolversParentTypes['Mutation'],
+> = {
+    languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
+};
+
 export interface GQLPhoneNumberScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['PhoneNumber'], any> {
     name: 'PhoneNumber';
 }
+
+export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
+    languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
+};
 
 export interface GQLUIntScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['UInt'], any> {
     name: 'UInt';
@@ -166,9 +238,14 @@ export type GQLResolvers<ContextType = any> = {
     Date?: GraphQLScalarType;
     DateTime?: GraphQLScalarType;
     EmailAddress?: GraphQLScalarType;
+    Language?: GQLLanguageResolvers<ContextType>;
+    LanguageMutation?: GQLLanguageMutationResolvers<ContextType>;
+    LanguageQuery?: GQLLanguageQueryResolvers<ContextType>;
     Latitude?: GraphQLScalarType;
     Longitude?: GraphQLScalarType;
+    Mutation?: GQLMutationResolvers<ContextType>;
     PhoneNumber?: GraphQLScalarType;
+    Query?: GQLQueryResolvers<ContextType>;
     UInt?: GraphQLScalarType;
     UUID?: GraphQLScalarType;
     Upload?: GraphQLScalarType;
