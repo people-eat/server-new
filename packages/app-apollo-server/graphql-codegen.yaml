@@ -11,3 +11,13 @@ generates:
       typesPrefix: GQL
       maybeValue: 'T | undefined'
       enumsAsTypes: true
+      scalars:
+        Date: string
+        DateTime: Date
+        EmailAddress: string
+        Latitude: number
+        Longitude: number
+        PhoneNumber: string
+        UInt: number
+        Url: string
+        UUID: string

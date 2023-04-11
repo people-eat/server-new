@@ -4,6 +4,17 @@ import { loadFilesSync } from '@graphql-tools/load-files';
 import { addMocksToSchema } from '@graphql-tools/mock';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { type GraphQLSchema } from 'graphql';
+import {
+    DateResolver,
+    DateTimeResolver,
+    EmailAddressResolver,
+    LatitudeResolver,
+    LongitudeResolver,
+    PhoneNumberResolver,
+    UnsignedIntResolver,
+    URLResolver,
+    UUIDResolver,
+} from 'graphql-scalars';
 import { type GQLResolvers } from './generated';
 
 export interface StartApolloServerAppOptions {
@@ -19,6 +30,15 @@ export async function startApolloServerApp({ mockSchema, port }: StartApolloServ
     const typeDefs: string[] = loadFilesSync('./**/*.graphql');
 
     const resolvers: GQLResolvers = {
+        Date: DateResolver,
+        DateTime: DateTimeResolver,
+        EmailAddress: EmailAddressResolver,
+        Latitude: LatitudeResolver,
+        Longitude: LongitudeResolver,
+        PhoneNumber: PhoneNumberResolver,
+        UInt: UnsignedIntResolver,
+        UUID: UUIDResolver,
+        Url: URLResolver,
         Query: {},
         Mutation: {},
     };

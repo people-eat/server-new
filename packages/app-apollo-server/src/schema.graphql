@@ -1,0 +1,9 @@
+scalar Date
+scalar DateTime
+scalar EmailAddress
+scalar Latitude
+scalar Longitude
+scalar PhoneNumber
+scalar UInt
+scalar Url
+scalar UUID
