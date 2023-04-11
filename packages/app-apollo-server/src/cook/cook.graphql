@@ -1,0 +1,64 @@
+type Cook {
+    cookId: String!
+    isLocked: Boolean!
+    isVisible: Boolean!
+    location: Location!
+    rank: CookRank!
+    biography: String!
+    travelExpenses: UInt!
+    maximumTravelDistance: UInt
+    minimumPrice: UInt
+    maximumPrice: UInt
+    minimumParticipants: UInt
+    maximumParticipants: UInt
+    createdAt: DateTime!
+
+    user: User!
+    languages: [Language!]!
+}
+
+type CookQuery {
+    findMany(request: FindManyRequest!): [Cook!]!
+    findOne(cookId: String!): Cook
+}
+
+type Query {
+    cooks: CookQuery!
+}
+
+input CreateOneCookRequest {
+    isVisible: Boolean!
+    location: LocationInput!
+    rank: CookRank!
+    biography: String!
+    travelExpenses: UInt!
+    maximumTravelDistance: UInt
+    minimumPrice: UInt
+    maximumPrice: UInt
+    minimumParticipants: UInt
+    maximumParticipants: UInt
+
+    languageIds: [String!]
+}
+
+type CookMutation {
+    createOne(cookId: String!, request: CreateOneCookRequest!): Boolean!
+    updateIsLocked(cookId: String!, isLocked: Boolean!): Boolean!
+    updateIsVisible(cookId: String!, isVisible: Boolean!): Boolean!
+    updateLocation(cookId: String!, location: LocationInput!): Boolean!
+    updateRank(cookId: String!, rank: CookRank!): Boolean!
+    updateBiography(cookId: String!, biography: String!): Boolean!
+    updateTravelExpenses(cookId: String!, travelExpenses: UInt!): Boolean!
+    updateMaximumTravelDistance(cookId: String!, maximumTravelDistance: UInt): Boolean!
+    updateMinimumPrice(cookId: String!, minimumPrice: UInt): Boolean!
+    updateMaximumPrice(cookId: String!, maximumPrice: UInt): Boolean!
+    updateMinimumParticipants(cookId: String!, minimumParticipants: UInt): Boolean!
+    updateMaximumParticipants(cookId: String!, maximumParticipants: UInt): Boolean!
+
+    addOneLanguage(cookId: String!, languageId: String!): Boolean!
+    removeOneLanguage(cookId: String!, languageId: String!): Boolean!
+}
+
+type Mutation {
+    cooks: CookMutation!
+}

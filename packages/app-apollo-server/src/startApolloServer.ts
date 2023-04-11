@@ -35,6 +35,7 @@ import { createAllergyResolvers } from './allergy/createAllergyResolvers';
 import { createAnonymousSessionResolvers } from './anonymous-session/createAnonymousSessionResolvers';
 import { createAnonymousUserResolvers } from './anonymous-user/createAnonymousUserResolvers';
 import { createCategoryResolvers } from './category/createCategoryResolvers';
+import { createCookResolvers } from './cook/createCookResolvers';
 import { type GQLResolvers } from './generated';
 import { createKitchenResolvers } from './kitchen/createKitchenResolvers';
 import { createLanguageResolvers } from './language/createLanguageResolvers';
@@ -83,6 +84,7 @@ export async function startApolloServerApp({
             kitchens: () => ({} as any),
             allergies: () => ({} as any),
             users: () => ({} as any),
+            cooks: () => ({} as any),
         },
         Mutation: {
             languages: () => ({} as any),
@@ -91,6 +93,7 @@ export async function startApolloServerApp({
             allergies: () => ({} as any),
             users: () => ({} as any),
             sessions: () => ({} as any),
+            cooks: () => ({} as any),
         },
         ...createLanguageResolvers(service),
         ...createCategoryResolvers(service),
@@ -102,6 +105,7 @@ export async function startApolloServerApp({
         ...createSessionResolvers(service),
         ...createAnonymousSessionResolvers(),
         ...createAdminResolvers(service),
+        ...createCookResolvers(service),
     };
 
     const path: string = '/graphql';

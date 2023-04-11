@@ -18,6 +18,9 @@ type User {
 
     admin: Admin
     isAdmin: Boolean!
+
+    cook: Cook
+    isCook: Boolean!
 }
 
 type UserQuery {
@@ -39,6 +42,7 @@ input CreateOneUserByEmailAddressRequest {
     gender: Gender!
     birthDate: Date
     profilePictureUrl: Url
+    cook: CreateOneCookRequest
 }
 
 input CreateOneUserByPhoneNumberRequest {
@@ -50,6 +54,7 @@ input CreateOneUserByPhoneNumberRequest {
     gender: Gender!
     birthDate: Date
     profilePictureUrl: Url
+    cook: CreateOneCookRequest
 }
 
 input CreateOneUserByIdentityProviderRequest {
@@ -61,6 +66,7 @@ input CreateOneUserByIdentityProviderRequest {
     gender: Gender!
     birthDate: Date
     profilePictureUrl: Url
+    cook: CreateOneCookRequest
 }
 
 type UserMutation {

@@ -102,10 +102,145 @@ export type GQLCategoryQuery = {
     findAll: Array<GQLCategory>;
 };
 
+export type GQLCook = {
+    __typename?: 'Cook';
+    biography: Scalars['String'];
+    cookId: Scalars['String'];
+    createdAt: Scalars['DateTime'];
+    isLocked: Scalars['Boolean'];
+    isVisible: Scalars['Boolean'];
+    languages: Array<GQLLanguage>;
+    location: GQLLocation;
+    maximumParticipants?: Maybe<Scalars['UInt']>;
+    maximumPrice?: Maybe<Scalars['UInt']>;
+    maximumTravelDistance?: Maybe<Scalars['UInt']>;
+    minimumParticipants?: Maybe<Scalars['UInt']>;
+    minimumPrice?: Maybe<Scalars['UInt']>;
+    rank: GQLCookRank;
+    travelExpenses: Scalars['UInt'];
+    user: GQLUser;
+};
+
+export type GQLCookMutation = {
+    __typename?: 'CookMutation';
+    addOneLanguage: Scalars['Boolean'];
+    createOne: Scalars['Boolean'];
+    removeOneLanguage: Scalars['Boolean'];
+    updateBiography: Scalars['Boolean'];
+    updateIsLocked: Scalars['Boolean'];
+    updateIsVisible: Scalars['Boolean'];
+    updateLocation: Scalars['Boolean'];
+    updateMaximumParticipants: Scalars['Boolean'];
+    updateMaximumPrice: Scalars['Boolean'];
+    updateMaximumTravelDistance: Scalars['Boolean'];
+    updateMinimumParticipants: Scalars['Boolean'];
+    updateMinimumPrice: Scalars['Boolean'];
+    updateRank: Scalars['Boolean'];
+    updateTravelExpenses: Scalars['Boolean'];
+};
+
+export type GQLCookMutationAddOneLanguageArgs = {
+    cookId: Scalars['String'];
+    languageId: Scalars['String'];
+};
+
+export type GQLCookMutationCreateOneArgs = {
+    cookId: Scalars['String'];
+    request: GQLCreateOneCookRequest;
+};
+
+export type GQLCookMutationRemoveOneLanguageArgs = {
+    cookId: Scalars['String'];
+    languageId: Scalars['String'];
+};
+
+export type GQLCookMutationUpdateBiographyArgs = {
+    biography: Scalars['String'];
+    cookId: Scalars['String'];
+};
+
+export type GQLCookMutationUpdateIsLockedArgs = {
+    cookId: Scalars['String'];
+    isLocked: Scalars['Boolean'];
+};
+
+export type GQLCookMutationUpdateIsVisibleArgs = {
+    cookId: Scalars['String'];
+    isVisible: Scalars['Boolean'];
+};
+
+export type GQLCookMutationUpdateLocationArgs = {
+    cookId: Scalars['String'];
+    location: GQLLocationInput;
+};
+
+export type GQLCookMutationUpdateMaximumParticipantsArgs = {
+    cookId: Scalars['String'];
+    maximumParticipants?: InputMaybe<Scalars['UInt']>;
+};
+
+export type GQLCookMutationUpdateMaximumPriceArgs = {
+    cookId: Scalars['String'];
+    maximumPrice?: InputMaybe<Scalars['UInt']>;
+};
+
+export type GQLCookMutationUpdateMaximumTravelDistanceArgs = {
+    cookId: Scalars['String'];
+    maximumTravelDistance?: InputMaybe<Scalars['UInt']>;
+};
+
+export type GQLCookMutationUpdateMinimumParticipantsArgs = {
+    cookId: Scalars['String'];
+    minimumParticipants?: InputMaybe<Scalars['UInt']>;
+};
+
+export type GQLCookMutationUpdateMinimumPriceArgs = {
+    cookId: Scalars['String'];
+    minimumPrice?: InputMaybe<Scalars['UInt']>;
+};
+
+export type GQLCookMutationUpdateRankArgs = {
+    cookId: Scalars['String'];
+    rank: GQLCookRank;
+};
+
+export type GQLCookMutationUpdateTravelExpensesArgs = {
+    cookId: Scalars['String'];
+    travelExpenses: Scalars['UInt'];
+};
+
+export type GQLCookQuery = {
+    __typename?: 'CookQuery';
+    findMany: Array<GQLCook>;
+    findOne?: Maybe<GQLCook>;
+};
+
+export type GQLCookQueryFindManyArgs = {
+    request: GQLFindManyRequest;
+};
+
+export type GQLCookQueryFindOneArgs = {
+    cookId: Scalars['String'];
+};
+
 export type GQLCookRank = 'HOBBY' | 'PROFESSIONAL';
 
 export type GQLCreateOneAdminRequest = {
     adminId: Scalars['String'];
+};
+
+export type GQLCreateOneCookRequest = {
+    biography: Scalars['String'];
+    isVisible: Scalars['Boolean'];
+    languageIds?: InputMaybe<Array<Scalars['String']>>;
+    location: GQLLocationInput;
+    maximumParticipants?: InputMaybe<Scalars['UInt']>;
+    maximumPrice?: InputMaybe<Scalars['UInt']>;
+    maximumTravelDistance?: InputMaybe<Scalars['UInt']>;
+    minimumParticipants?: InputMaybe<Scalars['UInt']>;
+    minimumPrice?: InputMaybe<Scalars['UInt']>;
+    rank: GQLCookRank;
+    travelExpenses: Scalars['UInt'];
 };
 
 export type GQLCreateOneSessionByEmailAddressRequest = {
@@ -133,6 +268,7 @@ export type GQLCreateOneSessionByPhoneNumberRequest = {
 
 export type GQLCreateOneUserByEmailAddressRequest = {
     birthDate?: InputMaybe<Scalars['Date']>;
+    cook?: InputMaybe<GQLCreateOneCookRequest>;
     emailAddress: Scalars['EmailAddress'];
     firstName: Scalars['String'];
     gender: GQLGender;
@@ -144,6 +280,7 @@ export type GQLCreateOneUserByEmailAddressRequest = {
 
 export type GQLCreateOneUserByIdentityProviderRequest = {
     birthDate?: InputMaybe<Scalars['Date']>;
+    cook?: InputMaybe<GQLCreateOneCookRequest>;
     firstName: Scalars['String'];
     gender: GQLGender;
     idToken: Scalars['String'];
@@ -155,6 +292,7 @@ export type GQLCreateOneUserByIdentityProviderRequest = {
 
 export type GQLCreateOneUserByPhoneNumberRequest = {
     birthDate?: InputMaybe<Scalars['Date']>;
+    cook?: InputMaybe<GQLCreateOneCookRequest>;
     firstName: Scalars['String'];
     gender: GQLGender;
     language: GQLUserLanguage;
@@ -232,6 +370,7 @@ export type GQLMutation = {
     admins: GQLAdminMutation;
     allergies: GQLAllergyMutation;
     categories: GQLCategoryMutation;
+    cooks: GQLCookMutation;
     kitchens: GQLKitchenMutation;
     languages: GQLLanguageMutation;
     sessions: GQLSessionMutation;
@@ -267,6 +406,7 @@ export type GQLQuery = {
     admins: GQLAdminQuery;
     allergies: GQLAllergyQuery;
     categories: GQLCategoryQuery;
+    cooks: GQLCookQuery;
     kitchens: GQLKitchenQuery;
     languages: GQLLanguageQuery;
     users: GQLUserQuery;
@@ -310,11 +450,13 @@ export type GQLUser = {
     activeSessions: Array<GQLSession>;
     admin?: Maybe<GQLAdmin>;
     birthDate?: Maybe<Scalars['Date']>;
+    cook?: Maybe<GQLCook>;
     createdAt: Scalars['DateTime'];
     emailAddress?: Maybe<Scalars['EmailAddress']>;
     firstName: Scalars['String'];
     gender: GQLGender;
     isAdmin: Scalars['Boolean'];
+    isCook: Scalars['Boolean'];
     isLocked: Scalars['Boolean'];
     language: GQLUserLanguage;
     lastName: Scalars['String'];
@@ -498,8 +640,12 @@ export type GQLResolversTypes = {
     Category: ResolverTypeWrapper<GQLCategory>;
     CategoryMutation: ResolverTypeWrapper<GQLCategoryMutation>;
     CategoryQuery: ResolverTypeWrapper<GQLCategoryQuery>;
+    Cook: ResolverTypeWrapper<GQLCook>;
+    CookMutation: ResolverTypeWrapper<GQLCookMutation>;
+    CookQuery: ResolverTypeWrapper<GQLCookQuery>;
     CookRank: GQLCookRank;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
+    CreateOneCookRequest: GQLCreateOneCookRequest;
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
@@ -562,7 +708,11 @@ export type GQLResolversParentTypes = {
     Category: GQLCategory;
     CategoryMutation: GQLCategoryMutation;
     CategoryQuery: GQLCategoryQuery;
+    Cook: GQLCook;
+    CookMutation: GQLCookMutation;
+    CookQuery: GQLCookQuery;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
+    CreateOneCookRequest: GQLCreateOneCookRequest;
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
@@ -699,6 +849,125 @@ export type GQLCategoryQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLCookResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Cook'] = GQLResolversParentTypes['Cook']> = {
+    biography?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    isLocked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    isVisible?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    languages?: Resolver<Array<GQLResolversTypes['Language']>, ParentType, ContextType>;
+    location?: Resolver<GQLResolversTypes['Location'], ParentType, ContextType>;
+    maximumParticipants?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
+    maximumPrice?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
+    maximumTravelDistance?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
+    minimumParticipants?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
+    minimumPrice?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
+    rank?: Resolver<GQLResolversTypes['CookRank'], ParentType, ContextType>;
+    travelExpenses?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    user?: Resolver<GQLResolversTypes['User'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCookMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CookMutation'] = GQLResolversParentTypes['CookMutation'],
+> = {
+    addOneLanguage?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationAddOneLanguageArgs, 'cookId' | 'languageId'>
+    >;
+    createOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationCreateOneArgs, 'cookId' | 'request'>
+    >;
+    removeOneLanguage?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationRemoveOneLanguageArgs, 'cookId' | 'languageId'>
+    >;
+    updateBiography?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateBiographyArgs, 'biography' | 'cookId'>
+    >;
+    updateIsLocked?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateIsLockedArgs, 'cookId' | 'isLocked'>
+    >;
+    updateIsVisible?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateIsVisibleArgs, 'cookId' | 'isVisible'>
+    >;
+    updateLocation?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateLocationArgs, 'cookId' | 'location'>
+    >;
+    updateMaximumParticipants?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateMaximumParticipantsArgs, 'cookId'>
+    >;
+    updateMaximumPrice?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateMaximumPriceArgs, 'cookId'>
+    >;
+    updateMaximumTravelDistance?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateMaximumTravelDistanceArgs, 'cookId'>
+    >;
+    updateMinimumParticipants?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateMinimumParticipantsArgs, 'cookId'>
+    >;
+    updateMinimumPrice?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateMinimumPriceArgs, 'cookId'>
+    >;
+    updateRank?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateRankArgs, 'cookId' | 'rank'>
+    >;
+    updateTravelExpenses?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateTravelExpensesArgs, 'cookId' | 'travelExpenses'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCookQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CookQuery'] = GQLResolversParentTypes['CookQuery'],
+> = {
+    findMany?: Resolver<Array<GQLResolversTypes['Cook']>, ParentType, ContextType, RequireFields<GQLCookQueryFindManyArgs, 'request'>>;
+    findOne?: Resolver<Maybe<GQLResolversTypes['Cook']>, ParentType, ContextType, RequireFields<GQLCookQueryFindOneArgs, 'cookId'>>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface GQLDateScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['Date'], any> {
     name: 'Date';
 }
@@ -785,6 +1054,7 @@ export type GQLMutationResolvers<
     admins?: Resolver<GQLResolversTypes['AdminMutation'], ParentType, ContextType>;
     allergies?: Resolver<GQLResolversTypes['AllergyMutation'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryMutation'], ParentType, ContextType>;
+    cooks?: Resolver<GQLResolversTypes['CookMutation'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenMutation'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
     sessions?: Resolver<GQLResolversTypes['SessionMutation'], ParentType, ContextType>;
@@ -817,6 +1087,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     admins?: Resolver<GQLResolversTypes['AdminQuery'], ParentType, ContextType>;
     allergies?: Resolver<GQLResolversTypes['AllergyQuery'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryQuery'], ParentType, ContextType>;
+    cooks?: Resolver<GQLResolversTypes['CookQuery'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserQuery'], ParentType, ContextType>;
@@ -884,11 +1155,13 @@ export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversP
     activeSessions?: Resolver<Array<GQLResolversTypes['Session']>, ParentType, ContextType>;
     admin?: Resolver<Maybe<GQLResolversTypes['Admin']>, ParentType, ContextType>;
     birthDate?: Resolver<Maybe<GQLResolversTypes['Date']>, ParentType, ContextType>;
+    cook?: Resolver<Maybe<GQLResolversTypes['Cook']>, ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     emailAddress?: Resolver<Maybe<GQLResolversTypes['EmailAddress']>, ParentType, ContextType>;
     firstName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     gender?: Resolver<GQLResolversTypes['Gender'], ParentType, ContextType>;
     isAdmin?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    isCook?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     isLocked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     language?: Resolver<GQLResolversTypes['UserLanguage'], ParentType, ContextType>;
     lastName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -1013,6 +1286,9 @@ export type GQLResolvers<ContextType = any> = {
     Category?: GQLCategoryResolvers<ContextType>;
     CategoryMutation?: GQLCategoryMutationResolvers<ContextType>;
     CategoryQuery?: GQLCategoryQueryResolvers<ContextType>;
+    Cook?: GQLCookResolvers<ContextType>;
+    CookMutation?: GQLCookMutationResolvers<ContextType>;
+    CookQuery?: GQLCookQueryResolvers<ContextType>;
     Date?: GraphQLScalarType;
     DateTime?: GraphQLScalarType;
     EmailAddress?: GraphQLScalarType;
