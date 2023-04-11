@@ -41,6 +41,14 @@ export type GQLAllergyQuery = {
     findAll: Array<GQLAllergy>;
 };
 
+export type GQLAnonymousUser = {
+    __typename?: 'AnonymousUser';
+    birthDate?: Maybe<Scalars['Date']>;
+    createdAt: Scalars['DateTime'];
+    gender: GQLGender;
+    language: GQLUserLanguage;
+};
+
 export type GQLCategory = {
     __typename?: 'Category';
     categoryId: Scalars['String'];
@@ -343,6 +351,7 @@ export type GQLResolversTypes = {
     Allergy: ResolverTypeWrapper<GQLAllergy>;
     AllergyMutation: ResolverTypeWrapper<GQLAllergyMutation>;
     AllergyQuery: ResolverTypeWrapper<GQLAllergyQuery>;
+    AnonymousUser: ResolverTypeWrapper<GQLAnonymousUser>;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
     Category: ResolverTypeWrapper<GQLCategory>;
     CategoryMutation: ResolverTypeWrapper<GQLCategoryMutation>;
@@ -393,6 +402,7 @@ export type GQLResolversParentTypes = {
     Allergy: GQLAllergy;
     AllergyMutation: GQLAllergyMutation;
     AllergyQuery: GQLAllergyQuery;
+    AnonymousUser: GQLAnonymousUser;
     Boolean: Scalars['Boolean'];
     Category: GQLCategory;
     CategoryMutation: GQLCategoryMutation;
@@ -452,6 +462,17 @@ export type GQLAllergyQueryResolvers<
     ParentType extends GQLResolversParentTypes['AllergyQuery'] = GQLResolversParentTypes['AllergyQuery'],
 > = {
     findAll?: Resolver<Array<GQLResolversTypes['Allergy']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLAnonymousUserResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['AnonymousUser'] = GQLResolversParentTypes['AnonymousUser'],
+> = {
+    birthDate?: Resolver<Maybe<GQLResolversTypes['Date']>, ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    gender?: Resolver<GQLResolversTypes['Gender'], ParentType, ContextType>;
+    language?: Resolver<GQLResolversTypes['UserLanguage'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -703,6 +724,7 @@ export type GQLResolvers<ContextType = any> = {
     Allergy?: GQLAllergyResolvers<ContextType>;
     AllergyMutation?: GQLAllergyMutationResolvers<ContextType>;
     AllergyQuery?: GQLAllergyQueryResolvers<ContextType>;
+    AnonymousUser?: GQLAnonymousUserResolvers<ContextType>;
     Category?: GQLCategoryResolvers<ContextType>;
     CategoryMutation?: GQLCategoryMutationResolvers<ContextType>;
     CategoryQuery?: GQLCategoryQueryResolvers<ContextType>;

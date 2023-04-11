@@ -1,0 +1,6 @@
+type AnonymousUser {
+    gender: Gender!
+    birthDate: Date
+    language: UserLanguage!
+    createdAt: DateTime!
+}
