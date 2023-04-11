@@ -63,3 +63,9 @@ enum IdentityProvider {
     APPLE
     GOOGLE
 }
+
+input FindManyRequest {
+    searchText: String
+    skip: UInt
+    take: UInt
+}

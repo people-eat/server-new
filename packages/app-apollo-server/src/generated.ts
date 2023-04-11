@@ -58,6 +58,12 @@ export type GQLCategoryQuery = {
 
 export type GQLCurrencyCode = 'EUR' | 'USD';
 
+export type GQLFindManyRequest = {
+    searchText?: InputMaybe<Scalars['String']>;
+    skip?: InputMaybe<Scalars['UInt']>;
+    take?: InputMaybe<Scalars['UInt']>;
+};
+
 export type GQLGender = 'DIVERSE' | 'FEMALE' | 'MALE' | 'NO_INFORMATION';
 
 export type GQLIdentityProvider = 'APPLE' | 'GOOGLE';
@@ -218,6 +224,7 @@ export type GQLResolversTypes = {
     Date: ResolverTypeWrapper<Scalars['Date']>;
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
     EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
+    FindManyRequest: GQLFindManyRequest;
     Gender: GQLGender;
     IdentityProvider: GQLIdentityProvider;
     Kitchen: ResolverTypeWrapper<GQLKitchen>;
@@ -257,6 +264,7 @@ export type GQLResolversParentTypes = {
     Date: Scalars['Date'];
     DateTime: Scalars['DateTime'];
     EmailAddress: Scalars['EmailAddress'];
+    FindManyRequest: GQLFindManyRequest;
     Kitchen: GQLKitchen;
     KitchenMutation: GQLKitchenMutation;
     KitchenQuery: GQLKitchenQuery;
