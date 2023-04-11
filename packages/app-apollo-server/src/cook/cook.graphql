@@ -15,6 +15,9 @@ type Cook {
 
     user: User!
     languages: [Language!]!
+
+    meals: [Meal!]!
+    mealCount: UInt!
 }
 
 type CookQuery {

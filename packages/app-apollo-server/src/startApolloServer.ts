@@ -42,6 +42,7 @@ import { createEmailAddressUpdateResolvers } from './email-address-update/create
 import { type GQLResolvers } from './generated';
 import { createKitchenResolvers } from './kitchen/createKitchenResolvers';
 import { createLanguageResolvers } from './language/createLanguageResolvers';
+import { createMealResolvers } from './meal/createMealResolvers';
 import { createNotificationConfigurationResolvers } from './notification-configuration/createNotificationConfigurationResolvers';
 import { createNotificationResolvers } from './notification/createNotificationResolvers';
 import { createPhoneNumberUpdateResolvers } from './phone-number-update/createPhoneNumberUpdateResolvers';
@@ -131,6 +132,7 @@ export async function startApolloServerApp({
         ...createCookSpecificFeeResolvers(),
         ...createPhoneNumberUpdateResolvers(service),
         ...createEmailAddressUpdateResolvers(service),
+        ...createMealResolvers(service),
     };
 
     const path: string = '/graphql';

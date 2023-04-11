@@ -1,9 +1,10 @@
-import { type Authorization, type Service } from '@people-eat/server-domain';
+import { type Authorization, type Meal, type Service } from '@people-eat/server-domain';
 import {
     type GQLCook,
     type GQLCookMutation,
     type GQLCookMutationAddOneLanguageArgs,
     type GQLCookMutationCreateOneArgs,
+    type GQLCookMutationMealsArgs,
     type GQLCookMutationRemoveOneLanguageArgs,
     type GQLCookMutationUpdateBiographyArgs,
     type GQLCookMutationUpdateIsLockedArgs,
@@ -19,7 +20,9 @@ import {
     type GQLCookQuery,
     type GQLCookQueryFindManyArgs,
     type GQLCookQueryFindOneArgs,
+    type GQLCookQueryMealsArgs,
     type GQLLanguage,
+    type GQLMeal,
     type GQLUser,
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
@@ -31,6 +34,12 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
                 service.user.findOneByUserId(context, { userId: cookId }) as any,
             languages: async ({ cookId }: GQLCook, _input: unknown, context: Authorization.Context): Promise<GQLLanguage[]> =>
                 service.cookLanguage.findAll(context, { cookId }) as any,
+            meals: async ({ cookId }: GQLCook, _input: unknown, context: Authorization.Context): Promise<GQLMeal[]> =>
+                service.meal.findMany(context, { cookId }) as any,
+            mealCount: async ({ cookId }: GQLCook, _input: unknown, context: Authorization.Context): Promise<number> => {
+                const meals: Meal[] | undefined = await service.meal.findMany(context, { cookId });
+                return meals?.length ?? 0;
+            },
         },
         CookMutation: {
             createOne: async (
@@ -116,6 +125,8 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
                 { cookId, languageId }: GQLCookMutationRemoveOneLanguageArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.cookLanguage.deleteOne(context, { cookId, languageId }),
+
+            meals: (_parent: GQLCookMutation, { cookId }: GQLCookMutationMealsArgs) => ({ cookId } as any),
         },
         CookQuery: {
             findOne: async (
@@ -129,6 +140,8 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
                 { request }: GQLCookQueryFindManyArgs,
                 context: Authorization.Context,
             ): Promise<GQLCook[]> => service.cook.findMany(context, request) as any,
+
+            meals: (_parent: GQLCookQuery, { cookId }: GQLCookQueryMealsArgs) => ({ cookId } as any),
         },
     };
 }
