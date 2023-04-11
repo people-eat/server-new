@@ -248,6 +248,11 @@ export type GQLCreateOneNotificationRequest = {
     url?: InputMaybe<Scalars['Url']>;
 };
 
+export type GQLCreateOnePrivacyPolicyUpdateRequest = {
+    englishText: Scalars['String'];
+    germanText: Scalars['String'];
+};
+
 export type GQLCreateOneSessionByEmailAddressRequest = {
     emailAddress: Scalars['EmailAddress'];
     password: Scalars['String'];
@@ -397,6 +402,7 @@ export type GQLMutation = {
     kitchens: GQLKitchenMutation;
     languages: GQLLanguageMutation;
     notifications: GQLNotificationMutation;
+    privacyPolicyUpdates: GQLPrivacyPolicyUpdateMutation;
     sessions: GQLSessionMutation;
     termsUpdates: GQLTermsUpdateMutation;
     users: GQLUserMutation;
@@ -467,6 +473,36 @@ export type GQLPriceInput = {
     currencyCode: GQLCurrencyCode;
 };
 
+export type GQLPrivacyPolicyUpdate = {
+    __typename?: 'PrivacyPolicyUpdate';
+    admin: GQLAdmin;
+    adminId: Scalars['String'];
+    createdAt: Scalars['DateTime'];
+    englishText: Scalars['String'];
+    germanText: Scalars['String'];
+    privacyPolicyUpdateId: Scalars['String'];
+};
+
+export type GQLPrivacyPolicyUpdateMutation = {
+    __typename?: 'PrivacyPolicyUpdateMutation';
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLPrivacyPolicyUpdateMutationCreateOneArgs = {
+    request: GQLCreateOnePrivacyPolicyUpdateRequest;
+};
+
+export type GQLPrivacyPolicyUpdateQuery = {
+    __typename?: 'PrivacyPolicyUpdateQuery';
+    findAll: Array<GQLPrivacyPolicyUpdate>;
+    findLatest?: Maybe<GQLPrivacyPolicyUpdate>;
+    findOne?: Maybe<GQLPrivacyPolicyUpdate>;
+};
+
+export type GQLPrivacyPolicyUpdateQueryFindOneArgs = {
+    privacyPolicyUpdateId: Scalars['String'];
+};
+
 export type GQLPublicCook = {
     __typename?: 'PublicCook';
     biography: Scalars['String'];
@@ -535,6 +571,7 @@ export type GQLQuery = {
     cooks: GQLCookQuery;
     kitchens: GQLKitchenQuery;
     languages: GQLLanguageQuery;
+    privacyPolicyUpdates: GQLPrivacyPolicyUpdateQuery;
     publicCooks: GQLPublicCookQuery;
     publicTermsUpdates: GQLPublicTermsUpdateQuery;
     termsUpdates: GQLTermsUpdateQuery;
@@ -851,6 +888,7 @@ export type GQLResolversTypes = {
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
     CreateOneNotificationRequest: GQLCreateOneNotificationRequest;
+    CreateOnePrivacyPolicyUpdateRequest: GQLCreateOnePrivacyPolicyUpdateRequest;
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
@@ -890,6 +928,9 @@ export type GQLResolversTypes = {
     Platform: GQLPlatform;
     Price: ResolverTypeWrapper<GQLPrice>;
     PriceInput: GQLPriceInput;
+    PrivacyPolicyUpdate: ResolverTypeWrapper<GQLPrivacyPolicyUpdate>;
+    PrivacyPolicyUpdateMutation: ResolverTypeWrapper<GQLPrivacyPolicyUpdateMutation>;
+    PrivacyPolicyUpdateQuery: ResolverTypeWrapper<GQLPrivacyPolicyUpdateQuery>;
     PublicCook: ResolverTypeWrapper<GQLPublicCook>;
     PublicCookQuery: ResolverTypeWrapper<GQLPublicCookQuery>;
     PublicTermsUpdate: ResolverTypeWrapper<GQLPublicTermsUpdate>;
@@ -935,6 +976,7 @@ export type GQLResolversParentTypes = {
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
     CreateOneNotificationRequest: GQLCreateOneNotificationRequest;
+    CreateOnePrivacyPolicyUpdateRequest: GQLCreateOnePrivacyPolicyUpdateRequest;
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
@@ -968,6 +1010,9 @@ export type GQLResolversParentTypes = {
     PhoneNumber: Scalars['PhoneNumber'];
     Price: GQLPrice;
     PriceInput: GQLPriceInput;
+    PrivacyPolicyUpdate: GQLPrivacyPolicyUpdate;
+    PrivacyPolicyUpdateMutation: GQLPrivacyPolicyUpdateMutation;
+    PrivacyPolicyUpdateQuery: GQLPrivacyPolicyUpdateQuery;
     PublicCook: GQLPublicCook;
     PublicCookQuery: GQLPublicCookQuery;
     PublicTermsUpdate: GQLPublicTermsUpdate;
@@ -1296,6 +1341,7 @@ export type GQLMutationResolvers<
     kitchens?: Resolver<GQLResolversTypes['KitchenMutation'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
     notifications?: Resolver<GQLResolversTypes['NotificationMutation'], ParentType, ContextType>;
+    privacyPolicyUpdates?: Resolver<GQLResolversTypes['PrivacyPolicyUpdateMutation'], ParentType, ContextType>;
     sessions?: Resolver<GQLResolversTypes['SessionMutation'], ParentType, ContextType>;
     termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateMutation'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserMutation'], ParentType, ContextType>;
@@ -1377,6 +1423,47 @@ export interface GQLPhoneNumberScalarConfig extends GraphQLScalarTypeConfig<GQLR
 export type GQLPriceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Price'] = GQLResolversParentTypes['Price']> = {
     amount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     currencyCode?: Resolver<GQLResolversTypes['CurrencyCode'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLPrivacyPolicyUpdateResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['PrivacyPolicyUpdate'] = GQLResolversParentTypes['PrivacyPolicyUpdate'],
+> = {
+    admin?: Resolver<GQLResolversTypes['Admin'], ParentType, ContextType>;
+    adminId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    englishText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    germanText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    privacyPolicyUpdateId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLPrivacyPolicyUpdateMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['PrivacyPolicyUpdateMutation'] = GQLResolversParentTypes['PrivacyPolicyUpdateMutation'],
+> = {
+    createOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLPrivacyPolicyUpdateMutationCreateOneArgs, 'request'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLPrivacyPolicyUpdateQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['PrivacyPolicyUpdateQuery'] = GQLResolversParentTypes['PrivacyPolicyUpdateQuery'],
+> = {
+    findAll?: Resolver<Array<GQLResolversTypes['PrivacyPolicyUpdate']>, ParentType, ContextType>;
+    findLatest?: Resolver<Maybe<GQLResolversTypes['PrivacyPolicyUpdate']>, ParentType, ContextType>;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['PrivacyPolicyUpdate']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLPrivacyPolicyUpdateQueryFindOneArgs, 'privacyPolicyUpdateId'>
+    >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1465,6 +1552,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     cooks?: Resolver<GQLResolversTypes['CookQuery'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
+    privacyPolicyUpdates?: Resolver<GQLResolversTypes['PrivacyPolicyUpdateQuery'], ParentType, ContextType>;
     publicCooks?: Resolver<GQLResolversTypes['PublicCookQuery'], ParentType, ContextType>;
     publicTermsUpdates?: Resolver<GQLResolversTypes['PublicTermsUpdateQuery'], ParentType, ContextType>;
     termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateQuery'], ParentType, ContextType>;
@@ -1783,6 +1871,9 @@ export type GQLResolvers<ContextType = any> = {
     NotificationQuery?: GQLNotificationQueryResolvers<ContextType>;
     PhoneNumber?: GraphQLScalarType;
     Price?: GQLPriceResolvers<ContextType>;
+    PrivacyPolicyUpdate?: GQLPrivacyPolicyUpdateResolvers<ContextType>;
+    PrivacyPolicyUpdateMutation?: GQLPrivacyPolicyUpdateMutationResolvers<ContextType>;
+    PrivacyPolicyUpdateQuery?: GQLPrivacyPolicyUpdateQueryResolvers<ContextType>;
     PublicCook?: GQLPublicCookResolvers<ContextType>;
     PublicCookQuery?: GQLPublicCookQueryResolvers<ContextType>;
     PublicTermsUpdate?: GQLPublicTermsUpdateResolvers<ContextType>;

@@ -1,0 +1,32 @@
+type PrivacyPolicyUpdate {
+    privacyPolicyUpdateId: String!
+    adminId: String!
+    germanText: String!
+    englishText: String!
+    createdAt: DateTime!
+
+    admin: Admin!
+}
+
+type PrivacyPolicyUpdateQuery {
+    findAll: [PrivacyPolicyUpdate!]!
+    findOne(privacyPolicyUpdateId: String!): PrivacyPolicyUpdate
+    findLatest: PrivacyPolicyUpdate
+}
+
+type Query {
+    privacyPolicyUpdates: PrivacyPolicyUpdateQuery!
+}
+
+input CreateOnePrivacyPolicyUpdateRequest {
+    germanText: String!
+    englishText: String!
+}
+
+type PrivacyPolicyUpdateMutation {
+    createOne(request: CreateOnePrivacyPolicyUpdateRequest!): Boolean!
+}
+
+type Mutation {
+    privacyPolicyUpdates: PrivacyPolicyUpdateMutation!
+}
