@@ -1,0 +1,20 @@
+type CookSpecificFee {
+    cookId: String!
+}
+
+type CookSpecificFeeQuery {
+    findMany(request: FindManyRequest): [CookSpecificFee!]!
+    findOne(cookId: String!): CookSpecificFee
+}
+
+type Query {
+    cookSpecificFees: CookSpecificFeeQuery!
+}
+
+type CookSpecificFeeMutation {
+    createOne: Boolean!
+}
+
+type Mutation {
+    cookSpecificFees: CookSpecificFeeMutation!
+}

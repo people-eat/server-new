@@ -225,6 +225,30 @@ export type GQLCookQueryFindOneArgs = {
 
 export type GQLCookRank = 'HOBBY' | 'PROFESSIONAL';
 
+export type GQLCookSpecificFee = {
+    __typename?: 'CookSpecificFee';
+    cookId: Scalars['String'];
+};
+
+export type GQLCookSpecificFeeMutation = {
+    __typename?: 'CookSpecificFeeMutation';
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLCookSpecificFeeQuery = {
+    __typename?: 'CookSpecificFeeQuery';
+    findMany: Array<GQLCookSpecificFee>;
+    findOne?: Maybe<GQLCookSpecificFee>;
+};
+
+export type GQLCookSpecificFeeQueryFindManyArgs = {
+    request?: InputMaybe<GQLFindManyRequest>;
+};
+
+export type GQLCookSpecificFeeQueryFindOneArgs = {
+    cookId: Scalars['String'];
+};
+
 export type GQLCreateOneAdminRequest = {
     adminId: Scalars['String'];
 };
@@ -423,6 +447,7 @@ export type GQLMutation = {
     admins: GQLAdminMutation;
     allergies: GQLAllergyMutation;
     categories: GQLCategoryMutation;
+    cookSpecificFees: GQLCookSpecificFeeMutation;
     cooks: GQLCookMutation;
     customerFeeUpdates: GQLCustomerFeeUpdateMutation;
     kitchens: GQLKitchenMutation;
@@ -613,6 +638,7 @@ export type GQLQuery = {
     admins: GQLAdminQuery;
     allergies: GQLAllergyQuery;
     categories: GQLCategoryQuery;
+    cookSpecificFees: GQLCookSpecificFeeQuery;
     cooks: GQLCookQuery;
     customerFeeUpdates: GQLCustomerFeeUpdateQuery;
     kitchens: GQLKitchenQuery;
@@ -932,6 +958,9 @@ export type GQLResolversTypes = {
     CookMutation: ResolverTypeWrapper<GQLCookMutation>;
     CookQuery: ResolverTypeWrapper<GQLCookQuery>;
     CookRank: GQLCookRank;
+    CookSpecificFee: ResolverTypeWrapper<GQLCookSpecificFee>;
+    CookSpecificFeeMutation: ResolverTypeWrapper<GQLCookSpecificFeeMutation>;
+    CookSpecificFeeQuery: ResolverTypeWrapper<GQLCookSpecificFeeQuery>;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
     CreateOneNotificationRequest: GQLCreateOneNotificationRequest;
@@ -1025,6 +1054,9 @@ export type GQLResolversParentTypes = {
     Cook: GQLCook;
     CookMutation: GQLCookMutation;
     CookQuery: GQLCookQuery;
+    CookSpecificFee: GQLCookSpecificFee;
+    CookSpecificFeeMutation: GQLCookSpecificFeeMutation;
+    CookSpecificFeeQuery: GQLCookSpecificFeeQuery;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
     CreateOneNotificationRequest: GQLCreateOneNotificationRequest;
@@ -1308,6 +1340,36 @@ export type GQLCookQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLCookSpecificFeeResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CookSpecificFee'] = GQLResolversParentTypes['CookSpecificFee'],
+> = {
+    cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCookSpecificFeeMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CookSpecificFeeMutation'] = GQLResolversParentTypes['CookSpecificFeeMutation'],
+> = {
+    createOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCookSpecificFeeQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CookSpecificFeeQuery'] = GQLResolversParentTypes['CookSpecificFeeQuery'],
+> = {
+    findMany?: Resolver<Array<GQLResolversTypes['CookSpecificFee']>, ParentType, ContextType, Partial<GQLCookSpecificFeeQueryFindManyArgs>>;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['CookSpecificFee']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookSpecificFeeQueryFindOneArgs, 'cookId'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLCustomerFeeUpdateResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['CustomerFeeUpdate'] = GQLResolversParentTypes['CustomerFeeUpdate'],
@@ -1425,6 +1487,7 @@ export type GQLMutationResolvers<
     admins?: Resolver<GQLResolversTypes['AdminMutation'], ParentType, ContextType>;
     allergies?: Resolver<GQLResolversTypes['AllergyMutation'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryMutation'], ParentType, ContextType>;
+    cookSpecificFees?: Resolver<GQLResolversTypes['CookSpecificFeeMutation'], ParentType, ContextType>;
     cooks?: Resolver<GQLResolversTypes['CookMutation'], ParentType, ContextType>;
     customerFeeUpdates?: Resolver<GQLResolversTypes['CustomerFeeUpdateMutation'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenMutation'], ParentType, ContextType>;
@@ -1664,6 +1727,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     admins?: Resolver<GQLResolversTypes['AdminQuery'], ParentType, ContextType>;
     allergies?: Resolver<GQLResolversTypes['AllergyQuery'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryQuery'], ParentType, ContextType>;
+    cookSpecificFees?: Resolver<GQLResolversTypes['CookSpecificFeeQuery'], ParentType, ContextType>;
     cooks?: Resolver<GQLResolversTypes['CookQuery'], ParentType, ContextType>;
     customerFeeUpdates?: Resolver<GQLResolversTypes['CustomerFeeUpdateQuery'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
@@ -1967,6 +2031,9 @@ export type GQLResolvers<ContextType = any> = {
     Cook?: GQLCookResolvers<ContextType>;
     CookMutation?: GQLCookMutationResolvers<ContextType>;
     CookQuery?: GQLCookQueryResolvers<ContextType>;
+    CookSpecificFee?: GQLCookSpecificFeeResolvers<ContextType>;
+    CookSpecificFeeMutation?: GQLCookSpecificFeeMutationResolvers<ContextType>;
+    CookSpecificFeeQuery?: GQLCookSpecificFeeQueryResolvers<ContextType>;
     CustomerFeeUpdate?: GQLCustomerFeeUpdateResolvers<ContextType>;
     CustomerFeeUpdateMutation?: GQLCustomerFeeUpdateMutationResolvers<ContextType>;
     CustomerFeeUpdateQuery?: GQLCustomerFeeUpdateQueryResolvers<ContextType>;
