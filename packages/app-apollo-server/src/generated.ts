@@ -114,6 +114,8 @@ export type GQLLocationInput = {
     text?: InputMaybe<Scalars['String']>;
 };
 
+export type GQLMealType = 'DESSERT' | 'FISH' | 'MEAT' | 'SOUP' | 'SPECIAL' | 'VEGAN' | 'VEGETARIAN';
+
 export type GQLMutation = {
     __typename?: 'Mutation';
     allergies: GQLAllergyMutation;
@@ -240,6 +242,7 @@ export type GQLResolversTypes = {
     Location: ResolverTypeWrapper<GQLLocation>;
     LocationInput: GQLLocationInput;
     Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
+    MealType: GQLMealType;
     Mutation: ResolverTypeWrapper<{}>;
     PaymentProvider: GQLPaymentProvider;
     PhoneNumber: ResolverTypeWrapper<Scalars['PhoneNumber']>;

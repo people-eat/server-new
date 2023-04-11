@@ -74,3 +74,13 @@ enum CookRank {
     HOBBY
     PROFESSIONAL
 }
+
+enum MealType {
+    SOUP
+    MEAT
+    FISH
+    VEGETARIAN
+    VEGAN
+    DESSERT
+    SPECIAL
+}
