@@ -92,6 +92,12 @@ export type GQLLanguageQuery = {
     findAll: Array<GQLLanguage>;
 };
 
+export type GQLLocation = {
+    __typename?: 'Location';
+    latitude: Scalars['Latitude'];
+    longitude: Scalars['Longitude'];
+};
+
 export type GQLMutation = {
     __typename?: 'Mutation';
     allergies: GQLAllergyMutation;
@@ -210,6 +216,7 @@ export type GQLResolversTypes = {
     LanguageMutation: ResolverTypeWrapper<GQLLanguageMutation>;
     LanguageQuery: ResolverTypeWrapper<GQLLanguageQuery>;
     Latitude: ResolverTypeWrapper<Scalars['Latitude']>;
+    Location: ResolverTypeWrapper<GQLLocation>;
     Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
     Mutation: ResolverTypeWrapper<{}>;
     PhoneNumber: ResolverTypeWrapper<Scalars['PhoneNumber']>;
@@ -244,6 +251,7 @@ export type GQLResolversParentTypes = {
     LanguageMutation: GQLLanguageMutation;
     LanguageQuery: GQLLanguageQuery;
     Latitude: Scalars['Latitude'];
+    Location: GQLLocation;
     Longitude: Scalars['Longitude'];
     Mutation: {};
     PhoneNumber: Scalars['PhoneNumber'];
@@ -373,6 +381,15 @@ export interface GQLLatitudeScalarConfig extends GraphQLScalarTypeConfig<GQLReso
     name: 'Latitude';
 }
 
+export type GQLLocationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['Location'] = GQLResolversParentTypes['Location'],
+> = {
+    latitude?: Resolver<GQLResolversTypes['Latitude'], ParentType, ContextType>;
+    longitude?: Resolver<GQLResolversTypes['Longitude'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface GQLLongitudeScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['Longitude'], any> {
     name: 'Longitude';
 }
@@ -437,6 +454,7 @@ export type GQLResolvers<ContextType = any> = {
     LanguageMutation?: GQLLanguageMutationResolvers<ContextType>;
     LanguageQuery?: GQLLanguageQueryResolvers<ContextType>;
     Latitude?: GraphQLScalarType;
+    Location?: GQLLocationResolvers<ContextType>;
     Longitude?: GraphQLScalarType;
     Mutation?: GQLMutationResolvers<ContextType>;
     PhoneNumber?: GraphQLScalarType;

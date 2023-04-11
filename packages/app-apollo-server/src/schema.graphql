@@ -43,3 +43,8 @@ input PriceInput {
     amount: UInt!
     currencyCode: CurrencyCode!
 }
+
+type Location {
+    latitude: Latitude!
+    longitude: Longitude!
+}
