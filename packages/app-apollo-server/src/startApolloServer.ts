@@ -1,11 +1,13 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { loadFilesSync } from '@graphql-tools/load-files';
+import { addMocksToSchema } from '@graphql-tools/mock';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { type GraphQLSchema } from 'graphql';
 import { type GQLResolvers } from './generated';
 
 export interface StartApolloServerAppOptions {
+    mockSchema: boolean;
     port: number;
 }
 
@@ -13,7 +15,7 @@ export interface StartApolloServerAppResult {
     path: string;
 }
 
-export async function startApolloServerApp({ port }: StartApolloServerAppOptions): Promise<StartApolloServerAppResult> {
+export async function startApolloServerApp({ mockSchema, port }: StartApolloServerAppOptions): Promise<StartApolloServerAppResult> {
     const typeDefs: string[] = loadFilesSync('./**/*.graphql');
 
     const resolvers: GQLResolvers = {
@@ -23,7 +25,7 @@ export async function startApolloServerApp({ port }: StartApolloServerAppOptions
 
     const schema: GraphQLSchema = makeExecutableSchema({ resolvers, typeDefs });
 
-    const server: ApolloServer = new ApolloServer({ schema });
+    const server: ApolloServer = new ApolloServer(mockSchema ? { schema: addMocksToSchema({ schema }) } : { schema });
 
     const path: string = 'graphql';
 
