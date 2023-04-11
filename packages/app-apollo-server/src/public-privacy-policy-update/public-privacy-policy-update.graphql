@@ -1,0 +1,16 @@
+type PublicPrivacyPolicyUpdate {
+    privacyPolicyUpdateId: String!
+    germanText: String!
+    englishText: String!
+    createdAt: DateTime!
+}
+
+type PublicPrivacyPolicyUpdateQuery {
+    findAll: [PublicPrivacyPolicyUpdate!]!
+    findOne(privacyPolicyUpdateId: String!): PublicPrivacyPolicyUpdate
+    findLatest: PublicPrivacyPolicyUpdate
+}
+
+type Query {
+    publicPrivacyPolicyUpdates: PublicPrivacyPolicyUpdateQuery!
+}

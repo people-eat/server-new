@@ -43,6 +43,7 @@ import { createNotificationConfigurationResolvers } from './notification-configu
 import { createNotificationResolvers } from './notification/createNotificationResolvers';
 import { createPrivacyPolicyUpdateResolvers } from './privacy-policy-update/createPrivacyPolicyUpdateResolvers';
 import { createPublicCookResolvers } from './public-cook/createPublicCookResolvers';
+import { createPublicPrivacyPolicyUpdateResolvers } from './public-privacy-policy-update/createPublicPrivacyPolicyUpdateResolvers';
 import { createPublicTermsUpdateResolvers } from './public-terms-update/createPublicTermsUpdateResolvers';
 import { createPublicUserResolvers } from './public-user/createPublicUserResolvers';
 import { createSessionResolvers } from './session/createSessionResolvers';
@@ -93,6 +94,7 @@ export async function startApolloServerApp({
             cooks: () => ({} as any),
             publicCooks: () => ({} as any),
             publicTermsUpdates: () => ({} as any),
+            publicPrivacyPolicyUpdates: () => ({} as any),
         },
         Mutation: {
             languages: () => ({} as any),
@@ -120,6 +122,7 @@ export async function startApolloServerApp({
         ...createTermsUpdateResolvers(),
         ...createPublicTermsUpdateResolvers(service),
         ...createPrivacyPolicyUpdateResolvers(),
+        ...createPublicPrivacyPolicyUpdateResolvers(service),
     };
 
     const path: string = '/graphql';

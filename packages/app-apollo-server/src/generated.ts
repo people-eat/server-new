@@ -535,6 +535,25 @@ export type GQLPublicCookQueryFindOneArgs = {
     cookId: Scalars['String'];
 };
 
+export type GQLPublicPrivacyPolicyUpdate = {
+    __typename?: 'PublicPrivacyPolicyUpdate';
+    createdAt: Scalars['DateTime'];
+    englishText: Scalars['String'];
+    germanText: Scalars['String'];
+    privacyPolicyUpdateId: Scalars['String'];
+};
+
+export type GQLPublicPrivacyPolicyUpdateQuery = {
+    __typename?: 'PublicPrivacyPolicyUpdateQuery';
+    findAll: Array<GQLPublicPrivacyPolicyUpdate>;
+    findLatest?: Maybe<GQLPublicPrivacyPolicyUpdate>;
+    findOne?: Maybe<GQLPublicPrivacyPolicyUpdate>;
+};
+
+export type GQLPublicPrivacyPolicyUpdateQueryFindOneArgs = {
+    privacyPolicyUpdateId: Scalars['String'];
+};
+
 export type GQLPublicTermsUpdate = {
     __typename?: 'PublicTermsUpdate';
     createdAt: Scalars['DateTime'];
@@ -573,6 +592,7 @@ export type GQLQuery = {
     languages: GQLLanguageQuery;
     privacyPolicyUpdates: GQLPrivacyPolicyUpdateQuery;
     publicCooks: GQLPublicCookQuery;
+    publicPrivacyPolicyUpdates: GQLPublicPrivacyPolicyUpdateQuery;
     publicTermsUpdates: GQLPublicTermsUpdateQuery;
     termsUpdates: GQLTermsUpdateQuery;
     users: GQLUserQuery;
@@ -933,6 +953,8 @@ export type GQLResolversTypes = {
     PrivacyPolicyUpdateQuery: ResolverTypeWrapper<GQLPrivacyPolicyUpdateQuery>;
     PublicCook: ResolverTypeWrapper<GQLPublicCook>;
     PublicCookQuery: ResolverTypeWrapper<GQLPublicCookQuery>;
+    PublicPrivacyPolicyUpdate: ResolverTypeWrapper<GQLPublicPrivacyPolicyUpdate>;
+    PublicPrivacyPolicyUpdateQuery: ResolverTypeWrapper<GQLPublicPrivacyPolicyUpdateQuery>;
     PublicTermsUpdate: ResolverTypeWrapper<GQLPublicTermsUpdate>;
     PublicTermsUpdateQuery: ResolverTypeWrapper<GQLPublicTermsUpdateQuery>;
     PublicUser: ResolverTypeWrapper<GQLPublicUser>;
@@ -1015,6 +1037,8 @@ export type GQLResolversParentTypes = {
     PrivacyPolicyUpdateQuery: GQLPrivacyPolicyUpdateQuery;
     PublicCook: GQLPublicCook;
     PublicCookQuery: GQLPublicCookQuery;
+    PublicPrivacyPolicyUpdate: GQLPublicPrivacyPolicyUpdate;
+    PublicPrivacyPolicyUpdateQuery: GQLPublicPrivacyPolicyUpdateQuery;
     PublicTermsUpdate: GQLPublicTermsUpdate;
     PublicTermsUpdateQuery: GQLPublicTermsUpdateQuery;
     PublicUser: GQLPublicUser;
@@ -1507,6 +1531,32 @@ export type GQLPublicCookQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLPublicPrivacyPolicyUpdateResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['PublicPrivacyPolicyUpdate'] = GQLResolversParentTypes['PublicPrivacyPolicyUpdate'],
+> = {
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    englishText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    germanText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    privacyPolicyUpdateId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLPublicPrivacyPolicyUpdateQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['PublicPrivacyPolicyUpdateQuery'] = GQLResolversParentTypes['PublicPrivacyPolicyUpdateQuery'],
+> = {
+    findAll?: Resolver<Array<GQLResolversTypes['PublicPrivacyPolicyUpdate']>, ParentType, ContextType>;
+    findLatest?: Resolver<Maybe<GQLResolversTypes['PublicPrivacyPolicyUpdate']>, ParentType, ContextType>;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['PublicPrivacyPolicyUpdate']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLPublicPrivacyPolicyUpdateQueryFindOneArgs, 'privacyPolicyUpdateId'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLPublicTermsUpdateResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['PublicTermsUpdate'] = GQLResolversParentTypes['PublicTermsUpdate'],
@@ -1554,6 +1604,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
     privacyPolicyUpdates?: Resolver<GQLResolversTypes['PrivacyPolicyUpdateQuery'], ParentType, ContextType>;
     publicCooks?: Resolver<GQLResolversTypes['PublicCookQuery'], ParentType, ContextType>;
+    publicPrivacyPolicyUpdates?: Resolver<GQLResolversTypes['PublicPrivacyPolicyUpdateQuery'], ParentType, ContextType>;
     publicTermsUpdates?: Resolver<GQLResolversTypes['PublicTermsUpdateQuery'], ParentType, ContextType>;
     termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateQuery'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserQuery'], ParentType, ContextType>;
@@ -1876,6 +1927,8 @@ export type GQLResolvers<ContextType = any> = {
     PrivacyPolicyUpdateQuery?: GQLPrivacyPolicyUpdateQueryResolvers<ContextType>;
     PublicCook?: GQLPublicCookResolvers<ContextType>;
     PublicCookQuery?: GQLPublicCookQueryResolvers<ContextType>;
+    PublicPrivacyPolicyUpdate?: GQLPublicPrivacyPolicyUpdateResolvers<ContextType>;
+    PublicPrivacyPolicyUpdateQuery?: GQLPublicPrivacyPolicyUpdateQueryResolvers<ContextType>;
     PublicTermsUpdate?: GQLPublicTermsUpdateResolvers<ContextType>;
     PublicTermsUpdateQuery?: GQLPublicTermsUpdateQueryResolvers<ContextType>;
     PublicUser?: GQLPublicUserResolvers<ContextType>;
