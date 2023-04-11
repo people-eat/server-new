@@ -1,0 +1,77 @@
+type User {
+    userId: String!
+    isLocked: Boolean!
+    emailAddress: EmailAddress
+    phoneNumber: PhoneNumber
+    firstName: String!
+    lastName: String!
+    gender: Gender!
+    birthDate: Date
+    profilePictureUrl: Url
+    language: UserLanguage!
+    acceptedPrivacyPolicy: DateTime!
+    acceptedTerms: DateTime!
+    createdAt: DateTime!
+}
+
+type UserQuery {
+    findMany(request: FindManyRequest!): [User!]
+    findOne(userId: String!): User
+    me: User
+}
+
+type Query {
+    users: UserQuery!
+}
+
+input CreateOneUserByEmailAddressRequest {
+    emailAddress: EmailAddress!
+    password: String!
+    firstName: String!
+    lastName: String!
+    language: UserLanguage!
+    gender: Gender!
+    birthDate: Date
+    profilePictureUrl: Url
+}
+
+input CreateOneUserByPhoneNumberRequest {
+    phoneNumber: PhoneNumber!
+    password: String!
+    firstName: String!
+    lastName: String!
+    language: UserLanguage!
+    gender: Gender!
+    birthDate: Date
+    profilePictureUrl: Url
+}
+
+input CreateOneUserByIdentityProviderRequest {
+    identityProvider: IdentityProvider!
+    idToken: String!
+    firstName: String!
+    lastName: String!
+    language: UserLanguage!
+    gender: Gender!
+    birthDate: Date
+    profilePictureUrl: Url
+}
+
+type UserMutation {
+    acceptLatestPrivacyPolicy: Boolean!
+    acceptLatestTerms: Boolean!
+
+    createOneByEmailAddress(request: CreateOneUserByEmailAddressRequest!, profilePicture: Upload): Boolean!
+    createOneByPhoneNumber(request: CreateOneUserByPhoneNumberRequest!): Boolean!
+    createOneByIdentityProvider(request: CreateOneUserByIdentityProviderRequest!): Boolean!
+
+    updatePassword(userId: String!, password: String!): Boolean!
+    updateGender(userId: String!, gender: Gender!): Boolean!
+    updateProfilePicture(userId: String!, profilePicture: Upload): Boolean!
+
+    updateIsLocked(userId: String!, isLocked: Boolean!): Boolean!
+}
+
+type Mutation {
+    users: UserMutation!
+}

@@ -5,6 +5,7 @@ export type InputMaybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
     ID: string;
@@ -57,6 +58,39 @@ export type GQLCategoryQuery = {
 };
 
 export type GQLCookRank = 'HOBBY' | 'PROFESSIONAL';
+
+export type GQLCreateOneUserByEmailAddressRequest = {
+    birthDate?: InputMaybe<Scalars['Date']>;
+    emailAddress: Scalars['EmailAddress'];
+    firstName: Scalars['String'];
+    gender: GQLGender;
+    language: GQLUserLanguage;
+    lastName: Scalars['String'];
+    password: Scalars['String'];
+    profilePictureUrl?: InputMaybe<Scalars['Url']>;
+};
+
+export type GQLCreateOneUserByIdentityProviderRequest = {
+    birthDate?: InputMaybe<Scalars['Date']>;
+    firstName: Scalars['String'];
+    gender: GQLGender;
+    idToken: Scalars['String'];
+    identityProvider: GQLIdentityProvider;
+    language: GQLUserLanguage;
+    lastName: Scalars['String'];
+    profilePictureUrl?: InputMaybe<Scalars['Url']>;
+};
+
+export type GQLCreateOneUserByPhoneNumberRequest = {
+    birthDate?: InputMaybe<Scalars['Date']>;
+    firstName: Scalars['String'];
+    gender: GQLGender;
+    language: GQLUserLanguage;
+    lastName: Scalars['String'];
+    password: Scalars['String'];
+    phoneNumber: Scalars['PhoneNumber'];
+    profilePictureUrl?: InputMaybe<Scalars['Url']>;
+};
 
 export type GQLCurrencyCode = 'EUR' | 'USD';
 
@@ -122,6 +156,7 @@ export type GQLMutation = {
     categories: GQLCategoryMutation;
     kitchens: GQLKitchenMutation;
     languages: GQLLanguageMutation;
+    users: GQLUserMutation;
 };
 
 export type GQLPaymentProvider = 'STRIPE';
@@ -145,9 +180,88 @@ export type GQLQuery = {
     categories: GQLCategoryQuery;
     kitchens: GQLKitchenQuery;
     languages: GQLLanguageQuery;
+    users: GQLUserQuery;
+};
+
+export type GQLUser = {
+    __typename?: 'User';
+    acceptedPrivacyPolicy: Scalars['DateTime'];
+    acceptedTerms: Scalars['DateTime'];
+    birthDate?: Maybe<Scalars['Date']>;
+    createdAt: Scalars['DateTime'];
+    emailAddress?: Maybe<Scalars['EmailAddress']>;
+    firstName: Scalars['String'];
+    gender: GQLGender;
+    isLocked: Scalars['Boolean'];
+    language: GQLUserLanguage;
+    lastName: Scalars['String'];
+    phoneNumber?: Maybe<Scalars['PhoneNumber']>;
+    profilePictureUrl?: Maybe<Scalars['Url']>;
+    userId: Scalars['String'];
 };
 
 export type GQLUserLanguage = 'ENGLISH' | 'GERMAN';
+
+export type GQLUserMutation = {
+    __typename?: 'UserMutation';
+    acceptLatestPrivacyPolicy: Scalars['Boolean'];
+    acceptLatestTerms: Scalars['Boolean'];
+    createOneByEmailAddress: Scalars['Boolean'];
+    createOneByIdentityProvider: Scalars['Boolean'];
+    createOneByPhoneNumber: Scalars['Boolean'];
+    updateGender: Scalars['Boolean'];
+    updateIsLocked: Scalars['Boolean'];
+    updatePassword: Scalars['Boolean'];
+    updateProfilePicture: Scalars['Boolean'];
+};
+
+export type GQLUserMutationCreateOneByEmailAddressArgs = {
+    profilePicture?: InputMaybe<Scalars['Upload']>;
+    request: GQLCreateOneUserByEmailAddressRequest;
+};
+
+export type GQLUserMutationCreateOneByIdentityProviderArgs = {
+    request: GQLCreateOneUserByIdentityProviderRequest;
+};
+
+export type GQLUserMutationCreateOneByPhoneNumberArgs = {
+    request: GQLCreateOneUserByPhoneNumberRequest;
+};
+
+export type GQLUserMutationUpdateGenderArgs = {
+    gender: GQLGender;
+    userId: Scalars['String'];
+};
+
+export type GQLUserMutationUpdateIsLockedArgs = {
+    isLocked: Scalars['Boolean'];
+    userId: Scalars['String'];
+};
+
+export type GQLUserMutationUpdatePasswordArgs = {
+    password: Scalars['String'];
+    userId: Scalars['String'];
+};
+
+export type GQLUserMutationUpdateProfilePictureArgs = {
+    profilePicture?: InputMaybe<Scalars['Upload']>;
+    userId: Scalars['String'];
+};
+
+export type GQLUserQuery = {
+    __typename?: 'UserQuery';
+    findMany?: Maybe<Array<GQLUser>>;
+    findOne?: Maybe<GQLUser>;
+    me?: Maybe<GQLUser>;
+};
+
+export type GQLUserQueryFindManyArgs = {
+    request: GQLFindManyRequest;
+};
+
+export type GQLUserQueryFindOneArgs = {
+    userId: Scalars['String'];
+};
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -225,6 +339,9 @@ export type GQLResolversTypes = {
     CategoryMutation: ResolverTypeWrapper<GQLCategoryMutation>;
     CategoryQuery: ResolverTypeWrapper<GQLCategoryQuery>;
     CookRank: GQLCookRank;
+    CreateOneUserByEmailAddressRequest: GQLCreateOneUserByEmailAddressRequest;
+    CreateOneUserByIdentityProviderRequest: GQLCreateOneUserByIdentityProviderRequest;
+    CreateOneUserByPhoneNumberRequest: GQLCreateOneUserByPhoneNumberRequest;
     CurrencyCode: GQLCurrencyCode;
     Date: ResolverTypeWrapper<Scalars['Date']>;
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
@@ -255,7 +372,10 @@ export type GQLResolversTypes = {
     UUID: ResolverTypeWrapper<Scalars['UUID']>;
     Upload: ResolverTypeWrapper<Scalars['Upload']>;
     Url: ResolverTypeWrapper<Scalars['Url']>;
+    User: ResolverTypeWrapper<GQLUser>;
     UserLanguage: GQLUserLanguage;
+    UserMutation: ResolverTypeWrapper<GQLUserMutation>;
+    UserQuery: ResolverTypeWrapper<GQLUserQuery>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -267,6 +387,9 @@ export type GQLResolversParentTypes = {
     Category: GQLCategory;
     CategoryMutation: GQLCategoryMutation;
     CategoryQuery: GQLCategoryQuery;
+    CreateOneUserByEmailAddressRequest: GQLCreateOneUserByEmailAddressRequest;
+    CreateOneUserByIdentityProviderRequest: GQLCreateOneUserByIdentityProviderRequest;
+    CreateOneUserByPhoneNumberRequest: GQLCreateOneUserByPhoneNumberRequest;
     Date: Scalars['Date'];
     DateTime: Scalars['DateTime'];
     EmailAddress: Scalars['EmailAddress'];
@@ -291,6 +414,9 @@ export type GQLResolversParentTypes = {
     UUID: Scalars['UUID'];
     Upload: Scalars['Upload'];
     Url: Scalars['Url'];
+    User: GQLUser;
+    UserMutation: GQLUserMutation;
+    UserQuery: GQLUserQuery;
 };
 
 export type GQLAllergyResolvers<
@@ -430,6 +556,7 @@ export type GQLMutationResolvers<
     categories?: Resolver<GQLResolversTypes['CategoryMutation'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenMutation'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
+    users?: Resolver<GQLResolversTypes['UserMutation'], ParentType, ContextType>;
 };
 
 export interface GQLPhoneNumberScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['PhoneNumber'], any> {
@@ -447,6 +574,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     categories?: Resolver<GQLResolversTypes['CategoryQuery'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
+    users?: Resolver<GQLResolversTypes['UserQuery'], ParentType, ContextType>;
 };
 
 export interface GQLUIntScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['UInt'], any> {
@@ -464,6 +592,89 @@ export interface GQLUploadScalarConfig extends GraphQLScalarTypeConfig<GQLResolv
 export interface GQLUrlScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['Url'], any> {
     name: 'Url';
 }
+
+export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['User'] = GQLResolversParentTypes['User']> = {
+    acceptedPrivacyPolicy?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    acceptedTerms?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    birthDate?: Resolver<Maybe<GQLResolversTypes['Date']>, ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    emailAddress?: Resolver<Maybe<GQLResolversTypes['EmailAddress']>, ParentType, ContextType>;
+    firstName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    gender?: Resolver<GQLResolversTypes['Gender'], ParentType, ContextType>;
+    isLocked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    language?: Resolver<GQLResolversTypes['UserLanguage'], ParentType, ContextType>;
+    lastName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    phoneNumber?: Resolver<Maybe<GQLResolversTypes['PhoneNumber']>, ParentType, ContextType>;
+    profilePictureUrl?: Resolver<Maybe<GQLResolversTypes['Url']>, ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserMutation'] = GQLResolversParentTypes['UserMutation'],
+> = {
+    acceptLatestPrivacyPolicy?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    acceptLatestTerms?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    createOneByEmailAddress?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationCreateOneByEmailAddressArgs, 'request'>
+    >;
+    createOneByIdentityProvider?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationCreateOneByIdentityProviderArgs, 'request'>
+    >;
+    createOneByPhoneNumber?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationCreateOneByPhoneNumberArgs, 'request'>
+    >;
+    updateGender?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationUpdateGenderArgs, 'gender' | 'userId'>
+    >;
+    updateIsLocked?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationUpdateIsLockedArgs, 'isLocked' | 'userId'>
+    >;
+    updatePassword?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationUpdatePasswordArgs, 'password' | 'userId'>
+    >;
+    updateProfilePicture?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationUpdateProfilePictureArgs, 'userId'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserQuery'] = GQLResolversParentTypes['UserQuery'],
+> = {
+    findMany?: Resolver<
+        Maybe<Array<GQLResolversTypes['User']>>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserQueryFindManyArgs, 'request'>
+    >;
+    findOne?: Resolver<Maybe<GQLResolversTypes['User']>, ParentType, ContextType, RequireFields<GQLUserQueryFindOneArgs, 'userId'>>;
+    me?: Resolver<Maybe<GQLResolversTypes['User']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type GQLResolvers<ContextType = any> = {
     Allergy?: GQLAllergyResolvers<ContextType>;
@@ -492,4 +703,7 @@ export type GQLResolvers<ContextType = any> = {
     UUID?: GraphQLScalarType;
     Upload?: GraphQLScalarType;
     Url?: GraphQLScalarType;
+    User?: GQLUserResolvers<ContextType>;
+    UserMutation?: GQLUserMutationResolvers<ContextType>;
+    UserQuery?: GQLUserQueryResolvers<ContextType>;
 };
