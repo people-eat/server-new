@@ -3,6 +3,7 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { type GraphQLSchema } from 'graphql';
+import { type GQLResolvers } from './generated';
 
 export interface StartApolloServerAppOptions {
     port: number;
@@ -15,7 +16,12 @@ export interface StartApolloServerAppResult {
 export async function startApolloServerApp({ port }: StartApolloServerAppOptions): Promise<StartApolloServerAppResult> {
     const typeDefs: string[] = loadFilesSync('./**/*.graphql');
 
-    const schema: GraphQLSchema = makeExecutableSchema({ typeDefs });
+    const resolvers: GQLResolvers = {
+        Query: {},
+        Mutation: {},
+    };
+
+    const schema: GraphQLSchema = makeExecutableSchema({ resolvers, typeDefs });
 
     const server: ApolloServer = new ApolloServer({ schema });
 

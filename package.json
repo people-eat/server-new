@@ -10,6 +10,7 @@
     "license": "UNLICENSED",
     "private": true,
     "scripts": {
+        "generate:graphql": "yarn workspace @people-eat/server-app-apollo-server generate:graphql",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "lint": "eslint . --ext js,cjs,mjs,ts,cts,mts --fix",
