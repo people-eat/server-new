@@ -98,6 +98,12 @@ export type GQLLocation = {
     longitude: Scalars['Longitude'];
 };
 
+export type GQLLocationInput = {
+    latitude: Scalars['Latitude'];
+    longitude: Scalars['Longitude'];
+    text?: InputMaybe<Scalars['String']>;
+};
+
 export type GQLMutation = {
     __typename?: 'Mutation';
     allergies: GQLAllergyMutation;
@@ -217,6 +223,7 @@ export type GQLResolversTypes = {
     LanguageQuery: ResolverTypeWrapper<GQLLanguageQuery>;
     Latitude: ResolverTypeWrapper<Scalars['Latitude']>;
     Location: ResolverTypeWrapper<GQLLocation>;
+    LocationInput: GQLLocationInput;
     Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
     Mutation: ResolverTypeWrapper<{}>;
     PhoneNumber: ResolverTypeWrapper<Scalars['PhoneNumber']>;
@@ -252,6 +259,7 @@ export type GQLResolversParentTypes = {
     LanguageQuery: GQLLanguageQuery;
     Latitude: Scalars['Latitude'];
     Location: GQLLocation;
+    LocationInput: GQLLocationInput;
     Longitude: Scalars['Longitude'];
     Mutation: {};
     PhoneNumber: Scalars['PhoneNumber'];

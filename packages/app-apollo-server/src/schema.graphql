@@ -48,3 +48,9 @@ type Location {
     latitude: Latitude!
     longitude: Longitude!
 }
+
+input LocationInput {
+    latitude: Latitude!
+    longitude: Longitude!
+    text: String
+}
