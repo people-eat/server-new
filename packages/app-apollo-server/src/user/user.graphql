@@ -32,6 +32,9 @@ type User {
     oneTimeAccessToken: OneTimeAccessToken
 
     bookingRequests: [BookingRequest!]!
+
+    followings: [Following!]!
+    followingCount: UInt!
 }
 
 type UserQuery {

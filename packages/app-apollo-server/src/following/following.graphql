@@ -1,0 +1,33 @@
+type Following {
+    userId: String!
+    cookId: String!
+    createdAt: DateTime!
+
+    user: AnonymousUser!
+    cook: PublicCook!
+}
+
+type UserFollowingQuery {
+    findAll: [Following!]!
+}
+
+type UserQuery {
+    followings: UserFollowingQuery!
+}
+
+type CookFollowingQuery {
+    findAll: [Following!]!
+}
+
+type CookQuery {
+    followers: CookFollowingQuery!
+}
+
+type UserFollowingMutation {
+    createOne(cookId: String!): Boolean!
+    deleteOne(cookId: String!): Boolean!
+}
+
+type UserMutation {
+    followings: UserFollowingMutation!
+}
