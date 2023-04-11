@@ -58,3 +58,8 @@ input LocationInput {
 enum PaymentProvider {
     STRIPE
 }
+
+enum IdentityProvider {
+    APPLE
+    GOOGLE
+}

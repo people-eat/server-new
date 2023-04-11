@@ -60,6 +60,8 @@ export type GQLCurrencyCode = 'EUR' | 'USD';
 
 export type GQLGender = 'DIVERSE' | 'FEMALE' | 'MALE' | 'NO_INFORMATION';
 
+export type GQLIdentityProvider = 'APPLE' | 'GOOGLE';
+
 export type GQLKitchen = {
     __typename?: 'Kitchen';
     kitchenId: Scalars['String'];
@@ -217,6 +219,7 @@ export type GQLResolversTypes = {
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
     EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
     Gender: GQLGender;
+    IdentityProvider: GQLIdentityProvider;
     Kitchen: ResolverTypeWrapper<GQLKitchen>;
     KitchenMutation: ResolverTypeWrapper<GQLKitchenMutation>;
     KitchenQuery: ResolverTypeWrapper<GQLKitchenQuery>;
