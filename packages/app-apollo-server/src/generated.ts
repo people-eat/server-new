@@ -112,6 +112,8 @@ export type GQLMutation = {
     languages: GQLLanguageMutation;
 };
 
+export type GQLPaymentProvider = 'STRIPE';
+
 export type GQLPlatform = 'ANDROID' | 'BROWSER' | 'IOS' | 'NO_INFORMATION';
 
 export type GQLPrice = {
@@ -226,6 +228,7 @@ export type GQLResolversTypes = {
     LocationInput: GQLLocationInput;
     Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
     Mutation: ResolverTypeWrapper<{}>;
+    PaymentProvider: GQLPaymentProvider;
     PhoneNumber: ResolverTypeWrapper<Scalars['PhoneNumber']>;
     Platform: GQLPlatform;
     Price: ResolverTypeWrapper<GQLPrice>;

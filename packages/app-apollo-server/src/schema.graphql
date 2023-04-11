@@ -54,3 +54,7 @@ input LocationInput {
     longitude: Longitude!
     text: String
 }
+
+enum PaymentProvider {
+    STRIPE
+}
