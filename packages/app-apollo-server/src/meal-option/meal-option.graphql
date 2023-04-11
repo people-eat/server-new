@@ -1,0 +1,36 @@
+type MealOption {
+    index: UInt!
+    mealId: String!
+
+    meal: Meal!
+}
+
+type CookMenuCourseMealOptionQuery {
+    cookId: String!
+    menuId: String!
+
+    findMany(request: FindManyRequest): [MealOption!]!
+}
+
+type CookMenuCourseQuery {
+    mealOptions(courseId: String!): CookMenuCourseMealOptionQuery!
+}
+
+input CreateOneMealOptionRequest {
+    index: UInt!
+    mealId: String!
+}
+
+type CookMenuCourseMealOptionMutation {
+    cookId: String!
+    menuId: String!
+    courseId: String!
+
+    createOne(mealOption: CreateOneMealOptionRequest!): Boolean!
+    createMany(mealOptions: [CreateOneMealOptionRequest!]!): Boolean!
+    deleteOne(mealId: String!): Boolean!
+}
+
+type CookMenuCourseMutation {
+    mealOptions(courseId: String!): CookMenuCourseMealOptionMutation!
+}
