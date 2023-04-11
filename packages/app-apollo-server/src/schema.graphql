@@ -14,3 +14,10 @@ enum UserLanguage {
     GERMAN
     ENGLISH
 }
+
+enum Gender {
+    MALE
+    FEMALE
+    DIVERSE
+    NO_INFORMATION
+}

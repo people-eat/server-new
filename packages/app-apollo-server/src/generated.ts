@@ -56,6 +56,8 @@ export type GQLCategoryQuery = {
     findAll: Array<GQLCategory>;
 };
 
+export type GQLGender = 'DIVERSE' | 'FEMALE' | 'MALE' | 'NO_INFORMATION';
+
 export type GQLKitchen = {
     __typename?: 'Kitchen';
     kitchenId: Scalars['String'];
@@ -184,6 +186,7 @@ export type GQLResolversTypes = {
     Date: ResolverTypeWrapper<Scalars['Date']>;
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
     EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
+    Gender: GQLGender;
     Kitchen: ResolverTypeWrapper<GQLKitchen>;
     KitchenMutation: ResolverTypeWrapper<GQLKitchenMutation>;
     KitchenQuery: ResolverTypeWrapper<GQLKitchenQuery>;
