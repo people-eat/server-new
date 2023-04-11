@@ -26,6 +26,8 @@ type User {
     unreadNotificationCount: UInt!
 
     notificationConfiguration: NotificationConfiguration!
+
+    phoneNumberUpdate: PhoneNumberUpdate
 }
 
 type UserQuery {
