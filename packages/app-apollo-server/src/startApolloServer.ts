@@ -61,6 +61,7 @@ import { createPublicTermsUpdateResolvers } from './public-terms-update/createPu
 import { createPublicUserResolvers } from './public-user/createPublicUserResolvers';
 import { createSessionResolvers } from './session/createSessionResolvers';
 import { createTermsUpdateResolvers } from './terms-update/createTermsUpdateResolvers';
+import { createUserRatingResolvers } from './user-rating/createUserRatingResolvers';
 import { createUserResolvers } from './user/createUserResolvers';
 
 export interface StartApolloServerAppOptions {
@@ -150,6 +151,7 @@ export async function startApolloServerApp({
         ...createBookingRequestResolvers(service),
         ...createMenuConfigurationResolvers(),
         ...createCookRatingResolvers(),
+        ...createUserRatingResolvers(),
     };
 
     const path: string = '/graphql';
