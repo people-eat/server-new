@@ -24,6 +24,8 @@ type User {
 
     notifications: [Notification!]!
     unreadNotificationCount: UInt!
+
+    notificationConfiguration: NotificationConfiguration!
 }
 
 type UserQuery {

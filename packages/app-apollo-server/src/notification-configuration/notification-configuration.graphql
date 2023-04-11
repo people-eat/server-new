@@ -1,0 +1,33 @@
+type NotificationConfiguration {
+    userId: String!
+
+    # Push Notifications
+    pushesForBookingRequests: Boolean!
+    pushesForFavoriteCooks: Boolean!
+    pushesForOffers: Boolean!
+    pushesForAccount: Boolean!
+
+    # E-Mail Notifications
+    emailsForBookingRequests: Boolean!
+    emailsForFavoriteCooks: Boolean!
+    emailsForOffers: Boolean!
+    emailsForAccount: Boolean!
+}
+
+type NotificationConfigurationQuery {
+    userId: String!
+    findOne: NotificationConfiguration!
+}
+
+type UserQuery {
+    notificationConfiguration(userId: String!): NotificationConfigurationQuery
+}
+
+type NotificationConfigurationMutation {
+    userId: String!
+    update: Boolean!
+}
+
+type UserMutation {
+    notificationConfiguration(userId: String!): NotificationConfigurationMutation!
+}
