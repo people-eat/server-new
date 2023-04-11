@@ -32,6 +32,7 @@ import { createServer as createHttpServer, type IncomingMessage, type Server as 
 import { WebSocketServer } from 'ws';
 import { createCategoryResolvers } from './category/createCategoryResolvers';
 import { type GQLResolvers } from './generated';
+import { createKitchenResolvers } from './kitchen/createKitchenResolvers';
 import { createLanguageResolvers } from './language/createLanguageResolvers';
 
 export interface StartApolloServerAppOptions {
@@ -72,13 +73,16 @@ export async function startApolloServerApp({
         Query: {
             languages: () => ({} as any),
             categories: () => ({} as any),
+            kitchens: () => ({} as any),
         },
         Mutation: {
             languages: () => ({} as any),
             categories: () => ({} as any),
+            kitchens: () => ({} as any),
         },
         ...createLanguageResolvers(service),
         ...createCategoryResolvers(service),
+        ...createKitchenResolvers(service),
     };
 
     const path: string = '/graphql';

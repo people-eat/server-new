@@ -40,6 +40,22 @@ export type GQLCategoryQuery = {
     findAll: Array<GQLCategory>;
 };
 
+export type GQLKitchen = {
+    __typename?: 'Kitchen';
+    kitchenId: Scalars['String'];
+    title: Scalars['String'];
+};
+
+export type GQLKitchenMutation = {
+    __typename?: 'KitchenMutation';
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLKitchenQuery = {
+    __typename?: 'KitchenQuery';
+    findAll: Array<GQLKitchen>;
+};
+
 export type GQLLanguage = {
     __typename?: 'Language';
     languageId: Scalars['String'];
@@ -59,12 +75,14 @@ export type GQLLanguageQuery = {
 export type GQLMutation = {
     __typename?: 'Mutation';
     categories: GQLCategoryMutation;
+    kitchens: GQLKitchenMutation;
     languages: GQLLanguageMutation;
 };
 
 export type GQLQuery = {
     __typename?: 'Query';
     categories: GQLCategoryQuery;
+    kitchens: GQLKitchenQuery;
     languages: GQLLanguageQuery;
 };
 
@@ -143,6 +161,9 @@ export type GQLResolversTypes = {
     Date: ResolverTypeWrapper<Scalars['Date']>;
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
     EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
+    Kitchen: ResolverTypeWrapper<GQLKitchen>;
+    KitchenMutation: ResolverTypeWrapper<GQLKitchenMutation>;
+    KitchenQuery: ResolverTypeWrapper<GQLKitchenQuery>;
     Language: ResolverTypeWrapper<GQLLanguage>;
     LanguageMutation: ResolverTypeWrapper<GQLLanguageMutation>;
     LanguageQuery: ResolverTypeWrapper<GQLLanguageQuery>;
@@ -167,6 +188,9 @@ export type GQLResolversParentTypes = {
     Date: Scalars['Date'];
     DateTime: Scalars['DateTime'];
     EmailAddress: Scalars['EmailAddress'];
+    Kitchen: GQLKitchen;
+    KitchenMutation: GQLKitchenMutation;
+    KitchenQuery: GQLKitchenQuery;
     Language: GQLLanguage;
     LanguageMutation: GQLLanguageMutation;
     LanguageQuery: GQLLanguageQuery;
@@ -219,6 +243,31 @@ export interface GQLEmailAddressScalarConfig extends GraphQLScalarTypeConfig<GQL
     name: 'EmailAddress';
 }
 
+export type GQLKitchenResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['Kitchen'] = GQLResolversParentTypes['Kitchen'],
+> = {
+    kitchenId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLKitchenMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['KitchenMutation'] = GQLResolversParentTypes['KitchenMutation'],
+> = {
+    createOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLKitchenQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['KitchenQuery'] = GQLResolversParentTypes['KitchenQuery'],
+> = {
+    findAll?: Resolver<Array<GQLResolversTypes['Kitchen']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLLanguageResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['Language'] = GQLResolversParentTypes['Language'],
@@ -257,6 +306,7 @@ export type GQLMutationResolvers<
     ParentType extends GQLResolversParentTypes['Mutation'] = GQLResolversParentTypes['Mutation'],
 > = {
     categories?: Resolver<GQLResolversTypes['CategoryMutation'], ParentType, ContextType>;
+    kitchens?: Resolver<GQLResolversTypes['KitchenMutation'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
 };
 
@@ -266,6 +316,7 @@ export interface GQLPhoneNumberScalarConfig extends GraphQLScalarTypeConfig<GQLR
 
 export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
     categories?: Resolver<GQLResolversTypes['CategoryQuery'], ParentType, ContextType>;
+    kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
 };
 
@@ -292,6 +343,9 @@ export type GQLResolvers<ContextType = any> = {
     Date?: GraphQLScalarType;
     DateTime?: GraphQLScalarType;
     EmailAddress?: GraphQLScalarType;
+    Kitchen?: GQLKitchenResolvers<ContextType>;
+    KitchenMutation?: GQLKitchenMutationResolvers<ContextType>;
+    KitchenQuery?: GQLKitchenQueryResolvers<ContextType>;
     Language?: GQLLanguageResolvers<ContextType>;
     LanguageMutation?: GQLLanguageMutationResolvers<ContextType>;
     LanguageQuery?: GQLLanguageQueryResolvers<ContextType>;
