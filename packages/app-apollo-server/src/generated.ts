@@ -104,6 +104,8 @@ export type GQLQuery = {
     languages: GQLLanguageQuery;
 };
 
+export type GQLUserLanguage = 'ENGLISH' | 'GERMAN';
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
@@ -198,6 +200,7 @@ export type GQLResolversTypes = {
     UUID: ResolverTypeWrapper<Scalars['UUID']>;
     Upload: ResolverTypeWrapper<Scalars['Upload']>;
     Url: ResolverTypeWrapper<Scalars['Url']>;
+    UserLanguage: GQLUserLanguage;
 };
 
 /** Mapping between all available schema types and the resolvers parents */

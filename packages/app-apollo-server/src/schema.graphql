@@ -9,3 +9,8 @@ scalar Url
 scalar UUID
 
 scalar Upload
+
+enum UserLanguage {
+    GERMAN
+    ENGLISH
+}
