@@ -30,6 +30,7 @@ import { type Disposable } from 'graphql-ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { createServer as createHttpServer, type IncomingMessage, type Server as HttpServer } from 'http';
 import { WebSocketServer } from 'ws';
+import { createCategoryResolvers } from './category/createCategoryResolvers';
 import { type GQLResolvers } from './generated';
 import { createLanguageResolvers } from './language/createLanguageResolvers';
 
@@ -70,11 +71,14 @@ export async function startApolloServerApp({
         Upload: GraphQLUpload,
         Query: {
             languages: () => ({} as any),
+            categories: () => ({} as any),
         },
         Mutation: {
             languages: () => ({} as any),
+            categories: () => ({} as any),
         },
         ...createLanguageResolvers(service),
+        ...createCategoryResolvers(service),
     };
 
     const path: string = '/graphql';

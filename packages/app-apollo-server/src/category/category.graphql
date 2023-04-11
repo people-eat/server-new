@@ -1,0 +1,20 @@
+type Category {
+    categoryId: String!
+    title: String!
+}
+
+type CategoryQuery {
+    findAll: [Category!]!
+}
+
+type Query {
+    categories: CategoryQuery!
+}
+
+type CategoryMutation {
+    createOne: Boolean!
+}
+
+type Mutation {
+    categories: CategoryMutation!
+}

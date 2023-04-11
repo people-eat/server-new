@@ -24,6 +24,22 @@ export type Scalars = {
     Url: string;
 };
 
+export type GQLCategory = {
+    __typename?: 'Category';
+    categoryId: Scalars['String'];
+    title: Scalars['String'];
+};
+
+export type GQLCategoryMutation = {
+    __typename?: 'CategoryMutation';
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLCategoryQuery = {
+    __typename?: 'CategoryQuery';
+    findAll: Array<GQLCategory>;
+};
+
 export type GQLLanguage = {
     __typename?: 'Language';
     languageId: Scalars['String'];
@@ -42,11 +58,13 @@ export type GQLLanguageQuery = {
 
 export type GQLMutation = {
     __typename?: 'Mutation';
+    categories: GQLCategoryMutation;
     languages: GQLLanguageMutation;
 };
 
 export type GQLQuery = {
     __typename?: 'Query';
+    categories: GQLCategoryQuery;
     languages: GQLLanguageQuery;
 };
 
@@ -119,6 +137,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type GQLResolversTypes = {
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+    Category: ResolverTypeWrapper<GQLCategory>;
+    CategoryMutation: ResolverTypeWrapper<GQLCategoryMutation>;
+    CategoryQuery: ResolverTypeWrapper<GQLCategoryQuery>;
     Date: ResolverTypeWrapper<Scalars['Date']>;
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
     EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
@@ -140,6 +161,9 @@ export type GQLResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type GQLResolversParentTypes = {
     Boolean: Scalars['Boolean'];
+    Category: GQLCategory;
+    CategoryMutation: GQLCategoryMutation;
+    CategoryQuery: GQLCategoryQuery;
     Date: Scalars['Date'];
     DateTime: Scalars['DateTime'];
     EmailAddress: Scalars['EmailAddress'];
@@ -156,6 +180,31 @@ export type GQLResolversParentTypes = {
     UUID: Scalars['UUID'];
     Upload: Scalars['Upload'];
     Url: Scalars['Url'];
+};
+
+export type GQLCategoryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['Category'] = GQLResolversParentTypes['Category'],
+> = {
+    categoryId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCategoryMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CategoryMutation'] = GQLResolversParentTypes['CategoryMutation'],
+> = {
+    createOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCategoryQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CategoryQuery'] = GQLResolversParentTypes['CategoryQuery'],
+> = {
+    findAll?: Resolver<Array<GQLResolversTypes['Category']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface GQLDateScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['Date'], any> {
@@ -207,6 +256,7 @@ export type GQLMutationResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['Mutation'] = GQLResolversParentTypes['Mutation'],
 > = {
+    categories?: Resolver<GQLResolversTypes['CategoryMutation'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
 };
 
@@ -215,6 +265,7 @@ export interface GQLPhoneNumberScalarConfig extends GraphQLScalarTypeConfig<GQLR
 }
 
 export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
+    categories?: Resolver<GQLResolversTypes['CategoryQuery'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
 };
 
@@ -235,6 +286,9 @@ export interface GQLUrlScalarConfig extends GraphQLScalarTypeConfig<GQLResolvers
 }
 
 export type GQLResolvers<ContextType = any> = {
+    Category?: GQLCategoryResolvers<ContextType>;
+    CategoryMutation?: GQLCategoryMutationResolvers<ContextType>;
+    CategoryQuery?: GQLCategoryQueryResolvers<ContextType>;
     Date?: GraphQLScalarType;
     DateTime?: GraphQLScalarType;
     EmailAddress?: GraphQLScalarType;
