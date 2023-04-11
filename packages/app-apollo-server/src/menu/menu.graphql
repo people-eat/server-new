@@ -1,0 +1,74 @@
+type Menu {
+    menuId: String!
+    cookId: String!
+    isVisible: Boolean!
+    title: String!
+    description: String!
+    preparationTime: UInt!
+    kitchenId: String
+    greetingFromKitchen: String
+    basePrice: UInt!
+    basePriceCustomers: UInt!
+    pricePerAdult: UInt!
+    pricePerChild: UInt
+    currencyCode: CurrencyCode!
+    createdAt: DateTime!
+
+    cook: Cook!
+    kitchen: Kitchen
+    categories: [Category!]!
+
+    courses: [Course!]!
+    courseCount: UInt!
+
+    imageUrls: [Url!]!
+}
+
+type CookMenuQuery {
+    cookId: String!
+    findMany(request: FindManyRequest): [Menu!]!
+    findOne(menuId: String!): Menu
+}
+
+type CookQuery {
+    menus(cookId: String!): CookMenuQuery!
+}
+
+input CreateOneMenuRequest {
+    isVisible: Boolean!
+    title: String!
+    description: String!
+    preparationTime: UInt!
+    greetingFromKitchen: String
+    basePrice: UInt!
+    basePriceCustomers: UInt!
+    pricePerAdult: UInt!
+    pricePerChild: UInt
+    currencyCode: CurrencyCode!
+
+    courses: [CreateOneCourseRequest!]
+    kitchenId: String
+    categoryIds: [String!]
+}
+
+type CookMenuMutation {
+    cookId: String!
+    createOne(menu: CreateOneMenuRequest!): Boolean!
+    deleteOne(menuId: String!): Boolean!
+
+    updateIsVisible(menuId: String!, isVisible: Boolean!): Boolean!
+    updateTitle(menuId: String!, title: String!): Boolean!
+    updateDescription(menuId: String!, description: String!): Boolean!
+    updatePreparationTime(menuId: String!, preparationTime: UInt!): Boolean!
+    updateKitchenId(menuId: String!, kitchenId: String): Boolean!
+    updateGreetingFromKitchen(menuId: String!, greetingFromKitchen: String): Boolean!
+    updateBasePrice(menuId: String!, basePrice: UInt!): Boolean!
+    updateBasePriceCustomers(menuId: String!, basePriceCustomers: UInt!): Boolean!
+    updatePricePerAdult(menuId: String!, pricePerAdult: UInt!): Boolean!
+    updatePricePerChild(menuId: String!, pricePerChild: UInt): Boolean!
+    updateCurrencyCode(menuId: String!, currencyCode: CurrencyCode!): Boolean!
+}
+
+type CookMutation {
+    menus(cookId: String!): CookMenuMutation!
+}

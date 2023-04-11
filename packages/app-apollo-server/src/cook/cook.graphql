@@ -18,6 +18,9 @@ type Cook {
 
     meals: [Meal!]!
     mealCount: UInt!
+
+    menus: [Menu!]!
+    menuCount: UInt!
 }
 
 type CookQuery {
