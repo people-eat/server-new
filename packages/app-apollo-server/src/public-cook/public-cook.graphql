@@ -1,0 +1,41 @@
+type PublicCook {
+    cookId: String!
+    location: Location!
+    city: String!
+    rank: CookRank!
+    biography: String!
+    travelExpenses: UInt!
+    maximumTravelDistance: UInt
+    minimumPrice: UInt
+    maximumPrice: UInt
+    minimumParticipants: UInt
+    maximumParticipants: UInt
+    createdAt: DateTime!
+
+    user: PublicUser!
+    languages: [Language!]!
+}
+
+input FindManyPublicCooksRequest {
+    searchText: String
+    skip: UInt
+    take: UInt
+
+    location: LocationInput!
+    adultParticipants: UInt!
+    dateTime: DateTime!
+    children: UInt
+
+    price: PriceInput
+    kitchenIds: [String!]
+    categoryIds: [String!]
+}
+
+type PublicCookQuery {
+    findMany(request: FindManyPublicCooksRequest!): [PublicCook!]!
+    findOne(cookId: String!): PublicCook
+}
+
+type Query {
+    publicCooks: PublicCookQuery!
+}
