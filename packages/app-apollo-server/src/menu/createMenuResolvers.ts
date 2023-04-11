@@ -2,6 +2,7 @@ import { type Authorization, type Category, type Kitchen, type MenuCategory, typ
 import {
     type GQLCategory,
     type GQLCookMenuMutation,
+    type GQLCookMenuMutationCoursesArgs,
     type GQLCookMenuMutationCreateOneArgs,
     type GQLCookMenuMutationDeleteOneArgs,
     type GQLCookMenuMutationUpdateBasePriceArgs,
@@ -16,8 +17,10 @@ import {
     type GQLCookMenuMutationUpdatePricePerChildArgs,
     type GQLCookMenuMutationUpdateTitleArgs,
     type GQLCookMenuQuery,
+    type GQLCookMenuQueryCoursesArgs,
     type GQLCookMenuQueryFindManyArgs,
     type GQLCookMenuQueryFindOneArgs,
+    type GQLCourse,
     type GQLKitchen,
     type GQLMenu,
 } from '../generated';
@@ -43,6 +46,8 @@ export function createMenuResolvers(service: Service): Resolvers<'Menu' | 'CookM
             },
             imageUrls: async ({ menuId }: GQLMenu, _input: unknown, context: Authorization.Context): Promise<string[]> =>
                 service.menu.findImageUrls(context, { menuId }),
+            courses: async ({ cookId, menuId }: GQLMenu, _input: unknown, context: Authorization.Context): Promise<GQLCourse[]> =>
+                service.course.findAll(context, { cookId, menuId }) as any,
         },
         CookMenuMutation: {
             createOne: async (
@@ -111,6 +116,8 @@ export function createMenuResolvers(service: Service): Resolvers<'Menu' | 'CookM
                 request: GQLCookMenuMutationUpdateCurrencyCodeArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.menu.updateCurrencyCode(context, { cookId, ...request }),
+
+            courses: ({ cookId }: GQLCookMenuMutation, { menuId }: GQLCookMenuMutationCoursesArgs) => ({ cookId, menuId } as any),
         },
         CookMenuQuery: {
             findMany: async (
@@ -123,6 +130,8 @@ export function createMenuResolvers(service: Service): Resolvers<'Menu' | 'CookM
                 { menuId }: GQLCookMenuQueryFindOneArgs,
                 context: Authorization.Context,
             ): Promise<GQLMenu | undefined> => service.menu.findOne(context, { cookId, menuId }) as any,
+
+            courses: ({ cookId }: GQLCookMenuQuery, { menuId }: GQLCookMenuQueryCoursesArgs) => ({ cookId, menuId } as any),
         },
     };
 }

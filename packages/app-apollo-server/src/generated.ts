@@ -180,6 +180,28 @@ export type GQLCookMealQueryFindOneArgs = {
     mealId: Scalars['String'];
 };
 
+export type GQLCookMenuCourseMutation = {
+    __typename?: 'CookMenuCourseMutation';
+    createOne: Scalars['Boolean'];
+    deleteOne: Scalars['Boolean'];
+    menuId: Scalars['String'];
+};
+
+export type GQLCookMenuCourseMutationCreateOneArgs = {
+    request: GQLCreateOneCourseRequest;
+};
+
+export type GQLCookMenuCourseQuery = {
+    __typename?: 'CookMenuCourseQuery';
+    findAll: Array<GQLCourse>;
+    findOne?: Maybe<GQLCourse>;
+    menuId: Scalars['String'];
+};
+
+export type GQLCookMenuCourseQueryFindOneArgs = {
+    courseId: Scalars['String'];
+};
+
 export type GQLCookMutation = {
     __typename?: 'CookMutation';
     addOneLanguage: Scalars['Boolean'];
@@ -328,6 +350,12 @@ export type GQLCookSpecificFeeQueryFindOneArgs = {
     cookId: Scalars['String'];
 };
 
+export type GQLCourse = {
+    __typename?: 'Course';
+    courseId: Scalars['String'];
+    user: GQLPublicUser;
+};
+
 export type GQLCreateOneAdminRequest = {
     adminId: Scalars['String'];
 };
@@ -344,6 +372,10 @@ export type GQLCreateOneCookRequest = {
     minimumPrice?: InputMaybe<Scalars['UInt']>;
     rank: GQLCookRank;
     travelExpenses: Scalars['UInt'];
+};
+
+export type GQLCreateOneCourseRequest = {
+    title: Scalars['String'];
 };
 
 export type GQLCreateOneMealRequest = {
@@ -566,6 +598,8 @@ export type GQLMenu = {
     categories: Array<GQLCategory>;
     cook: GQLCook;
     cookId: Scalars['String'];
+    courseCount: Scalars['UInt'];
+    courses: Array<GQLCourse>;
     createdAt: Scalars['DateTime'];
     currencyCode: GQLCurrencyCode;
     description: Scalars['String'];
@@ -583,7 +617,12 @@ export type GQLMenu = {
 export type GQLMenuMutation = {
     __typename?: 'MenuMutation';
     cookId: Scalars['String'];
+    courses: GQLCookMenuCourseMutation;
     createOne: Scalars['Boolean'];
+};
+
+export type GQLMenuMutationCoursesArgs = {
+    menuId: Scalars['String'];
 };
 
 export type GQLMenuMutationCreateOneArgs = {
@@ -593,8 +632,13 @@ export type GQLMenuMutationCreateOneArgs = {
 export type GQLMenuQuery = {
     __typename?: 'MenuQuery';
     cookId: Scalars['String'];
+    courses: GQLCookMenuCourseQuery;
     findMany: Array<GQLMenu>;
     findOne?: Maybe<GQLMenu>;
+};
+
+export type GQLMenuQueryCoursesArgs = {
+    menuId: Scalars['String'];
 };
 
 export type GQLMenuQueryFindManyArgs = {
@@ -1237,14 +1281,18 @@ export type GQLResolversTypes = {
     Cook: ResolverTypeWrapper<GQLCook>;
     CookMealMutation: ResolverTypeWrapper<GQLCookMealMutation>;
     CookMealQuery: ResolverTypeWrapper<GQLCookMealQuery>;
+    CookMenuCourseMutation: ResolverTypeWrapper<GQLCookMenuCourseMutation>;
+    CookMenuCourseQuery: ResolverTypeWrapper<GQLCookMenuCourseQuery>;
     CookMutation: ResolverTypeWrapper<GQLCookMutation>;
     CookQuery: ResolverTypeWrapper<GQLCookQuery>;
     CookRank: GQLCookRank;
     CookSpecificFee: ResolverTypeWrapper<GQLCookSpecificFee>;
     CookSpecificFeeMutation: ResolverTypeWrapper<GQLCookSpecificFeeMutation>;
     CookSpecificFeeQuery: ResolverTypeWrapper<GQLCookSpecificFeeQuery>;
+    Course: ResolverTypeWrapper<GQLCourse>;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
+    CreateOneCourseRequest: GQLCreateOneCourseRequest;
     CreateOneMealRequest: GQLCreateOneMealRequest;
     CreateOneMenuRequest: GQLCreateOneMenuRequest;
     CreateOneNotificationRequest: GQLCreateOneNotificationRequest;
@@ -1351,13 +1399,17 @@ export type GQLResolversParentTypes = {
     Cook: GQLCook;
     CookMealMutation: GQLCookMealMutation;
     CookMealQuery: GQLCookMealQuery;
+    CookMenuCourseMutation: GQLCookMenuCourseMutation;
+    CookMenuCourseQuery: GQLCookMenuCourseQuery;
     CookMutation: GQLCookMutation;
     CookQuery: GQLCookQuery;
     CookSpecificFee: GQLCookSpecificFee;
     CookSpecificFeeMutation: GQLCookSpecificFeeMutation;
     CookSpecificFeeQuery: GQLCookSpecificFeeQuery;
+    Course: GQLCourse;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
+    CreateOneCourseRequest: GQLCreateOneCourseRequest;
     CreateOneMealRequest: GQLCreateOneMealRequest;
     CreateOneMenuRequest: GQLCreateOneMenuRequest;
     CreateOneNotificationRequest: GQLCreateOneNotificationRequest;
@@ -1602,6 +1654,36 @@ export type GQLCookMealQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLCookMenuCourseMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CookMenuCourseMutation'] = GQLResolversParentTypes['CookMenuCourseMutation'],
+> = {
+    createOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMenuCourseMutationCreateOneArgs, 'request'>
+    >;
+    deleteOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    menuId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCookMenuCourseQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CookMenuCourseQuery'] = GQLResolversParentTypes['CookMenuCourseQuery'],
+> = {
+    findAll?: Resolver<Array<GQLResolversTypes['Course']>, ParentType, ContextType>;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['Course']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMenuCourseQueryFindOneArgs, 'courseId'>
+    >;
+    menuId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLCookMutationResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['CookMutation'] = GQLResolversParentTypes['CookMutation'],
@@ -1733,6 +1815,15 @@ export type GQLCookSpecificFeeQueryResolvers<
         ContextType,
         RequireFields<GQLCookSpecificFeeQueryFindOneArgs, 'cookId'>
     >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCourseResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['Course'] = GQLResolversParentTypes['Course'],
+> = {
+    courseId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    user?: Resolver<GQLResolversTypes['PublicUser'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1873,6 +1964,8 @@ export type GQLMenuResolvers<ContextType = any, ParentType extends GQLResolversP
     categories?: Resolver<Array<GQLResolversTypes['Category']>, ParentType, ContextType>;
     cook?: Resolver<GQLResolversTypes['Cook'], ParentType, ContextType>;
     cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    courseCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    courses?: Resolver<Array<GQLResolversTypes['Course']>, ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     currencyCode?: Resolver<GQLResolversTypes['CurrencyCode'], ParentType, ContextType>;
     description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -1893,6 +1986,12 @@ export type GQLMenuMutationResolvers<
     ParentType extends GQLResolversParentTypes['MenuMutation'] = GQLResolversParentTypes['MenuMutation'],
 > = {
     cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    courses?: Resolver<
+        GQLResolversTypes['CookMenuCourseMutation'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLMenuMutationCoursesArgs, 'menuId'>
+    >;
     createOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType, RequireFields<GQLMenuMutationCreateOneArgs, 'menu'>>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1902,6 +2001,7 @@ export type GQLMenuQueryResolvers<
     ParentType extends GQLResolversParentTypes['MenuQuery'] = GQLResolversParentTypes['MenuQuery'],
 > = {
     cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    courses?: Resolver<GQLResolversTypes['CookMenuCourseQuery'], ParentType, ContextType, RequireFields<GQLMenuQueryCoursesArgs, 'menuId'>>;
     findMany?: Resolver<Array<GQLResolversTypes['Menu']>, ParentType, ContextType, Partial<GQLMenuQueryFindManyArgs>>;
     findOne?: Resolver<Maybe<GQLResolversTypes['Menu']>, ParentType, ContextType, RequireFields<GQLMenuQueryFindOneArgs, 'menuId'>>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2612,11 +2712,14 @@ export type GQLResolvers<ContextType = any> = {
     Cook?: GQLCookResolvers<ContextType>;
     CookMealMutation?: GQLCookMealMutationResolvers<ContextType>;
     CookMealQuery?: GQLCookMealQueryResolvers<ContextType>;
+    CookMenuCourseMutation?: GQLCookMenuCourseMutationResolvers<ContextType>;
+    CookMenuCourseQuery?: GQLCookMenuCourseQueryResolvers<ContextType>;
     CookMutation?: GQLCookMutationResolvers<ContextType>;
     CookQuery?: GQLCookQueryResolvers<ContextType>;
     CookSpecificFee?: GQLCookSpecificFeeResolvers<ContextType>;
     CookSpecificFeeMutation?: GQLCookSpecificFeeMutationResolvers<ContextType>;
     CookSpecificFeeQuery?: GQLCookSpecificFeeQueryResolvers<ContextType>;
+    Course?: GQLCourseResolvers<ContextType>;
     CustomerFeeUpdate?: GQLCustomerFeeUpdateResolvers<ContextType>;
     CustomerFeeUpdateMutation?: GQLCustomerFeeUpdateMutationResolvers<ContextType>;
     CustomerFeeUpdateQuery?: GQLCustomerFeeUpdateQueryResolvers<ContextType>;

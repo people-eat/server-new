@@ -1,0 +1,39 @@
+type Course {
+    courseId: String!
+    menuId: String!
+    cookId: String!
+    index: UInt!
+    title: String!
+
+    mealOptions: [MealOption!]!
+    mealOptionCount: UInt!
+}
+
+type CookMenuCourseQuery {
+    cookId: String!
+    menuId: String!
+
+    findAll: [Course!]!
+}
+
+type CookMenuQuery {
+    courses(cookId: String!, menuId: String!): CookMenuCourseQuery!
+}
+
+input CreateOneCourseRequest {
+    index: UInt!
+    title: String!
+    mealOptions: [CreateOneMealOptionRequest!]
+}
+
+type CookMenuCourseMutation {
+    cookId: String!
+    menuId: String!
+
+    createOne(request: CreateOneCourseRequest!): Boolean!
+    deleteOne(courseId: String!): Boolean!
+}
+
+type CookMenuMutation {
+    courses(menuId: String!): CookMenuCourseMutation!
+}
