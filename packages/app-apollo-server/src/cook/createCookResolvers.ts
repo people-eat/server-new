@@ -20,6 +20,7 @@ import {
     type GQLCookQuery,
     type GQLCookQueryFindManyArgs,
     type GQLCookQueryFindOneArgs,
+    type GQLCookQueryGlobalBookingRequestsArgs,
     type GQLCookQueryMealsArgs,
     type GQLLanguage,
     type GQLMeal,
@@ -127,6 +128,7 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
             ): Promise<boolean> => service.cookLanguage.deleteOne(context, { cookId, languageId }),
 
             meals: (_parent: GQLCookMutation, { cookId }: GQLCookMutationMealsArgs) => ({ cookId } as any),
+            menus: (_parent: GQLCookMutation, { cookId }: GQLCookMutationMenusArgs) => ({ cookId } as any),
         },
         CookQuery: {
             findOne: async (
@@ -142,6 +144,8 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
             ): Promise<GQLCook[]> => service.cook.findMany(context, request) as any,
 
             meals: (_parent: GQLCookQuery, { cookId }: GQLCookQueryMealsArgs) => ({ cookId } as any),
+            menus: (_parent: GQLCookQuery, { cookId }: GQLCookQueryMenusArgs) => ({ cookId } as any),
+            globalBookingRequests: (_parent: GQLCookQuery, { cookId }: GQLCookQueryGlobalBookingRequestsArgs) => ({ cookId } as any),
         },
     };
 }

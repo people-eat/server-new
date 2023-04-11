@@ -5,6 +5,7 @@ import {
     type GQLUserMutationCreateOneByEmailAddressArgs,
     type GQLUserMutationCreateOneByIdentityProviderArgs,
     type GQLUserMutationCreateOneByPhoneNumberArgs,
+    type GQLUserMutationGlobalBookingRequestsArgs,
     type GQLUserMutationSessionsArgs,
     type GQLUserMutationUpdateGenderArgs,
     type GQLUserMutationUpdatePasswordArgs,
@@ -12,6 +13,7 @@ import {
     type GQLUserQuery,
     type GQLUserQueryFindManyArgs,
     type GQLUserQueryFindOneArgs,
+    type GQLUserQueryGlobalBookingRequestsArgs,
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
 
@@ -78,6 +80,8 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
             sessions: (_parent: GQLUserMutation, { userId }: GQLUserMutationSessionsArgs) => ({ userId } as any),
             phoneNumberUpdate: () => ({} as any),
             emailAddressUpdate: () => ({} as any),
+            addresses: (_parent: GQLUserMutation, { userId }: GQLUserMutationAddressesArgs) => ({ userId } as any),
+            globalBookingRequests: (_parent: GQLUserMutation, { userId }: GQLUserMutationGlobalBookingRequestsArgs) => ({ userId } as any),
         },
         UserQuery: {
             findMany: async (
@@ -102,6 +106,8 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
 
             phoneNumberUpdate: () => ({} as any),
             emailAddressUpdate: () => ({} as any),
+            addresses: () => ({} as any),
+            globalBookingRequests: (_parent: GQLUserQuery, { userId }: GQLUserQueryGlobalBookingRequestsArgs) => ({ userId } as any),
         },
     };
 }

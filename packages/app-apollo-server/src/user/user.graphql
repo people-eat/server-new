@@ -52,6 +52,7 @@ input CreateOneUserByEmailAddressRequest {
     birthDate: Date
     profilePictureUrl: Url
     cook: CreateOneCookRequest
+    globalBookingRequest: CreateOneGlobalBookingRequestRequest
 }
 
 input CreateOneUserByPhoneNumberRequest {
@@ -64,6 +65,7 @@ input CreateOneUserByPhoneNumberRequest {
     birthDate: Date
     profilePictureUrl: Url
     cook: CreateOneCookRequest
+    globalBookingRequest: CreateOneGlobalBookingRequestRequest
 }
 
 input CreateOneUserByIdentityProviderRequest {
@@ -76,6 +78,7 @@ input CreateOneUserByIdentityProviderRequest {
     birthDate: Date
     profilePictureUrl: Url
     cook: CreateOneCookRequest
+    globalBookingRequest: CreateOneGlobalBookingRequestRequest
 }
 
 type UserMutation {

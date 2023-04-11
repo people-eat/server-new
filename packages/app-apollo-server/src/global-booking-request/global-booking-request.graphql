@@ -1,0 +1,65 @@
+type GlobalBookingRequest {
+    globalBookingRequestId: String!
+    userId: String!
+    location: Location!
+    dateTime: DateTime!
+    duration: UInt
+    adultParticipants: UInt!
+    children: UInt!
+    price: Price!
+    occasion: String!
+    message: String!
+    createdAt: DateTime!
+
+    user: PublicUser!
+    allergies: [Allergy!]!
+}
+
+input CreateOneGlobalBookingRequestRequest {
+    location: LocationInput!
+    dateTime: DateTime!
+    duration: UInt!
+    adultParticipants: UInt!
+    children: UInt!
+    price: PriceInput!
+    occasion: String!
+    message: String!
+
+    kitchenId: String
+    categoryIds: [String!]
+    allergyIds: [String!]
+}
+
+type UserGlobalBookingRequestQuery {
+    userId: String!
+    findMany: [GlobalBookingRequest!]
+    findOne: GlobalBookingRequest
+}
+
+type UserQuery {
+    globalBookingRequests(userId: String!): UserGlobalBookingRequestQuery!
+}
+
+type UserGlobalBookingRequestMutation {
+    userId: String!
+    createOne(request: CreateOneGlobalBookingRequestRequest!): Boolean!
+    expireOne(globalBookingRequestId: String!): Boolean!
+    updateOccasion(globalBookingRequestId: String!, occasion: String!): Boolean!
+    updateMessage(globalBookingRequestId: String!, message: String!): Boolean!
+    updateDateTime(globalBookingRequestId: String!, dateTime: DateTime!): Boolean!
+    updatePrice(globalBookingRequestId: String!, price: PriceInput!): Boolean!
+}
+
+type UserMutation {
+    globalBookingRequests(userId: String!): UserGlobalBookingRequestMutation!
+}
+
+type CookGlobalBookingRequestQuery {
+    cookId: String!
+    findMany(request: FindManyRequest): [GlobalBookingRequest!]
+    findOne(globalBookingRequestId: String!): GlobalBookingRequest
+}
+
+type CookQuery {
+    globalBookingRequests(cookId: String!): CookGlobalBookingRequestQuery!
+}
