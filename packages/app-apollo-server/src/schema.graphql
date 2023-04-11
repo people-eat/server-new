@@ -33,3 +33,8 @@ enum CurrencyCode {
     EUR
     USD
 }
+
+type Price {
+    amount: UInt!
+    currencyCode: CurrencyCode!
+}

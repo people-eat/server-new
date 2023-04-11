@@ -102,6 +102,12 @@ export type GQLMutation = {
 
 export type GQLPlatform = 'ANDROID' | 'BROWSER' | 'IOS' | 'NO_INFORMATION';
 
+export type GQLPrice = {
+    __typename?: 'Price';
+    amount: Scalars['UInt'];
+    currencyCode: GQLCurrencyCode;
+};
+
 export type GQLQuery = {
     __typename?: 'Query';
     allergies: GQLAllergyQuery;
@@ -203,6 +209,7 @@ export type GQLResolversTypes = {
     Mutation: ResolverTypeWrapper<{}>;
     PhoneNumber: ResolverTypeWrapper<Scalars['PhoneNumber']>;
     Platform: GQLPlatform;
+    Price: ResolverTypeWrapper<GQLPrice>;
     Query: ResolverTypeWrapper<{}>;
     String: ResolverTypeWrapper<Scalars['String']>;
     UInt: ResolverTypeWrapper<Scalars['UInt']>;
@@ -234,6 +241,7 @@ export type GQLResolversParentTypes = {
     Longitude: Scalars['Longitude'];
     Mutation: {};
     PhoneNumber: Scalars['PhoneNumber'];
+    Price: GQLPrice;
     Query: {};
     String: Scalars['String'];
     UInt: Scalars['UInt'];
@@ -376,6 +384,12 @@ export interface GQLPhoneNumberScalarConfig extends GraphQLScalarTypeConfig<GQLR
     name: 'PhoneNumber';
 }
 
+export type GQLPriceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Price'] = GQLResolversParentTypes['Price']> = {
+    amount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    currencyCode?: Resolver<GQLResolversTypes['CurrencyCode'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
     allergies?: Resolver<GQLResolversTypes['AllergyQuery'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryQuery'], ParentType, ContextType>;
@@ -419,6 +433,7 @@ export type GQLResolvers<ContextType = any> = {
     Longitude?: GraphQLScalarType;
     Mutation?: GQLMutationResolvers<ContextType>;
     PhoneNumber?: GraphQLScalarType;
+    Price?: GQLPriceResolvers<ContextType>;
     Query?: GQLQueryResolvers<ContextType>;
     UInt?: GraphQLScalarType;
     UUID?: GraphQLScalarType;
