@@ -21,3 +21,10 @@ enum Gender {
     DIVERSE
     NO_INFORMATION
 }
+
+enum Platform {
+    IOS
+    ANDROID
+    BROWSER
+    NO_INFORMATION
+}

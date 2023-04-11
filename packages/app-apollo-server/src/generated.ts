@@ -98,6 +98,8 @@ export type GQLMutation = {
     languages: GQLLanguageMutation;
 };
 
+export type GQLPlatform = 'ANDROID' | 'BROWSER' | 'IOS' | 'NO_INFORMATION';
+
 export type GQLQuery = {
     __typename?: 'Query';
     allergies: GQLAllergyQuery;
@@ -197,6 +199,7 @@ export type GQLResolversTypes = {
     Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
     Mutation: ResolverTypeWrapper<{}>;
     PhoneNumber: ResolverTypeWrapper<Scalars['PhoneNumber']>;
+    Platform: GQLPlatform;
     Query: ResolverTypeWrapper<{}>;
     String: ResolverTypeWrapper<Scalars['String']>;
     UInt: ResolverTypeWrapper<Scalars['UInt']>;
