@@ -21,6 +21,9 @@ type User {
 
     cook: Cook
     isCook: Boolean!
+
+    notifications: [Notification!]!
+    unreadNotificationCount: UInt!
 }
 
 type UserQuery {

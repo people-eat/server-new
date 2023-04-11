@@ -39,6 +39,7 @@ import { createCookResolvers } from './cook/createCookResolvers';
 import { type GQLResolvers } from './generated';
 import { createKitchenResolvers } from './kitchen/createKitchenResolvers';
 import { createLanguageResolvers } from './language/createLanguageResolvers';
+import { createNotificationResolvers } from './notification/createNotificationResolvers';
 import { createPublicCookResolvers } from './public-cook/createPublicCookResolvers';
 import { createPublicUserResolvers } from './public-user/createPublicUserResolvers';
 import { createSessionResolvers } from './session/createSessionResolvers';
@@ -109,6 +110,7 @@ export async function startApolloServerApp({
         ...createAdminResolvers(service),
         ...createCookResolvers(service),
         ...createPublicCookResolvers(service),
+        ...createNotificationResolvers(),
     };
 
     const path: string = '/graphql';

@@ -1,0 +1,42 @@
+type Notification {
+    notificationId: String!
+    userId: String!
+    message: String!
+    url: Url
+    wasRead: Boolean
+    createdAt: DateTime!
+}
+
+type NotificationQuery {
+    userId: String!
+    findMany: [Notification!]
+}
+
+type UserQuery {
+    notifications(userId: String!): NotificationQuery!
+}
+
+type UserNotificationMutation {
+    userId: String!
+    deleteOne(notificationId: String!): Boolean!
+    deleteAll: Boolean!
+    updateOneWasRead(notificationId: String!, wasRead: Boolean!): Boolean!
+    updateAllWasRead(wasRead: Boolean!): Boolean!
+}
+
+type UserMutation {
+    notifications(userId: String!): UserNotificationMutation!
+}
+
+input CreateOneNotificationRequest {
+    message: String!
+    url: Url
+}
+
+type NotificationMutation {
+    createOne(request: CreateOneNotificationRequest!): Boolean!
+}
+
+type Mutation {
+    notifications: NotificationMutation!
+}

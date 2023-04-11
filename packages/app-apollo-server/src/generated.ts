@@ -243,6 +243,11 @@ export type GQLCreateOneCookRequest = {
     travelExpenses: Scalars['UInt'];
 };
 
+export type GQLCreateOneNotificationRequest = {
+    message: Scalars['String'];
+    url?: InputMaybe<Scalars['Url']>;
+};
+
 export type GQLCreateOneSessionByEmailAddressRequest = {
     emailAddress: Scalars['EmailAddress'];
     password: Scalars['String'];
@@ -386,8 +391,34 @@ export type GQLMutation = {
     cooks: GQLCookMutation;
     kitchens: GQLKitchenMutation;
     languages: GQLLanguageMutation;
+    notifications: GQLNotificationMutation;
     sessions: GQLSessionMutation;
     users: GQLUserMutation;
+};
+
+export type GQLNotification = {
+    __typename?: 'Notification';
+    createdAt: Scalars['DateTime'];
+    message: Scalars['String'];
+    notificationId: Scalars['String'];
+    url?: Maybe<Scalars['Url']>;
+    userId: Scalars['String'];
+    wasRead?: Maybe<Scalars['Boolean']>;
+};
+
+export type GQLNotificationMutation = {
+    __typename?: 'NotificationMutation';
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLNotificationMutationCreateOneArgs = {
+    request: GQLCreateOneNotificationRequest;
+};
+
+export type GQLNotificationQuery = {
+    __typename?: 'NotificationQuery';
+    findMany?: Maybe<Array<GQLNotification>>;
+    userId: Scalars['String'];
 };
 
 export type GQLPaymentProvider = 'STRIPE';
@@ -506,8 +537,10 @@ export type GQLUser = {
     isLocked: Scalars['Boolean'];
     language: GQLUserLanguage;
     lastName: Scalars['String'];
+    notifications: Array<GQLNotification>;
     phoneNumber?: Maybe<Scalars['PhoneNumber']>;
     profilePictureUrl?: Maybe<Scalars['Url']>;
+    unreadNotificationCount: Scalars['UInt'];
     userId: Scalars['String'];
 };
 
@@ -520,6 +553,7 @@ export type GQLUserMutation = {
     createOneByEmailAddress: Scalars['Boolean'];
     createOneByIdentityProvider: Scalars['Boolean'];
     createOneByPhoneNumber: Scalars['Boolean'];
+    notifications: GQLUserNotificationMutation;
     sessions: GQLUserSessionMutation;
     updateGender: Scalars['Boolean'];
     updateIsLocked: Scalars['Boolean'];
@@ -538,6 +572,10 @@ export type GQLUserMutationCreateOneByIdentityProviderArgs = {
 
 export type GQLUserMutationCreateOneByPhoneNumberArgs = {
     request: GQLCreateOneUserByPhoneNumberRequest;
+};
+
+export type GQLUserMutationNotificationsArgs = {
+    userId: Scalars['String'];
 };
 
 export type GQLUserMutationSessionsArgs = {
@@ -564,11 +602,34 @@ export type GQLUserMutationUpdateProfilePictureArgs = {
     userId: Scalars['String'];
 };
 
+export type GQLUserNotificationMutation = {
+    __typename?: 'UserNotificationMutation';
+    deleteAll: Scalars['Boolean'];
+    deleteOne: Scalars['Boolean'];
+    updateAllWasRead: Scalars['Boolean'];
+    updateOneWasRead: Scalars['Boolean'];
+    userId: Scalars['String'];
+};
+
+export type GQLUserNotificationMutationDeleteOneArgs = {
+    notificationId: Scalars['String'];
+};
+
+export type GQLUserNotificationMutationUpdateAllWasReadArgs = {
+    wasRead: Scalars['Boolean'];
+};
+
+export type GQLUserNotificationMutationUpdateOneWasReadArgs = {
+    notificationId: Scalars['String'];
+    wasRead: Scalars['Boolean'];
+};
+
 export type GQLUserQuery = {
     __typename?: 'UserQuery';
     findMany?: Maybe<Array<GQLUser>>;
     findOne?: Maybe<GQLUser>;
     me?: Maybe<GQLUser>;
+    notifications: GQLNotificationQuery;
     sessions: GQLUserSessionQuery;
 };
 
@@ -577,6 +638,10 @@ export type GQLUserQueryFindManyArgs = {
 };
 
 export type GQLUserQueryFindOneArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserQueryNotificationsArgs = {
     userId: Scalars['String'];
 };
 
@@ -692,6 +757,7 @@ export type GQLResolversTypes = {
     CookRank: GQLCookRank;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
+    CreateOneNotificationRequest: GQLCreateOneNotificationRequest;
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
@@ -719,6 +785,9 @@ export type GQLResolversTypes = {
     Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
     MealType: GQLMealType;
     Mutation: ResolverTypeWrapper<{}>;
+    Notification: ResolverTypeWrapper<GQLNotification>;
+    NotificationMutation: ResolverTypeWrapper<GQLNotificationMutation>;
+    NotificationQuery: ResolverTypeWrapper<GQLNotificationQuery>;
     PaymentProvider: GQLPaymentProvider;
     PhoneNumber: ResolverTypeWrapper<Scalars['PhoneNumber']>;
     Platform: GQLPlatform;
@@ -738,6 +807,7 @@ export type GQLResolversTypes = {
     User: ResolverTypeWrapper<GQLUser>;
     UserLanguage: GQLUserLanguage;
     UserMutation: ResolverTypeWrapper<GQLUserMutation>;
+    UserNotificationMutation: ResolverTypeWrapper<GQLUserNotificationMutation>;
     UserQuery: ResolverTypeWrapper<GQLUserQuery>;
     UserSessionMutation: ResolverTypeWrapper<GQLUserSessionMutation>;
     UserSessionQuery: ResolverTypeWrapper<GQLUserSessionQuery>;
@@ -762,6 +832,7 @@ export type GQLResolversParentTypes = {
     CookQuery: GQLCookQuery;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
+    CreateOneNotificationRequest: GQLCreateOneNotificationRequest;
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
@@ -785,6 +856,9 @@ export type GQLResolversParentTypes = {
     LocationInput: GQLLocationInput;
     Longitude: Scalars['Longitude'];
     Mutation: {};
+    Notification: GQLNotification;
+    NotificationMutation: GQLNotificationMutation;
+    NotificationQuery: GQLNotificationQuery;
     PhoneNumber: Scalars['PhoneNumber'];
     Price: GQLPrice;
     PriceInput: GQLPriceInput;
@@ -801,6 +875,7 @@ export type GQLResolversParentTypes = {
     Url: Scalars['Url'];
     User: GQLUser;
     UserMutation: GQLUserMutation;
+    UserNotificationMutation: GQLUserNotificationMutation;
     UserQuery: GQLUserQuery;
     UserSessionMutation: GQLUserSessionMutation;
     UserSessionQuery: GQLUserSessionQuery;
@@ -1109,8 +1184,44 @@ export type GQLMutationResolvers<
     cooks?: Resolver<GQLResolversTypes['CookMutation'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenMutation'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
+    notifications?: Resolver<GQLResolversTypes['NotificationMutation'], ParentType, ContextType>;
     sessions?: Resolver<GQLResolversTypes['SessionMutation'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserMutation'], ParentType, ContextType>;
+};
+
+export type GQLNotificationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['Notification'] = GQLResolversParentTypes['Notification'],
+> = {
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    notificationId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    url?: Resolver<Maybe<GQLResolversTypes['Url']>, ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    wasRead?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLNotificationMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['NotificationMutation'] = GQLResolversParentTypes['NotificationMutation'],
+> = {
+    createOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLNotificationMutationCreateOneArgs, 'request'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLNotificationQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['NotificationQuery'] = GQLResolversParentTypes['NotificationQuery'],
+> = {
+    findMany?: Resolver<Maybe<Array<GQLResolversTypes['Notification']>>, ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface GQLPhoneNumberScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['PhoneNumber'], any> {
@@ -1258,8 +1369,10 @@ export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversP
     isLocked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     language?: Resolver<GQLResolversTypes['UserLanguage'], ParentType, ContextType>;
     lastName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    notifications?: Resolver<Array<GQLResolversTypes['Notification']>, ParentType, ContextType>;
     phoneNumber?: Resolver<Maybe<GQLResolversTypes['PhoneNumber']>, ParentType, ContextType>;
     profilePictureUrl?: Resolver<Maybe<GQLResolversTypes['Url']>, ParentType, ContextType>;
+    unreadNotificationCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1287,6 +1400,12 @@ export type GQLUserMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLUserMutationCreateOneByPhoneNumberArgs, 'request'>
+    >;
+    notifications?: Resolver<
+        GQLResolversTypes['UserNotificationMutation'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationNotificationsArgs, 'userId'>
     >;
     sessions?: Resolver<
         GQLResolversTypes['UserSessionMutation'],
@@ -1321,6 +1440,33 @@ export type GQLUserMutationResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLUserNotificationMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserNotificationMutation'] = GQLResolversParentTypes['UserNotificationMutation'],
+> = {
+    deleteAll?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    deleteOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserNotificationMutationDeleteOneArgs, 'notificationId'>
+    >;
+    updateAllWasRead?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserNotificationMutationUpdateAllWasReadArgs, 'wasRead'>
+    >;
+    updateOneWasRead?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserNotificationMutationUpdateOneWasReadArgs, 'notificationId' | 'wasRead'>
+    >;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLUserQueryResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['UserQuery'] = GQLResolversParentTypes['UserQuery'],
@@ -1333,6 +1479,12 @@ export type GQLUserQueryResolvers<
     >;
     findOne?: Resolver<Maybe<GQLResolversTypes['User']>, ParentType, ContextType, RequireFields<GQLUserQueryFindOneArgs, 'userId'>>;
     me?: Resolver<Maybe<GQLResolversTypes['User']>, ParentType, ContextType>;
+    notifications?: Resolver<
+        GQLResolversTypes['NotificationQuery'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserQueryNotificationsArgs, 'userId'>
+    >;
     sessions?: Resolver<GQLResolversTypes['UserSessionQuery'], ParentType, ContextType, RequireFields<GQLUserQuerySessionsArgs, 'userId'>>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1395,6 +1547,9 @@ export type GQLResolvers<ContextType = any> = {
     Location?: GQLLocationResolvers<ContextType>;
     Longitude?: GraphQLScalarType;
     Mutation?: GQLMutationResolvers<ContextType>;
+    Notification?: GQLNotificationResolvers<ContextType>;
+    NotificationMutation?: GQLNotificationMutationResolvers<ContextType>;
+    NotificationQuery?: GQLNotificationQueryResolvers<ContextType>;
     PhoneNumber?: GraphQLScalarType;
     Price?: GQLPriceResolvers<ContextType>;
     PublicCook?: GQLPublicCookResolvers<ContextType>;
@@ -1409,6 +1564,7 @@ export type GQLResolvers<ContextType = any> = {
     Url?: GraphQLScalarType;
     User?: GQLUserResolvers<ContextType>;
     UserMutation?: GQLUserMutationResolvers<ContextType>;
+    UserNotificationMutation?: GQLUserNotificationMutationResolvers<ContextType>;
     UserQuery?: GQLUserQueryResolvers<ContextType>;
     UserSessionMutation?: GQLUserSessionMutationResolvers<ContextType>;
     UserSessionQuery?: GQLUserSessionQueryResolvers<ContextType>;
