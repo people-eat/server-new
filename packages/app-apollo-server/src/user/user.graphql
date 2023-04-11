@@ -15,6 +15,9 @@ type User {
 
     activeSessions: [Session!]!
     activeSessionCount: UInt!
+
+    admin: Admin
+    isAdmin: Boolean!
 }
 
 type UserQuery {

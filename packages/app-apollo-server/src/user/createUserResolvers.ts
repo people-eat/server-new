@@ -1,4 +1,4 @@
-import { type Authorization, type Service } from '@people-eat/server-domain';
+import { type Admin, type Authorization, type Service } from '@people-eat/server-domain';
 import {
     type GQLUser,
     type GQLUserMutation,
@@ -17,7 +17,14 @@ import { type Resolvers } from '../Resolvers';
 
 export function createUserResolvers(service: Service): Resolvers<'User' | 'UserMutation' | 'UserQuery'> {
     return {
-        User: {},
+        User: {
+            admin: ({ userId }: GQLUser, _input: unknown, context: Authorization.Context) =>
+                service.admin.findOne(context, { adminId: userId }) as any,
+            isAdmin: async ({ userId }: GQLUser, _input: unknown, context: Authorization.Context): Promise<boolean> => {
+                const admin: Admin | undefined = await service.admin.findOne(context, { adminId: userId });
+                return Boolean(admin);
+            },
+        },
         UserMutation: {
             createOneByEmailAddress: async (
                 _parent: GQLUserMutation,

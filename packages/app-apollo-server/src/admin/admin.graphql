@@ -1,0 +1,25 @@
+type Admin {
+    adminId: String!
+    user: PublicUser!
+}
+
+type AdminQuery {
+    findMany(request: FindManyRequest): [Admin!]!
+    findOne(adminId: String!): Admin
+}
+
+type Query {
+    admins: AdminQuery!
+}
+
+input CreateOneAdminRequest {
+    adminId: String!
+}
+
+type AdminMutation {
+    createOne(request: CreateOneAdminRequest!): Boolean!
+}
+
+type Mutation {
+    admins: AdminMutation!
+}

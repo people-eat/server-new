@@ -30,6 +30,7 @@ import { type Disposable } from 'graphql-ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { createServer as createHttpServer, type IncomingMessage, type Server as HttpServer } from 'http';
 import { WebSocketServer } from 'ws';
+import { createAdminResolvers } from './admin/createAdminResolvers';
 import { createAllergyResolvers } from './allergy/createAllergyResolvers';
 import { createAnonymousSessionResolvers } from './anonymous-session/createAnonymousSessionResolvers';
 import { createAnonymousUserResolvers } from './anonymous-user/createAnonymousUserResolvers';
@@ -100,6 +101,7 @@ export async function startApolloServerApp({
         ...createAnonymousUserResolvers(),
         ...createSessionResolvers(service),
         ...createAnonymousSessionResolvers(),
+        ...createAdminResolvers(service),
     };
 
     const path: string = '/graphql';

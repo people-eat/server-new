@@ -25,6 +25,35 @@ export type Scalars = {
     Url: string;
 };
 
+export type GQLAdmin = {
+    __typename?: 'Admin';
+    adminId: Scalars['String'];
+    user: GQLPublicUser;
+};
+
+export type GQLAdminMutation = {
+    __typename?: 'AdminMutation';
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLAdminMutationCreateOneArgs = {
+    request: GQLCreateOneAdminRequest;
+};
+
+export type GQLAdminQuery = {
+    __typename?: 'AdminQuery';
+    findMany: Array<GQLAdmin>;
+    findOne?: Maybe<GQLAdmin>;
+};
+
+export type GQLAdminQueryFindManyArgs = {
+    request?: InputMaybe<GQLFindManyRequest>;
+};
+
+export type GQLAdminQueryFindOneArgs = {
+    adminId: Scalars['String'];
+};
+
 export type GQLAllergy = {
     __typename?: 'Allergy';
     allergyId: Scalars['String'];
@@ -74,6 +103,10 @@ export type GQLCategoryQuery = {
 };
 
 export type GQLCookRank = 'HOBBY' | 'PROFESSIONAL';
+
+export type GQLCreateOneAdminRequest = {
+    adminId: Scalars['String'];
+};
 
 export type GQLCreateOneSessionByEmailAddressRequest = {
     emailAddress: Scalars['EmailAddress'];
@@ -196,6 +229,7 @@ export type GQLMealType = 'DESSERT' | 'FISH' | 'MEAT' | 'SOUP' | 'SPECIAL' | 'VE
 
 export type GQLMutation = {
     __typename?: 'Mutation';
+    admins: GQLAdminMutation;
     allergies: GQLAllergyMutation;
     categories: GQLCategoryMutation;
     kitchens: GQLKitchenMutation;
@@ -230,6 +264,7 @@ export type GQLPublicUser = {
 
 export type GQLQuery = {
     __typename?: 'Query';
+    admins: GQLAdminQuery;
     allergies: GQLAllergyQuery;
     categories: GQLCategoryQuery;
     kitchens: GQLKitchenQuery;
@@ -273,11 +308,13 @@ export type GQLUser = {
     acceptedTerms: Scalars['DateTime'];
     activeSessionCount: Scalars['UInt'];
     activeSessions: Array<GQLSession>;
+    admin?: Maybe<GQLAdmin>;
     birthDate?: Maybe<Scalars['Date']>;
     createdAt: Scalars['DateTime'];
     emailAddress?: Maybe<Scalars['EmailAddress']>;
     firstName: Scalars['String'];
     gender: GQLGender;
+    isAdmin: Scalars['Boolean'];
     isLocked: Scalars['Boolean'];
     language: GQLUserLanguage;
     lastName: Scalars['String'];
@@ -449,6 +486,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type GQLResolversTypes = {
+    Admin: ResolverTypeWrapper<GQLAdmin>;
+    AdminMutation: ResolverTypeWrapper<GQLAdminMutation>;
+    AdminQuery: ResolverTypeWrapper<GQLAdminQuery>;
     Allergy: ResolverTypeWrapper<GQLAllergy>;
     AllergyMutation: ResolverTypeWrapper<GQLAllergyMutation>;
     AllergyQuery: ResolverTypeWrapper<GQLAllergyQuery>;
@@ -459,6 +499,7 @@ export type GQLResolversTypes = {
     CategoryMutation: ResolverTypeWrapper<GQLCategoryMutation>;
     CategoryQuery: ResolverTypeWrapper<GQLCategoryQuery>;
     CookRank: GQLCookRank;
+    CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
@@ -509,6 +550,9 @@ export type GQLResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type GQLResolversParentTypes = {
+    Admin: GQLAdmin;
+    AdminMutation: GQLAdminMutation;
+    AdminQuery: GQLAdminQuery;
     Allergy: GQLAllergy;
     AllergyMutation: GQLAllergyMutation;
     AllergyQuery: GQLAllergyQuery;
@@ -518,6 +562,7 @@ export type GQLResolversParentTypes = {
     Category: GQLCategory;
     CategoryMutation: GQLCategoryMutation;
     CategoryQuery: GQLCategoryQuery;
+    CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
@@ -557,6 +602,29 @@ export type GQLResolversParentTypes = {
     UserQuery: GQLUserQuery;
     UserSessionMutation: GQLUserSessionMutation;
     UserSessionQuery: GQLUserSessionQuery;
+};
+
+export type GQLAdminResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Admin'] = GQLResolversParentTypes['Admin']> = {
+    adminId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    user?: Resolver<GQLResolversTypes['PublicUser'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLAdminMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['AdminMutation'] = GQLResolversParentTypes['AdminMutation'],
+> = {
+    createOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType, RequireFields<GQLAdminMutationCreateOneArgs, 'request'>>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLAdminQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['AdminQuery'] = GQLResolversParentTypes['AdminQuery'],
+> = {
+    findMany?: Resolver<Array<GQLResolversTypes['Admin']>, ParentType, ContextType, Partial<GQLAdminQueryFindManyArgs>>;
+    findOne?: Resolver<Maybe<GQLResolversTypes['Admin']>, ParentType, ContextType, RequireFields<GQLAdminQueryFindOneArgs, 'adminId'>>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLAllergyResolvers<
@@ -714,6 +782,7 @@ export type GQLMutationResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['Mutation'] = GQLResolversParentTypes['Mutation'],
 > = {
+    admins?: Resolver<GQLResolversTypes['AdminMutation'], ParentType, ContextType>;
     allergies?: Resolver<GQLResolversTypes['AllergyMutation'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryMutation'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenMutation'], ParentType, ContextType>;
@@ -745,6 +814,7 @@ export type GQLPublicUserResolvers<
 };
 
 export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
+    admins?: Resolver<GQLResolversTypes['AdminQuery'], ParentType, ContextType>;
     allergies?: Resolver<GQLResolversTypes['AllergyQuery'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryQuery'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
@@ -812,11 +882,13 @@ export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversP
     acceptedTerms?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     activeSessionCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     activeSessions?: Resolver<Array<GQLResolversTypes['Session']>, ParentType, ContextType>;
+    admin?: Resolver<Maybe<GQLResolversTypes['Admin']>, ParentType, ContextType>;
     birthDate?: Resolver<Maybe<GQLResolversTypes['Date']>, ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     emailAddress?: Resolver<Maybe<GQLResolversTypes['EmailAddress']>, ParentType, ContextType>;
     firstName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     gender?: Resolver<GQLResolversTypes['Gender'], ParentType, ContextType>;
+    isAdmin?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     isLocked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     language?: Resolver<GQLResolversTypes['UserLanguage'], ParentType, ContextType>;
     lastName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -930,6 +1002,9 @@ export type GQLUserSessionQueryResolvers<
 };
 
 export type GQLResolvers<ContextType = any> = {
+    Admin?: GQLAdminResolvers<ContextType>;
+    AdminMutation?: GQLAdminMutationResolvers<ContextType>;
+    AdminQuery?: GQLAdminQueryResolvers<ContextType>;
     Allergy?: GQLAllergyResolvers<ContextType>;
     AllergyMutation?: GQLAllergyMutationResolvers<ContextType>;
     AllergyQuery?: GQLAllergyQueryResolvers<ContextType>;
