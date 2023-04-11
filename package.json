@@ -11,6 +11,7 @@
     "private": true,
     "scripts": {
         "generate:graphql": "yarn workspace @people-eat/server-app-apollo-server generate:graphql",
+        "build:host-mock": "nx build host-mock",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "lint": "eslint . --ext js,cjs,mjs,ts,cts,mts --fix",
