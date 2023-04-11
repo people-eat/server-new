@@ -1,0 +1,3 @@
+{
+    "schema": "./packages/app-apollo-server/src/**/*.graphql"
+}
