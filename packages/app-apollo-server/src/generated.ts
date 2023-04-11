@@ -319,6 +319,31 @@ export type GQLCreateOneUserByPhoneNumberRequest = {
 
 export type GQLCurrencyCode = 'EUR' | 'USD';
 
+export type GQLCustomerFeeUpdate = {
+    __typename?: 'CustomerFeeUpdate';
+    adminId: Scalars['String'];
+    user: GQLPublicUser;
+};
+
+export type GQLCustomerFeeUpdateMutation = {
+    __typename?: 'CustomerFeeUpdateMutation';
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLCustomerFeeUpdateQuery = {
+    __typename?: 'CustomerFeeUpdateQuery';
+    findMany: Array<GQLAdmin>;
+    findOne?: Maybe<GQLAdmin>;
+};
+
+export type GQLCustomerFeeUpdateQueryFindManyArgs = {
+    request?: InputMaybe<GQLFindManyRequest>;
+};
+
+export type GQLCustomerFeeUpdateQueryFindOneArgs = {
+    adminId: Scalars['String'];
+};
+
 export type GQLExpireOneSessionRequest = {
     sessionId: Scalars['String'];
     userId: Scalars['String'];
@@ -399,6 +424,7 @@ export type GQLMutation = {
     allergies: GQLAllergyMutation;
     categories: GQLCategoryMutation;
     cooks: GQLCookMutation;
+    customerFeeUpdates: GQLCustomerFeeUpdateMutation;
     kitchens: GQLKitchenMutation;
     languages: GQLLanguageMutation;
     notifications: GQLNotificationMutation;
@@ -588,6 +614,7 @@ export type GQLQuery = {
     allergies: GQLAllergyQuery;
     categories: GQLCategoryQuery;
     cooks: GQLCookQuery;
+    customerFeeUpdates: GQLCustomerFeeUpdateQuery;
     kitchens: GQLKitchenQuery;
     languages: GQLLanguageQuery;
     privacyPolicyUpdates: GQLPrivacyPolicyUpdateQuery;
@@ -917,6 +944,9 @@ export type GQLResolversTypes = {
     CreateOneUserByIdentityProviderRequest: GQLCreateOneUserByIdentityProviderRequest;
     CreateOneUserByPhoneNumberRequest: GQLCreateOneUserByPhoneNumberRequest;
     CurrencyCode: GQLCurrencyCode;
+    CustomerFeeUpdate: ResolverTypeWrapper<GQLCustomerFeeUpdate>;
+    CustomerFeeUpdateMutation: ResolverTypeWrapper<GQLCustomerFeeUpdateMutation>;
+    CustomerFeeUpdateQuery: ResolverTypeWrapper<GQLCustomerFeeUpdateQuery>;
     Date: ResolverTypeWrapper<Scalars['Date']>;
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
     EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
@@ -1006,6 +1036,9 @@ export type GQLResolversParentTypes = {
     CreateOneUserByEmailAddressRequest: GQLCreateOneUserByEmailAddressRequest;
     CreateOneUserByIdentityProviderRequest: GQLCreateOneUserByIdentityProviderRequest;
     CreateOneUserByPhoneNumberRequest: GQLCreateOneUserByPhoneNumberRequest;
+    CustomerFeeUpdate: GQLCustomerFeeUpdate;
+    CustomerFeeUpdateMutation: GQLCustomerFeeUpdateMutation;
+    CustomerFeeUpdateQuery: GQLCustomerFeeUpdateQuery;
     Date: Scalars['Date'];
     DateTime: Scalars['DateTime'];
     EmailAddress: Scalars['EmailAddress'];
@@ -1275,6 +1308,37 @@ export type GQLCookQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLCustomerFeeUpdateResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CustomerFeeUpdate'] = GQLResolversParentTypes['CustomerFeeUpdate'],
+> = {
+    adminId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    user?: Resolver<GQLResolversTypes['PublicUser'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCustomerFeeUpdateMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CustomerFeeUpdateMutation'] = GQLResolversParentTypes['CustomerFeeUpdateMutation'],
+> = {
+    createOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCustomerFeeUpdateQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CustomerFeeUpdateQuery'] = GQLResolversParentTypes['CustomerFeeUpdateQuery'],
+> = {
+    findMany?: Resolver<Array<GQLResolversTypes['Admin']>, ParentType, ContextType, Partial<GQLCustomerFeeUpdateQueryFindManyArgs>>;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['Admin']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLCustomerFeeUpdateQueryFindOneArgs, 'adminId'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface GQLDateScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['Date'], any> {
     name: 'Date';
 }
@@ -1362,6 +1426,7 @@ export type GQLMutationResolvers<
     allergies?: Resolver<GQLResolversTypes['AllergyMutation'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryMutation'], ParentType, ContextType>;
     cooks?: Resolver<GQLResolversTypes['CookMutation'], ParentType, ContextType>;
+    customerFeeUpdates?: Resolver<GQLResolversTypes['CustomerFeeUpdateMutation'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenMutation'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
     notifications?: Resolver<GQLResolversTypes['NotificationMutation'], ParentType, ContextType>;
@@ -1600,6 +1665,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     allergies?: Resolver<GQLResolversTypes['AllergyQuery'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryQuery'], ParentType, ContextType>;
     cooks?: Resolver<GQLResolversTypes['CookQuery'], ParentType, ContextType>;
+    customerFeeUpdates?: Resolver<GQLResolversTypes['CustomerFeeUpdateQuery'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
     privacyPolicyUpdates?: Resolver<GQLResolversTypes['PrivacyPolicyUpdateQuery'], ParentType, ContextType>;
@@ -1901,6 +1967,9 @@ export type GQLResolvers<ContextType = any> = {
     Cook?: GQLCookResolvers<ContextType>;
     CookMutation?: GQLCookMutationResolvers<ContextType>;
     CookQuery?: GQLCookQueryResolvers<ContextType>;
+    CustomerFeeUpdate?: GQLCustomerFeeUpdateResolvers<ContextType>;
+    CustomerFeeUpdateMutation?: GQLCustomerFeeUpdateMutationResolvers<ContextType>;
+    CustomerFeeUpdateQuery?: GQLCustomerFeeUpdateQueryResolvers<ContextType>;
     Date?: GraphQLScalarType;
     DateTime?: GraphQLScalarType;
     EmailAddress?: GraphQLScalarType;

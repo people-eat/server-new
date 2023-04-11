@@ -1,0 +1,21 @@
+type CustomerFeeUpdate {
+    adminId: String!
+    user: PublicUser!
+}
+
+type CustomerFeeUpdateQuery {
+    findMany(request: FindManyRequest): [Admin!]!
+    findOne(adminId: String!): Admin
+}
+
+type Query {
+    customerFeeUpdates: CustomerFeeUpdateQuery!
+}
+
+type CustomerFeeUpdateMutation {
+    createOne: Boolean!
+}
+
+type Mutation {
+    customerFeeUpdates: CustomerFeeUpdateMutation!
+}

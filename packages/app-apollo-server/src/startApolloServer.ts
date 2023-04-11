@@ -36,6 +36,7 @@ import { createAnonymousSessionResolvers } from './anonymous-session/createAnony
 import { createAnonymousUserResolvers } from './anonymous-user/createAnonymousUserResolvers';
 import { createCategoryResolvers } from './category/createCategoryResolvers';
 import { createCookResolvers } from './cook/createCookResolvers';
+import { createCustomerFeeUpdateResolvers } from './customer-fee-update/createCustomerFeeUpdateResolvers';
 import { type GQLResolvers } from './generated';
 import { createKitchenResolvers } from './kitchen/createKitchenResolvers';
 import { createLanguageResolvers } from './language/createLanguageResolvers';
@@ -123,6 +124,7 @@ export async function startApolloServerApp({
         ...createPublicTermsUpdateResolvers(service),
         ...createPrivacyPolicyUpdateResolvers(),
         ...createPublicPrivacyPolicyUpdateResolvers(service),
+        ...createCustomerFeeUpdateResolvers(),
     };
 
     const path: string = '/graphql';
