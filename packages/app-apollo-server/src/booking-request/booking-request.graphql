@@ -1,0 +1,81 @@
+type BookingRequest {
+    bookingRequestId: String!
+    globalBookingRequestId: String
+    userId: String!
+    cookId: String!
+    userAccepted: Boolean
+    cookAccepted: Boolean
+    location: Location!
+    dateTime: DateTime!
+    preparationTime: UInt!
+    duration: UInt!
+    adultParticipants: UInt!
+    children: UInt!
+    price: Price!
+    occasion: String!
+    message: String!
+    kitchenId: String
+    createdAt: DateTime!
+
+    user: PublicUser!
+    cook: PublicCook!
+    allergies: [Allergy!]!
+}
+
+type UserBookingRequestQuery {
+    userId: String!
+    findMany(request: FindManyRequest): [BookingRequest!]
+    findOne(bookingRequestId: String!): BookingRequest
+}
+
+type UserQuery {
+    bookingRequests(userId: String!): UserBookingRequestQuery!
+}
+
+type CookBookingRequestQuery {
+    cookId: String!
+    findMany(request: FindManyRequest): [BookingRequest!]
+    findOne(bookingRequestId: String!): BookingRequest
+}
+
+type CookQuery {
+    bookingRequests(cookId: String!): CookBookingRequestQuery!
+}
+
+input CreateBookingRequestRequest {
+    cookId: String!
+    location: LocationInput!
+    dateTime: DateTime!
+    preparationTime: UInt!
+    duration: UInt!
+    adultParticipants: UInt!
+    children: UInt!
+    price: PriceInput!
+    message: String!
+    kitchenId: String
+    occasion: String!
+}
+
+type UserBookingRequestMutation {
+    userId: String!
+    createOne(request: CreateBookingRequestRequest!): Boolean!
+    accept(bookingRequestId: String!): Boolean!
+    decline(bookingRequestId: String!): Boolean!
+    updatePrice(bookingRequestId: String!, price: PriceInput!): Boolean!
+}
+
+type UserMutation {
+    bookingRequests(userId: String!): UserBookingRequestMutation!
+}
+
+type CookBookingRequestMutation {
+    cookId: String!
+    createOne(globalBookingRequestId: String!): Boolean!
+    accept(bookingRequestId: String!): Boolean!
+    decline(bookingRequestId: String!): Boolean!
+    updatePrice(bookingRequestId: String!, price: PriceInput!): Boolean!
+}
+
+type CookMutation {
+    bookingRequests(cookId: String!): CookBookingRequestMutation!
+}

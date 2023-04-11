@@ -34,6 +34,7 @@ import { createAdminResolvers } from './admin/createAdminResolvers';
 import { createAllergyResolvers } from './allergy/createAllergyResolvers';
 import { createAnonymousSessionResolvers } from './anonymous-session/createAnonymousSessionResolvers';
 import { createAnonymousUserResolvers } from './anonymous-user/createAnonymousUserResolvers';
+import { createBookingRequestResolvers } from './booking-request/createBookingRequestResolvers';
 import { createCategoryResolvers } from './category/createCategoryResolvers';
 import { createCookSpecificFeeResolvers } from './cook-specific-fee/createCookSpecificFeeResolvers';
 import { createCookResolvers } from './cook/createCookResolvers';
@@ -144,6 +145,7 @@ export async function startApolloServerApp({
         ...createMealOptionResolvers(service),
         ...createPublicMenuResolvers(service),
         ...createGlobalBookingRequestResolvers(service),
+        ...createBookingRequestResolvers(service),
     };
 
     const path: string = '/graphql';

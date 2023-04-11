@@ -2,6 +2,7 @@ import { type Admin, type Authorization, type Cook, type Service } from '@people
 import {
     type GQLUser,
     type GQLUserMutation,
+    type GQLUserMutationBookingRequestsArgs,
     type GQLUserMutationCreateOneByEmailAddressArgs,
     type GQLUserMutationCreateOneByIdentityProviderArgs,
     type GQLUserMutationCreateOneByPhoneNumberArgs,
@@ -11,6 +12,7 @@ import {
     type GQLUserMutationUpdatePasswordArgs,
     type GQLUserMutationUpdateProfilePictureArgs,
     type GQLUserQuery,
+    type GQLUserQueryBookingRequestsArgs,
     type GQLUserQueryFindManyArgs,
     type GQLUserQueryFindOneArgs,
     type GQLUserQueryGlobalBookingRequestsArgs,
@@ -82,6 +84,7 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
             emailAddressUpdate: () => ({} as any),
             addresses: (_parent: GQLUserMutation, { userId }: GQLUserMutationAddressesArgs) => ({ userId } as any),
             globalBookingRequests: (_parent: GQLUserMutation, { userId }: GQLUserMutationGlobalBookingRequestsArgs) => ({ userId } as any),
+            bookingRequests: (_parent: GQLUserMutation, { userId }: GQLUserMutationBookingRequestsArgs) => ({ userId } as any),
         },
         UserQuery: {
             findMany: async (
@@ -108,6 +111,7 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
             emailAddressUpdate: () => ({} as any),
             addresses: () => ({} as any),
             globalBookingRequests: (_parent: GQLUserQuery, { userId }: GQLUserQueryGlobalBookingRequestsArgs) => ({ userId } as any),
+            bookingRequests: (_parent: GQLUserQuery, { userId }: GQLUserQueryBookingRequestsArgs) => ({ userId } as any),
         },
     };
 }

@@ -21,6 +21,8 @@ type Cook {
 
     menus: [Menu!]!
     menuCount: UInt!
+
+    bookingRequests: [BookingRequest!]!
 }
 
 type CookQuery {

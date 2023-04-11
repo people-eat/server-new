@@ -30,6 +30,8 @@ type User {
     phoneNumberUpdate: PhoneNumberUpdate
     emailAddressUpdate: EmailAddressUpdate
     oneTimeAccessToken: OneTimeAccessToken
+
+    bookingRequests: [BookingRequest!]!
 }
 
 type UserQuery {

@@ -3,6 +3,7 @@ import {
     type GQLCook,
     type GQLCookMutation,
     type GQLCookMutationAddOneLanguageArgs,
+    type GQLCookMutationBookingRequestsArgs,
     type GQLCookMutationCreateOneArgs,
     type GQLCookMutationMealsArgs,
     type GQLCookMutationRemoveOneLanguageArgs,
@@ -18,6 +19,7 @@ import {
     type GQLCookMutationUpdateRankArgs,
     type GQLCookMutationUpdateTravelExpensesArgs,
     type GQLCookQuery,
+    type GQLCookQueryBookingRequestsArgs,
     type GQLCookQueryFindManyArgs,
     type GQLCookQueryFindOneArgs,
     type GQLCookQueryGlobalBookingRequestsArgs,
@@ -129,6 +131,7 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
 
             meals: (_parent: GQLCookMutation, { cookId }: GQLCookMutationMealsArgs) => ({ cookId } as any),
             menus: (_parent: GQLCookMutation, { cookId }: GQLCookMutationMenusArgs) => ({ cookId } as any),
+            bookingRequests: (_parent: GQLCookMutation, { cookId }: GQLCookMutationBookingRequestsArgs) => ({ cookId } as any),
         },
         CookQuery: {
             findOne: async (
@@ -146,6 +149,7 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
             meals: (_parent: GQLCookQuery, { cookId }: GQLCookQueryMealsArgs) => ({ cookId } as any),
             menus: (_parent: GQLCookQuery, { cookId }: GQLCookQueryMenusArgs) => ({ cookId } as any),
             globalBookingRequests: (_parent: GQLCookQuery, { cookId }: GQLCookQueryGlobalBookingRequestsArgs) => ({ cookId } as any),
+            bookingRequests: (_parent: GQLCookQuery, { cookId }: GQLCookQueryBookingRequestsArgs) => ({ cookId } as any),
         },
     };
 }
