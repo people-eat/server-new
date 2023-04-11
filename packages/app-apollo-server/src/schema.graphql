@@ -38,3 +38,8 @@ type Price {
     amount: UInt!
     currencyCode: CurrencyCode!
 }
+
+input PriceInput {
+    amount: UInt!
+    currencyCode: CurrencyCode!
+}

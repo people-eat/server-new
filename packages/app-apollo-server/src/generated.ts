@@ -108,6 +108,11 @@ export type GQLPrice = {
     currencyCode: GQLCurrencyCode;
 };
 
+export type GQLPriceInput = {
+    amount: Scalars['UInt'];
+    currencyCode: GQLCurrencyCode;
+};
+
 export type GQLQuery = {
     __typename?: 'Query';
     allergies: GQLAllergyQuery;
@@ -210,6 +215,7 @@ export type GQLResolversTypes = {
     PhoneNumber: ResolverTypeWrapper<Scalars['PhoneNumber']>;
     Platform: GQLPlatform;
     Price: ResolverTypeWrapper<GQLPrice>;
+    PriceInput: GQLPriceInput;
     Query: ResolverTypeWrapper<{}>;
     String: ResolverTypeWrapper<Scalars['String']>;
     UInt: ResolverTypeWrapper<Scalars['UInt']>;
@@ -242,6 +248,7 @@ export type GQLResolversParentTypes = {
     Mutation: {};
     PhoneNumber: Scalars['PhoneNumber'];
     Price: GQLPrice;
+    PriceInput: GQLPriceInput;
     Query: {};
     String: Scalars['String'];
     UInt: Scalars['UInt'];
