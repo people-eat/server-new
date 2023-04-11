@@ -183,28 +183,34 @@ export type GQLCookMealQueryFindOneArgs = {
 export type GQLCookMenuCourseMealOptionMutation = {
     __typename?: 'CookMenuCourseMealOptionMutation';
     cookId: Scalars['String'];
+    courseId: Scalars['String'];
+    createMany: Scalars['Boolean'];
     createOne: Scalars['Boolean'];
+    deleteOne: Scalars['Boolean'];
     menuId: Scalars['String'];
+};
+
+export type GQLCookMenuCourseMealOptionMutationCreateManyArgs = {
+    mealOptions: Array<GQLCreateOneMealOptionRequest>;
 };
 
 export type GQLCookMenuCourseMealOptionMutationCreateOneArgs = {
     mealOption: GQLCreateOneMealOptionRequest;
 };
 
+export type GQLCookMenuCourseMealOptionMutationDeleteOneArgs = {
+    mealId: Scalars['String'];
+};
+
 export type GQLCookMenuCourseMealOptionQuery = {
     __typename?: 'CookMenuCourseMealOptionQuery';
     cookId: Scalars['String'];
     findMany: Array<GQLMealOption>;
-    findOne?: Maybe<GQLMealOption>;
     menuId: Scalars['String'];
 };
 
 export type GQLCookMenuCourseMealOptionQueryFindManyArgs = {
     request?: InputMaybe<GQLFindManyRequest>;
-};
-
-export type GQLCookMenuCourseMealOptionQueryFindOneArgs = {
-    mealOptionId: Scalars['String'];
 };
 
 export type GQLCookMenuCourseMutation = {
@@ -684,6 +690,19 @@ export type GQLFindManyPublicCooksRequest = {
     take?: InputMaybe<Scalars['UInt']>;
 };
 
+export type GQLFindManyPublicMenusRequest = {
+    adultParticipants: Scalars['UInt'];
+    categoryIds?: InputMaybe<Array<Scalars['String']>>;
+    children?: InputMaybe<Scalars['UInt']>;
+    dateTime: Scalars['DateTime'];
+    kitchenIds?: InputMaybe<Array<Scalars['String']>>;
+    location: GQLLocationInput;
+    price?: InputMaybe<GQLPriceInput>;
+    searchText?: InputMaybe<Scalars['String']>;
+    skip?: InputMaybe<Scalars['UInt']>;
+    take?: InputMaybe<Scalars['UInt']>;
+};
+
 export type GQLFindManyRequest = {
     searchText?: InputMaybe<Scalars['String']>;
     skip?: InputMaybe<Scalars['UInt']>;
@@ -771,6 +790,7 @@ export type GQLMenu = {
     currencyCode: GQLCurrencyCode;
     description: Scalars['String'];
     greetingFromKitchen?: Maybe<Scalars['String']>;
+    imageUrls: Array<Scalars['Url']>;
     isVisible: Scalars['Boolean'];
     kitchen?: Maybe<GQLKitchen>;
     kitchenId?: Maybe<Scalars['String']>;
@@ -917,6 +937,7 @@ export type GQLPublicCook = {
     maximumParticipants?: Maybe<Scalars['UInt']>;
     maximumPrice?: Maybe<Scalars['UInt']>;
     maximumTravelDistance?: Maybe<Scalars['UInt']>;
+    menus: Array<GQLPublicMenu>;
     minimumParticipants?: Maybe<Scalars['UInt']>;
     minimumPrice?: Maybe<Scalars['UInt']>;
     rank: GQLCookRank;
@@ -936,6 +957,42 @@ export type GQLPublicCookQueryFindManyArgs = {
 
 export type GQLPublicCookQueryFindOneArgs = {
     cookId: Scalars['String'];
+};
+
+export type GQLPublicMenu = {
+    __typename?: 'PublicMenu';
+    basePrice: Scalars['UInt'];
+    basePriceCustomers: Scalars['UInt'];
+    categories: Array<GQLCategory>;
+    cook: GQLPublicCook;
+    cookId: Scalars['String'];
+    courseCount: Scalars['UInt'];
+    courses: Array<GQLCourse>;
+    createdAt: Scalars['DateTime'];
+    currencyCode: GQLCurrencyCode;
+    description: Scalars['String'];
+    greetingFromKitchen?: Maybe<Scalars['String']>;
+    imageUrls: Array<Scalars['Url']>;
+    kitchen?: Maybe<GQLKitchen>;
+    menuId: Scalars['String'];
+    preparationTime: Scalars['UInt'];
+    pricePerAdult: Scalars['UInt'];
+    pricePerChild?: Maybe<Scalars['UInt']>;
+    title: Scalars['String'];
+};
+
+export type GQLPublicMenuQuery = {
+    __typename?: 'PublicMenuQuery';
+    findMany: Array<GQLPublicMenu>;
+    findOne?: Maybe<GQLPublicMenu>;
+};
+
+export type GQLPublicMenuQueryFindManyArgs = {
+    request: GQLFindManyPublicMenusRequest;
+};
+
+export type GQLPublicMenuQueryFindOneArgs = {
+    menuId: Scalars['String'];
 };
 
 export type GQLPublicPrivacyPolicyUpdate = {
@@ -997,6 +1054,7 @@ export type GQLQuery = {
     languages: GQLLanguageQuery;
     privacyPolicyUpdates: GQLPrivacyPolicyUpdateQuery;
     publicCooks: GQLPublicCookQuery;
+    publicMenus: GQLPublicMenuQuery;
     publicPrivacyPolicyUpdates: GQLPublicPrivacyPolicyUpdateQuery;
     publicTermsUpdates: GQLPublicTermsUpdateQuery;
     termsUpdates: GQLTermsUpdateQuery;
@@ -1451,6 +1509,7 @@ export type GQLResolversTypes = {
     EmailAddressUpdate: ResolverTypeWrapper<GQLEmailAddressUpdate>;
     ExpireOneSessionRequest: GQLExpireOneSessionRequest;
     FindManyPublicCooksRequest: GQLFindManyPublicCooksRequest;
+    FindManyPublicMenusRequest: GQLFindManyPublicMenusRequest;
     FindManyRequest: GQLFindManyRequest;
     Gender: GQLGender;
     IdentityProvider: GQLIdentityProvider;
@@ -1487,6 +1546,8 @@ export type GQLResolversTypes = {
     PrivacyPolicyUpdateQuery: ResolverTypeWrapper<GQLPrivacyPolicyUpdateQuery>;
     PublicCook: ResolverTypeWrapper<GQLPublicCook>;
     PublicCookQuery: ResolverTypeWrapper<GQLPublicCookQuery>;
+    PublicMenu: ResolverTypeWrapper<GQLPublicMenu>;
+    PublicMenuQuery: ResolverTypeWrapper<GQLPublicMenuQuery>;
     PublicPrivacyPolicyUpdate: ResolverTypeWrapper<GQLPublicPrivacyPolicyUpdate>;
     PublicPrivacyPolicyUpdateQuery: ResolverTypeWrapper<GQLPublicPrivacyPolicyUpdateQuery>;
     PublicTermsUpdate: ResolverTypeWrapper<GQLPublicTermsUpdate>;
@@ -1571,6 +1632,7 @@ export type GQLResolversParentTypes = {
     EmailAddressUpdate: GQLEmailAddressUpdate;
     ExpireOneSessionRequest: GQLExpireOneSessionRequest;
     FindManyPublicCooksRequest: GQLFindManyPublicCooksRequest;
+    FindManyPublicMenusRequest: GQLFindManyPublicMenusRequest;
     FindManyRequest: GQLFindManyRequest;
     Kitchen: GQLKitchen;
     KitchenMutation: GQLKitchenMutation;
@@ -1602,6 +1664,8 @@ export type GQLResolversParentTypes = {
     PrivacyPolicyUpdateQuery: GQLPrivacyPolicyUpdateQuery;
     PublicCook: GQLPublicCook;
     PublicCookQuery: GQLPublicCookQuery;
+    PublicMenu: GQLPublicMenu;
+    PublicMenuQuery: GQLPublicMenuQuery;
     PublicPrivacyPolicyUpdate: GQLPublicPrivacyPolicyUpdate;
     PublicPrivacyPolicyUpdateQuery: GQLPublicPrivacyPolicyUpdateQuery;
     PublicTermsUpdate: GQLPublicTermsUpdate;
@@ -1799,11 +1863,24 @@ export type GQLCookMenuCourseMealOptionMutationResolvers<
     ParentType extends GQLResolversParentTypes['CookMenuCourseMealOptionMutation'] = GQLResolversParentTypes['CookMenuCourseMealOptionMutation'],
 > = {
     cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    courseId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    createMany?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMenuCourseMealOptionMutationCreateManyArgs, 'mealOptions'>
+    >;
     createOne?: Resolver<
         GQLResolversTypes['Boolean'],
         ParentType,
         ContextType,
         RequireFields<GQLCookMenuCourseMealOptionMutationCreateOneArgs, 'mealOption'>
+    >;
+    deleteOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMenuCourseMealOptionMutationDeleteOneArgs, 'mealId'>
     >;
     menuId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1819,12 +1896,6 @@ export type GQLCookMenuCourseMealOptionQueryResolvers<
         ParentType,
         ContextType,
         Partial<GQLCookMenuCourseMealOptionQueryFindManyArgs>
-    >;
-    findOne?: Resolver<
-        Maybe<GQLResolversTypes['MealOption']>,
-        ParentType,
-        ContextType,
-        RequireFields<GQLCookMenuCourseMealOptionQueryFindOneArgs, 'mealOptionId'>
     >;
     menuId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2272,6 +2343,7 @@ export type GQLMenuResolvers<ContextType = any, ParentType extends GQLResolversP
     currencyCode?: Resolver<GQLResolversTypes['CurrencyCode'], ParentType, ContextType>;
     description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     greetingFromKitchen?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    imageUrls?: Resolver<Array<GQLResolversTypes['Url']>, ParentType, ContextType>;
     isVisible?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     kitchen?: Resolver<Maybe<GQLResolversTypes['Kitchen']>, ParentType, ContextType>;
     kitchenId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -2454,6 +2526,7 @@ export type GQLPublicCookResolvers<
     maximumParticipants?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
     maximumPrice?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
     maximumTravelDistance?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
+    menus?: Resolver<Array<GQLResolversTypes['PublicMenu']>, ParentType, ContextType>;
     minimumParticipants?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
     minimumPrice?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
     rank?: Resolver<GQLResolversTypes['CookRank'], ParentType, ContextType>;
@@ -2477,6 +2550,50 @@ export type GQLPublicCookQueryResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLPublicCookQueryFindOneArgs, 'cookId'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLPublicMenuResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['PublicMenu'] = GQLResolversParentTypes['PublicMenu'],
+> = {
+    basePrice?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    basePriceCustomers?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    categories?: Resolver<Array<GQLResolversTypes['Category']>, ParentType, ContextType>;
+    cook?: Resolver<GQLResolversTypes['PublicCook'], ParentType, ContextType>;
+    cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    courseCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    courses?: Resolver<Array<GQLResolversTypes['Course']>, ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    currencyCode?: Resolver<GQLResolversTypes['CurrencyCode'], ParentType, ContextType>;
+    description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    greetingFromKitchen?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    imageUrls?: Resolver<Array<GQLResolversTypes['Url']>, ParentType, ContextType>;
+    kitchen?: Resolver<Maybe<GQLResolversTypes['Kitchen']>, ParentType, ContextType>;
+    menuId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    preparationTime?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    pricePerAdult?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    pricePerChild?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
+    title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLPublicMenuQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['PublicMenuQuery'] = GQLResolversParentTypes['PublicMenuQuery'],
+> = {
+    findMany?: Resolver<
+        Array<GQLResolversTypes['PublicMenu']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLPublicMenuQueryFindManyArgs, 'request'>
+    >;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['PublicMenu']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLPublicMenuQueryFindOneArgs, 'menuId'>
     >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2556,6 +2673,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
     privacyPolicyUpdates?: Resolver<GQLResolversTypes['PrivacyPolicyUpdateQuery'], ParentType, ContextType>;
     publicCooks?: Resolver<GQLResolversTypes['PublicCookQuery'], ParentType, ContextType>;
+    publicMenus?: Resolver<GQLResolversTypes['PublicMenuQuery'], ParentType, ContextType>;
     publicPrivacyPolicyUpdates?: Resolver<GQLResolversTypes['PublicPrivacyPolicyUpdateQuery'], ParentType, ContextType>;
     publicTermsUpdates?: Resolver<GQLResolversTypes['PublicTermsUpdateQuery'], ParentType, ContextType>;
     termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateQuery'], ParentType, ContextType>;
@@ -3035,6 +3153,8 @@ export type GQLResolvers<ContextType = any> = {
     PrivacyPolicyUpdateQuery?: GQLPrivacyPolicyUpdateQueryResolvers<ContextType>;
     PublicCook?: GQLPublicCookResolvers<ContextType>;
     PublicCookQuery?: GQLPublicCookQueryResolvers<ContextType>;
+    PublicMenu?: GQLPublicMenuResolvers<ContextType>;
+    PublicMenuQuery?: GQLPublicMenuQueryResolvers<ContextType>;
     PublicPrivacyPolicyUpdate?: GQLPublicPrivacyPolicyUpdateResolvers<ContextType>;
     PublicPrivacyPolicyUpdateQuery?: GQLPublicPrivacyPolicyUpdateQueryResolvers<ContextType>;
     PublicTermsUpdate?: GQLPublicTermsUpdateResolvers<ContextType>;

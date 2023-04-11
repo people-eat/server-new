@@ -5,6 +5,7 @@ import {
     type GQLPublicCookQuery,
     type GQLPublicCookQueryFindManyArgs,
     type GQLPublicCookQueryFindOneArgs,
+    type GQLPublicMenu,
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
 
@@ -13,6 +14,8 @@ export function createPublicCookResolvers(service: Service): Resolvers<'PublicCo
         PublicCook: {
             languages: async ({ cookId }: GQLPublicCook, _input: unknown, context: Authorization.Context): Promise<GQLLanguage[]> =>
                 service.cookLanguage.findAll(context, { cookId }) as any,
+            menus: async ({ cookId }: GQLPublicCook, _input: unknown, context: Authorization.Context): Promise<GQLPublicMenu[]> =>
+                service.publicMenu.findManyByCookId(context, { cookId }) as any,
         },
         PublicCookQuery: {
             findOne: async (

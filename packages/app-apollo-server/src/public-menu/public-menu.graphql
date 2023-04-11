@@ -1,0 +1,47 @@
+type PublicMenu {
+    menuId: String!
+    cookId: String!
+    title: String!
+    description: String!
+    preparationTime: UInt!
+    greetingFromKitchen: String
+    basePrice: UInt!
+    basePriceCustomers: UInt!
+    pricePerAdult: UInt!
+    pricePerChild: UInt
+    currencyCode: CurrencyCode!
+    createdAt: DateTime!
+
+    cook: PublicCook!
+    kitchen: Kitchen
+    categories: [Category!]!
+
+    courses: [Course!]!
+    courseCount: UInt!
+
+    imageUrls: [Url!]!
+}
+
+input FindManyPublicMenusRequest {
+    searchText: String
+    skip: UInt
+    take: UInt
+
+    location: LocationInput!
+    adultParticipants: UInt!
+    dateTime: DateTime!
+    children: UInt
+
+    price: PriceInput
+    kitchenIds: [String!]
+    categoryIds: [String!]
+}
+
+type PublicMenuQuery {
+    findMany(request: FindManyPublicMenusRequest!): [PublicMenu!]!
+    findOne(menuId: String!): PublicMenu
+}
+
+type Query {
+    publicMenus: PublicMenuQuery!
+}

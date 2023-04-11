@@ -51,6 +51,7 @@ import { createNotificationResolvers } from './notification/createNotificationRe
 import { createPhoneNumberUpdateResolvers } from './phone-number-update/createPhoneNumberUpdateResolvers';
 import { createPrivacyPolicyUpdateResolvers } from './privacy-policy-update/createPrivacyPolicyUpdateResolvers';
 import { createPublicCookResolvers } from './public-cook/createPublicCookResolvers';
+import { createPublicMenuResolvers } from './public-menu/createPublicMenuResolvers';
 import { createPublicPrivacyPolicyUpdateResolvers } from './public-privacy-policy-update/createPublicPrivacyPolicyUpdateResolvers';
 import { createPublicTermsUpdateResolvers } from './public-terms-update/createPublicTermsUpdateResolvers';
 import { createPublicUserResolvers } from './public-user/createPublicUserResolvers';
@@ -101,6 +102,7 @@ export async function startApolloServerApp({
             users: () => ({} as any),
             cooks: () => ({} as any),
             publicCooks: () => ({} as any),
+            publicMenus: () => ({} as any),
             publicTermsUpdates: () => ({} as any),
             publicPrivacyPolicyUpdates: () => ({} as any),
         },
@@ -139,6 +141,7 @@ export async function startApolloServerApp({
         ...createMenuResolvers(service),
         ...createCourseResolvers(service),
         ...createMealOptionResolvers(service),
+        ...createPublicMenuResolvers(service),
     };
 
     const path: string = '/graphql';
