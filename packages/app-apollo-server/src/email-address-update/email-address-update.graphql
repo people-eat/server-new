@@ -1,0 +1,25 @@
+type EmailAddressUpdate {
+    userId: String!
+    emailAddress: EmailAddress!
+    createdAt: DateTime!
+}
+
+type UserEmailAddressUpdateQuery {
+    userId: String!
+    findOne: EmailAddressUpdate
+}
+
+type UserQuery {
+    emailAddressUpdate(userId: String!): UserEmailAddressUpdateQuery!
+}
+
+type UserEmailAddressUpdateMutation {
+    userId: String!
+    createOne(emailAddress: EmailAddress!): Boolean!
+    deleteOne: Boolean!
+    confirm(secret: String!): Boolean!
+}
+
+type UserMutation {
+    emailAddressUpdate(userId: String!): UserEmailAddressUpdateMutation!
+}

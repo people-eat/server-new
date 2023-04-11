@@ -368,6 +368,13 @@ export type GQLCustomerFeeUpdateQueryFindOneArgs = {
     adminId: Scalars['String'];
 };
 
+export type GQLEmailAddressUpdate = {
+    __typename?: 'EmailAddressUpdate';
+    createdAt: Scalars['DateTime'];
+    emailAddress: Scalars['EmailAddress'];
+    userId: Scalars['String'];
+};
+
 export type GQLExpireOneSessionRequest = {
     sessionId: Scalars['String'];
     userId: Scalars['String'];
@@ -729,6 +736,7 @@ export type GQLUser = {
     cook?: Maybe<GQLCook>;
     createdAt: Scalars['DateTime'];
     emailAddress?: Maybe<Scalars['EmailAddress']>;
+    emailAddressUpdate?: Maybe<GQLEmailAddressUpdate>;
     firstName: Scalars['String'];
     gender: GQLGender;
     isAdmin: Scalars['Boolean'];
@@ -745,6 +753,28 @@ export type GQLUser = {
     userId: Scalars['String'];
 };
 
+export type GQLUserEmailAddressUpdateMutation = {
+    __typename?: 'UserEmailAddressUpdateMutation';
+    confirm: Scalars['Boolean'];
+    createOne: Scalars['Boolean'];
+    deleteOne: Scalars['Boolean'];
+    userId: Scalars['String'];
+};
+
+export type GQLUserEmailAddressUpdateMutationConfirmArgs = {
+    secret: Scalars['String'];
+};
+
+export type GQLUserEmailAddressUpdateMutationCreateOneArgs = {
+    emailAddress: Scalars['EmailAddress'];
+};
+
+export type GQLUserEmailAddressUpdateQuery = {
+    __typename?: 'UserEmailAddressUpdateQuery';
+    findOne?: Maybe<GQLEmailAddressUpdate>;
+    userId: Scalars['String'];
+};
+
 export type GQLUserLanguage = 'ENGLISH' | 'GERMAN';
 
 export type GQLUserMutation = {
@@ -754,6 +784,7 @@ export type GQLUserMutation = {
     createOneByEmailAddress: Scalars['Boolean'];
     createOneByIdentityProvider: Scalars['Boolean'];
     createOneByPhoneNumber: Scalars['Boolean'];
+    emailAddressUpdate: GQLUserEmailAddressUpdateMutation;
     notificationConfiguration: GQLNotificationConfigurationMutation;
     notifications: GQLUserNotificationMutation;
     phoneNumberUpdate: GQLUserPhoneNumberUpdateMutation;
@@ -775,6 +806,10 @@ export type GQLUserMutationCreateOneByIdentityProviderArgs = {
 
 export type GQLUserMutationCreateOneByPhoneNumberArgs = {
     request: GQLCreateOneUserByPhoneNumberRequest;
+};
+
+export type GQLUserMutationEmailAddressUpdateArgs = {
+    userId: Scalars['String'];
 };
 
 export type GQLUserMutationNotificationConfigurationArgs = {
@@ -859,6 +894,7 @@ export type GQLUserPhoneNumberUpdateQuery = {
 
 export type GQLUserQuery = {
     __typename?: 'UserQuery';
+    emailAddressUpdate: GQLUserEmailAddressUpdateQuery;
     findMany?: Maybe<Array<GQLUser>>;
     findOne?: Maybe<GQLUser>;
     me?: Maybe<GQLUser>;
@@ -866,6 +902,10 @@ export type GQLUserQuery = {
     notifications: GQLNotificationQuery;
     phoneNumberUpdate: GQLUserPhoneNumberUpdateQuery;
     sessions: GQLUserSessionQuery;
+};
+
+export type GQLUserQueryEmailAddressUpdateArgs = {
+    userId: Scalars['String'];
 };
 
 export type GQLUserQueryFindManyArgs = {
@@ -1019,6 +1059,7 @@ export type GQLResolversTypes = {
     Date: ResolverTypeWrapper<Scalars['Date']>;
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
     EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
+    EmailAddressUpdate: ResolverTypeWrapper<GQLEmailAddressUpdate>;
     ExpireOneSessionRequest: GQLExpireOneSessionRequest;
     FindManyPublicCooksRequest: GQLFindManyPublicCooksRequest;
     FindManyRequest: GQLFindManyRequest;
@@ -1070,6 +1111,8 @@ export type GQLResolversTypes = {
     Upload: ResolverTypeWrapper<Scalars['Upload']>;
     Url: ResolverTypeWrapper<Scalars['Url']>;
     User: ResolverTypeWrapper<GQLUser>;
+    UserEmailAddressUpdateMutation: ResolverTypeWrapper<GQLUserEmailAddressUpdateMutation>;
+    UserEmailAddressUpdateQuery: ResolverTypeWrapper<GQLUserEmailAddressUpdateQuery>;
     UserLanguage: GQLUserLanguage;
     UserMutation: ResolverTypeWrapper<GQLUserMutation>;
     UserNotificationMutation: ResolverTypeWrapper<GQLUserNotificationMutation>;
@@ -1117,6 +1160,7 @@ export type GQLResolversParentTypes = {
     Date: Scalars['Date'];
     DateTime: Scalars['DateTime'];
     EmailAddress: Scalars['EmailAddress'];
+    EmailAddressUpdate: GQLEmailAddressUpdate;
     ExpireOneSessionRequest: GQLExpireOneSessionRequest;
     FindManyPublicCooksRequest: GQLFindManyPublicCooksRequest;
     FindManyRequest: GQLFindManyRequest;
@@ -1163,6 +1207,8 @@ export type GQLResolversParentTypes = {
     Upload: Scalars['Upload'];
     Url: Scalars['Url'];
     User: GQLUser;
+    UserEmailAddressUpdateMutation: GQLUserEmailAddressUpdateMutation;
+    UserEmailAddressUpdateQuery: GQLUserEmailAddressUpdateQuery;
     UserMutation: GQLUserMutation;
     UserNotificationMutation: GQLUserNotificationMutation;
     UserPhoneNumberUpdateMutation: GQLUserPhoneNumberUpdateMutation;
@@ -1458,6 +1504,16 @@ export interface GQLDateTimeScalarConfig extends GraphQLScalarTypeConfig<GQLReso
 export interface GQLEmailAddressScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['EmailAddress'], any> {
     name: 'EmailAddress';
 }
+
+export type GQLEmailAddressUpdateResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['EmailAddressUpdate'] = GQLResolversParentTypes['EmailAddressUpdate'],
+> = {
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    emailAddress?: Resolver<GQLResolversTypes['EmailAddress'], ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type GQLKitchenResolvers<
     ContextType = any,
@@ -1902,6 +1958,7 @@ export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversP
     cook?: Resolver<Maybe<GQLResolversTypes['Cook']>, ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     emailAddress?: Resolver<Maybe<GQLResolversTypes['EmailAddress']>, ParentType, ContextType>;
+    emailAddressUpdate?: Resolver<Maybe<GQLResolversTypes['EmailAddressUpdate']>, ParentType, ContextType>;
     firstName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     gender?: Resolver<GQLResolversTypes['Gender'], ParentType, ContextType>;
     isAdmin?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
@@ -1915,6 +1972,36 @@ export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversP
     phoneNumberUpdate?: Resolver<Maybe<GQLResolversTypes['PhoneNumberUpdate']>, ParentType, ContextType>;
     profilePictureUrl?: Resolver<Maybe<GQLResolversTypes['Url']>, ParentType, ContextType>;
     unreadNotificationCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserEmailAddressUpdateMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserEmailAddressUpdateMutation'] = GQLResolversParentTypes['UserEmailAddressUpdateMutation'],
+> = {
+    confirm?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserEmailAddressUpdateMutationConfirmArgs, 'secret'>
+    >;
+    createOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserEmailAddressUpdateMutationCreateOneArgs, 'emailAddress'>
+    >;
+    deleteOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserEmailAddressUpdateQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserEmailAddressUpdateQuery'] = GQLResolversParentTypes['UserEmailAddressUpdateQuery'],
+> = {
+    findOne?: Resolver<Maybe<GQLResolversTypes['EmailAddressUpdate']>, ParentType, ContextType>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1942,6 +2029,12 @@ export type GQLUserMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLUserMutationCreateOneByPhoneNumberArgs, 'request'>
+    >;
+    emailAddressUpdate?: Resolver<
+        GQLResolversTypes['UserEmailAddressUpdateMutation'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationEmailAddressUpdateArgs, 'userId'>
     >;
     notificationConfiguration?: Resolver<
         GQLResolversTypes['NotificationConfigurationMutation'],
@@ -2055,6 +2148,12 @@ export type GQLUserQueryResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['UserQuery'] = GQLResolversParentTypes['UserQuery'],
 > = {
+    emailAddressUpdate?: Resolver<
+        GQLResolversTypes['UserEmailAddressUpdateQuery'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserQueryEmailAddressUpdateArgs, 'userId'>
+    >;
     findMany?: Resolver<
         Maybe<Array<GQLResolversTypes['User']>>,
         ParentType,
@@ -2139,6 +2238,7 @@ export type GQLResolvers<ContextType = any> = {
     Date?: GraphQLScalarType;
     DateTime?: GraphQLScalarType;
     EmailAddress?: GraphQLScalarType;
+    EmailAddressUpdate?: GQLEmailAddressUpdateResolvers<ContextType>;
     Kitchen?: GQLKitchenResolvers<ContextType>;
     KitchenMutation?: GQLKitchenMutationResolvers<ContextType>;
     KitchenQuery?: GQLKitchenQueryResolvers<ContextType>;
@@ -2179,6 +2279,8 @@ export type GQLResolvers<ContextType = any> = {
     Upload?: GraphQLScalarType;
     Url?: GraphQLScalarType;
     User?: GQLUserResolvers<ContextType>;
+    UserEmailAddressUpdateMutation?: GQLUserEmailAddressUpdateMutationResolvers<ContextType>;
+    UserEmailAddressUpdateQuery?: GQLUserEmailAddressUpdateQueryResolvers<ContextType>;
     UserMutation?: GQLUserMutationResolvers<ContextType>;
     UserNotificationMutation?: GQLUserNotificationMutationResolvers<ContextType>;
     UserPhoneNumberUpdateMutation?: GQLUserPhoneNumberUpdateMutationResolvers<ContextType>;

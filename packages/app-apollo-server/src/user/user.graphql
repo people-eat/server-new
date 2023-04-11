@@ -28,6 +28,7 @@ type User {
     notificationConfiguration: NotificationConfiguration!
 
     phoneNumberUpdate: PhoneNumberUpdate
+    emailAddressUpdate: EmailAddressUpdate
 }
 
 type UserQuery {

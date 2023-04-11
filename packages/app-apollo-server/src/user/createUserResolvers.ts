@@ -77,6 +77,7 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
 
             sessions: (_parent: GQLUserMutation, { userId }: GQLUserMutationSessionsArgs) => ({ userId } as any),
             phoneNumberUpdate: () => ({} as any),
+            emailAddressUpdate: () => ({} as any),
         },
         UserQuery: {
             findMany: async (
@@ -100,6 +101,7 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
             },
 
             phoneNumberUpdate: () => ({} as any),
+            emailAddressUpdate: () => ({} as any),
         },
     };
 }
