@@ -174,6 +174,15 @@ export type GQLPriceInput = {
     currencyCode: GQLCurrencyCode;
 };
 
+export type GQLPublicUser = {
+    __typename?: 'PublicUser';
+    createdAt: Scalars['DateTime'];
+    firstName: Scalars['String'];
+    language: GQLUserLanguage;
+    profilePictureUrl?: Maybe<Scalars['Url']>;
+    userId: Scalars['String'];
+};
+
 export type GQLQuery = {
     __typename?: 'Query';
     allergies: GQLAllergyQuery;
@@ -366,6 +375,7 @@ export type GQLResolversTypes = {
     Platform: GQLPlatform;
     Price: ResolverTypeWrapper<GQLPrice>;
     PriceInput: GQLPriceInput;
+    PublicUser: ResolverTypeWrapper<GQLPublicUser>;
     Query: ResolverTypeWrapper<{}>;
     String: ResolverTypeWrapper<Scalars['String']>;
     UInt: ResolverTypeWrapper<Scalars['UInt']>;
@@ -408,6 +418,7 @@ export type GQLResolversParentTypes = {
     PhoneNumber: Scalars['PhoneNumber'];
     Price: GQLPrice;
     PriceInput: GQLPriceInput;
+    PublicUser: GQLPublicUser;
     Query: {};
     String: Scalars['String'];
     UInt: Scalars['UInt'];
@@ -569,6 +580,18 @@ export type GQLPriceResolvers<ContextType = any, ParentType extends GQLResolvers
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLPublicUserResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['PublicUser'] = GQLResolversParentTypes['PublicUser'],
+> = {
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    firstName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    language?: Resolver<GQLResolversTypes['UserLanguage'], ParentType, ContextType>;
+    profilePictureUrl?: Resolver<Maybe<GQLResolversTypes['Url']>, ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
     allergies?: Resolver<GQLResolversTypes['AllergyQuery'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryQuery'], ParentType, ContextType>;
@@ -698,6 +721,7 @@ export type GQLResolvers<ContextType = any> = {
     Mutation?: GQLMutationResolvers<ContextType>;
     PhoneNumber?: GraphQLScalarType;
     Price?: GQLPriceResolvers<ContextType>;
+    PublicUser?: GQLPublicUserResolvers<ContextType>;
     Query?: GQLQueryResolvers<ContextType>;
     UInt?: GraphQLScalarType;
     UUID?: GraphQLScalarType;

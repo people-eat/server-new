@@ -35,6 +35,7 @@ import { createCategoryResolvers } from './category/createCategoryResolvers';
 import { type GQLResolvers } from './generated';
 import { createKitchenResolvers } from './kitchen/createKitchenResolvers';
 import { createLanguageResolvers } from './language/createLanguageResolvers';
+import { createPublicUserResolvers } from './public-user/createPublicUserResolvers';
 import { createUserResolvers } from './user/createUserResolvers';
 
 export interface StartApolloServerAppOptions {
@@ -91,6 +92,7 @@ export async function startApolloServerApp({
         ...createKitchenResolvers(service),
         ...createAllergyResolvers(service),
         ...createUserResolvers(service),
+        ...createPublicUserResolvers(),
     };
 
     const path: string = '/graphql';

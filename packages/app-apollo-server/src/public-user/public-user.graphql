@@ -1,0 +1,7 @@
+type PublicUser {
+    userId: String!
+    firstName: String!
+    profilePictureUrl: Url
+    language: UserLanguage!
+    createdAt: DateTime!
+}
