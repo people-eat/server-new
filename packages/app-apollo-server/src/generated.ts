@@ -499,6 +499,25 @@ export type GQLPublicCookQueryFindOneArgs = {
     cookId: Scalars['String'];
 };
 
+export type GQLPublicTermsUpdate = {
+    __typename?: 'PublicTermsUpdate';
+    createdAt: Scalars['DateTime'];
+    englishText: Scalars['String'];
+    germanText: Scalars['String'];
+    termsUpdateId: Scalars['String'];
+};
+
+export type GQLPublicTermsUpdateQuery = {
+    __typename?: 'PublicTermsUpdateQuery';
+    findAll: Array<GQLPublicTermsUpdate>;
+    findLatest?: Maybe<GQLPublicTermsUpdate>;
+    findOne?: Maybe<GQLPublicTermsUpdate>;
+};
+
+export type GQLPublicTermsUpdateQueryFindOneArgs = {
+    termsUpdateId: Scalars['String'];
+};
+
 export type GQLPublicUser = {
     __typename?: 'PublicUser';
     createdAt: Scalars['DateTime'];
@@ -517,6 +536,7 @@ export type GQLQuery = {
     kitchens: GQLKitchenQuery;
     languages: GQLLanguageQuery;
     publicCooks: GQLPublicCookQuery;
+    publicTermsUpdates: GQLPublicTermsUpdateQuery;
     termsUpdates: GQLTermsUpdateQuery;
     users: GQLUserQuery;
 };
@@ -872,6 +892,8 @@ export type GQLResolversTypes = {
     PriceInput: GQLPriceInput;
     PublicCook: ResolverTypeWrapper<GQLPublicCook>;
     PublicCookQuery: ResolverTypeWrapper<GQLPublicCookQuery>;
+    PublicTermsUpdate: ResolverTypeWrapper<GQLPublicTermsUpdate>;
+    PublicTermsUpdateQuery: ResolverTypeWrapper<GQLPublicTermsUpdateQuery>;
     PublicUser: ResolverTypeWrapper<GQLPublicUser>;
     Query: ResolverTypeWrapper<{}>;
     Session: ResolverTypeWrapper<GQLSession>;
@@ -948,6 +970,8 @@ export type GQLResolversParentTypes = {
     PriceInput: GQLPriceInput;
     PublicCook: GQLPublicCook;
     PublicCookQuery: GQLPublicCookQuery;
+    PublicTermsUpdate: GQLPublicTermsUpdate;
+    PublicTermsUpdateQuery: GQLPublicTermsUpdateQuery;
     PublicUser: GQLPublicUser;
     Query: {};
     Session: GQLSession;
@@ -1396,6 +1420,32 @@ export type GQLPublicCookQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLPublicTermsUpdateResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['PublicTermsUpdate'] = GQLResolversParentTypes['PublicTermsUpdate'],
+> = {
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    englishText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    germanText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    termsUpdateId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLPublicTermsUpdateQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['PublicTermsUpdateQuery'] = GQLResolversParentTypes['PublicTermsUpdateQuery'],
+> = {
+    findAll?: Resolver<Array<GQLResolversTypes['PublicTermsUpdate']>, ParentType, ContextType>;
+    findLatest?: Resolver<Maybe<GQLResolversTypes['PublicTermsUpdate']>, ParentType, ContextType>;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['PublicTermsUpdate']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLPublicTermsUpdateQueryFindOneArgs, 'termsUpdateId'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLPublicUserResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['PublicUser'] = GQLResolversParentTypes['PublicUser'],
@@ -1416,6 +1466,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
     publicCooks?: Resolver<GQLResolversTypes['PublicCookQuery'], ParentType, ContextType>;
+    publicTermsUpdates?: Resolver<GQLResolversTypes['PublicTermsUpdateQuery'], ParentType, ContextType>;
     termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateQuery'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserQuery'], ParentType, ContextType>;
 };
@@ -1734,6 +1785,8 @@ export type GQLResolvers<ContextType = any> = {
     Price?: GQLPriceResolvers<ContextType>;
     PublicCook?: GQLPublicCookResolvers<ContextType>;
     PublicCookQuery?: GQLPublicCookQueryResolvers<ContextType>;
+    PublicTermsUpdate?: GQLPublicTermsUpdateResolvers<ContextType>;
+    PublicTermsUpdateQuery?: GQLPublicTermsUpdateQueryResolvers<ContextType>;
     PublicUser?: GQLPublicUserResolvers<ContextType>;
     Query?: GQLQueryResolvers<ContextType>;
     Session?: GQLSessionResolvers<ContextType>;

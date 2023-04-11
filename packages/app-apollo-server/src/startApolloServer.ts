@@ -42,6 +42,7 @@ import { createLanguageResolvers } from './language/createLanguageResolvers';
 import { createNotificationConfigurationResolvers } from './notification-configuration/createNotificationConfigurationResolvers';
 import { createNotificationResolvers } from './notification/createNotificationResolvers';
 import { createPublicCookResolvers } from './public-cook/createPublicCookResolvers';
+import { createPublicTermsUpdateResolvers } from './public-terms-update/createPublicTermsUpdateResolvers';
 import { createPublicUserResolvers } from './public-user/createPublicUserResolvers';
 import { createSessionResolvers } from './session/createSessionResolvers';
 import { createTermsUpdateResolvers } from './terms-update/createTermsUpdateResolvers';
@@ -90,6 +91,7 @@ export async function startApolloServerApp({
             users: () => ({} as any),
             cooks: () => ({} as any),
             publicCooks: () => ({} as any),
+            publicTermsUpdates: () => ({} as any),
         },
         Mutation: {
             languages: () => ({} as any),
@@ -115,6 +117,7 @@ export async function startApolloServerApp({
         ...createNotificationResolvers(),
         ...createNotificationConfigurationResolvers(),
         ...createTermsUpdateResolvers(),
+        ...createPublicTermsUpdateResolvers(service),
     };
 
     const path: string = '/graphql';
