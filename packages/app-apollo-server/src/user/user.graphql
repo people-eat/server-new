@@ -12,6 +12,9 @@ type User {
     acceptedPrivacyPolicy: DateTime!
     acceptedTerms: DateTime!
     createdAt: DateTime!
+
+    activeSessions: [Session!]!
+    activeSessionCount: UInt!
 }
 
 type UserQuery {

@@ -67,6 +67,29 @@ export type GQLCategoryQuery = {
 
 export type GQLCookRank = 'HOBBY' | 'PROFESSIONAL';
 
+export type GQLCreateOneSessionByEmailAddressRequest = {
+    emailAddress: Scalars['EmailAddress'];
+    password: Scalars['String'];
+    platform: GQLPlatform;
+    pushToken?: InputMaybe<Scalars['String']>;
+    title: Scalars['String'];
+};
+
+export type GQLCreateOneSessionByIdentityProviderRequest = {
+    idToken: Scalars['String'];
+    identityProvider: GQLIdentityProvider;
+    platform: GQLPlatform;
+    title: Scalars['String'];
+};
+
+export type GQLCreateOneSessionByPhoneNumberRequest = {
+    password: Scalars['String'];
+    phoneNumber: Scalars['String'];
+    platform: GQLPlatform;
+    pushToken?: InputMaybe<Scalars['String']>;
+    title: Scalars['String'];
+};
+
 export type GQLCreateOneUserByEmailAddressRequest = {
     birthDate?: InputMaybe<Scalars['Date']>;
     emailAddress: Scalars['EmailAddress'];
@@ -101,6 +124,11 @@ export type GQLCreateOneUserByPhoneNumberRequest = {
 };
 
 export type GQLCurrencyCode = 'EUR' | 'USD';
+
+export type GQLExpireOneSessionRequest = {
+    sessionId: Scalars['String'];
+    userId: Scalars['String'];
+};
 
 export type GQLFindManyRequest = {
     searchText?: InputMaybe<Scalars['String']>;
@@ -164,6 +192,7 @@ export type GQLMutation = {
     categories: GQLCategoryMutation;
     kitchens: GQLKitchenMutation;
     languages: GQLLanguageMutation;
+    sessions: GQLSessionMutation;
     users: GQLUserMutation;
 };
 
@@ -200,10 +229,42 @@ export type GQLQuery = {
     users: GQLUserQuery;
 };
 
+export type GQLSession = {
+    __typename?: 'Session';
+    createdAt: Scalars['DateTime'];
+    expired: Scalars['Boolean'];
+    lastExtendedAt: Scalars['DateTime'];
+    platform: GQLPlatform;
+    sessionId: Scalars['String'];
+    title?: Maybe<Scalars['String']>;
+    userId?: Maybe<Scalars['String']>;
+};
+
+export type GQLSessionMutation = {
+    __typename?: 'SessionMutation';
+    assignOneByEmailAddress: Scalars['Boolean'];
+    assignOneByIdentityProvider: Scalars['Boolean'];
+    assignOneByPhoneNumber: Scalars['Boolean'];
+};
+
+export type GQLSessionMutationAssignOneByEmailAddressArgs = {
+    request: GQLCreateOneSessionByEmailAddressRequest;
+};
+
+export type GQLSessionMutationAssignOneByIdentityProviderArgs = {
+    request: GQLCreateOneSessionByIdentityProviderRequest;
+};
+
+export type GQLSessionMutationAssignOneByPhoneNumberArgs = {
+    request: GQLCreateOneSessionByPhoneNumberRequest;
+};
+
 export type GQLUser = {
     __typename?: 'User';
     acceptedPrivacyPolicy: Scalars['DateTime'];
     acceptedTerms: Scalars['DateTime'];
+    activeSessionCount: Scalars['UInt'];
+    activeSessions: Array<GQLSession>;
     birthDate?: Maybe<Scalars['Date']>;
     createdAt: Scalars['DateTime'];
     emailAddress?: Maybe<Scalars['EmailAddress']>;
@@ -226,6 +287,7 @@ export type GQLUserMutation = {
     createOneByEmailAddress: Scalars['Boolean'];
     createOneByIdentityProvider: Scalars['Boolean'];
     createOneByPhoneNumber: Scalars['Boolean'];
+    sessions: GQLUserSessionMutation;
     updateGender: Scalars['Boolean'];
     updateIsLocked: Scalars['Boolean'];
     updatePassword: Scalars['Boolean'];
@@ -243,6 +305,10 @@ export type GQLUserMutationCreateOneByIdentityProviderArgs = {
 
 export type GQLUserMutationCreateOneByPhoneNumberArgs = {
     request: GQLCreateOneUserByPhoneNumberRequest;
+};
+
+export type GQLUserMutationSessionsArgs = {
+    userId: Scalars['String'];
 };
 
 export type GQLUserMutationUpdateGenderArgs = {
@@ -270,6 +336,7 @@ export type GQLUserQuery = {
     findMany?: Maybe<Array<GQLUser>>;
     findOne?: Maybe<GQLUser>;
     me?: Maybe<GQLUser>;
+    sessions: GQLUserSessionQuery;
 };
 
 export type GQLUserQueryFindManyArgs = {
@@ -277,6 +344,32 @@ export type GQLUserQueryFindManyArgs = {
 };
 
 export type GQLUserQueryFindOneArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserQuerySessionsArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserSessionMutation = {
+    __typename?: 'UserSessionMutation';
+    expireCurrent: Scalars['Boolean'];
+    expireMany: Scalars['Boolean'];
+    expireOne: Scalars['Boolean'];
+    userId: Scalars['String'];
+};
+
+export type GQLUserSessionMutationExpireManyArgs = {
+    request: Array<Scalars['String']>;
+};
+
+export type GQLUserSessionMutationExpireOneArgs = {
+    request: GQLExpireOneSessionRequest;
+};
+
+export type GQLUserSessionQuery = {
+    __typename?: 'UserSessionQuery';
+    findMany?: Maybe<Array<GQLSession>>;
     userId: Scalars['String'];
 };
 
@@ -357,6 +450,9 @@ export type GQLResolversTypes = {
     CategoryMutation: ResolverTypeWrapper<GQLCategoryMutation>;
     CategoryQuery: ResolverTypeWrapper<GQLCategoryQuery>;
     CookRank: GQLCookRank;
+    CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
+    CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
+    CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
     CreateOneUserByEmailAddressRequest: GQLCreateOneUserByEmailAddressRequest;
     CreateOneUserByIdentityProviderRequest: GQLCreateOneUserByIdentityProviderRequest;
     CreateOneUserByPhoneNumberRequest: GQLCreateOneUserByPhoneNumberRequest;
@@ -364,6 +460,7 @@ export type GQLResolversTypes = {
     Date: ResolverTypeWrapper<Scalars['Date']>;
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
     EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
+    ExpireOneSessionRequest: GQLExpireOneSessionRequest;
     FindManyRequest: GQLFindManyRequest;
     Gender: GQLGender;
     IdentityProvider: GQLIdentityProvider;
@@ -386,6 +483,8 @@ export type GQLResolversTypes = {
     PriceInput: GQLPriceInput;
     PublicUser: ResolverTypeWrapper<GQLPublicUser>;
     Query: ResolverTypeWrapper<{}>;
+    Session: ResolverTypeWrapper<GQLSession>;
+    SessionMutation: ResolverTypeWrapper<GQLSessionMutation>;
     String: ResolverTypeWrapper<Scalars['String']>;
     UInt: ResolverTypeWrapper<Scalars['UInt']>;
     UUID: ResolverTypeWrapper<Scalars['UUID']>;
@@ -395,6 +494,8 @@ export type GQLResolversTypes = {
     UserLanguage: GQLUserLanguage;
     UserMutation: ResolverTypeWrapper<GQLUserMutation>;
     UserQuery: ResolverTypeWrapper<GQLUserQuery>;
+    UserSessionMutation: ResolverTypeWrapper<GQLUserSessionMutation>;
+    UserSessionQuery: ResolverTypeWrapper<GQLUserSessionQuery>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -407,12 +508,16 @@ export type GQLResolversParentTypes = {
     Category: GQLCategory;
     CategoryMutation: GQLCategoryMutation;
     CategoryQuery: GQLCategoryQuery;
+    CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
+    CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
+    CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
     CreateOneUserByEmailAddressRequest: GQLCreateOneUserByEmailAddressRequest;
     CreateOneUserByIdentityProviderRequest: GQLCreateOneUserByIdentityProviderRequest;
     CreateOneUserByPhoneNumberRequest: GQLCreateOneUserByPhoneNumberRequest;
     Date: Scalars['Date'];
     DateTime: Scalars['DateTime'];
     EmailAddress: Scalars['EmailAddress'];
+    ExpireOneSessionRequest: GQLExpireOneSessionRequest;
     FindManyRequest: GQLFindManyRequest;
     Kitchen: GQLKitchen;
     KitchenMutation: GQLKitchenMutation;
@@ -430,6 +535,8 @@ export type GQLResolversParentTypes = {
     PriceInput: GQLPriceInput;
     PublicUser: GQLPublicUser;
     Query: {};
+    Session: GQLSession;
+    SessionMutation: GQLSessionMutation;
     String: Scalars['String'];
     UInt: Scalars['UInt'];
     UUID: Scalars['UUID'];
@@ -438,6 +545,8 @@ export type GQLResolversParentTypes = {
     User: GQLUser;
     UserMutation: GQLUserMutation;
     UserQuery: GQLUserQuery;
+    UserSessionMutation: GQLUserSessionMutation;
+    UserSessionQuery: GQLUserSessionQuery;
 };
 
 export type GQLAllergyResolvers<
@@ -588,6 +697,7 @@ export type GQLMutationResolvers<
     categories?: Resolver<GQLResolversTypes['CategoryMutation'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenMutation'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
+    sessions?: Resolver<GQLResolversTypes['SessionMutation'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserMutation'], ParentType, ContextType>;
 };
 
@@ -621,6 +731,45 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     users?: Resolver<GQLResolversTypes['UserQuery'], ParentType, ContextType>;
 };
 
+export type GQLSessionResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['Session'] = GQLResolversParentTypes['Session'],
+> = {
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    expired?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    lastExtendedAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    platform?: Resolver<GQLResolversTypes['Platform'], ParentType, ContextType>;
+    sessionId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    title?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    userId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLSessionMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['SessionMutation'] = GQLResolversParentTypes['SessionMutation'],
+> = {
+    assignOneByEmailAddress?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLSessionMutationAssignOneByEmailAddressArgs, 'request'>
+    >;
+    assignOneByIdentityProvider?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLSessionMutationAssignOneByIdentityProviderArgs, 'request'>
+    >;
+    assignOneByPhoneNumber?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLSessionMutationAssignOneByPhoneNumberArgs, 'request'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface GQLUIntScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['UInt'], any> {
     name: 'UInt';
 }
@@ -640,6 +789,8 @@ export interface GQLUrlScalarConfig extends GraphQLScalarTypeConfig<GQLResolvers
 export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['User'] = GQLResolversParentTypes['User']> = {
     acceptedPrivacyPolicy?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     acceptedTerms?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    activeSessionCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    activeSessions?: Resolver<Array<GQLResolversTypes['Session']>, ParentType, ContextType>;
     birthDate?: Resolver<Maybe<GQLResolversTypes['Date']>, ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     emailAddress?: Resolver<Maybe<GQLResolversTypes['EmailAddress']>, ParentType, ContextType>;
@@ -677,6 +828,12 @@ export type GQLUserMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLUserMutationCreateOneByPhoneNumberArgs, 'request'>
+    >;
+    sessions?: Resolver<
+        GQLResolversTypes['UserSessionMutation'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationSessionsArgs, 'userId'>
     >;
     updateGender?: Resolver<
         GQLResolversTypes['Boolean'],
@@ -717,6 +874,37 @@ export type GQLUserQueryResolvers<
     >;
     findOne?: Resolver<Maybe<GQLResolversTypes['User']>, ParentType, ContextType, RequireFields<GQLUserQueryFindOneArgs, 'userId'>>;
     me?: Resolver<Maybe<GQLResolversTypes['User']>, ParentType, ContextType>;
+    sessions?: Resolver<GQLResolversTypes['UserSessionQuery'], ParentType, ContextType, RequireFields<GQLUserQuerySessionsArgs, 'userId'>>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserSessionMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserSessionMutation'] = GQLResolversParentTypes['UserSessionMutation'],
+> = {
+    expireCurrent?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    expireMany?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserSessionMutationExpireManyArgs, 'request'>
+    >;
+    expireOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserSessionMutationExpireOneArgs, 'request'>
+    >;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserSessionQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserSessionQuery'] = GQLResolversParentTypes['UserSessionQuery'],
+> = {
+    findMany?: Resolver<Maybe<Array<GQLResolversTypes['Session']>>, ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -745,6 +933,8 @@ export type GQLResolvers<ContextType = any> = {
     Price?: GQLPriceResolvers<ContextType>;
     PublicUser?: GQLPublicUserResolvers<ContextType>;
     Query?: GQLQueryResolvers<ContextType>;
+    Session?: GQLSessionResolvers<ContextType>;
+    SessionMutation?: GQLSessionMutationResolvers<ContextType>;
     UInt?: GraphQLScalarType;
     UUID?: GraphQLScalarType;
     Upload?: GraphQLScalarType;
@@ -752,4 +942,6 @@ export type GQLResolvers<ContextType = any> = {
     User?: GQLUserResolvers<ContextType>;
     UserMutation?: GQLUserMutationResolvers<ContextType>;
     UserQuery?: GQLUserQueryResolvers<ContextType>;
+    UserSessionMutation?: GQLUserSessionMutationResolvers<ContextType>;
+    UserSessionQuery?: GQLUserSessionQueryResolvers<ContextType>;
 };

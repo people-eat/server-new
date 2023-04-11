@@ -5,6 +5,7 @@ import {
     type GQLUserMutationCreateOneByEmailAddressArgs,
     type GQLUserMutationCreateOneByIdentityProviderArgs,
     type GQLUserMutationCreateOneByPhoneNumberArgs,
+    type GQLUserMutationSessionsArgs,
     type GQLUserMutationUpdateGenderArgs,
     type GQLUserMutationUpdatePasswordArgs,
     type GQLUserMutationUpdateProfilePictureArgs,
@@ -61,6 +62,8 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
                     userId,
                     profilePicture: profilePicture && (await profilePicture).createReadStream(),
                 }),
+
+            sessions: (_parent: GQLUserMutation, { userId }: GQLUserMutationSessionsArgs) => ({ userId } as any),
         },
         UserQuery: {
             findMany: async (

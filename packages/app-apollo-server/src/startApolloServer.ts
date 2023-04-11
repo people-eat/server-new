@@ -37,6 +37,7 @@ import { type GQLResolvers } from './generated';
 import { createKitchenResolvers } from './kitchen/createKitchenResolvers';
 import { createLanguageResolvers } from './language/createLanguageResolvers';
 import { createPublicUserResolvers } from './public-user/createPublicUserResolvers';
+import { createSessionResolvers } from './session/createSessionResolvers';
 import { createUserResolvers } from './user/createUserResolvers';
 
 export interface StartApolloServerAppOptions {
@@ -87,6 +88,7 @@ export async function startApolloServerApp({
             kitchens: () => ({} as any),
             allergies: () => ({} as any),
             users: () => ({} as any),
+            sessions: () => ({} as any),
         },
         ...createLanguageResolvers(service),
         ...createCategoryResolvers(service),
@@ -95,6 +97,7 @@ export async function startApolloServerApp({
         ...createUserResolvers(service),
         ...createPublicUserResolvers(),
         ...createAnonymousUserResolvers(),
+        ...createSessionResolvers(service),
     };
 
     const path: string = '/graphql';
