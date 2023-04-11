@@ -69,3 +69,8 @@ input FindManyRequest {
     skip: UInt
     take: UInt
 }
+
+enum CookRank {
+    HOBBY
+    PROFESSIONAL
+}

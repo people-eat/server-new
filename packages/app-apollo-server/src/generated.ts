@@ -56,6 +56,8 @@ export type GQLCategoryQuery = {
     findAll: Array<GQLCategory>;
 };
 
+export type GQLCookRank = 'HOBBY' | 'PROFESSIONAL';
+
 export type GQLCurrencyCode = 'EUR' | 'USD';
 
 export type GQLFindManyRequest = {
@@ -220,6 +222,7 @@ export type GQLResolversTypes = {
     Category: ResolverTypeWrapper<GQLCategory>;
     CategoryMutation: ResolverTypeWrapper<GQLCategoryMutation>;
     CategoryQuery: ResolverTypeWrapper<GQLCategoryQuery>;
+    CookRank: GQLCookRank;
     CurrencyCode: GQLCurrencyCode;
     Date: ResolverTypeWrapper<Scalars['Date']>;
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
