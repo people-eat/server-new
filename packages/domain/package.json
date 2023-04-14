@@ -1,0 +1,14 @@
+{
+    "name": "@people-eat/server-domain",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/people-eat/server.git",
+        "directory": "packages/domain"
+    },
+    "bugs": {
+        "url": "https://github.com/people-eat/server/issues"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "version": "0.0.0"
+}
