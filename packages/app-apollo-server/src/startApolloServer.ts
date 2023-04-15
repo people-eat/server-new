@@ -1,4 +1,8 @@
-import { ApolloServer } from '@apollo/server';
+import { ApolloServer, type ApolloServerPlugin } from '@apollo/server';
+import {
+    ApolloServerPluginLandingPageLocalDefault,
+    ApolloServerPluginLandingPageProductionDefault,
+} from '@apollo/server/plugin/landingPage/default';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { addMocksToSchema } from '@graphql-tools/mock';
@@ -43,9 +47,22 @@ export async function startApolloServerApp({ mockSchema, port }: StartApolloServ
         Mutation: {},
     };
 
+    const plugins: ApolloServerPlugin[] =
+        process.env.NODE_ENV === 'production'
+            ? [
+                  ApolloServerPluginLandingPageProductionDefault({
+                      embed: {
+                          displayOptions: { docsPanelState: 'open', showHeadersAndEnvVars: true, theme: 'light' },
+                          persistExplorerState: true,
+                      },
+                      graphRef: 'people-eat@current',
+                  }),
+              ]
+            : [ApolloServerPluginLandingPageLocalDefault({ embed: true })];
+
     const schema: GraphQLSchema = makeExecutableSchema({ resolvers, typeDefs });
 
-    const server: ApolloServer = new ApolloServer(mockSchema ? { schema: addMocksToSchema({ schema }) } : { schema });
+    const server: ApolloServer = new ApolloServer(mockSchema ? { plugins, schema: addMocksToSchema({ schema }) } : { plugins, schema });
 
     const path: string = 'graphql';
 
