@@ -1,0 +1,27 @@
+type CookVisit {
+    cookVisitId: String!
+    cookId: String!
+    sessionId: String!
+    createdAt: DateTime!
+
+    cook: PublicCook!
+    session: AnonymousSession!
+}
+
+type UserCookVisitQuery {
+    userId: String!
+    findMany(request: FindManyRequest): [Address!]
+}
+
+type UserQuery {
+    cookVisits(userId: String!): UserAddressQuery!
+}
+
+type CookCookVisitQuery {
+    cookId: String!
+    findMany(request: FindManyRequest): [Address!]
+}
+
+type CookQuery {
+    cookVisits(cookId: String!): UserAddressQuery!
+}
