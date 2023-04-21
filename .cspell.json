@@ -1,4 +1,4 @@
 {
     "ignorePaths": ["node_modules", "dist", "*.env"],
-    "words": ["cacheable", "codacy", "esnext", "nrwl", "typedef"]
+    "words": ["cacheable", "codacy", "esnext", "nrwl", "typedef", "typeorm"]
 }
