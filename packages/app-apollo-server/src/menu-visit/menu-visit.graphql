@@ -1,0 +1,27 @@
+type MenuVisit {
+    menuVisitId: String!
+    menuId: String!
+    sessionId: String!
+    createdAt: DateTime!
+
+    menu: PublicMenu!
+    session: AnonymousSession!
+}
+
+type UserMenuVisitQuery {
+    userId: String!
+    findMany(request: FindManyRequest): [Address!]
+}
+
+type UserQuery {
+    menuVisits(userId: String!): UserAddressQuery!
+}
+
+type CookMenuVisitQuery {
+    cookId: String!
+    findMany(request: FindManyRequest): [Address!]
+}
+
+type CookQuery {
+    menuVisits(cookId: String!): UserAddressQuery!
+}

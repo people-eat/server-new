@@ -470,6 +470,16 @@ export type GQLCookMenuQueryFindOneArgs = {
     menuId: Scalars['String'];
 };
 
+export type GQLCookMenuVisitQuery = {
+    __typename?: 'CookMenuVisitQuery';
+    cookId: Scalars['String'];
+    findMany?: Maybe<Array<GQLAddress>>;
+};
+
+export type GQLCookMenuVisitQueryFindManyArgs = {
+    request?: InputMaybe<GQLFindManyRequest>;
+};
+
 export type GQLCookMutation = {
     __typename?: 'CookMutation';
     addOneLanguage: Scalars['Boolean'];
@@ -583,6 +593,7 @@ export type GQLCookQuery = {
     followers: GQLCookFollowingQuery;
     globalBookingRequests: GQLCookGlobalBookingRequestQuery;
     meals: GQLCookMealQuery;
+    menuVisits: GQLUserAddressQuery;
     menus: GQLCookMenuQuery;
     userRatings: GQLCookUserRatingQuery;
 };
@@ -612,6 +623,10 @@ export type GQLCookQueryGlobalBookingRequestsArgs = {
 };
 
 export type GQLCookQueryMealsArgs = {
+    cookId: Scalars['String'];
+};
+
+export type GQLCookQueryMenuVisitsArgs = {
     cookId: Scalars['String'];
 };
 
@@ -1065,6 +1080,16 @@ export type GQLMenuConfigurationCourse = {
     mealImageUrl: Scalars['Url'];
     mealTitle: Scalars['String'];
     mealType: GQLMealType;
+};
+
+export type GQLMenuVisit = {
+    __typename?: 'MenuVisit';
+    createdAt: Scalars['DateTime'];
+    menu: GQLPublicMenu;
+    menuId: Scalars['String'];
+    menuVisitId: Scalars['String'];
+    session: GQLAnonymousSession;
+    sessionId: Scalars['String'];
 };
 
 export type GQLMutation = {
@@ -1598,6 +1623,16 @@ export type GQLUserGlobalBookingRequestQuery = {
 
 export type GQLUserLanguage = 'ENGLISH' | 'GERMAN';
 
+export type GQLUserMenuVisitQuery = {
+    __typename?: 'UserMenuVisitQuery';
+    findMany?: Maybe<Array<GQLAddress>>;
+    userId: Scalars['String'];
+};
+
+export type GQLUserMenuVisitQueryFindManyArgs = {
+    request?: InputMaybe<GQLFindManyRequest>;
+};
+
 export type GQLUserMutation = {
     __typename?: 'UserMutation';
     acceptLatestPrivacyPolicy: Scalars['Boolean'];
@@ -1773,6 +1808,7 @@ export type GQLUserQuery = {
     followings: GQLUserFollowingQuery;
     globalBookingRequests: GQLUserGlobalBookingRequestQuery;
     me?: Maybe<GQLUser>;
+    menuVisits: GQLUserAddressQuery;
     notificationConfiguration?: Maybe<GQLNotificationConfigurationQuery>;
     notifications: GQLNotificationQuery;
     oneTimeAccessToken: GQLUserOneTimeAccessTokenQuery;
@@ -1810,6 +1846,10 @@ export type GQLUserQueryFindOneArgs = {
 };
 
 export type GQLUserQueryGlobalBookingRequestsArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserQueryMenuVisitsArgs = {
     userId: Scalars['String'];
 };
 
@@ -1975,6 +2015,7 @@ export type GQLResolversTypes = {
     CookMenuCourseQuery: ResolverTypeWrapper<GQLCookMenuCourseQuery>;
     CookMenuMutation: ResolverTypeWrapper<GQLCookMenuMutation>;
     CookMenuQuery: ResolverTypeWrapper<GQLCookMenuQuery>;
+    CookMenuVisitQuery: ResolverTypeWrapper<GQLCookMenuVisitQuery>;
     CookMutation: ResolverTypeWrapper<GQLCookMutation>;
     CookQuery: ResolverTypeWrapper<GQLCookQuery>;
     CookRank: GQLCookRank;
@@ -2035,6 +2076,7 @@ export type GQLResolversTypes = {
     Menu: ResolverTypeWrapper<GQLMenu>;
     MenuConfiguration: ResolverTypeWrapper<GQLMenuConfiguration>;
     MenuConfigurationCourse: ResolverTypeWrapper<GQLMenuConfigurationCourse>;
+    MenuVisit: ResolverTypeWrapper<GQLMenuVisit>;
     Mutation: ResolverTypeWrapper<{}>;
     Notification: ResolverTypeWrapper<GQLNotification>;
     NotificationConfiguration: ResolverTypeWrapper<GQLNotificationConfiguration>;
@@ -2086,6 +2128,7 @@ export type GQLResolversTypes = {
     UserGlobalBookingRequestMutation: ResolverTypeWrapper<GQLUserGlobalBookingRequestMutation>;
     UserGlobalBookingRequestQuery: ResolverTypeWrapper<GQLUserGlobalBookingRequestQuery>;
     UserLanguage: GQLUserLanguage;
+    UserMenuVisitQuery: ResolverTypeWrapper<GQLUserMenuVisitQuery>;
     UserMutation: ResolverTypeWrapper<GQLUserMutation>;
     UserNotificationMutation: ResolverTypeWrapper<GQLUserNotificationMutation>;
     UserOneTimeAccessTokenMutation: ResolverTypeWrapper<GQLUserOneTimeAccessTokenMutation>;
@@ -2130,6 +2173,7 @@ export type GQLResolversParentTypes = {
     CookMenuCourseQuery: GQLCookMenuCourseQuery;
     CookMenuMutation: GQLCookMenuMutation;
     CookMenuQuery: GQLCookMenuQuery;
+    CookMenuVisitQuery: GQLCookMenuVisitQuery;
     CookMutation: GQLCookMutation;
     CookQuery: GQLCookQuery;
     CookRating: GQLCookRating;
@@ -2185,6 +2229,7 @@ export type GQLResolversParentTypes = {
     Menu: GQLMenu;
     MenuConfiguration: GQLMenuConfiguration;
     MenuConfigurationCourse: GQLMenuConfigurationCourse;
+    MenuVisit: GQLMenuVisit;
     Mutation: {};
     Notification: GQLNotification;
     NotificationConfiguration: GQLNotificationConfiguration;
@@ -2233,6 +2278,7 @@ export type GQLResolversParentTypes = {
     UserFollowingQuery: GQLUserFollowingQuery;
     UserGlobalBookingRequestMutation: GQLUserGlobalBookingRequestMutation;
     UserGlobalBookingRequestQuery: GQLUserGlobalBookingRequestQuery;
+    UserMenuVisitQuery: GQLUserMenuVisitQuery;
     UserMutation: GQLUserMutation;
     UserNotificationMutation: GQLUserNotificationMutation;
     UserOneTimeAccessTokenMutation: GQLUserOneTimeAccessTokenMutation;
@@ -2736,6 +2782,15 @@ export type GQLCookMenuQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLCookMenuVisitQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CookMenuVisitQuery'] = GQLResolversParentTypes['CookMenuVisitQuery'],
+> = {
+    cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    findMany?: Resolver<Maybe<Array<GQLResolversTypes['Address']>>, ParentType, ContextType, Partial<GQLCookMenuVisitQueryFindManyArgs>>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLCookMutationResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['CookMutation'] = GQLResolversParentTypes['CookMutation'],
@@ -2867,6 +2922,12 @@ export type GQLCookQueryResolvers<
         RequireFields<GQLCookQueryGlobalBookingRequestsArgs, 'cookId'>
     >;
     meals?: Resolver<GQLResolversTypes['CookMealQuery'], ParentType, ContextType, RequireFields<GQLCookQueryMealsArgs, 'cookId'>>;
+    menuVisits?: Resolver<
+        GQLResolversTypes['UserAddressQuery'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookQueryMenuVisitsArgs, 'cookId'>
+    >;
     menus?: Resolver<GQLResolversTypes['CookMenuQuery'], ParentType, ContextType, RequireFields<GQLCookQueryMenusArgs, 'cookId'>>;
     userRatings?: Resolver<
         GQLResolversTypes['CookUserRatingQuery'],
@@ -3182,6 +3243,19 @@ export type GQLMenuConfigurationCourseResolvers<
     mealImageUrl?: Resolver<GQLResolversTypes['Url'], ParentType, ContextType>;
     mealTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     mealType?: Resolver<GQLResolversTypes['MealType'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLMenuVisitResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['MenuVisit'] = GQLResolversParentTypes['MenuVisit'],
+> = {
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    menu?: Resolver<GQLResolversTypes['PublicMenu'], ParentType, ContextType>;
+    menuId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    menuVisitId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    session?: Resolver<GQLResolversTypes['AnonymousSession'], ParentType, ContextType>;
+    sessionId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3856,6 +3930,15 @@ export type GQLUserGlobalBookingRequestQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLUserMenuVisitQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserMenuVisitQuery'] = GQLResolversParentTypes['UserMenuVisitQuery'],
+> = {
+    findMany?: Resolver<Maybe<Array<GQLResolversTypes['Address']>>, ParentType, ContextType, Partial<GQLUserMenuVisitQueryFindManyArgs>>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLUserMutationResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['UserMutation'] = GQLResolversParentTypes['UserMutation'],
@@ -4104,6 +4187,12 @@ export type GQLUserQueryResolvers<
         RequireFields<GQLUserQueryGlobalBookingRequestsArgs, 'userId'>
     >;
     me?: Resolver<Maybe<GQLResolversTypes['User']>, ParentType, ContextType>;
+    menuVisits?: Resolver<
+        GQLResolversTypes['UserAddressQuery'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserQueryMenuVisitsArgs, 'userId'>
+    >;
     notificationConfiguration?: Resolver<
         Maybe<GQLResolversTypes['NotificationConfigurationQuery']>,
         ParentType,
@@ -4222,6 +4311,7 @@ export type GQLResolvers<ContextType = any> = {
     CookMenuCourseQuery?: GQLCookMenuCourseQueryResolvers<ContextType>;
     CookMenuMutation?: GQLCookMenuMutationResolvers<ContextType>;
     CookMenuQuery?: GQLCookMenuQueryResolvers<ContextType>;
+    CookMenuVisitQuery?: GQLCookMenuVisitQueryResolvers<ContextType>;
     CookMutation?: GQLCookMutationResolvers<ContextType>;
     CookQuery?: GQLCookQueryResolvers<ContextType>;
     CookRating?: GQLCookRatingResolvers<ContextType>;
@@ -4254,6 +4344,7 @@ export type GQLResolvers<ContextType = any> = {
     Menu?: GQLMenuResolvers<ContextType>;
     MenuConfiguration?: GQLMenuConfigurationResolvers<ContextType>;
     MenuConfigurationCourse?: GQLMenuConfigurationCourseResolvers<ContextType>;
+    MenuVisit?: GQLMenuVisitResolvers<ContextType>;
     Mutation?: GQLMutationResolvers<ContextType>;
     Notification?: GQLNotificationResolvers<ContextType>;
     NotificationConfiguration?: GQLNotificationConfigurationResolvers<ContextType>;
@@ -4300,6 +4391,7 @@ export type GQLResolvers<ContextType = any> = {
     UserFollowingQuery?: GQLUserFollowingQueryResolvers<ContextType>;
     UserGlobalBookingRequestMutation?: GQLUserGlobalBookingRequestMutationResolvers<ContextType>;
     UserGlobalBookingRequestQuery?: GQLUserGlobalBookingRequestQueryResolvers<ContextType>;
+    UserMenuVisitQuery?: GQLUserMenuVisitQueryResolvers<ContextType>;
     UserMutation?: GQLUserMutationResolvers<ContextType>;
     UserNotificationMutation?: GQLUserNotificationMutationResolvers<ContextType>;
     UserOneTimeAccessTokenMutation?: GQLUserOneTimeAccessTokenMutationResolvers<ContextType>;

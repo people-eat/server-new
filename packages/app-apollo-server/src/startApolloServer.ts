@@ -51,6 +51,7 @@ import { createLanguageResolvers } from './language/createLanguageResolvers';
 import { createMealOptionResolvers } from './meal-option/createMealOptionResolvers';
 import { createMealResolvers } from './meal/createMealResolvers';
 import { createMenuConfigurationResolvers } from './menu-configuration/createMenuConfigurationResolvers';
+import { createMenuVisitResolvers } from './menu-visit/createMenuVisitResolvers';
 import { createMenuResolvers } from './menu/createMenuResolvers';
 import { createNotificationConfigurationResolvers } from './notification-configuration/createNotificationConfigurationResolvers';
 import { createNotificationResolvers } from './notification/createNotificationResolvers';
@@ -156,6 +157,7 @@ export async function startApolloServerApp({
         ...createUserRatingResolvers(),
         ...createAddressResolvers(service),
         ...createCookVisitResolvers(),
+        ...createMenuVisitResolvers(),
     };
 
     const path: string = '/graphql';
