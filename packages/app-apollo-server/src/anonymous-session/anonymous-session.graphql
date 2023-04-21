@@ -1,0 +1,7 @@
+type AnonymousSession {
+    sessionId: String!
+    userId: String
+    platform: Platform!
+
+    anonymousUser: AnonymousUser
+}
