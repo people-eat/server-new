@@ -1,0 +1,70 @@
+{
+    "name": "adapter-logger",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "packages/adapter-logger/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/esbuild:esbuild",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "platform": "node",
+                "outputPath": "dist/packages/adapter-logger",
+                "format": ["cjs"],
+                "bundle": false,
+                "main": "packages/adapter-logger/src/index.ts",
+                "tsConfig": "packages/adapter-logger/tsconfig.app.json",
+                "assets": ["packages/adapter-logger/src/assets"],
+                "generatePackageJson": true,
+                "esbuildOptions": {
+                    "sourcemap": true,
+                    "outExtension": {
+                        ".js": ".js"
+                    }
+                }
+            },
+            "configurations": {
+                "development": {},
+                "production": {
+                    "esbuildOptions": {
+                        "sourcemap": false,
+                        "outExtension": {
+                            ".js": ".js"
+                        }
+                    }
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nrwl/js:node",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "adapter-logger:build"
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "adapter-logger:build:development"
+                },
+                "production": {
+                    "buildTarget": "adapter-logger:build:production"
+                }
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "packages/adapter-logger/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        }
+    },
+    "tags": []
+}

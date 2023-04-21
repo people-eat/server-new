@@ -18,7 +18,8 @@
         "esModuleInterop": true,
         "baseUrl": ".",
         "paths": {
-            "@people-eat/server-domain": ["packages/domain/src/index.ts"]
+            "@people-eat/server-domain": ["packages/domain/src/index.ts"],
+            "@people-eat/server-adapter-logger": ["packages/adapter-logger/src/index.ts"]
         }
     },
     "exclude": ["node_modules", "tmp"]
