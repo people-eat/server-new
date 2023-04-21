@@ -12,6 +12,7 @@
     "private": true,
     "version": "0.0.0",
     "dependencies": {
-        "@people-eat/server-domain": "*"
+        "@people-eat/server-domain": "*",
+        "chalk": "^5.2.0"
     }
 }
