@@ -4,4 +4,5 @@ export * as Email from './email';
 export * as IdentityProvider from './identity-provider';
 export * as Logger from './logger';
 export * as PaymentProvider from './payment-provider';
+export * as PushNotification from './push-notification';
 export * as SMS from './sms';
