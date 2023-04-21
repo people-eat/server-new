@@ -1,3 +1,4 @@
+export * as Authorization from './authorization';
 export * from './core';
 export * as DataSource from './data-source';
 export * as Email from './email';
