@@ -516,6 +516,12 @@ export type GQLNotificationQuery = {
     userId: Scalars['String'];
 };
 
+export type GQLOneTimeAccessToken = {
+    __typename?: 'OneTimeAccessToken';
+    createdAt: Scalars['DateTime'];
+    userId: Scalars['String'];
+};
+
 export type GQLPaymentProvider = 'STRIPE';
 
 export type GQLPhoneNumberUpdate = {
@@ -746,6 +752,7 @@ export type GQLUser = {
     lastName: Scalars['String'];
     notificationConfiguration: GQLNotificationConfiguration;
     notifications: Array<GQLNotification>;
+    oneTimeAccessToken?: Maybe<GQLOneTimeAccessToken>;
     phoneNumber?: Maybe<Scalars['PhoneNumber']>;
     phoneNumberUpdate?: Maybe<GQLPhoneNumberUpdate>;
     profilePictureUrl?: Maybe<Scalars['Url']>;
@@ -787,6 +794,7 @@ export type GQLUserMutation = {
     emailAddressUpdate: GQLUserEmailAddressUpdateMutation;
     notificationConfiguration: GQLNotificationConfigurationMutation;
     notifications: GQLUserNotificationMutation;
+    oneTimeAccessToken: GQLUserOneTimeAccessTokenMutation;
     phoneNumberUpdate: GQLUserPhoneNumberUpdateMutation;
     sessions: GQLUserSessionMutation;
     updateGender: Scalars['Boolean'];
@@ -817,6 +825,10 @@ export type GQLUserMutationNotificationConfigurationArgs = {
 };
 
 export type GQLUserMutationNotificationsArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserMutationOneTimeAccessTokenArgs = {
     userId: Scalars['String'];
 };
 
@@ -870,6 +882,33 @@ export type GQLUserNotificationMutationUpdateOneWasReadArgs = {
     wasRead: Scalars['Boolean'];
 };
 
+export type GQLUserOneTimeAccessTokenMutation = {
+    __typename?: 'UserOneTimeAccessTokenMutation';
+    confirm: Scalars['Boolean'];
+    createOneForEmailAddress: Scalars['Boolean'];
+    createOneForPhoneNumber: Scalars['Boolean'];
+    deleteOne: Scalars['Boolean'];
+    userId: Scalars['String'];
+};
+
+export type GQLUserOneTimeAccessTokenMutationConfirmArgs = {
+    secret: Scalars['String'];
+};
+
+export type GQLUserOneTimeAccessTokenMutationCreateOneForEmailAddressArgs = {
+    emailAddress: Scalars['EmailAddress'];
+};
+
+export type GQLUserOneTimeAccessTokenMutationCreateOneForPhoneNumberArgs = {
+    phoneNumber: Scalars['PhoneNumber'];
+};
+
+export type GQLUserOneTimeAccessTokenQuery = {
+    __typename?: 'UserOneTimeAccessTokenQuery';
+    findOne?: Maybe<GQLOneTimeAccessToken>;
+    userId: Scalars['String'];
+};
+
 export type GQLUserPhoneNumberUpdateMutation = {
     __typename?: 'UserPhoneNumberUpdateMutation';
     confirm: Scalars['Boolean'];
@@ -900,6 +939,7 @@ export type GQLUserQuery = {
     me?: Maybe<GQLUser>;
     notificationConfiguration?: Maybe<GQLNotificationConfigurationQuery>;
     notifications: GQLNotificationQuery;
+    oneTimeAccessToken: GQLUserOneTimeAccessTokenQuery;
     phoneNumberUpdate: GQLUserPhoneNumberUpdateQuery;
     sessions: GQLUserSessionQuery;
 };
@@ -921,6 +961,10 @@ export type GQLUserQueryNotificationConfigurationArgs = {
 };
 
 export type GQLUserQueryNotificationsArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserQueryOneTimeAccessTokenArgs = {
     userId: Scalars['String'];
 };
 
@@ -1083,6 +1127,7 @@ export type GQLResolversTypes = {
     NotificationConfigurationQuery: ResolverTypeWrapper<GQLNotificationConfigurationQuery>;
     NotificationMutation: ResolverTypeWrapper<GQLNotificationMutation>;
     NotificationQuery: ResolverTypeWrapper<GQLNotificationQuery>;
+    OneTimeAccessToken: ResolverTypeWrapper<GQLOneTimeAccessToken>;
     PaymentProvider: GQLPaymentProvider;
     PhoneNumber: ResolverTypeWrapper<Scalars['PhoneNumber']>;
     PhoneNumberUpdate: ResolverTypeWrapper<GQLPhoneNumberUpdate>;
@@ -1116,6 +1161,8 @@ export type GQLResolversTypes = {
     UserLanguage: GQLUserLanguage;
     UserMutation: ResolverTypeWrapper<GQLUserMutation>;
     UserNotificationMutation: ResolverTypeWrapper<GQLUserNotificationMutation>;
+    UserOneTimeAccessTokenMutation: ResolverTypeWrapper<GQLUserOneTimeAccessTokenMutation>;
+    UserOneTimeAccessTokenQuery: ResolverTypeWrapper<GQLUserOneTimeAccessTokenQuery>;
     UserPhoneNumberUpdateMutation: ResolverTypeWrapper<GQLUserPhoneNumberUpdateMutation>;
     UserPhoneNumberUpdateQuery: ResolverTypeWrapper<GQLUserPhoneNumberUpdateQuery>;
     UserQuery: ResolverTypeWrapper<GQLUserQuery>;
@@ -1181,6 +1228,7 @@ export type GQLResolversParentTypes = {
     NotificationConfigurationQuery: GQLNotificationConfigurationQuery;
     NotificationMutation: GQLNotificationMutation;
     NotificationQuery: GQLNotificationQuery;
+    OneTimeAccessToken: GQLOneTimeAccessToken;
     PhoneNumber: Scalars['PhoneNumber'];
     PhoneNumberUpdate: GQLPhoneNumberUpdate;
     Price: GQLPrice;
@@ -1211,6 +1259,8 @@ export type GQLResolversParentTypes = {
     UserEmailAddressUpdateQuery: GQLUserEmailAddressUpdateQuery;
     UserMutation: GQLUserMutation;
     UserNotificationMutation: GQLUserNotificationMutation;
+    UserOneTimeAccessTokenMutation: GQLUserOneTimeAccessTokenMutation;
+    UserOneTimeAccessTokenQuery: GQLUserOneTimeAccessTokenQuery;
     UserPhoneNumberUpdateMutation: GQLUserPhoneNumberUpdateMutation;
     UserPhoneNumberUpdateQuery: GQLUserPhoneNumberUpdateQuery;
     UserQuery: GQLUserQuery;
@@ -1670,6 +1720,15 @@ export type GQLNotificationQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLOneTimeAccessTokenResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['OneTimeAccessToken'] = GQLResolversParentTypes['OneTimeAccessToken'],
+> = {
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface GQLPhoneNumberScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['PhoneNumber'], any> {
     name: 'PhoneNumber';
 }
@@ -1968,6 +2027,7 @@ export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversP
     lastName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     notificationConfiguration?: Resolver<GQLResolversTypes['NotificationConfiguration'], ParentType, ContextType>;
     notifications?: Resolver<Array<GQLResolversTypes['Notification']>, ParentType, ContextType>;
+    oneTimeAccessToken?: Resolver<Maybe<GQLResolversTypes['OneTimeAccessToken']>, ParentType, ContextType>;
     phoneNumber?: Resolver<Maybe<GQLResolversTypes['PhoneNumber']>, ParentType, ContextType>;
     phoneNumberUpdate?: Resolver<Maybe<GQLResolversTypes['PhoneNumberUpdate']>, ParentType, ContextType>;
     profilePictureUrl?: Resolver<Maybe<GQLResolversTypes['Url']>, ParentType, ContextType>;
@@ -2048,6 +2108,12 @@ export type GQLUserMutationResolvers<
         ContextType,
         RequireFields<GQLUserMutationNotificationsArgs, 'userId'>
     >;
+    oneTimeAccessToken?: Resolver<
+        GQLResolversTypes['UserOneTimeAccessTokenMutation'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationOneTimeAccessTokenArgs, 'userId'>
+    >;
     phoneNumberUpdate?: Resolver<
         GQLResolversTypes['UserPhoneNumberUpdateMutation'],
         ParentType,
@@ -2114,6 +2180,42 @@ export type GQLUserNotificationMutationResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLUserOneTimeAccessTokenMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserOneTimeAccessTokenMutation'] = GQLResolversParentTypes['UserOneTimeAccessTokenMutation'],
+> = {
+    confirm?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserOneTimeAccessTokenMutationConfirmArgs, 'secret'>
+    >;
+    createOneForEmailAddress?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserOneTimeAccessTokenMutationCreateOneForEmailAddressArgs, 'emailAddress'>
+    >;
+    createOneForPhoneNumber?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserOneTimeAccessTokenMutationCreateOneForPhoneNumberArgs, 'phoneNumber'>
+    >;
+    deleteOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserOneTimeAccessTokenQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserOneTimeAccessTokenQuery'] = GQLResolversParentTypes['UserOneTimeAccessTokenQuery'],
+> = {
+    findOne?: Resolver<Maybe<GQLResolversTypes['OneTimeAccessToken']>, ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLUserPhoneNumberUpdateMutationResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['UserPhoneNumberUpdateMutation'] = GQLResolversParentTypes['UserPhoneNumberUpdateMutation'],
@@ -2173,6 +2275,12 @@ export type GQLUserQueryResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLUserQueryNotificationsArgs, 'userId'>
+    >;
+    oneTimeAccessToken?: Resolver<
+        GQLResolversTypes['UserOneTimeAccessTokenQuery'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserQueryOneTimeAccessTokenArgs, 'userId'>
     >;
     phoneNumberUpdate?: Resolver<
         GQLResolversTypes['UserPhoneNumberUpdateQuery'],
@@ -2255,6 +2363,7 @@ export type GQLResolvers<ContextType = any> = {
     NotificationConfigurationQuery?: GQLNotificationConfigurationQueryResolvers<ContextType>;
     NotificationMutation?: GQLNotificationMutationResolvers<ContextType>;
     NotificationQuery?: GQLNotificationQueryResolvers<ContextType>;
+    OneTimeAccessToken?: GQLOneTimeAccessTokenResolvers<ContextType>;
     PhoneNumber?: GraphQLScalarType;
     PhoneNumberUpdate?: GQLPhoneNumberUpdateResolvers<ContextType>;
     Price?: GQLPriceResolvers<ContextType>;
@@ -2283,6 +2392,8 @@ export type GQLResolvers<ContextType = any> = {
     UserEmailAddressUpdateQuery?: GQLUserEmailAddressUpdateQueryResolvers<ContextType>;
     UserMutation?: GQLUserMutationResolvers<ContextType>;
     UserNotificationMutation?: GQLUserNotificationMutationResolvers<ContextType>;
+    UserOneTimeAccessTokenMutation?: GQLUserOneTimeAccessTokenMutationResolvers<ContextType>;
+    UserOneTimeAccessTokenQuery?: GQLUserOneTimeAccessTokenQueryResolvers<ContextType>;
     UserPhoneNumberUpdateMutation?: GQLUserPhoneNumberUpdateMutationResolvers<ContextType>;
     UserPhoneNumberUpdateQuery?: GQLUserPhoneNumberUpdateQueryResolvers<ContextType>;
     UserQuery?: GQLUserQueryResolvers<ContextType>;

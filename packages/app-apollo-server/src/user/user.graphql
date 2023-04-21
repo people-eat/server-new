@@ -29,6 +29,7 @@ type User {
 
     phoneNumberUpdate: PhoneNumberUpdate
     emailAddressUpdate: EmailAddressUpdate
+    oneTimeAccessToken: OneTimeAccessToken
 }
 
 type UserQuery {

@@ -1,0 +1,25 @@
+type OneTimeAccessToken {
+    userId: String!
+    createdAt: DateTime!
+}
+
+type UserOneTimeAccessTokenQuery {
+    userId: String!
+    findOne: OneTimeAccessToken
+}
+
+type UserQuery {
+    oneTimeAccessToken(userId: String!): UserOneTimeAccessTokenQuery!
+}
+
+type UserOneTimeAccessTokenMutation {
+    userId: String!
+    createOneForEmailAddress(emailAddress: EmailAddress!): Boolean!
+    createOneForPhoneNumber(phoneNumber: PhoneNumber!): Boolean!
+    deleteOne: Boolean!
+    confirm(secret: String!): Boolean!
+}
+
+type UserMutation {
+    oneTimeAccessToken(userId: String!): UserOneTimeAccessTokenMutation!
+}
