@@ -1,5 +1,5 @@
 import { ApolloServer, type ApolloServerPlugin } from '@apollo/server';
-import { expressMiddleware } from '@apollo/server/express4';
+import { expressMiddleware, type ExpressContextFunctionArgument } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import {
     ApolloServerPluginLandingPageLocalDefault,
@@ -8,7 +8,9 @@ import {
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { addMocksToSchema } from '@graphql-tools/mock';
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import { Authorization, type DataSource, type Logger } from '@people-eat/server-domain';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { type Express } from 'express';
 import { type GraphQLSchema } from 'graphql';
@@ -25,20 +27,30 @@ import {
 } from 'graphql-scalars';
 import { type Disposable } from 'graphql-ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
-import { createServer as createHttpServer, type Server as HttpServer } from 'http';
+import { createServer as createHttpServer, type IncomingMessage, type Server as HttpServer } from 'http';
 import { WebSocketServer } from 'ws';
 import { type GQLResolvers } from './generated';
 
 export interface StartApolloServerAppOptions {
+    dataSourceAdapter: DataSource.Adapter;
+    logger: Logger.Adapter;
     mockSchema: boolean;
     port: number;
+    sessionIdCookie: { name: string; domainScope: string; secure: boolean };
 }
 
 export interface StartApolloServerAppResult {
     path: string;
 }
 
-export async function startApolloServerApp({ mockSchema, port }: StartApolloServerAppOptions): Promise<StartApolloServerAppResult> {
+// eslint-disable-next-line max-statements
+export async function startApolloServerApp({
+    dataSourceAdapter,
+    logger,
+    mockSchema,
+    port,
+    sessionIdCookie,
+}: StartApolloServerAppOptions): Promise<StartApolloServerAppResult> {
     const typeDefs: string[] = loadFilesSync('./**/*.graphql');
 
     const resolvers: GQLResolvers = {
@@ -63,8 +75,39 @@ export async function startApolloServerApp({ mockSchema, port }: StartApolloServ
 
     const expressApp: Express = express();
     const httpServer: HttpServer = createHttpServer(expressApp);
-    const webSocketServer: WebSocketServer = new WebSocketServer({ path, server: httpServer });
-    const serverCleanup: Disposable = useServer({ schema }, webSocketServer);
+    const webSocketServer: WebSocketServer = new WebSocketServer({ server: httpServer });
+
+    webSocketServer.on('headers', (_headers: string[], request: IncomingMessage & { sessionId?: string }) => {
+        if (!request.headers.cookie) throw new Error('Websocket connection without session id was declined');
+
+        request.sessionId = request.headers.cookie
+            .split(';')
+            .reduce((cookieMap: Map<string, string>, cookie: string) => {
+                const [key, value] = cookie.trim().split('=');
+                if (!key || !value) throw new Error('Invalid sessionId header');
+                return cookieMap.set(key, value);
+            }, new Map<string, string>())
+            .get(sessionIdCookie.name);
+    });
+
+    const serverCleanup: Disposable = useServer(
+        {
+            context: (
+                context: Authorization.Context & { extra: { request: IncomingMessage & { sessionId?: string } } },
+            ): Authorization.Context => {
+                const sessionId: string | undefined = context.extra.request.sessionId;
+
+                if (!sessionId) throw new Error('Subscription requested without session id');
+
+                return {
+                    sessionId: sessionId,
+                    userId: undefined,
+                };
+            },
+            schema,
+        },
+        webSocketServer,
+    );
 
     const plugins: ApolloServerPlugin[] = [
         process.env.NODE_ENV === 'production'
@@ -75,7 +118,7 @@ export async function startApolloServerApp({ mockSchema, port }: StartApolloServ
                   },
                   graphRef: 'people-eat@current',
               })
-            : ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+            : ApolloServerPluginLandingPageLocalDefault({ embed: true, includeCookies: true }),
 
         // Proper shutdown for the HTTP server.
         ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -96,7 +139,36 @@ export async function startApolloServerApp({ mockSchema, port }: StartApolloServ
 
     await server.start();
 
-    expressApp.use(path, cors<cors.CorsRequest>(), bodyParser.json(), expressMiddleware(server));
+    expressApp.use(
+        path,
+        cors<cors.CorsRequest>({ origin: true, credentials: true }),
+        bodyParser.json(),
+        cookieParser(),
+        expressMiddleware(server, {
+            context: async ({ req, res }: ExpressContextFunctionArgument): Promise<Authorization.Context> => {
+                const sessionId: string | undefined = req.cookies[sessionIdCookie.name];
+                const result: Authorization.AuthorizeSessionOutput | undefined = await Authorization.authorizeSession({
+                    dataSourceAdapter,
+                    logger,
+                    sessionId,
+                });
+                if (!result) throw new Error();
+
+                res.cookie(sessionIdCookie.name, result.sessionId, {
+                    expires: result.expirationDate,
+                    httpOnly: true,
+                    sameSite: sessionIdCookie.secure ? 'none' : 'lax',
+                    secure: sessionIdCookie.secure,
+                    domain: sessionIdCookie.domainScope,
+                });
+
+                return {
+                    sessionId: result.sessionId,
+                    userId: result.userId,
+                };
+            },
+        }),
+    );
 
     httpServer.listen(port, () => undefined);
 
