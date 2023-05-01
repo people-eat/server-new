@@ -1,3 +1,4 @@
+import { type MealOption } from '../meal-option';
 import { type NanoId } from '../shared';
 
 export interface Course {
@@ -5,5 +6,6 @@ export interface Course {
     menuId: NanoId;
     cookId: NanoId;
     index: number;
-    type: string;
+    title: string;
+    mealOptions?: MealOption[];
 }

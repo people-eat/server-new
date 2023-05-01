@@ -1,3 +1,4 @@
+import { type Course } from '../course';
 import { type CurrencyCode, type NanoId } from '../shared';
 
 export interface Menu {
@@ -8,11 +9,12 @@ export interface Menu {
     description: string;
     preparationTime: number;
     kitchenId?: NanoId;
-    greetingFromKitchen: boolean;
+    greetingFromKitchen?: string;
     basePrice: number;
     basePriceCustomers: number;
     pricePerAdult: number;
     pricePerChild?: number;
     currencyCode: CurrencyCode;
     createdAt: Date;
+    courses?: Course[];
 }

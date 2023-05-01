@@ -12,6 +12,7 @@ export { CookSpecificFee } from './cook-specific-fee/CookSpecificFee';
 export { CookVisit } from './cook-visit/CookVisit';
 export { Cook } from './cook/Cook';
 export { Course } from './course/Course';
+export { createService } from './createService';
 export { CustomerFeeUpdate } from './customer-fee-update/CustomerFeeUpdate';
 export { EmailAddressUpdate } from './email-address-update/EmailAddressUpdate';
 export { FavoriteCook } from './favorite-cook/FavoriteCook';
@@ -34,6 +35,7 @@ export { PublicPrivacyPolicyUpdate } from './public-privacy-policy-update/Public
 export { PublicTermsUpdate } from './public-terms-update/PublicTermsUpdate';
 export { PublicUser } from './public-user/PublicUser';
 export { SearchRequest } from './search-request/SearchRequest';
+export { Service } from './Service';
 export { Session } from './session/Session';
 export * as Shared from './shared';
 export { TermsUpdate } from './terms-update/TermsUpdate';
