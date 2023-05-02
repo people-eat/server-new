@@ -8,7 +8,7 @@ import {
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { addMocksToSchema } from '@graphql-tools/mock';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import { Authorization, type DataSource, type Logger } from '@people-eat/server-domain';
+import { Authorization, type DataSource, type Logger, type Service } from '@people-eat/server-domain';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -35,6 +35,7 @@ import { type GQLResolvers } from './generated';
 export interface StartApolloServerAppOptions {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
+    service: Service;
     mockSchema: boolean;
     port: number;
     sessionIdCookie: { name: string; domainScope: string; secure: boolean };
@@ -51,6 +52,7 @@ export async function startApolloServerApp({
     mockSchema,
     port,
     sessionIdCookie,
+    service,
 }: StartApolloServerAppOptions): Promise<StartApolloServerAppResult> {
     const typeDefs: string[] = loadFilesSync('./**/*.graphql');
 
