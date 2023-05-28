@@ -26,7 +26,8 @@
             "@people-eat/server-app-apollo-server": ["packages/app-apollo-server/src/index.ts"],
             "@people-eat/server-host-integration": ["packages/host-integration/src/index.ts"],
             "@people-eat/server-host-mock": ["packages/host-mock/src/index.ts"],
-            "@people-eat/server-host-local": ["packages/host-local/src/index.ts"]
+            "@people-eat/server-host-local": ["packages/host-local/src/index.ts"],
+            "@people-eat/server-host-production": ["packages/host-production/src/index.ts"]
         }
     },
     "exclude": ["node_modules", "tmp"]
