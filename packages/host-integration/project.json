@@ -1,0 +1,70 @@
+{
+    "name": "host-integration",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "packages/host-integration/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/esbuild:esbuild",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "integration",
+            "options": {
+                "platform": "node",
+                "outputPath": "dist/packages/host-integration",
+                "format": ["cjs"],
+                "bundle": false,
+                "main": "packages/host-integration/src/index.ts",
+                "tsConfig": "packages/host-integration/tsconfig.app.json",
+                "assets": ["packages/host-integration/src/assets"],
+                "generatePackageJson": true,
+                "esbuildOptions": {
+                    "sourcemap": true,
+                    "outExtension": {
+                        ".js": ".js"
+                    }
+                }
+            },
+            "configurations": {
+                "development": {},
+                "integration": {
+                    "esbuildOptions": {
+                        "sourcemap": false,
+                        "outExtension": {
+                            ".js": ".js"
+                        }
+                    }
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nrwl/js:node",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "host-integration:build"
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "host-integration:build:development"
+                },
+                "integration": {
+                    "buildTarget": "host-integration:build:integration"
+                }
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "packages/host-integration/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        }
+    },
+    "tags": []
+}
