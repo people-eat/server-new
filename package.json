@@ -23,6 +23,7 @@
         "verify": "nx run-many -t test && nx run-many -t build && yarn format:check && yarn lint:check && yarn spell:check"
     },
     "dependencies": {
+        "moment": "^2.29.4",
         "tslib": "^2.5.0"
     },
     "devDependencies": {
