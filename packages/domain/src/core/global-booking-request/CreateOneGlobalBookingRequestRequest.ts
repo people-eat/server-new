@@ -13,4 +13,7 @@ export interface CreateOneGlobalBookingRequestRequest {
     kitchenId?: string;
     allergyIds?: NanoId[];
     categoryIds?: NanoId[];
+
+    // Todo: remove
+    phoneNumber?: string;
 }

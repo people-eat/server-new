@@ -13,7 +13,7 @@ export interface CreateOneUserRequest
     profilePicture?: ReadStream;
 }
 
-export type CreateOneUserByEmailAddressRequest = CreateOneUserRequest & { emailAddress: string; password: string };
+export type CreateOneUserByEmailAddressRequest = CreateOneUserRequest & { emailAddress?: string; phoneNumber?: string; password?: string };
 
 export type CreateOneUserByPhoneNumberRequest = CreateOneUserRequest & { phoneNumber: string; password: string };
 

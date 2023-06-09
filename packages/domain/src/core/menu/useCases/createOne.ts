@@ -59,7 +59,6 @@ export async function createOne({ dataSourceAdapter, logger, context, request }:
                 index: courseIndex,
                 title: courseTitle,
                 mealOptions: mealOptions?.map(({ index: mealOptionIndex, mealId }: CreateOneMealOptionRequest) => ({
-                    mealOptionId: createNanoId(),
                     courseId,
                     cookId,
                     index: mealOptionIndex,

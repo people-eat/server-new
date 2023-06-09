@@ -34,6 +34,7 @@ export async function createOne({
         categoryIds,
         location,
         userId,
+        phoneNumber,
     } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
@@ -87,18 +88,19 @@ export async function createOne({
     }
 
     const formattedDateTime: string = moment(dateTime).format('MMMM Do YYYY, h:mm a');
-    // , 'contact@people-eat.com'
     const emailSuccess: boolean = await emailAdapter.sendToMany(
         'Booking Request',
-        ['yilmaz.cem.2603@gmail.com'],
+        ['contact@people-eat.com', 'yilmaz.cem.2603@gmail.com'],
         `from ${user.firstName} ${user.lastName}`,
         `A new Booking Request was received from <b>${user.firstName} ${
             user.lastName
-        }</b><br/><br/><b>When:</b> ${formattedDateTime}<br/><b>Where:</b> ${'Todo: city name'}<br/><b>Occasion:</b> ${occasion}<br/><br/><b>Adults:</b> ${adultParticipants}<br/><b>Children:</b> ${children}<br/><br/><b>Budget:</b> ${
+        }</b><br/><br/><b>When:</b> ${formattedDateTime}<br/><b>Where:</b> ${
+            location.text
+        }<br/><b>Occasion:</b> ${occasion}<br/><br/><b>Adults:</b> ${adultParticipants}<br/><b>Children:</b> ${children}<br/><br/><b>Budget:</b> ${
             price.amount
         } ${price.currencyCode}<br/><br/><b>Message:</b><br/>${message}<br/><br/><br/><b>Contact:</b><br/>Email Address: ${
             user.emailAddress
-        }<br/>Phone Number: ${user.phoneNumber}<br/><br/>Kitchen: ${kitchen?.title ?? 'any'}<br/><br/>Allergies: ${allergies
+        }<br/>Phone Number: ${phoneNumber}<br/><br/>Kitchen: ${kitchen?.title ?? 'any'}<br/><br/>Allergies: ${allergies
             .map(({ title }: DBAllergy) => title)
             .join(', ')}<br/><br/>Categories: ${categories.map(({ title }: DBCategory) => title).join(', ')}`,
     );

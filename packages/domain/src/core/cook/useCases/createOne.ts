@@ -5,7 +5,7 @@ import { type CreateOneCookRequest } from '../CreateOneCookRequest';
 export interface CreateOneCookInput {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
-    context: Authorization.Context & { userCreation?: boolean };
+    context: Authorization.Context;
     request: CreateOneCookRequest & { cookId: NanoId };
 }
 
@@ -26,7 +26,7 @@ export async function createOne({ dataSourceAdapter, logger, context, request }:
         languageIds,
     } = request;
 
-    if (!context.userCreation) await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
+    await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
     const success: boolean = await dataSourceAdapter.cookRepository.insertOne({
         cookId,
@@ -35,6 +35,7 @@ export async function createOne({ dataSourceAdapter, logger, context, request }:
         name,
         latitude: location.latitude,
         longitude: location.longitude,
+        city: location.text ?? '',
         rank,
         biography: biography.trim(),
         travelExpenses,

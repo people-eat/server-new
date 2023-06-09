@@ -25,5 +25,7 @@ export async function findOne({ dataSourceAdapter, request }: FindOnePublicCookI
     return {
         ...menu,
         cook: { ...packLocation(cook) },
+        kitchen: undefined,
+        categories: [],
     };
 }

@@ -3,6 +3,7 @@ import {
     type GQLCookMenuCourseMutation,
     type GQLCookMenuCourseMutationCreateOneArgs,
     type GQLCookMenuCourseMutationDeleteOneArgs,
+    type GQLCookMenuCourseMutationMealOptionsArgs,
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
 
@@ -19,6 +20,9 @@ export function createCourseResolvers(service: Service): Resolvers<'Course' | 'C
                 { courseId }: GQLCookMenuCourseMutationDeleteOneArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.course.deleteOne(context, { cookId, menuId, courseId }),
+
+            mealOptions: ({ cookId, menuId }: GQLCookMenuCourseMutation, { courseId }: GQLCookMenuCourseMutationMealOptionsArgs) =>
+                ({ cookId, menuId, courseId } as any),
         },
         CookMenuCourseQuery: {},
         Course: {},

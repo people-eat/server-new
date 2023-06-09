@@ -40,6 +40,10 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
                 const addresses: Address[] | undefined = await service.address.findMany(context, { userId });
                 return addresses?.length ?? 0;
             },
+            emailAddressUpdate: ({ userId }: GQLUser, _input: unknown, context: Authorization.Context) =>
+                service.emailAddressUpdate.findOneByUserId(context, { userId }),
+            phoneNumberUpdate: ({ userId }: GQLUser, _input: unknown, context: Authorization.Context) =>
+                service.phoneNumberUpdate.findOneByUserId(context, { userId }),
         },
         UserMutation: {
             createOneByEmailAddress: async (

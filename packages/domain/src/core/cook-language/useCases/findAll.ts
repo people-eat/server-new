@@ -1,4 +1,4 @@
-import { Authorization, type DataSource, type Language, type Logger } from '../../..';
+import { type Authorization, type DataSource, type Language, type Logger } from '../../..';
 import { type NanoId } from '../../shared';
 
 export interface FindManyCookLanguagesInput {
@@ -10,13 +10,13 @@ export interface FindManyCookLanguagesInput {
 
 export async function findAll({
     dataSourceAdapter,
-    logger,
-    context,
+    // logger,
+    // context,
     request,
 }: FindManyCookLanguagesInput): Promise<Language[] | undefined> {
     const { cookId } = request;
 
-    await Authorization.canQueryUserData({ context, dataSourceAdapter, logger, userId: cookId });
+    // await Authorization.canQueryUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
     const cookLanguages: DataSource.DBCookLanguage[] | undefined = await dataSourceAdapter.cookLanguageRepository.findMany({ cookId });
 

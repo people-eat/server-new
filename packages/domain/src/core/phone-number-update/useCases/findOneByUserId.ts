@@ -8,7 +8,7 @@ interface FindManyPhoneNumberUpdatesInput {
     request: { userId: string };
 }
 
-export async function findOne({
+export async function findOneByUserId({
     dataSourceAdapter,
     logger,
     context,

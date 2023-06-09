@@ -1,3 +1,4 @@
+import { type DBPhoneNumberUpdate } from '../../../data-source/index.js';
 import { Authorization, type DataSource, type Logger, type SMS } from '../../../index.js';
 import { createNanoId } from '../../../utils/createNanoId.js';
 import { type NanoId } from '../../shared.js';
@@ -8,19 +9,23 @@ interface CreateOnePhoneNumberUpdateInput {
     smsAdapter: SMS.Adapter;
     logger: Logger.Adapter;
     webAppUrl: string;
-    context: Authorization.Context & { userCreation?: boolean };
+    context: Authorization.Context;
     request: CreateOnePhoneNumberUpdateRequest;
 }
 
 export async function createOne({
     dataSourceAdapter,
-    smsAdapter,
+    // smsAdapter,
     logger,
-    webAppUrl,
+    // webAppUrl,
     context,
     request: { userId, phoneNumber },
 }: CreateOnePhoneNumberUpdateInput): Promise<boolean> {
-    if (!context.userCreation) await Authorization.canMutateUserData({ dataSourceAdapter, logger, context, userId });
+    await Authorization.canMutateUserData({ dataSourceAdapter, logger, context, userId });
+
+    const phoneNumberUpdate: DBPhoneNumberUpdate | undefined = await dataSourceAdapter.phoneNumberUpdateRepository.findOne({ phoneNumber });
+
+    if (phoneNumberUpdate) return false;
 
     const secret: NanoId = createNanoId();
 
@@ -33,12 +38,12 @@ export async function createOne({
 
     if (!persistingSuccess) return false;
 
-    const smsSendingSuccess: boolean = await smsAdapter.sendToOne(
-        phoneNumber,
-        `Verify your phone number!\nSecret: ${webAppUrl}/phone-number-updates/confirm/${secret}`,
-    );
+    // const smsSendingSuccess: boolean = await smsAdapter.sendToOne(
+    //     phoneNumber,
+    //     `Verify your phone number!\nSecret: ${webAppUrl}/phone-number-updates/confirm/${secret}`,
+    // );
 
-    if (!smsSendingSuccess) return false;
+    // if (!smsSendingSuccess) return false;
 
     return true;
 }

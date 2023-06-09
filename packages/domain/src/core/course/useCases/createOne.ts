@@ -1,5 +1,6 @@
 import { Authorization, type DataSource, type Logger } from '../../..';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type CreateOneMealOptionRequest } from '../../meal-option';
 import { type NanoId } from '../../shared';
 import { type CreateOneCourseRequest } from '../CreateOneCourseRequest';
 
@@ -11,7 +12,7 @@ export interface CreateOneCourseInput {
 }
 
 export async function createOne({ dataSourceAdapter, logger, context, request }: CreateOneCourseInput): Promise<boolean> {
-    const { title, index, cookId, menuId } = request;
+    const { title, index, cookId, menuId, mealOptions } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
@@ -23,6 +24,12 @@ export async function createOne({ dataSourceAdapter, logger, context, request }:
         menuId,
         title: title.trim(),
         index,
+        mealOptions: mealOptions?.map(({ index: mealOptionIndex, mealId }: CreateOneMealOptionRequest) => ({
+            courseId,
+            cookId,
+            index: mealOptionIndex,
+            mealId,
+        })),
     });
 
     return success;

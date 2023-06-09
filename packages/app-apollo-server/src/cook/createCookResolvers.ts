@@ -6,6 +6,7 @@ import {
     type GQLCookMutationBookingRequestsArgs,
     type GQLCookMutationCreateOneArgs,
     type GQLCookMutationMealsArgs,
+    type GQLCookMutationMenusArgs,
     type GQLCookMutationRemoveOneLanguageArgs,
     type GQLCookMutationUpdateBiographyArgs,
     type GQLCookMutationUpdateIsLockedArgs,
@@ -24,6 +25,7 @@ import {
     type GQLCookQueryFindOneArgs,
     type GQLCookQueryGlobalBookingRequestsArgs,
     type GQLCookQueryMealsArgs,
+    type GQLCookQueryMenusArgs,
     type GQLLanguage,
     type GQLMeal,
     type GQLUser,
@@ -43,6 +45,8 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
                 const meals: Meal[] | undefined = await service.meal.findMany(context, { cookId });
                 return meals?.length ?? 0;
             },
+            ratingAverage: () => 15,
+            ratingCount: () => 0,
         },
         CookMutation: {
             createOne: async (

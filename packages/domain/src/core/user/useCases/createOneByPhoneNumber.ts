@@ -53,7 +53,7 @@ export async function createOneByPhoneNumber({
         smsAdapter,
         logger,
         webAppUrl,
-        context: { ...context, userCreation: true },
+        context,
         request: { userId, phoneNumber: phoneNumber.trim() },
     });
 
@@ -62,17 +62,7 @@ export async function createOneByPhoneNumber({
     if (addresses)
         for (const address of addresses) await createOneAddress({ dataSourceAdapter, logger, context, request: { userId, ...address } });
 
-    if (cook) {
-        await createOneCook({
-            dataSourceAdapter,
-            logger,
-            context: { ...context, userCreation: true },
-            request: {
-                cookId: userId,
-                ...cook,
-            },
-        });
-    }
+    if (cook) await createOneCook({ dataSourceAdapter, logger, context, request: { cookId: userId, ...cook } });
 
     return true;
 }

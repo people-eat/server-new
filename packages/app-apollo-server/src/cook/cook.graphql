@@ -24,6 +24,9 @@ type Cook {
 
     bookingRequests: [BookingRequest!]!
 
+    ratingAverage: UInt!
+    ratingCount: UInt!
+
     followers: [Following!]!
     followerCount: UInt!
 }

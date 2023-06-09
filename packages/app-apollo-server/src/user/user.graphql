@@ -51,14 +51,17 @@ type Query {
 }
 
 input CreateOneUserByEmailAddressRequest {
-    emailAddress: EmailAddress!
-    password: String!
+    emailAddress: EmailAddress
+    phoneNumber: PhoneNumber
+    password: String
     firstName: String!
     lastName: String!
     language: UserLanguage!
     gender: Gender!
     birthDate: Date
     profilePictureUrl: Url
+
+    addresses: [CreateOneAddressRequest!]
     cook: CreateOneCookRequest
     globalBookingRequest: CreateOneGlobalBookingRequestRequest
 }

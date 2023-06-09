@@ -161,6 +161,8 @@ export type GQLCook = {
     minimumParticipants?: Maybe<Scalars['UInt']>;
     minimumPrice?: Maybe<Scalars['UInt']>;
     rank: GQLCookRank;
+    ratingAverage: Scalars['UInt'];
+    ratingCount: Scalars['UInt'];
     travelExpenses: Scalars['UInt'];
     user: GQLUser;
 };
@@ -763,6 +765,7 @@ export type GQLCreateOneGlobalBookingRequestRequest = {
     location: GQLLocationInput;
     message: Scalars['String'];
     occasion: Scalars['String'];
+    phoneNumber?: InputMaybe<Scalars['PhoneNumber']>;
     price: GQLPriceInput;
 };
 
@@ -832,15 +835,17 @@ export type GQLCreateOneTermsUpdateRequest = {
 };
 
 export type GQLCreateOneUserByEmailAddressRequest = {
+    addresses?: InputMaybe<Array<GQLCreateOneAddressRequest>>;
     birthDate?: InputMaybe<Scalars['Date']>;
     cook?: InputMaybe<GQLCreateOneCookRequest>;
-    emailAddress: Scalars['EmailAddress'];
+    emailAddress?: InputMaybe<Scalars['EmailAddress']>;
     firstName: Scalars['String'];
     gender: GQLGender;
     globalBookingRequest?: InputMaybe<GQLCreateOneGlobalBookingRequestRequest>;
     language: GQLUserLanguage;
     lastName: Scalars['String'];
-    password: Scalars['String'];
+    password?: InputMaybe<Scalars['String']>;
+    phoneNumber?: InputMaybe<Scalars['PhoneNumber']>;
     profilePictureUrl?: InputMaybe<Scalars['Url']>;
 };
 
@@ -2451,6 +2456,8 @@ export type GQLCookResolvers<ContextType = any, ParentType extends GQLResolversP
     minimumParticipants?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
     minimumPrice?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
     rank?: Resolver<GQLResolversTypes['CookRank'], ParentType, ContextType>;
+    ratingAverage?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    ratingCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     travelExpenses?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     user?: Resolver<GQLResolversTypes['User'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

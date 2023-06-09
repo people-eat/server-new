@@ -28,6 +28,9 @@ input CreateOneGlobalBookingRequestRequest {
     kitchenId: String
     categoryIds: [String!]
     allergyIds: [String!]
+
+    # Todo: remove
+    phoneNumber: PhoneNumber
 }
 
 type UserGlobalBookingRequestQuery {
