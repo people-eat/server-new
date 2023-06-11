@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { FileUpload } from 'graphql-upload-minimal';
 export type Maybe<T> = T | undefined;
 export type InputMaybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -19,6 +20,7 @@ export type Scalars = {
     PhoneNumber: string;
     UInt: number;
     UUID: string;
+    Upload: Promise<FileUpload>;
     Url: string;
 };
 
@@ -100,6 +102,7 @@ export type GQLResolversTypes = {
     String: ResolverTypeWrapper<Scalars['String']>;
     UInt: ResolverTypeWrapper<Scalars['UInt']>;
     UUID: ResolverTypeWrapper<Scalars['UUID']>;
+    Upload: ResolverTypeWrapper<Scalars['Upload']>;
     Url: ResolverTypeWrapper<Scalars['Url']>;
 };
 
@@ -115,6 +118,7 @@ export type GQLResolversParentTypes = {
     String: Scalars['String'];
     UInt: Scalars['UInt'];
     UUID: Scalars['UUID'];
+    Upload: Scalars['Upload'];
     Url: Scalars['Url'];
 };
 
@@ -150,6 +154,10 @@ export interface GQLUuidScalarConfig extends GraphQLScalarTypeConfig<GQLResolver
     name: 'UUID';
 }
 
+export interface GQLUploadScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['Upload'], any> {
+    name: 'Upload';
+}
+
 export interface GQLUrlScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['Url'], any> {
     name: 'Url';
 }
@@ -163,5 +171,6 @@ export type GQLResolvers<ContextType = any> = {
     PhoneNumber?: GraphQLScalarType;
     UInt?: GraphQLScalarType;
     UUID?: GraphQLScalarType;
+    Upload?: GraphQLScalarType;
     Url?: GraphQLScalarType;
 };

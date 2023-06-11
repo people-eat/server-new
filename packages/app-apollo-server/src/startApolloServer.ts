@@ -25,6 +25,7 @@ import {
     URLResolver,
     UUIDResolver,
 } from 'graphql-scalars';
+import { GraphQLUpload, graphqlUploadExpress } from 'graphql-upload-minimal';
 import { type Disposable } from 'graphql-ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { createServer as createHttpServer, type IncomingMessage, type Server as HttpServer } from 'http';
@@ -63,6 +64,7 @@ export async function startApolloServerApp({
         UInt: UnsignedIntResolver,
         UUID: UUIDResolver,
         Url: URLResolver,
+        Upload: GraphQLUpload,
         Query: {},
         Mutation: {},
     };
@@ -144,6 +146,7 @@ export async function startApolloServerApp({
         cors<cors.CorsRequest>({ origin: true, credentials: true }),
         bodyParser.json(),
         cookieParser(),
+        graphqlUploadExpress({ maxFileSize: undefined, maxFiles: 10 }),
         expressMiddleware(server, {
             context: async ({ req, res }: ExpressContextFunctionArgument): Promise<Authorization.Context> => {
                 const sessionId: string | undefined = req.cookies[sessionIdCookie.name];
@@ -163,6 +166,7 @@ export async function startApolloServerApp({
                 });
 
                 return {
+                    ...req,
                     sessionId: result.sessionId,
                     userId: result.userId,
                 };

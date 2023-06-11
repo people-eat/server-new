@@ -7,3 +7,5 @@ scalar PhoneNumber
 scalar UInt
 scalar Url
 scalar UUID
+
+scalar Upload
