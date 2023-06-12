@@ -12,7 +12,7 @@ import { Authorization, type DataSource, type Logger, type Service } from '@peop
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import express, { type Express } from 'express';
+import express, { type Express, type Request, type Response } from 'express';
 import { type GraphQLSchema } from 'graphql';
 import {
     DateResolver,
@@ -29,6 +29,7 @@ import { GraphQLUpload, graphqlUploadExpress } from 'graphql-upload-minimal';
 import { type Disposable } from 'graphql-ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { createServer as createHttpServer, type IncomingMessage, type Server as HttpServer } from 'http';
+import { join } from 'path';
 import { WebSocketServer } from 'ws';
 import { createAddressResolvers } from './address/createAddressResolvers';
 import { createAdminResolvers } from './admin/createAdminResolvers';
@@ -264,6 +265,16 @@ export async function startApolloServerApp({
             },
         }),
     );
+
+    expressApp.get('/profile-pictures/:profilePictureId', function (request: Request, response: Response): void {
+        const { profilePictureId } = request.params;
+        response.sendFile(join(process.cwd(), `images/profile-pictures/${profilePictureId}.png`));
+    });
+
+    expressApp.get('/meal-images/:mealImageId', function (request: Request, response: Response): void {
+        const { mealImageId } = request.params;
+        response.sendFile(join(process.cwd(), `images/meal-images/${mealImageId}.png`));
+    });
 
     httpServer.listen(port, () => undefined);
 
