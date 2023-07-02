@@ -44,9 +44,8 @@ export default function createGenericRepository<Entity extends ObjectLiteral>(
             }
         },
         updateOne: async (criteria: Partial<Entity>, partialEntity: Partial<Entity>): Promise<boolean> => {
-            // Object.entries(partialEntity).forEach(([value, key]: [any, any]) => {
-            //     if (value === null) partialEntity[key] = IsNull();
-            // });
+            for (const key in partialEntity)
+                if (partialEntity[key] === null || partialEntity[key] === undefined) partialEntity[key] = null as any;
 
             try {
                 const result: UpdateResult = await genericRepository.update(criteria, partialEntity);
