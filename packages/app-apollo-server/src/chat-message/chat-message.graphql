@@ -1,0 +1,51 @@
+type ChatMessage {
+    chatMessageId: String!
+    bookingRequestId: String!
+    message: String!
+    createdBy: String!
+    createdAt: DateTime!
+}
+
+type UserBookingRequestChatMessageQuery {
+    userId: String!
+    bookingRequestId: String!
+    findMany(request: FindManyRequest): [ChatMessage!]
+}
+
+type UserBookingRequestQuery {
+    chatMessages(bookingRequestId: String!): UserBookingRequestChatMessageQuery!
+}
+
+type CookBookingRequestChatMessageQuery {
+    cookId: String!
+    bookingRequestId: String!
+    findMany(request: FindManyRequest): [ChatMessage!]
+}
+
+type CookBookingRequestQuery {
+    chatMessages(bookingRequestId: String!): CookBookingRequestChatMessageQuery!
+}
+
+input CreateChatMessageRequest {
+    message: String!
+}
+
+type UserBookingRequestChatMessageMutation {
+    userId: String!
+    bookingRequestId: String!
+    createOne(request: CreateChatMessageRequest!): Boolean!
+}
+
+type UserBookingRequestMutation {
+    chatMessages(bookingRequestId: String!): UserBookingRequestChatMessageMutation!
+}
+
+type CookBookingRequestChatMessageMutation {
+    cookId: String!
+    bookingRequestId: String!
+    createOne(request: CreateChatMessageRequest!): Boolean!
+}
+
+type CookBookingRequestMutation {
+    chatMessages(bookingRequestId: String!): CookBookingRequestChatMessageMutation!
+}

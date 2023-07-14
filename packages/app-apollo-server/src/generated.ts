@@ -139,6 +139,15 @@ export type GQLCategoryQuery = {
     findAll: Array<GQLCategory>;
 };
 
+export type GQLChatMessage = {
+    __typename?: 'ChatMessage';
+    bookingRequestId: Scalars['String'];
+    chatMessageId: Scalars['String'];
+    createdAt: Scalars['DateTime'];
+    createdBy: Scalars['String'];
+    message: Scalars['String'];
+};
+
 export type GQLCook = {
     __typename?: 'Cook';
     biography: Scalars['String'];
@@ -167,9 +176,32 @@ export type GQLCook = {
     user: GQLUser;
 };
 
+export type GQLCookBookingRequestChatMessageMutation = {
+    __typename?: 'CookBookingRequestChatMessageMutation';
+    bookingRequestId: Scalars['String'];
+    cookId: Scalars['String'];
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLCookBookingRequestChatMessageMutationCreateOneArgs = {
+    request: GQLCreateChatMessageRequest;
+};
+
+export type GQLCookBookingRequestChatMessageQuery = {
+    __typename?: 'CookBookingRequestChatMessageQuery';
+    bookingRequestId: Scalars['String'];
+    cookId: Scalars['String'];
+    findMany?: Maybe<Array<GQLChatMessage>>;
+};
+
+export type GQLCookBookingRequestChatMessageQueryFindManyArgs = {
+    request?: InputMaybe<GQLFindManyRequest>;
+};
+
 export type GQLCookBookingRequestMutation = {
     __typename?: 'CookBookingRequestMutation';
     accept: Scalars['Boolean'];
+    chatMessages: GQLCookBookingRequestChatMessageMutation;
     cookId: Scalars['String'];
     createOne: Scalars['Boolean'];
     decline: Scalars['Boolean'];
@@ -177,6 +209,10 @@ export type GQLCookBookingRequestMutation = {
 };
 
 export type GQLCookBookingRequestMutationAcceptArgs = {
+    bookingRequestId: Scalars['String'];
+};
+
+export type GQLCookBookingRequestMutationChatMessagesArgs = {
     bookingRequestId: Scalars['String'];
 };
 
@@ -195,9 +231,14 @@ export type GQLCookBookingRequestMutationUpdatePriceArgs = {
 
 export type GQLCookBookingRequestQuery = {
     __typename?: 'CookBookingRequestQuery';
+    chatMessages: GQLCookBookingRequestChatMessageQuery;
     cookId: Scalars['String'];
     findMany?: Maybe<Array<GQLBookingRequest>>;
     findOne?: Maybe<GQLBookingRequest>;
+};
+
+export type GQLCookBookingRequestQueryChatMessagesArgs = {
+    bookingRequestId: Scalars['String'];
 };
 
 export type GQLCookBookingRequestQueryFindManyArgs = {
@@ -718,6 +759,10 @@ export type GQLCreateBookingRequestRequest = {
     occasion: Scalars['String'];
     preparationTime: Scalars['UInt'];
     price: GQLPriceInput;
+};
+
+export type GQLCreateChatMessageRequest = {
+    message: Scalars['String'];
 };
 
 export type GQLCreateOneAddressRequest = {
@@ -1482,9 +1527,32 @@ export type GQLUserAddressQueryFindManyArgs = {
     request?: InputMaybe<GQLFindManyRequest>;
 };
 
+export type GQLUserBookingRequestChatMessageMutation = {
+    __typename?: 'UserBookingRequestChatMessageMutation';
+    bookingRequestId: Scalars['String'];
+    createOne: Scalars['Boolean'];
+    userId: Scalars['String'];
+};
+
+export type GQLUserBookingRequestChatMessageMutationCreateOneArgs = {
+    request: GQLCreateChatMessageRequest;
+};
+
+export type GQLUserBookingRequestChatMessageQuery = {
+    __typename?: 'UserBookingRequestChatMessageQuery';
+    bookingRequestId: Scalars['String'];
+    findMany?: Maybe<Array<GQLChatMessage>>;
+    userId: Scalars['String'];
+};
+
+export type GQLUserBookingRequestChatMessageQueryFindManyArgs = {
+    request?: InputMaybe<GQLFindManyRequest>;
+};
+
 export type GQLUserBookingRequestMutation = {
     __typename?: 'UserBookingRequestMutation';
     accept: Scalars['Boolean'];
+    chatMessages: GQLUserBookingRequestChatMessageMutation;
     createOne: Scalars['Boolean'];
     decline: Scalars['Boolean'];
     updatePrice: Scalars['Boolean'];
@@ -1492,6 +1560,10 @@ export type GQLUserBookingRequestMutation = {
 };
 
 export type GQLUserBookingRequestMutationAcceptArgs = {
+    bookingRequestId: Scalars['String'];
+};
+
+export type GQLUserBookingRequestMutationChatMessagesArgs = {
     bookingRequestId: Scalars['String'];
 };
 
@@ -1510,9 +1582,14 @@ export type GQLUserBookingRequestMutationUpdatePriceArgs = {
 
 export type GQLUserBookingRequestQuery = {
     __typename?: 'UserBookingRequestQuery';
+    chatMessages: GQLUserBookingRequestChatMessageQuery;
     findMany?: Maybe<Array<GQLBookingRequest>>;
     findOne?: Maybe<GQLBookingRequest>;
     userId: Scalars['String'];
+};
+
+export type GQLUserBookingRequestQueryChatMessagesArgs = {
+    bookingRequestId: Scalars['String'];
 };
 
 export type GQLUserBookingRequestQueryFindManyArgs = {
@@ -2005,7 +2082,10 @@ export type GQLResolversTypes = {
     Category: ResolverTypeWrapper<GQLCategory>;
     CategoryMutation: ResolverTypeWrapper<GQLCategoryMutation>;
     CategoryQuery: ResolverTypeWrapper<GQLCategoryQuery>;
+    ChatMessage: ResolverTypeWrapper<GQLChatMessage>;
     Cook: ResolverTypeWrapper<GQLCook>;
+    CookBookingRequestChatMessageMutation: ResolverTypeWrapper<GQLCookBookingRequestChatMessageMutation>;
+    CookBookingRequestChatMessageQuery: ResolverTypeWrapper<GQLCookBookingRequestChatMessageQuery>;
     CookBookingRequestMutation: ResolverTypeWrapper<GQLCookBookingRequestMutation>;
     CookBookingRequestQuery: ResolverTypeWrapper<GQLCookBookingRequestQuery>;
     CookCookRatingQuery: ResolverTypeWrapper<GQLCookCookRatingQuery>;
@@ -2032,6 +2112,7 @@ export type GQLResolversTypes = {
     CookVisit: ResolverTypeWrapper<GQLCookVisit>;
     Course: ResolverTypeWrapper<GQLCourse>;
     CreateBookingRequestRequest: GQLCreateBookingRequestRequest;
+    CreateChatMessageRequest: GQLCreateChatMessageRequest;
     CreateOneAddressRequest: GQLCreateOneAddressRequest;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
@@ -2122,6 +2203,8 @@ export type GQLResolversTypes = {
     User: ResolverTypeWrapper<GQLUser>;
     UserAddressMutation: ResolverTypeWrapper<GQLUserAddressMutation>;
     UserAddressQuery: ResolverTypeWrapper<GQLUserAddressQuery>;
+    UserBookingRequestChatMessageMutation: ResolverTypeWrapper<GQLUserBookingRequestChatMessageMutation>;
+    UserBookingRequestChatMessageQuery: ResolverTypeWrapper<GQLUserBookingRequestChatMessageQuery>;
     UserBookingRequestMutation: ResolverTypeWrapper<GQLUserBookingRequestMutation>;
     UserBookingRequestQuery: ResolverTypeWrapper<GQLUserBookingRequestQuery>;
     UserCookRatingQuery: ResolverTypeWrapper<GQLUserCookRatingQuery>;
@@ -2163,7 +2246,10 @@ export type GQLResolversParentTypes = {
     Category: GQLCategory;
     CategoryMutation: GQLCategoryMutation;
     CategoryQuery: GQLCategoryQuery;
+    ChatMessage: GQLChatMessage;
     Cook: GQLCook;
+    CookBookingRequestChatMessageMutation: GQLCookBookingRequestChatMessageMutation;
+    CookBookingRequestChatMessageQuery: GQLCookBookingRequestChatMessageQuery;
     CookBookingRequestMutation: GQLCookBookingRequestMutation;
     CookBookingRequestQuery: GQLCookBookingRequestQuery;
     CookCookRatingQuery: GQLCookCookRatingQuery;
@@ -2189,6 +2275,7 @@ export type GQLResolversParentTypes = {
     CookVisit: GQLCookVisit;
     Course: GQLCourse;
     CreateBookingRequestRequest: GQLCreateBookingRequestRequest;
+    CreateChatMessageRequest: GQLCreateChatMessageRequest;
     CreateOneAddressRequest: GQLCreateOneAddressRequest;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
@@ -2273,6 +2360,8 @@ export type GQLResolversParentTypes = {
     User: GQLUser;
     UserAddressMutation: GQLUserAddressMutation;
     UserAddressQuery: GQLUserAddressQuery;
+    UserBookingRequestChatMessageMutation: GQLUserBookingRequestChatMessageMutation;
+    UserBookingRequestChatMessageQuery: GQLUserBookingRequestChatMessageQuery;
     UserBookingRequestMutation: GQLUserBookingRequestMutation;
     UserBookingRequestQuery: GQLUserBookingRequestQuery;
     UserCookRatingQuery: GQLUserCookRatingQuery;
@@ -2435,6 +2524,18 @@ export type GQLCategoryQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLChatMessageResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['ChatMessage'] = GQLResolversParentTypes['ChatMessage'],
+> = {
+    bookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    chatMessageId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    createdBy?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLCookResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Cook'] = GQLResolversParentTypes['Cook']> = {
     biography?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     bookingRequests?: Resolver<Array<GQLResolversTypes['BookingRequest']>, ParentType, ContextType>;
@@ -2463,6 +2564,36 @@ export type GQLCookResolvers<ContextType = any, ParentType extends GQLResolversP
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLCookBookingRequestChatMessageMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CookBookingRequestChatMessageMutation'] = GQLResolversParentTypes['CookBookingRequestChatMessageMutation'],
+> = {
+    bookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    createOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookBookingRequestChatMessageMutationCreateOneArgs, 'request'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCookBookingRequestChatMessageQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CookBookingRequestChatMessageQuery'] = GQLResolversParentTypes['CookBookingRequestChatMessageQuery'],
+> = {
+    bookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    findMany?: Resolver<
+        Maybe<Array<GQLResolversTypes['ChatMessage']>>,
+        ParentType,
+        ContextType,
+        Partial<GQLCookBookingRequestChatMessageQueryFindManyArgs>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLCookBookingRequestMutationResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['CookBookingRequestMutation'] = GQLResolversParentTypes['CookBookingRequestMutation'],
@@ -2472,6 +2603,12 @@ export type GQLCookBookingRequestMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLCookBookingRequestMutationAcceptArgs, 'bookingRequestId'>
+    >;
+    chatMessages?: Resolver<
+        GQLResolversTypes['CookBookingRequestChatMessageMutation'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookBookingRequestMutationChatMessagesArgs, 'bookingRequestId'>
     >;
     cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     createOne?: Resolver<
@@ -2499,6 +2636,12 @@ export type GQLCookBookingRequestQueryResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['CookBookingRequestQuery'] = GQLResolversParentTypes['CookBookingRequestQuery'],
 > = {
+    chatMessages?: Resolver<
+        GQLResolversTypes['CookBookingRequestChatMessageQuery'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookBookingRequestQueryChatMessagesArgs, 'bookingRequestId'>
+    >;
     cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     findMany?: Resolver<
         Maybe<Array<GQLResolversTypes['BookingRequest']>>,
@@ -3756,6 +3899,36 @@ export type GQLUserAddressQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLUserBookingRequestChatMessageMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserBookingRequestChatMessageMutation'] = GQLResolversParentTypes['UserBookingRequestChatMessageMutation'],
+> = {
+    bookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    createOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserBookingRequestChatMessageMutationCreateOneArgs, 'request'>
+    >;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserBookingRequestChatMessageQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserBookingRequestChatMessageQuery'] = GQLResolversParentTypes['UserBookingRequestChatMessageQuery'],
+> = {
+    bookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    findMany?: Resolver<
+        Maybe<Array<GQLResolversTypes['ChatMessage']>>,
+        ParentType,
+        ContextType,
+        Partial<GQLUserBookingRequestChatMessageQueryFindManyArgs>
+    >;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLUserBookingRequestMutationResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['UserBookingRequestMutation'] = GQLResolversParentTypes['UserBookingRequestMutation'],
@@ -3765,6 +3938,12 @@ export type GQLUserBookingRequestMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLUserBookingRequestMutationAcceptArgs, 'bookingRequestId'>
+    >;
+    chatMessages?: Resolver<
+        GQLResolversTypes['UserBookingRequestChatMessageMutation'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserBookingRequestMutationChatMessagesArgs, 'bookingRequestId'>
     >;
     createOne?: Resolver<
         GQLResolversTypes['Boolean'],
@@ -3792,6 +3971,12 @@ export type GQLUserBookingRequestQueryResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['UserBookingRequestQuery'] = GQLResolversParentTypes['UserBookingRequestQuery'],
 > = {
+    chatMessages?: Resolver<
+        GQLResolversTypes['UserBookingRequestChatMessageQuery'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserBookingRequestQueryChatMessagesArgs, 'bookingRequestId'>
+    >;
     findMany?: Resolver<
         Maybe<Array<GQLResolversTypes['BookingRequest']>>,
         ParentType,
@@ -4303,7 +4488,10 @@ export type GQLResolvers<ContextType = any> = {
     Category?: GQLCategoryResolvers<ContextType>;
     CategoryMutation?: GQLCategoryMutationResolvers<ContextType>;
     CategoryQuery?: GQLCategoryQueryResolvers<ContextType>;
+    ChatMessage?: GQLChatMessageResolvers<ContextType>;
     Cook?: GQLCookResolvers<ContextType>;
+    CookBookingRequestChatMessageMutation?: GQLCookBookingRequestChatMessageMutationResolvers<ContextType>;
+    CookBookingRequestChatMessageQuery?: GQLCookBookingRequestChatMessageQueryResolvers<ContextType>;
     CookBookingRequestMutation?: GQLCookBookingRequestMutationResolvers<ContextType>;
     CookBookingRequestQuery?: GQLCookBookingRequestQueryResolvers<ContextType>;
     CookCookRatingQuery?: GQLCookCookRatingQueryResolvers<ContextType>;
@@ -4388,6 +4576,8 @@ export type GQLResolvers<ContextType = any> = {
     User?: GQLUserResolvers<ContextType>;
     UserAddressMutation?: GQLUserAddressMutationResolvers<ContextType>;
     UserAddressQuery?: GQLUserAddressQueryResolvers<ContextType>;
+    UserBookingRequestChatMessageMutation?: GQLUserBookingRequestChatMessageMutationResolvers<ContextType>;
+    UserBookingRequestChatMessageQuery?: GQLUserBookingRequestChatMessageQueryResolvers<ContextType>;
     UserBookingRequestMutation?: GQLUserBookingRequestMutationResolvers<ContextType>;
     UserBookingRequestQuery?: GQLUserBookingRequestQueryResolvers<ContextType>;
     UserCookRatingQuery?: GQLUserCookRatingQueryResolvers<ContextType>;

@@ -3,17 +3,21 @@ import {
     type GQLBookingRequest,
     type GQLCookBookingRequestMutation,
     type GQLCookBookingRequestMutationAcceptArgs,
+    type GQLCookBookingRequestMutationChatMessagesArgs,
     type GQLCookBookingRequestMutationCreateOneArgs,
     type GQLCookBookingRequestMutationDeclineArgs,
     type GQLCookBookingRequestMutationUpdatePriceArgs,
     type GQLCookBookingRequestQuery,
+    type GQLCookBookingRequestQueryChatMessagesArgs,
     type GQLPublicCook,
     type GQLPublicUser,
     type GQLUserBookingRequestMutation,
     type GQLUserBookingRequestMutationAcceptArgs,
+    type GQLUserBookingRequestMutationChatMessagesArgs,
     type GQLUserBookingRequestMutationCreateOneArgs,
     type GQLUserBookingRequestMutationUpdatePriceArgs,
     type GQLUserBookingRequestQuery,
+    type GQLUserBookingRequestQueryChatMessagesArgs,
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
 
@@ -50,6 +54,11 @@ export function createBookingRequestResolvers(
                 { bookingRequestId, price }: GQLUserBookingRequestMutationUpdatePriceArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.bookingRequest.updatePriceByUserId(context, { userId, bookingRequestId, price }),
+
+            chatMessages: (
+                { userId }: GQLUserBookingRequestMutation,
+                { bookingRequestId }: GQLUserBookingRequestMutationChatMessagesArgs,
+            ) => ({ userId, bookingRequestId } as any),
         },
         UserBookingRequestQuery: {
             findMany: async (
@@ -57,6 +66,9 @@ export function createBookingRequestResolvers(
                 _input: unknown,
                 context: Authorization.Context,
             ): Promise<GQLBookingRequest[] | undefined> => service.bookingRequest.findManyByUserId(context, { userId }) as any,
+
+            chatMessages: ({ userId }: GQLUserBookingRequestQuery, { bookingRequestId }: GQLUserBookingRequestQueryChatMessagesArgs) =>
+                ({ userId, bookingRequestId } as any),
         },
         CookBookingRequestMutation: {
             createOne: async (
@@ -79,6 +91,11 @@ export function createBookingRequestResolvers(
                 { bookingRequestId, price }: GQLCookBookingRequestMutationUpdatePriceArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.bookingRequest.updatePriceByCookId(context, { cookId, bookingRequestId, price }),
+
+            chatMessages: (
+                { cookId }: GQLCookBookingRequestMutation,
+                { bookingRequestId }: GQLCookBookingRequestMutationChatMessagesArgs,
+            ) => ({ cookId, bookingRequestId } as any),
         },
         CookBookingRequestQuery: {
             findMany: async (
@@ -86,6 +103,9 @@ export function createBookingRequestResolvers(
                 _input: unknown,
                 context: Authorization.Context,
             ): Promise<GQLBookingRequest[] | undefined> => service.bookingRequest.findManyByCookId(context, { cookId }) as any,
+
+            chatMessages: ({ cookId }: GQLCookBookingRequestQuery, { bookingRequestId }: GQLCookBookingRequestQueryChatMessagesArgs) =>
+                ({ cookId, bookingRequestId } as any),
         },
     };
 }
