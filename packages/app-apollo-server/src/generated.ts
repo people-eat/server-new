@@ -118,10 +118,13 @@ export type GQLBookingRequest = {
     occasion: Scalars['String'];
     preparationTime: Scalars['UInt'];
     price: GQLPrice;
+    status: GQLBookingRequestStatus;
     user: GQLPublicUser;
     userAccepted?: Maybe<Scalars['Boolean']>;
     userId: Scalars['String'];
 };
+
+export type GQLBookingRequestStatus = 'CANCELED' | 'COMPLETED' | 'OPEN' | 'PENDING';
 
 export type GQLCategory = {
     __typename?: 'Category';
@@ -2078,6 +2081,7 @@ export type GQLResolversTypes = {
     AnonymousSession: ResolverTypeWrapper<GQLAnonymousSession>;
     AnonymousUser: ResolverTypeWrapper<GQLAnonymousUser>;
     BookingRequest: ResolverTypeWrapper<GQLBookingRequest>;
+    BookingRequestStatus: GQLBookingRequestStatus;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
     Category: ResolverTypeWrapper<GQLCategory>;
     CategoryMutation: ResolverTypeWrapper<GQLCategoryMutation>;
@@ -2493,6 +2497,7 @@ export type GQLBookingRequestResolvers<
     occasion?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     preparationTime?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     price?: Resolver<GQLResolversTypes['Price'], ParentType, ContextType>;
+    status?: Resolver<GQLResolversTypes['BookingRequestStatus'], ParentType, ContextType>;
     user?: Resolver<GQLResolversTypes['PublicUser'], ParentType, ContextType>;
     userAccepted?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

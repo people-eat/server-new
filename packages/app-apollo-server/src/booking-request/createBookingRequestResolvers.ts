@@ -9,6 +9,7 @@ import {
     type GQLCookBookingRequestMutationUpdatePriceArgs,
     type GQLCookBookingRequestQuery,
     type GQLCookBookingRequestQueryChatMessagesArgs,
+    type GQLCookBookingRequestQueryFindOneArgs,
     type GQLPublicCook,
     type GQLPublicUser,
     type GQLUserBookingRequestMutation,
@@ -18,6 +19,7 @@ import {
     type GQLUserBookingRequestMutationUpdatePriceArgs,
     type GQLUserBookingRequestQuery,
     type GQLUserBookingRequestQueryChatMessagesArgs,
+    type GQLUserBookingRequestQueryFindOneArgs,
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
 
@@ -66,6 +68,12 @@ export function createBookingRequestResolvers(
                 _input: unknown,
                 context: Authorization.Context,
             ): Promise<GQLBookingRequest[] | undefined> => service.bookingRequest.findManyByUserId(context, { userId }) as any,
+            findOne: async (
+                { userId }: GQLUserBookingRequestQuery,
+                { bookingRequestId }: GQLUserBookingRequestQueryFindOneArgs,
+                context: Authorization.Context,
+            ): Promise<GQLBookingRequest | undefined> =>
+                service.bookingRequest.findOneByUserId(context, { userId, bookingRequestId }) as any,
 
             chatMessages: ({ userId }: GQLUserBookingRequestQuery, { bookingRequestId }: GQLUserBookingRequestQueryChatMessagesArgs) =>
                 ({ userId, bookingRequestId } as any),
@@ -103,6 +111,12 @@ export function createBookingRequestResolvers(
                 _input: unknown,
                 context: Authorization.Context,
             ): Promise<GQLBookingRequest[] | undefined> => service.bookingRequest.findManyByCookId(context, { cookId }) as any,
+            findOne: async (
+                { cookId }: GQLCookBookingRequestQuery,
+                { bookingRequestId }: GQLCookBookingRequestQueryFindOneArgs,
+                context: Authorization.Context,
+            ): Promise<GQLBookingRequest | undefined> =>
+                service.bookingRequest.findOneByCookId(context, { cookId, bookingRequestId }) as any,
 
             chatMessages: ({ cookId }: GQLCookBookingRequestQuery, { bookingRequestId }: GQLCookBookingRequestQueryChatMessagesArgs) =>
                 ({ cookId, bookingRequestId } as any),

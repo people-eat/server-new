@@ -1,5 +1,6 @@
 import { Authorization, type DataSource, type Logger } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
+import { createNanoId } from '../../../utils/createNanoId';
 import { type NanoId } from '../../shared';
 
 export interface AcceptOneBookingRequestByUserIdInput {
@@ -32,6 +33,15 @@ export async function acceptOneByUserId({
         { userId, bookingRequestId },
         { userAccepted: true },
     );
+
+    await dataSourceAdapter.chatMessageRepository.insertOne({
+        chatMessageId: createNanoId(),
+        bookingRequestId,
+        message: 'Accepted the Booking Request',
+        generated: true,
+        createdBy: userId,
+        createdAt: new Date(),
+    });
 
     return success;
 }

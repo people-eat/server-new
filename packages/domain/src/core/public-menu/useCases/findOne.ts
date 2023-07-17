@@ -1,4 +1,5 @@
 import { type Authorization, type DataSource, type Logger, type PublicMenu } from '../../..';
+import { type DBUser } from '../../../data-source';
 import packLocation from '../../packLocation';
 import { type NanoId } from '../../shared';
 
@@ -22,9 +23,13 @@ export async function findOne({ dataSourceAdapter, request }: FindOnePublicCookI
 
     if (!cook || cook.isLocked || !cook.isVisible) return;
 
+    const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: menu.cookId });
+
+    if (!user) return;
+
     return {
         ...menu,
-        cook: { ...packLocation(cook) },
+        cook: { ...packLocation(cook), user },
         kitchen: undefined,
         categories: [],
     };

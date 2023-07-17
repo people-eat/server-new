@@ -1,5 +1,6 @@
 import { Shared, type DataSource } from '@people-eat/server-domain';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import { ChatMessageEntity } from './ChatMessageEntity';
 import { CookEntity } from './CookEntity';
 import { KitchenEntity } from './KitchenEntity';
 import { UserEntity } from './UserEntity';
@@ -67,6 +68,9 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
     createdAt!: Date;
 
     /* relations */
+
+    @OneToMany(() => ChatMessageEntity, (chatMessage: ChatMessageEntity) => chatMessage.bookingRequest, { cascade: true })
+    chatMessages?: ChatMessageEntity[];
 
     @ManyToOne(() => UserEntity, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     @JoinColumn({ name: 'userId' })

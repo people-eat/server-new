@@ -4,6 +4,7 @@ export interface ChatMessage {
     chatMessageId: NanoId;
     bookingRequestId: NanoId;
     message: string;
+    generated: boolean;
     createdBy: NanoId;
     createdAt: Date;
 }

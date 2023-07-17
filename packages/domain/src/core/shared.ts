@@ -12,6 +12,8 @@ export type CookRank = 'HOBBY' | 'PROFESSIONAL';
 
 export type MealType = 'SOUP' | 'MEAT' | 'FISH' | 'VEGETARIAN' | 'VEGAN' | 'DESSERT' | 'SPECIAL';
 
+export type BookingRequestStatus = 'OPEN' | 'PENDING' | 'CANCELED' | 'COMPLETED';
+
 export interface Location {
     latitude: number;
     longitude: number;

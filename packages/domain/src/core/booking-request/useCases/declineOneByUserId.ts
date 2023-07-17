@@ -1,5 +1,6 @@
 import { Authorization, type DataSource, type Logger } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
+import { createNanoId } from '../../../utils/createNanoId';
 import { type NanoId } from '../../shared';
 
 export interface FindManyBookingRequestInput {
@@ -27,6 +28,15 @@ export async function declineOneByUserId({ dataSourceAdapter, logger, context, r
         { userId, bookingRequestId },
         { userAccepted: false },
     );
+
+    await dataSourceAdapter.chatMessageRepository.insertOne({
+        chatMessageId: createNanoId(),
+        bookingRequestId,
+        message: 'Declined the Booking Request',
+        generated: true,
+        createdBy: userId,
+        createdAt: new Date(),
+    });
 
     return success;
 }

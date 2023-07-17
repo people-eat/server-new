@@ -75,7 +75,8 @@ export async function createOneByGlobalBookingRequestId({
         chatMessageId: createNanoId(),
         bookingRequestId,
         message,
-        createdBy: cookId,
+        generated: false,
+        createdBy: userId,
         createdAt: new Date(),
     });
 

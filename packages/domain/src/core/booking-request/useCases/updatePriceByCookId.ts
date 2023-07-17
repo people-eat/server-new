@@ -1,5 +1,6 @@
 import { Authorization, type DataSource, type Logger } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
+import { createNanoId } from '../../../utils/createNanoId';
 import { type NanoId, type Price } from '../../shared';
 
 export interface UpdateBookingRequestPriceByCookIdInput {
@@ -32,6 +33,15 @@ export async function updatePriceByCookId({
         { cookId, bookingRequestId },
         { cookAccepted: true, userAccepted: undefined, ...price },
     );
+
+    await dataSourceAdapter.chatMessageRepository.insertOne({
+        chatMessageId: createNanoId(),
+        bookingRequestId,
+        message: `Suggested ${price.amount} ${price.currencyCode} instead of ${bookingRequest.amount} ${bookingRequest.currencyCode}`,
+        generated: true,
+        createdBy: cookId,
+        createdAt: new Date(),
+    });
 
     return success;
 }

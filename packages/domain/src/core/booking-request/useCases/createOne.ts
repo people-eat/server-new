@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Authorization, type DataSource, type Email, type Logger } from '../../..';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type NanoId } from '../../shared';
@@ -35,6 +36,10 @@ export async function createOne({
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
 
+    const daysUntilEventStart: number = moment(dateTime).diff(moment(), 'days');
+
+    if (daysUntilEventStart < 7) return false;
+
     const bookingRequestId: NanoId = createNanoId();
 
     const success: boolean = await dataSourceAdapter.bookingRequestRepository.insertOne({
@@ -64,30 +69,12 @@ export async function createOne({
         chatMessageId: createNanoId(),
         bookingRequestId,
         message: message.trim(),
-        createdBy: cookId,
+        generated: false,
+        createdBy: userId,
         createdAt: new Date(),
     });
 
     if (!messageSuccess) return false;
-
-    // const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
-
-    // if (!user) return false;
-
-    // const formattedDateTime: string = moment(dateTime).format('MMMM Do YYYY, h:mm a');
-
-    // const emailSuccess: boolean = await emailAdapter.sendToMany(
-    //     'Booking Request',
-    //     ['yilmaz.cem.2603@gmail.com', 'contact@people-eat.com'],
-    //     `from ${user.firstName} ${user.lastName}`,
-    //     `A new Booking Request was received from <b>${user.firstName} ${
-    //         user.lastName
-    //     }</b><br/><br/><b>When:</b> ${formattedDateTime}<br/><b>Where:</b> ${'Todo: city name'}<br/><b>Occasion:</b> ${occasion}<br/><br/><b>Adults:</b> ${adultParticipants}<br/><b>Children:</b> ${children}<br/><br/><b>Budget:</b> ${
-    //         price.amount
-    //     } ${price.currencyCode}<br/><br/><b>Message:</b><br/>${message}<br/><br/><br/><b>Contact:</b><br/>Email Address: ${
-    //         user.emailAddress
-    //     }<br/>Phone Number: ${user.phoneNumber}<br/>`,
-    // );
 
     return true;
 }

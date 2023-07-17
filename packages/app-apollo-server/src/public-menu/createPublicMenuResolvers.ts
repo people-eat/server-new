@@ -1,5 +1,6 @@
 import { type Authorization, type Service } from '@people-eat/server-domain';
 import {
+    type GQLCourse,
     type GQLPublicMenu,
     type GQLPublicMenuQuery,
     type GQLPublicMenuQueryFindManyArgs,
@@ -12,6 +13,8 @@ export function createPublicMenuResolvers(service: Service): Resolvers<'PublicMe
         PublicMenu: {
             imageUrls: async ({ menuId }: GQLPublicMenu, _input: unknown, context: Authorization.Context): Promise<string[]> =>
                 service.menu.findImageUrls(context, { menuId }),
+            courses: async ({ menuId }: GQLPublicMenu, _input: unknown, context: Authorization.Context): Promise<GQLCourse[]> =>
+                service.publicMenu.findAllCourses(context, { menuId }) as any,
         },
         PublicMenuQuery: {
             findOne: async (

@@ -1,9 +1,10 @@
-import { type Location, type NanoId, type Price } from '../shared';
+import { type BookingRequestStatus, type Location, type NanoId, type Price } from '../shared';
 
 export interface BookingRequest {
     bookingRequestId: NanoId;
     userId: NanoId;
     cookId: NanoId;
+    status: BookingRequestStatus;
     userAccepted?: boolean;
     cookAccepted?: boolean;
     location: Location;

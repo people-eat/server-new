@@ -34,6 +34,7 @@ export async function createOneByCookId({
         chatMessageId: createNanoId(),
         bookingRequestId,
         message: message.trim(),
+        generated: false,
         createdBy: cookId,
         createdAt: new Date(),
     });

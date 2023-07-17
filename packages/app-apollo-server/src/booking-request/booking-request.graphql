@@ -3,6 +3,7 @@ type BookingRequest {
     globalBookingRequestId: String
     userId: String!
     cookId: String!
+    status: BookingRequestStatus!
     userAccepted: Boolean
     cookAccepted: Boolean
     location: Location!
@@ -20,6 +21,13 @@ type BookingRequest {
     user: PublicUser!
     cook: PublicCook!
     allergies: [Allergy!]!
+}
+
+enum BookingRequestStatus {
+    OPEN
+    PENDING
+    COMPLETED
+    CANCELED
 }
 
 type UserBookingRequestQuery {

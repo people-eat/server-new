@@ -3,6 +3,7 @@ import packLocation from '../../packLocation';
 import packPrice from '../../packPrice';
 import { type NanoId } from '../../shared';
 import { type BookingRequest } from '../BookingRequest';
+import { toBookingRequestStatus } from './toBookingRequestStatus';
 
 export interface FindOneBookingRequestInput {
     dataSourceAdapter: DataSource.Adapter;
@@ -28,5 +29,5 @@ export async function findOneByCookId({
 
     if (!bookingRequest) return;
 
-    return packPrice(packLocation(bookingRequest));
+    return { ...packPrice(packLocation(bookingRequest)), status: toBookingRequestStatus(bookingRequest) };
 }
