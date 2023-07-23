@@ -1,3 +1,4 @@
+import { type CreateOneConfiguredMenuRequest } from '../configured-menu';
 import { type Location, type NanoId, type Price } from '../shared';
 
 export interface CreateOneBookingRequestRequest {
@@ -12,4 +13,5 @@ export interface CreateOneBookingRequestRequest {
     occasion: string;
     message: string;
     kitchenId?: NanoId;
+    configuredMenu?: CreateOneConfiguredMenuRequest;
 }

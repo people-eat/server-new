@@ -5,6 +5,7 @@ import { createAllergyService } from './allergy/createAllergyService';
 import { createBookingRequestService } from './booking-request/createBookingRequestService';
 import { createCategoryService } from './category/createCategoryService';
 import { createChatMessageService } from './chat-message/createChatMessageService';
+import { createConfiguredMenuService } from './configured-menu/createConfiguredMenuService';
 import { createCookLanguageService } from './cook-language/createCookLanguageService';
 import { createCookService } from './cook/createCookService';
 import { createCourseService } from './course/createCourseService';
@@ -72,5 +73,6 @@ export function createService({
         globalBookingRequest: createGlobalBookingRequestService({ dataSourceAdapter, logger, emailAdapter }),
         bookingRequest: createBookingRequestService({ dataSourceAdapter, logger, emailAdapter }),
         chatMessage: createChatMessageService({ dataSourceAdapter, logger }),
+        configuredMenu: createConfiguredMenuService({ dataSourceAdapter, logger }),
     };
 }

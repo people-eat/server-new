@@ -21,6 +21,8 @@ type BookingRequest {
     user: PublicUser!
     cook: PublicCook!
     allergies: [Allergy!]!
+
+    configuredMenu: ConfiguredMenu
 }
 
 enum BookingRequestStatus {
@@ -62,6 +64,7 @@ input CreateBookingRequestRequest {
     message: String!
     kitchenId: String
     occasion: String!
+    configuredMenu: CreateConfiguredMenuRequest
 }
 
 type UserBookingRequestMutation {
@@ -86,4 +89,33 @@ type CookBookingRequestMutation {
 
 type CookMutation {
     bookingRequests(cookId: String!): CookBookingRequestMutation!
+}
+
+type ConfiguredMenu {
+    bookingRequestId: String!
+    menuId: String
+    title: String!
+    description: String!
+    greetingFromKitchen: String
+    kitchenId: String
+    courses: [ConfiguredMenuCourse!]!
+}
+
+type ConfiguredMenuCourse {
+    index: UInt!
+    title: String!
+    mealTitle: String!
+    mealDescription: String!
+    mealImageUrl: String
+    mealType: MealType
+}
+
+input CreateConfiguredMenuRequest {
+    menuId: String!
+    courses: [CreateConfiguredMenuCourseRequest!]!
+}
+
+input CreateConfiguredMenuCourseRequest {
+    courseId: String!
+    mealId: String!
 }

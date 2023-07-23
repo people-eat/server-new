@@ -1,6 +1,9 @@
 import moment from 'moment';
-import { Authorization, type DataSource, type Email, type Logger } from '../../..';
+import { Authorization, type Course, type DataSource, type Email, type Logger, type MealOption, type PublicMenu } from '../../..';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type ConfiguredMenuCourse } from '../../configured-menu';
+import { findAllCourses } from '../../public-menu/useCases/findAllCourses';
+import { findOne as findOnePublicMenu } from '../../public-menu/useCases/findOne';
 import { type NanoId } from '../../shared';
 import { type CreateOneBookingRequestRequest } from '../CreateOneBookingRequestRequest';
 
@@ -12,6 +15,7 @@ export interface CreateOneBookingRequestInput {
     request: CreateOneBookingRequestRequest & { userId: NanoId };
 }
 
+// eslint-disable-next-line max-statements
 export async function createOne({
     dataSourceAdapter,
     // emailAdapter,
@@ -32,6 +36,7 @@ export async function createOne({
         occasion,
         message,
         kitchenId,
+        configuredMenu,
     } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
@@ -76,5 +81,52 @@ export async function createOne({
 
     if (!messageSuccess) return false;
 
-    return true;
+    if (!configuredMenu) return true;
+
+    const publicMenu: PublicMenu | undefined = await findOnePublicMenu({
+        dataSourceAdapter,
+        logger,
+        context,
+        request: { menuId: configuredMenu.menuId },
+    });
+
+    const courses: Course[] | undefined = await findAllCourses({
+        dataSourceAdapter,
+        logger,
+        context,
+        request: { menuId: configuredMenu.menuId },
+    });
+
+    if (!publicMenu || !courses) return false;
+
+    const configuredMenuCourses: ConfiguredMenuCourse[] = [];
+
+    for (const configuredCourse of configuredMenu.courses) {
+        const course: Course | undefined = courses.find((c: Course) => c.courseId === configuredCourse.courseId);
+        if (!course) return false;
+        const selectedMeal: MealOption | undefined = course.mealOptions?.find(
+            (mealOption: MealOption) => mealOption.mealId === configuredCourse.mealId,
+        );
+        if (!selectedMeal) return false;
+        configuredMenuCourses.push({
+            index: course.index,
+            title: course.title,
+            mealTitle: selectedMeal.meal?.title ?? '',
+            mealDescription: selectedMeal.meal?.description ?? '',
+            mealImageUrl: selectedMeal.meal?.imageUrl ?? '',
+            mealType: selectedMeal.meal?.type ?? 'SPECIAL',
+        });
+    }
+
+    const saveConfiguredMenuSuccess: boolean = await dataSourceAdapter.configuredMenuRepository.insertOne({
+        bookingRequestId,
+        menuId: publicMenu.menuId,
+        title: publicMenu.title,
+        description: publicMenu.description,
+        greetingFromKitchen: publicMenu.greetingFromKitchen,
+        kitchenId: publicMenu.kitchen?.kitchenId,
+        courses: configuredMenuCourses,
+    });
+
+    return saveConfiguredMenuSuccess;
 }

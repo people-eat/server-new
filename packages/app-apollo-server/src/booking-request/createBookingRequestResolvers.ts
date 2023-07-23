@@ -1,6 +1,7 @@
 import { type Authorization, type Service } from '@people-eat/server-domain';
 import {
     type GQLBookingRequest,
+    type GQLConfiguredMenu,
     type GQLCookBookingRequestMutation,
     type GQLCookBookingRequestMutationAcceptArgs,
     type GQLCookBookingRequestMutationChatMessagesArgs,
@@ -34,6 +35,11 @@ export function createBookingRequestResolvers(
                 service.publicUser.findOne(context, userId) as any,
             cook: async ({ cookId }: GQLBookingRequest, _input: unknown, context: Authorization.Context): Promise<GQLPublicCook> =>
                 service.publicCook.findOne(context, cookId) as any,
+            configuredMenu: async (
+                { bookingRequestId }: GQLBookingRequest,
+                _input: unknown,
+                context: Authorization.Context,
+            ): Promise<GQLConfiguredMenu | undefined> => service.configuredMenu.findOne(context, { bookingRequestId }),
         },
         UserBookingRequestMutation: {
             createOne: async (

@@ -105,6 +105,7 @@ export type GQLBookingRequest = {
     allergies: Array<GQLAllergy>;
     bookingRequestId: Scalars['String'];
     children: Scalars['UInt'];
+    configuredMenu?: Maybe<GQLConfiguredMenu>;
     cook: GQLPublicCook;
     cookAccepted?: Maybe<Scalars['Boolean']>;
     cookId: Scalars['String'];
@@ -149,6 +150,27 @@ export type GQLChatMessage = {
     createdAt: Scalars['DateTime'];
     createdBy: Scalars['String'];
     message: Scalars['String'];
+};
+
+export type GQLConfiguredMenu = {
+    __typename?: 'ConfiguredMenu';
+    bookingRequestId: Scalars['String'];
+    courses: Array<GQLConfiguredMenuCourse>;
+    description: Scalars['String'];
+    greetingFromKitchen?: Maybe<Scalars['String']>;
+    kitchenId?: Maybe<Scalars['String']>;
+    menuId?: Maybe<Scalars['String']>;
+    title: Scalars['String'];
+};
+
+export type GQLConfiguredMenuCourse = {
+    __typename?: 'ConfiguredMenuCourse';
+    index: Scalars['UInt'];
+    mealDescription: Scalars['String'];
+    mealImageUrl?: Maybe<Scalars['String']>;
+    mealTitle: Scalars['String'];
+    mealType?: Maybe<GQLMealType>;
+    title: Scalars['String'];
 };
 
 export type GQLCook = {
@@ -753,6 +775,7 @@ export type GQLCourse = {
 export type GQLCreateBookingRequestRequest = {
     adultParticipants: Scalars['UInt'];
     children: Scalars['UInt'];
+    configuredMenu?: InputMaybe<GQLCreateConfiguredMenuRequest>;
     cookId: Scalars['String'];
     dateTime: Scalars['DateTime'];
     duration: Scalars['UInt'];
@@ -766,6 +789,16 @@ export type GQLCreateBookingRequestRequest = {
 
 export type GQLCreateChatMessageRequest = {
     message: Scalars['String'];
+};
+
+export type GQLCreateConfiguredMenuCourseRequest = {
+    courseId: Scalars['String'];
+    mealId: Scalars['String'];
+};
+
+export type GQLCreateConfiguredMenuRequest = {
+    courses: Array<GQLCreateConfiguredMenuCourseRequest>;
+    menuId: Scalars['String'];
 };
 
 export type GQLCreateOneAddressRequest = {
@@ -2087,6 +2120,8 @@ export type GQLResolversTypes = {
     CategoryMutation: ResolverTypeWrapper<GQLCategoryMutation>;
     CategoryQuery: ResolverTypeWrapper<GQLCategoryQuery>;
     ChatMessage: ResolverTypeWrapper<GQLChatMessage>;
+    ConfiguredMenu: ResolverTypeWrapper<GQLConfiguredMenu>;
+    ConfiguredMenuCourse: ResolverTypeWrapper<GQLConfiguredMenuCourse>;
     Cook: ResolverTypeWrapper<GQLCook>;
     CookBookingRequestChatMessageMutation: ResolverTypeWrapper<GQLCookBookingRequestChatMessageMutation>;
     CookBookingRequestChatMessageQuery: ResolverTypeWrapper<GQLCookBookingRequestChatMessageQuery>;
@@ -2117,6 +2152,8 @@ export type GQLResolversTypes = {
     Course: ResolverTypeWrapper<GQLCourse>;
     CreateBookingRequestRequest: GQLCreateBookingRequestRequest;
     CreateChatMessageRequest: GQLCreateChatMessageRequest;
+    CreateConfiguredMenuCourseRequest: GQLCreateConfiguredMenuCourseRequest;
+    CreateConfiguredMenuRequest: GQLCreateConfiguredMenuRequest;
     CreateOneAddressRequest: GQLCreateOneAddressRequest;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
@@ -2251,6 +2288,8 @@ export type GQLResolversParentTypes = {
     CategoryMutation: GQLCategoryMutation;
     CategoryQuery: GQLCategoryQuery;
     ChatMessage: GQLChatMessage;
+    ConfiguredMenu: GQLConfiguredMenu;
+    ConfiguredMenuCourse: GQLConfiguredMenuCourse;
     Cook: GQLCook;
     CookBookingRequestChatMessageMutation: GQLCookBookingRequestChatMessageMutation;
     CookBookingRequestChatMessageQuery: GQLCookBookingRequestChatMessageQuery;
@@ -2280,6 +2319,8 @@ export type GQLResolversParentTypes = {
     Course: GQLCourse;
     CreateBookingRequestRequest: GQLCreateBookingRequestRequest;
     CreateChatMessageRequest: GQLCreateChatMessageRequest;
+    CreateConfiguredMenuCourseRequest: GQLCreateConfiguredMenuCourseRequest;
+    CreateConfiguredMenuRequest: GQLCreateConfiguredMenuRequest;
     CreateOneAddressRequest: GQLCreateOneAddressRequest;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
@@ -2484,6 +2525,7 @@ export type GQLBookingRequestResolvers<
     allergies?: Resolver<Array<GQLResolversTypes['Allergy']>, ParentType, ContextType>;
     bookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     children?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    configuredMenu?: Resolver<Maybe<GQLResolversTypes['ConfiguredMenu']>, ParentType, ContextType>;
     cook?: Resolver<GQLResolversTypes['PublicCook'], ParentType, ContextType>;
     cookAccepted?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
     cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2538,6 +2580,33 @@ export type GQLChatMessageResolvers<
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     createdBy?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLConfiguredMenuResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['ConfiguredMenu'] = GQLResolversParentTypes['ConfiguredMenu'],
+> = {
+    bookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    courses?: Resolver<Array<GQLResolversTypes['ConfiguredMenuCourse']>, ParentType, ContextType>;
+    description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    greetingFromKitchen?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    kitchenId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    menuId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLConfiguredMenuCourseResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['ConfiguredMenuCourse'] = GQLResolversParentTypes['ConfiguredMenuCourse'],
+> = {
+    index?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    mealDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    mealImageUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    mealTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    mealType?: Resolver<Maybe<GQLResolversTypes['MealType']>, ParentType, ContextType>;
+    title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4494,6 +4563,8 @@ export type GQLResolvers<ContextType = any> = {
     CategoryMutation?: GQLCategoryMutationResolvers<ContextType>;
     CategoryQuery?: GQLCategoryQueryResolvers<ContextType>;
     ChatMessage?: GQLChatMessageResolvers<ContextType>;
+    ConfiguredMenu?: GQLConfiguredMenuResolvers<ContextType>;
+    ConfiguredMenuCourse?: GQLConfiguredMenuCourseResolvers<ContextType>;
     Cook?: GQLCookResolvers<ContextType>;
     CookBookingRequestChatMessageMutation?: GQLCookBookingRequestChatMessageMutationResolvers<ContextType>;
     CookBookingRequestChatMessageQuery?: GQLCookBookingRequestChatMessageQueryResolvers<ContextType>;

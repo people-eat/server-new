@@ -4,6 +4,7 @@ import { type AllergyService } from './allergy/createAllergyService';
 import { type BookingRequestService } from './booking-request/createBookingRequestService';
 import { type CategoryService } from './category/createCategoryService';
 import { type ChatMessageService } from './chat-message/createChatMessageService';
+import { type ConfiguredMenuService } from './configured-menu/createConfiguredMenuService';
 import { type CookLanguageService } from './cook-language/createCookLanguageService';
 import { type CookService } from './cook/createCookService';
 import { type CourseService } from './course/createCourseService';
@@ -50,4 +51,5 @@ export interface Service {
     globalBookingRequest: GlobalBookingRequestService;
     bookingRequest: BookingRequestService;
     chatMessage: ChatMessageService;
+    configuredMenu: ConfiguredMenuService;
 }
