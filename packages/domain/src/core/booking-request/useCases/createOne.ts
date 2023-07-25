@@ -1,5 +1,14 @@
 import moment from 'moment';
-import { Authorization, type Course, type DataSource, type Email, type Logger, type MealOption, type PublicMenu } from '../../..';
+import {
+    Authorization,
+    type Course,
+    type DataSource,
+    type Email,
+    type Logger,
+    type MealOption,
+    type PaymentProvider,
+    type PublicMenu,
+} from '../../..';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type ConfiguredMenuCourse } from '../../configured-menu';
 import { findAllCourses } from '../../public-menu/useCases/findAllCourses';
@@ -10,6 +19,7 @@ import { type CreateOneBookingRequestRequest } from '../CreateOneBookingRequestR
 export interface CreateOneBookingRequestInput {
     dataSourceAdapter: DataSource.Adapter;
     emailAdapter: Email.Adapter;
+    paymentAdapter: PaymentProvider.Adapter;
     logger: Logger.Adapter;
     context: Authorization.Context;
     request: CreateOneBookingRequestRequest & { userId: NanoId };
@@ -19,10 +29,14 @@ export interface CreateOneBookingRequestInput {
 export async function createOne({
     dataSourceAdapter,
     // emailAdapter,
+    paymentAdapter,
     logger,
     context,
     request,
-}: CreateOneBookingRequestInput): Promise<boolean> {
+}: CreateOneBookingRequestInput): Promise<{
+    success: boolean;
+    clientSecret: string;
+}> {
     const {
         userId,
         cookId,
@@ -43,9 +57,18 @@ export async function createOne({
 
     const daysUntilEventStart: number = moment(dateTime).diff(moment(), 'days');
 
-    if (daysUntilEventStart < 7) return false;
+    if (daysUntilEventStart < 7) return { success: false, clientSecret: '' };
 
     const bookingRequestId: NanoId = createNanoId();
+
+    const paymentResult: { clientSecret: string } | undefined = await paymentAdapter.STRIPE.createPaymentIntent({
+        amount: price.amount,
+        currencyCode: price.currencyCode,
+    });
+
+    if (!paymentResult) return { success: false, clientSecret: '' };
+
+    const { clientSecret } = paymentResult;
 
     const success: boolean = await dataSourceAdapter.bookingRequestRepository.insertOne({
         bookingRequestId,
@@ -68,7 +91,7 @@ export async function createOne({
         createdAt: new Date(),
     });
 
-    if (!success) return false;
+    if (!success) return { success: false, clientSecret };
 
     const messageSuccess: boolean = await dataSourceAdapter.chatMessageRepository.insertOne({
         chatMessageId: createNanoId(),
@@ -79,9 +102,9 @@ export async function createOne({
         createdAt: new Date(),
     });
 
-    if (!messageSuccess) return false;
+    if (!messageSuccess) return { success: false, clientSecret };
 
-    if (!configuredMenu) return true;
+    if (!configuredMenu) return { success: true, clientSecret };
 
     const publicMenu: PublicMenu | undefined = await findOnePublicMenu({
         dataSourceAdapter,
@@ -97,17 +120,17 @@ export async function createOne({
         request: { menuId: configuredMenu.menuId },
     });
 
-    if (!publicMenu || !courses) return false;
+    if (!publicMenu || !courses) return { success: false, clientSecret };
 
     const configuredMenuCourses: ConfiguredMenuCourse[] = [];
 
     for (const configuredCourse of configuredMenu.courses) {
         const course: Course | undefined = courses.find((c: Course) => c.courseId === configuredCourse.courseId);
-        if (!course) return false;
+        if (!course) return { success: false, clientSecret };
         const selectedMeal: MealOption | undefined = course.mealOptions?.find(
             (mealOption: MealOption) => mealOption.mealId === configuredCourse.mealId,
         );
-        if (!selectedMeal) return false;
+        if (!selectedMeal) return { success: false, clientSecret };
         configuredMenuCourses.push({
             index: course.index,
             title: course.title,
@@ -128,5 +151,5 @@ export async function createOne({
         courses: configuredMenuCourses,
     });
 
-    return saveConfiguredMenuSuccess;
+    return { success: saveConfiguredMenuSuccess, clientSecret };
 }

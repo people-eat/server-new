@@ -1,0 +1,70 @@
+{
+    "name": "adapter-payment-stripe",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "packages/adapter-payment-stripe/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/esbuild:esbuild",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "platform": "node",
+                "outputPath": "dist/packages/adapter-payment-stripe",
+                "format": ["cjs"],
+                "bundle": false,
+                "main": "packages/adapter-payment-stripe/src/index.ts",
+                "tsConfig": "packages/adapter-payment-stripe/tsconfig.app.json",
+                "assets": ["packages/adapter-payment-stripe/src/assets"],
+                "generatePackageJson": true,
+                "esbuildOptions": {
+                    "sourcemap": true,
+                    "outExtension": {
+                        ".js": ".js"
+                    }
+                }
+            },
+            "configurations": {
+                "development": {},
+                "production": {
+                    "esbuildOptions": {
+                        "sourcemap": false,
+                        "outExtension": {
+                            ".js": ".js"
+                        }
+                    }
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nrwl/js:node",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "adapter-payment-stripe:build"
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "adapter-payment-stripe:build:development"
+                },
+                "production": {
+                    "buildTarget": "adapter-payment-stripe:build:production"
+                }
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "packages/adapter-payment-stripe/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        }
+    },
+    "tags": []
+}

@@ -69,10 +69,15 @@ input CreateBookingRequestRequest {
 
 type UserBookingRequestMutation {
     userId: String!
-    createOne(request: CreateBookingRequestRequest!): Boolean!
+    createOne(request: CreateBookingRequestRequest!): UserCreateOneBookingRequestResponse!
     accept(bookingRequestId: String!): Boolean!
     decline(bookingRequestId: String!): Boolean!
     updatePrice(bookingRequestId: String!, price: PriceInput!): Boolean!
+}
+
+type UserCreateOneBookingRequestResponse {
+    success: Boolean!
+    clientSecret: String!
 }
 
 type UserMutation {

@@ -1,1 +1,1 @@
-export { Adapter } from './Adapter';
+export { Adapter, CreatePaymentIntentInput } from './Adapter';

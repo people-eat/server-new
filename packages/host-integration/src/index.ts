@@ -52,7 +52,7 @@ async function bootstrap(): Promise<void> {
     };
 
     const paymentAdapter: PaymentProvider.Adapter = {
-        ['STRIPE']: async () => undefined,
+        ['STRIPE']: { createPaymentIntent: async () => undefined },
     };
 
     const service: Service = createService({
@@ -77,6 +77,7 @@ async function bootstrap(): Promise<void> {
             secure: true,
         },
         service,
+        stripePublishableKey: environmentVariables.payment.stripePublishableKey,
     });
 
     logger.log(`🚀 Apollo server started at ${path}`);

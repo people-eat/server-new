@@ -44,6 +44,7 @@ export function createService({
     emailAdapter,
     smsAdapter,
     identityProviderAdapter,
+    paymentAdapter,
     serverUrl,
     webAppUrl,
 }: CreateServiceInput): Service {
@@ -71,7 +72,7 @@ export function createService({
         course: createCourseService({ dataSourceAdapter, logger }),
         mealOption: createMealOptionService({ dataSourceAdapter, logger }),
         globalBookingRequest: createGlobalBookingRequestService({ dataSourceAdapter, logger, emailAdapter }),
-        bookingRequest: createBookingRequestService({ dataSourceAdapter, logger, emailAdapter }),
+        bookingRequest: createBookingRequestService({ dataSourceAdapter, paymentAdapter, logger, emailAdapter }),
         chatMessage: createChatMessageService({ dataSourceAdapter, logger }),
         configuredMenu: createConfiguredMenuService({ dataSourceAdapter, logger }),
     };

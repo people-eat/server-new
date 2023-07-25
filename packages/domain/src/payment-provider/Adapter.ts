@@ -1,3 +1,11 @@
-import { type PaymentProvider } from '../core/shared';
+import { type CurrencyCode, type PaymentProvider } from '../core/shared';
 
-export type Adapter = Record<PaymentProvider, () => Promise<undefined>>;
+export interface CreatePaymentIntentInput {
+    currencyCode: CurrencyCode;
+    amount: number;
+}
+
+export type Adapter = Record<
+    PaymentProvider,
+    { createPaymentIntent: (input: CreatePaymentIntentInput) => Promise<{ clientSecret: string } | undefined> }
+>;

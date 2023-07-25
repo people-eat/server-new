@@ -1,4 +1,4 @@
-import { type Authorization, type DataSource, type Email, type Logger } from '../..';
+import { type Authorization, type DataSource, type Email, type Logger, type PaymentProvider } from '../..';
 import { type FindManyRequest, type NanoId, type Price } from '../shared';
 import { type BookingRequest } from './BookingRequest';
 import { type CreateOneBookingRequestRequest } from './CreateOneBookingRequestRequest';
@@ -30,7 +30,13 @@ export interface BookingRequestService {
     findMany(context: Authorization.Context, request: FindManyRequest): Promise<BookingRequest[] | undefined>;
     findManyByCookId(context: Authorization.Context, request: FindManyRequest & { cookId: NanoId }): Promise<BookingRequest[] | undefined>;
     findManyByUserId(context: Authorization.Context, request: FindManyRequest & { userId: NanoId }): Promise<BookingRequest[] | undefined>;
-    createOne(context: Authorization.Context, request: CreateOneBookingRequestRequest & { userId: NanoId }): Promise<boolean>;
+    createOne(
+        context: Authorization.Context,
+        request: CreateOneBookingRequestRequest & { userId: NanoId },
+    ): Promise<{
+        success: boolean;
+        clientSecret: string;
+    }>;
     createOneByGlobalBookingRequestId(
         context: Authorization.Context,
         request: { cookId: NanoId; globalBookingRequestId: NanoId },
@@ -51,12 +57,14 @@ export interface BookingRequestService {
 
 export interface CreateBookingRequestServiceInput {
     dataSourceAdapter: DataSource.Adapter;
+    paymentAdapter: PaymentProvider.Adapter;
     emailAdapter: Email.Adapter;
     logger: Logger.Adapter;
 }
 
 export function createBookingRequestService({
     dataSourceAdapter,
+    paymentAdapter,
     emailAdapter,
     logger,
 }: CreateBookingRequestServiceInput): BookingRequestService {
@@ -73,7 +81,7 @@ export function createBookingRequestService({
         findManyByUserId: (context: Authorization.Context, request: FindManyRequest & { userId: NanoId }) =>
             findManyByUserId({ dataSourceAdapter, logger, context, request }),
         createOne: (context: Authorization.Context, request: CreateOneBookingRequestRequest & { userId: NanoId }) =>
-            createOne({ dataSourceAdapter, logger, context, request, emailAdapter }),
+            createOne({ dataSourceAdapter, logger, context, request, emailAdapter, paymentAdapter }),
         createOneByGlobalBookingRequestId: (context: Authorization.Context, request: { cookId: NanoId; globalBookingRequestId: NanoId }) =>
             createOneByGlobalBookingRequestId({ dataSourceAdapter, logger, context, request, emailAdapter }),
         acceptOneByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }) =>

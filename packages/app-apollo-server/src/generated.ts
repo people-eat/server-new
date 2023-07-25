@@ -1434,6 +1434,7 @@ export type GQLQuery = {
     publicMenus: GQLPublicMenuQuery;
     publicPrivacyPolicyUpdates: GQLPublicPrivacyPolicyUpdateQuery;
     publicTermsUpdates: GQLPublicTermsUpdateQuery;
+    stripePublishableKey?: Maybe<Scalars['String']>;
     termsUpdates: GQLTermsUpdateQuery;
     users: GQLUserQuery;
 };
@@ -1589,7 +1590,7 @@ export type GQLUserBookingRequestMutation = {
     __typename?: 'UserBookingRequestMutation';
     accept: Scalars['Boolean'];
     chatMessages: GQLUserBookingRequestChatMessageMutation;
-    createOne: Scalars['Boolean'];
+    createOne: GQLUserCreateOneBookingRequestResponse;
     decline: Scalars['Boolean'];
     updatePrice: Scalars['Boolean'];
     userId: Scalars['String'];
@@ -1650,6 +1651,12 @@ export type GQLUserCookVisitQuery = {
 
 export type GQLUserCookVisitQueryFindManyArgs = {
     request?: InputMaybe<GQLFindManyRequest>;
+};
+
+export type GQLUserCreateOneBookingRequestResponse = {
+    __typename?: 'UserCreateOneBookingRequestResponse';
+    clientSecret: Scalars['String'];
+    success: Scalars['Boolean'];
 };
 
 export type GQLUserEmailAddressUpdateMutation = {
@@ -2250,6 +2257,7 @@ export type GQLResolversTypes = {
     UserBookingRequestQuery: ResolverTypeWrapper<GQLUserBookingRequestQuery>;
     UserCookRatingQuery: ResolverTypeWrapper<GQLUserCookRatingQuery>;
     UserCookVisitQuery: ResolverTypeWrapper<GQLUserCookVisitQuery>;
+    UserCreateOneBookingRequestResponse: ResolverTypeWrapper<GQLUserCreateOneBookingRequestResponse>;
     UserEmailAddressUpdateMutation: ResolverTypeWrapper<GQLUserEmailAddressUpdateMutation>;
     UserEmailAddressUpdateQuery: ResolverTypeWrapper<GQLUserEmailAddressUpdateQuery>;
     UserFollowingMutation: ResolverTypeWrapper<GQLUserFollowingMutation>;
@@ -2411,6 +2419,7 @@ export type GQLResolversParentTypes = {
     UserBookingRequestQuery: GQLUserBookingRequestQuery;
     UserCookRatingQuery: GQLUserCookRatingQuery;
     UserCookVisitQuery: GQLUserCookVisitQuery;
+    UserCreateOneBookingRequestResponse: GQLUserCreateOneBookingRequestResponse;
     UserEmailAddressUpdateMutation: GQLUserEmailAddressUpdateMutation;
     UserEmailAddressUpdateQuery: GQLUserEmailAddressUpdateQuery;
     UserFollowingMutation: GQLUserFollowingMutation;
@@ -3804,6 +3813,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     publicMenus?: Resolver<GQLResolversTypes['PublicMenuQuery'], ParentType, ContextType>;
     publicPrivacyPolicyUpdates?: Resolver<GQLResolversTypes['PublicPrivacyPolicyUpdateQuery'], ParentType, ContextType>;
     publicTermsUpdates?: Resolver<GQLResolversTypes['PublicTermsUpdateQuery'], ParentType, ContextType>;
+    stripePublishableKey?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
     termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateQuery'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserQuery'], ParentType, ContextType>;
 };
@@ -4020,7 +4030,7 @@ export type GQLUserBookingRequestMutationResolvers<
         RequireFields<GQLUserBookingRequestMutationChatMessagesArgs, 'bookingRequestId'>
     >;
     createOne?: Resolver<
-        GQLResolversTypes['Boolean'],
+        GQLResolversTypes['UserCreateOneBookingRequestResponse'],
         ParentType,
         ContextType,
         RequireFields<GQLUserBookingRequestMutationCreateOneArgs, 'request'>
@@ -4082,6 +4092,15 @@ export type GQLUserCookVisitQueryResolvers<
 > = {
     findMany?: Resolver<Maybe<Array<GQLResolversTypes['Address']>>, ParentType, ContextType, Partial<GQLUserCookVisitQueryFindManyArgs>>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserCreateOneBookingRequestResponseResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserCreateOneBookingRequestResponse'] = GQLResolversParentTypes['UserCreateOneBookingRequestResponse'],
+> = {
+    clientSecret?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    success?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4658,6 +4677,7 @@ export type GQLResolvers<ContextType = any> = {
     UserBookingRequestQuery?: GQLUserBookingRequestQueryResolvers<ContextType>;
     UserCookRatingQuery?: GQLUserCookRatingQueryResolvers<ContextType>;
     UserCookVisitQuery?: GQLUserCookVisitQueryResolvers<ContextType>;
+    UserCreateOneBookingRequestResponse?: GQLUserCreateOneBookingRequestResponseResolvers<ContextType>;
     UserEmailAddressUpdateMutation?: GQLUserEmailAddressUpdateMutationResolvers<ContextType>;
     UserEmailAddressUpdateQuery?: GQLUserEmailAddressUpdateQueryResolvers<ContextType>;
     UserFollowingMutation?: GQLUserFollowingMutationResolvers<ContextType>;

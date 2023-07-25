@@ -84,3 +84,7 @@ enum MealType {
     DESSERT
     SPECIAL
 }
+
+type Query {
+    stripePublishableKey: String
+}

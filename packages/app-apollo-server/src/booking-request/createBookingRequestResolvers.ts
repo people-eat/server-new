@@ -46,7 +46,10 @@ export function createBookingRequestResolvers(
                 { userId }: GQLUserBookingRequestMutation,
                 { request }: GQLUserBookingRequestMutationCreateOneArgs,
                 context: Authorization.Context,
-            ): Promise<boolean> => service.bookingRequest.createOne(context, { userId, ...request }),
+            ): Promise<{
+                success: boolean;
+                clientSecret: string;
+            }> => service.bookingRequest.createOne(context, { userId, ...request }),
             accept: async (
                 { userId }: GQLUserBookingRequestMutation,
                 { bookingRequestId }: GQLUserBookingRequestMutationAcceptArgs,

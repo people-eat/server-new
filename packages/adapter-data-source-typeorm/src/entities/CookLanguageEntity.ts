@@ -13,11 +13,11 @@ export class CookLanguageEntity implements DataSource.DBCookLanguage {
 
     /* relations */
 
-    @ManyToOne(() => CookEntity, (cook: CookEntity) => cook.cookLanguages)
+    @ManyToOne(() => CookEntity, (cook: CookEntity) => cook.cookLanguages, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     @JoinColumn({ name: 'cookId' })
     cook?: CookEntity;
 
-    @ManyToOne(() => LanguageEntity, (language: LanguageEntity) => language.cookLanguages)
+    @ManyToOne(() => LanguageEntity, (language: LanguageEntity) => language.cookLanguages, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     @JoinColumn({ name: 'languageId' })
     language?: LanguageEntity;
 }

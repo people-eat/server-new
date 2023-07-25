@@ -76,6 +76,7 @@ export interface StartApolloServerAppOptions {
     mockSchema: boolean;
     port: number;
     sessionIdCookie: { name: string; domainScope: string; secure: boolean };
+    stripePublishableKey: string;
 }
 
 export interface StartApolloServerAppResult {
@@ -90,6 +91,7 @@ export async function startApolloServerApp({
     port,
     sessionIdCookie,
     service,
+    stripePublishableKey,
 }: StartApolloServerAppOptions): Promise<StartApolloServerAppResult> {
     const typeDefs: string[] = loadFilesSync('./**/*.graphql');
 
@@ -115,6 +117,7 @@ export async function startApolloServerApp({
             publicMenus: () => ({} as any),
             publicTermsUpdates: () => ({} as any),
             publicPrivacyPolicyUpdates: () => ({} as any),
+            stripePublishableKey: () => stripePublishableKey,
         },
         Mutation: {
             languages: () => ({} as any),

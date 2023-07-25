@@ -16,14 +16,14 @@ export class MenuCategoryEntity implements DataSource.DBMenuCategory {
 
     /* relations */
 
-    @ManyToOne(() => MenuEntity, (menu: MenuEntity) => menu.menuCategories)
+    @ManyToOne(() => MenuEntity, (menu: MenuEntity) => menu.menuCategories, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     @JoinColumn([
         { name: 'menuId', referencedColumnName: 'menuId' },
         { name: 'cookId', referencedColumnName: 'cookId' },
     ])
     menu?: MenuEntity;
 
-    @ManyToOne(() => CategoryEntity, (category: CategoryEntity) => category.menuCategories)
+    @ManyToOne(() => CategoryEntity, (category: CategoryEntity) => category.menuCategories, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     @JoinColumn({ name: 'categoryId' })
     category?: CategoryEntity;
 }
