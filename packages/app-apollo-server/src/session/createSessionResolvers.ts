@@ -1,18 +1,25 @@
 import { type Authorization, type Service } from '@people-eat/server-domain';
 import {
+    type GQLSession,
     type GQLSessionMutation,
     type GQLSessionMutationAssignOneByEmailAddressArgs,
     type GQLSessionMutationAssignOneByIdentityProviderArgs,
     type GQLSessionMutationAssignOneByPhoneNumberArgs,
+    type GQLSessionMutationUpdateCookieSettingsArgs,
+    type GQLSessionQuery,
     type GQLUserSessionMutation,
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
 
 export function createSessionResolvers(
     service: Service,
-): Resolvers<'Session' | 'SessionMutation' | 'UserSessionQuery' | 'UserSessionMutation'> {
+): Resolvers<'Session' | 'SessionQuery' | 'SessionMutation' | 'UserSessionQuery' | 'UserSessionMutation'> {
     return {
         Session: {},
+        SessionQuery: {
+            current: async (_parent: GQLSessionQuery, _input: unknown, context: Authorization.Context): Promise<GQLSession | undefined> =>
+                service.session.findCurrent(context),
+        },
         SessionMutation: {
             assignOneByEmailAddress: async (
                 _parent: GQLSessionMutation,
@@ -31,6 +38,12 @@ export function createSessionResolvers(
                 { request }: GQLSessionMutationAssignOneByIdentityProviderArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.session.assignOneByIdentityProvider(context, request),
+
+            updateCookieSettings: async (
+                _parent: GQLSessionMutation,
+                { request }: GQLSessionMutationUpdateCookieSettingsArgs,
+                context: Authorization.Context,
+            ): Promise<boolean> => service.session.updateCookieSettings(context, request),
         },
         UserSessionMutation: {
             expireCurrent: async ({ userId }: GQLUserSessionMutation, _: unknown, context: Authorization.Context): Promise<boolean> =>

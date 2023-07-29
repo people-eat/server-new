@@ -112,6 +112,7 @@ export async function startApolloServerApp({
             kitchens: () => ({} as any),
             allergies: () => ({} as any),
             users: () => ({} as any),
+            sessions: () => ({} as any),
             cooks: () => ({} as any),
             publicCooks: () => ({} as any),
             publicMenus: () => ({} as any),

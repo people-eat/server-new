@@ -28,6 +28,12 @@ export class SessionEntity implements DataSource.DBSession {
     @Column('datetime')
     createdAt!: Date;
 
+    @Column('json', { nullable: true })
+    cookieSettings?: {
+        sessionCookie?: boolean;
+        googleAnalytics?: boolean;
+    };
+
     /* relations */
 
     @ManyToOne(() => UserEntity, (user: UserEntity) => user.sessions, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })

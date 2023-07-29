@@ -1434,6 +1434,7 @@ export type GQLQuery = {
     publicMenus: GQLPublicMenuQuery;
     publicPrivacyPolicyUpdates: GQLPublicPrivacyPolicyUpdateQuery;
     publicTermsUpdates: GQLPublicTermsUpdateQuery;
+    sessions: GQLSessionQuery;
     stripePublishableKey?: Maybe<Scalars['String']>;
     termsUpdates: GQLTermsUpdateQuery;
     users: GQLUserQuery;
@@ -1441,6 +1442,7 @@ export type GQLQuery = {
 
 export type GQLSession = {
     __typename?: 'Session';
+    cookieSettings?: Maybe<GQLSessionCookieSettings>;
     createdAt: Scalars['DateTime'];
     expired: Scalars['Boolean'];
     lastExtendedAt: Scalars['DateTime'];
@@ -1450,11 +1452,23 @@ export type GQLSession = {
     userId?: Maybe<Scalars['String']>;
 };
 
+export type GQLSessionCookieSettings = {
+    __typename?: 'SessionCookieSettings';
+    googleAnalytics?: Maybe<Scalars['Boolean']>;
+    sessionCookie?: Maybe<Scalars['Boolean']>;
+};
+
+export type GQLSessionCookieSettingsInput = {
+    googleAnalytics?: InputMaybe<Scalars['Boolean']>;
+    sessionCookie?: InputMaybe<Scalars['Boolean']>;
+};
+
 export type GQLSessionMutation = {
     __typename?: 'SessionMutation';
     assignOneByEmailAddress: Scalars['Boolean'];
     assignOneByIdentityProvider: Scalars['Boolean'];
     assignOneByPhoneNumber: Scalars['Boolean'];
+    updateCookieSettings: Scalars['Boolean'];
 };
 
 export type GQLSessionMutationAssignOneByEmailAddressArgs = {
@@ -1467,6 +1481,15 @@ export type GQLSessionMutationAssignOneByIdentityProviderArgs = {
 
 export type GQLSessionMutationAssignOneByPhoneNumberArgs = {
     request: GQLCreateOneSessionByPhoneNumberRequest;
+};
+
+export type GQLSessionMutationUpdateCookieSettingsArgs = {
+    request: GQLSessionCookieSettingsInput;
+};
+
+export type GQLSessionQuery = {
+    __typename?: 'SessionQuery';
+    current?: Maybe<GQLSession>;
 };
 
 export type GQLTermsUpdate = {
@@ -2239,7 +2262,10 @@ export type GQLResolversTypes = {
     PublicUser: ResolverTypeWrapper<GQLPublicUser>;
     Query: ResolverTypeWrapper<{}>;
     Session: ResolverTypeWrapper<GQLSession>;
+    SessionCookieSettings: ResolverTypeWrapper<GQLSessionCookieSettings>;
+    SessionCookieSettingsInput: GQLSessionCookieSettingsInput;
     SessionMutation: ResolverTypeWrapper<GQLSessionMutation>;
+    SessionQuery: ResolverTypeWrapper<GQLSessionQuery>;
     String: ResolverTypeWrapper<Scalars['String']>;
     TermsUpdate: ResolverTypeWrapper<GQLTermsUpdate>;
     TermsUpdateMutation: ResolverTypeWrapper<GQLTermsUpdateMutation>;
@@ -2401,7 +2427,10 @@ export type GQLResolversParentTypes = {
     PublicUser: GQLPublicUser;
     Query: {};
     Session: GQLSession;
+    SessionCookieSettings: GQLSessionCookieSettings;
+    SessionCookieSettingsInput: GQLSessionCookieSettingsInput;
     SessionMutation: GQLSessionMutation;
+    SessionQuery: GQLSessionQuery;
     String: Scalars['String'];
     TermsUpdate: GQLTermsUpdate;
     TermsUpdateMutation: GQLTermsUpdateMutation;
@@ -3813,6 +3842,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     publicMenus?: Resolver<GQLResolversTypes['PublicMenuQuery'], ParentType, ContextType>;
     publicPrivacyPolicyUpdates?: Resolver<GQLResolversTypes['PublicPrivacyPolicyUpdateQuery'], ParentType, ContextType>;
     publicTermsUpdates?: Resolver<GQLResolversTypes['PublicTermsUpdateQuery'], ParentType, ContextType>;
+    sessions?: Resolver<GQLResolversTypes['SessionQuery'], ParentType, ContextType>;
     stripePublishableKey?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
     termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateQuery'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserQuery'], ParentType, ContextType>;
@@ -3822,6 +3852,7 @@ export type GQLSessionResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['Session'] = GQLResolversParentTypes['Session'],
 > = {
+    cookieSettings?: Resolver<Maybe<GQLResolversTypes['SessionCookieSettings']>, ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     expired?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     lastExtendedAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
@@ -3829,6 +3860,15 @@ export type GQLSessionResolvers<
     sessionId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     title?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
     userId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLSessionCookieSettingsResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['SessionCookieSettings'] = GQLResolversParentTypes['SessionCookieSettings'],
+> = {
+    googleAnalytics?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
+    sessionCookie?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3854,6 +3894,20 @@ export type GQLSessionMutationResolvers<
         ContextType,
         RequireFields<GQLSessionMutationAssignOneByPhoneNumberArgs, 'request'>
     >;
+    updateCookieSettings?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLSessionMutationUpdateCookieSettingsArgs, 'request'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLSessionQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['SessionQuery'] = GQLResolversParentTypes['SessionQuery'],
+> = {
+    current?: Resolver<Maybe<GQLResolversTypes['Session']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4660,7 +4714,9 @@ export type GQLResolvers<ContextType = any> = {
     PublicUser?: GQLPublicUserResolvers<ContextType>;
     Query?: GQLQueryResolvers<ContextType>;
     Session?: GQLSessionResolvers<ContextType>;
+    SessionCookieSettings?: GQLSessionCookieSettingsResolvers<ContextType>;
     SessionMutation?: GQLSessionMutationResolvers<ContextType>;
+    SessionQuery?: GQLSessionQueryResolvers<ContextType>;
     TermsUpdate?: GQLTermsUpdateResolvers<ContextType>;
     TermsUpdateMutation?: GQLTermsUpdateMutationResolvers<ContextType>;
     TermsUpdateQuery?: GQLTermsUpdateQueryResolvers<ContextType>;

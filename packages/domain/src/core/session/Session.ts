@@ -8,4 +8,9 @@ export interface Session {
     expired: boolean;
     lastExtendedAt: Date;
     createdAt: Date;
+
+    cookieSettings?: {
+        sessionCookie?: boolean;
+        googleAnalytics?: boolean;
+    };
 }

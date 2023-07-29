@@ -17,6 +17,7 @@ export default async function createOneSession({ dataSourceAdapter }: CreateOneS
         sessionId: sessionId,
         title: undefined,
         userId: undefined,
+        cookieSettings: undefined,
     });
 
     return success ? sessionId : undefined;

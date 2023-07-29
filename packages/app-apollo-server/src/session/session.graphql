@@ -6,6 +6,18 @@ type Session {
     expired: Boolean!
     lastExtendedAt: DateTime!
     createdAt: DateTime!
+
+    cookieSettings: SessionCookieSettings
+}
+
+type SessionCookieSettings {
+    sessionCookie: Boolean
+    googleAnalytics: Boolean
+}
+
+input SessionCookieSettingsInput {
+    sessionCookie: Boolean
+    googleAnalytics: Boolean
 }
 
 type UserSessionQuery {
@@ -60,8 +72,18 @@ type SessionMutation {
     assignOneByEmailAddress(request: CreateOneSessionByEmailAddressRequest!): Boolean!
     assignOneByPhoneNumber(request: CreateOneSessionByPhoneNumberRequest!): Boolean!
     assignOneByIdentityProvider(request: CreateOneSessionByIdentityProviderRequest!): Boolean!
+
+    updateCookieSettings(request: SessionCookieSettingsInput!): Boolean!
 }
 
 type Mutation {
     sessions: SessionMutation!
+}
+
+type SessionQuery {
+    current: Session
+}
+
+type Query {
+    sessions: SessionQuery!
 }
