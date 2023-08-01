@@ -1,4 +1,4 @@
-import { type BookingRequestStatus, type Location, type NanoId, type Price } from '../shared';
+import { type BookingRequestStatus, type Location, type NanoId, type PaymentProvider, type Price } from '../shared';
 
 export interface BookingRequest {
     bookingRequestId: NanoId;
@@ -19,4 +19,10 @@ export interface BookingRequest {
     kitchenId?: NanoId;
     globalBookingRequestId?: NanoId;
     createdAt: Date;
+
+    paymentData: {
+        provider: PaymentProvider;
+        setupIntentId: string;
+        clientSecret: string;
+    };
 }

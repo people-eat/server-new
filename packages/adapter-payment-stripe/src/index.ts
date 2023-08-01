@@ -1,5 +1,6 @@
 import { type Logger, type PaymentProvider } from '@people-eat/server-domain';
 import { Stripe } from 'stripe';
+import { type CreatePaymentIntentInput } from '../../domain/src/payment-provider';
 
 export interface CreatePaymentAdapterInput {
     logger: Logger.Adapter;
@@ -11,80 +12,52 @@ export function createPaymentAdapter({ logger, stripeSecretKey }: CreatePaymentA
 
     return {
         STRIPE: {
-            createPaymentIntent: async ({
-                currencyCode,
-                amount,
-            }: PaymentProvider.CreatePaymentIntentInput): Promise<{ clientSecret: string } | undefined> => {
+            createSetupIntent: async (): Promise<{ setupIntentId: string; clientSecret: string } | undefined> => {
                 try {
-                    const session: Stripe.Checkout.Session = await client.checkout.sessions.create({
-                        // customer: 'Max Mustermann',
-                        // customer_email: 'max.mustermann@gmail.com',
-                        customer_creation: 'if_required',
-                        currency: 'eur',
-                        mode: 'setup',
-                        setup_intent_data: {},
-                        payment_method_types: ['card', 'paypal'],
-
-                        // line_items: [
-                        //     {
-                        //         price_data: {
-                        //             currency: 'eur',
-                        //             product_data: {
-                        //                 name: 'Menü Kosten',
-                        //             },
-                        //             unit_amount: amount,
-                        //         },
-                        //         quantity: 1,
-                        //     },
-                        //     {
-                        //         price_data: {
-                        //             currency: 'eur',
-                        //             product_data: {
-                        //                 name: 'Reisekosten',
-                        //             },
-                        //             unit_amount: amount,
-                        //         },
-                        //         quantity: 1,
-                        //     },
-                        //     {
-                        //         price_data: {
-                        //             currency: 'eur',
-                        //             product_data: {
-                        //                 name: 'Service Fee',
-                        //                 images: [
-                        //                     'https://www.daskochrezept.de/sites/daskochrezept.de/files/styles/full_width_tablet_4_3/public/2021-11/2021_steak-braten_aufmacher.jpg?h=5c915fe1&itok=LiuV_ZWZ',
-                        //                 ],
-                        //             },
-                        //             unit_amount: amount,
-                        //         },
-                        //         quantity: 1,
-                        //     },
-                        // ],
-                        success_url: 'http://localhost:4242/success',
-                        cancel_url: 'http://localhost:3000',
-                    });
-
-                    console.log(session);
-
-                    const paymentIntent: Stripe.PaymentIntent = await client.paymentIntents.create({
-                        // instead provide a map
-                        currency: currencyCode === 'EUR' ? 'eur' : 'eur',
-                        amount,
+                    const setupIntent: Stripe.SetupIntent = await client.setupIntents.create({
+                        usage: 'off_session',
                         automatic_payment_methods: { enabled: true },
-                        // payment_method_types: ['card', 'paypal'],
                     });
 
-                    // contains client secret
-                    console.log({ paymentIntent });
-
-                    if (!paymentIntent.client_secret) return undefined;
+                    if (!setupIntent.client_secret) return undefined;
 
                     return {
-                        clientSecret: paymentIntent.client_secret,
+                        setupIntentId: setupIntent.id,
+                        clientSecret: setupIntent.client_secret,
                     };
                 } catch (error) {
                     logger.error(error);
                     return undefined;
+                }
+            },
+            createPaymentIntent: async ({ setupIntentId, amount }: CreatePaymentIntentInput): Promise<boolean> => {
+                try {
+                    const setupIntent: Stripe.SetupIntent = await client.setupIntents.retrieve(setupIntentId);
+                    console.log({ setupIntent });
+
+                    const paymentMethodId: string | null | Stripe.PaymentMethod = setupIntent.payment_method;
+
+                    if (typeof paymentMethodId !== 'string') return false;
+
+                    const customer: Stripe.Customer = await client.customers.create({});
+                    console.log({ customer });
+
+                    await client.paymentMethods.attach(paymentMethodId, { customer: customer.id });
+
+                    const paymentIntent: Stripe.PaymentIntent = await client.paymentIntents.create({
+                        customer: customer.id,
+                        payment_method: paymentMethodId,
+                        amount,
+                        currency: 'eur',
+                        confirm: true,
+                    });
+
+                    console.log({ paymentIntent });
+
+                    return true;
+                } catch (error) {
+                    logger.error(error);
+                    return false;
                 }
             },
         },

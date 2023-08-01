@@ -1,4 +1,4 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization, type DataSource, type Logger, type PaymentProvider } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type NanoId } from '../../shared';
@@ -6,12 +6,33 @@ import { type NanoId } from '../../shared';
 export interface AcceptOneBookingRequestByCookIdInput {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
+    paymentAdapter: PaymentProvider.Adapter;
     context: Authorization.Context;
     request: { cookId: NanoId; bookingRequestId: NanoId };
 }
 
+// probably does not belong in this file
+export function calculateMenuPrice(
+    adultParticipants: number,
+    underagedParticipants: number,
+    basePrice: number,
+    basePriceCustomers: number,
+    pricePerAdult: number,
+    pricePerUnderaged?: number,
+): number {
+    if (adultParticipants + underagedParticipants <= basePriceCustomers) return basePrice;
+
+    if (!pricePerUnderaged) return basePrice + (adultParticipants + underagedParticipants - basePriceCustomers) * pricePerAdult;
+
+    if (adultParticipants - basePriceCustomers >= 0)
+        return basePrice + (adultParticipants - basePriceCustomers) * pricePerAdult + underagedParticipants * pricePerUnderaged;
+
+    return (underagedParticipants - basePriceCustomers - adultParticipants) * pricePerUnderaged + basePrice;
+}
+
 export async function acceptOneByCookId({
     dataSourceAdapter,
+    paymentAdapter,
     logger,
     context,
     request,
@@ -33,6 +54,17 @@ export async function acceptOneByCookId({
         { cookId, bookingRequestId },
         { cookAccepted: true },
     );
+
+    // const configuredMenu: ConfiguredMenu | undefined = await dataSourceAdapter.configuredMenuRepository.findOne({ bookingRequestId });
+
+    const paymentSuccess: boolean = await paymentAdapter.STRIPE.createPaymentIntent({
+        currencyCode: bookingRequest.currencyCode,
+        amount: bookingRequest.amount,
+        userId: bookingRequest.userId,
+        setupIntentId: bookingRequest.paymentData.setupIntentId,
+    });
+
+    if (!paymentSuccess) return false;
 
     await dataSourceAdapter.chatMessageRepository.insertOne({
         chatMessageId: createNanoId(),

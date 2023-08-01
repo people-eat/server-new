@@ -67,6 +67,13 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
     @Column('datetime')
     createdAt!: Date;
 
+    @Column('json')
+    paymentData!: {
+        provider: Shared.PaymentProvider;
+        setupIntentId: string;
+        clientSecret: string;
+    };
+
     /* relations */
 
     @OneToMany(() => ChatMessageEntity, (chatMessage: ChatMessageEntity) => chatMessage.bookingRequest, { cascade: true })

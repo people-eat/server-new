@@ -61,14 +61,11 @@ export async function createOne({
 
     const bookingRequestId: NanoId = createNanoId();
 
-    const paymentResult: { clientSecret: string } | undefined = await paymentAdapter.STRIPE.createPaymentIntent({
-        amount: price.amount,
-        currencyCode: price.currencyCode,
-    });
+    const paymentData: { setupIntentId: string; clientSecret: string } | undefined = await paymentAdapter.STRIPE.createSetupIntent();
 
-    if (!paymentResult) return { success: false, clientSecret: '' };
+    if (!paymentData) return { success: false, clientSecret: '' };
 
-    const { clientSecret } = paymentResult;
+    const { clientSecret } = paymentData;
 
     const success: boolean = await dataSourceAdapter.bookingRequestRepository.insertOne({
         bookingRequestId,
@@ -89,6 +86,7 @@ export async function createOne({
         occasion: occasion.trim(),
         kitchenId,
         createdAt: new Date(),
+        paymentData: { ...paymentData, provider: 'STRIPE' },
     });
 
     if (!success) return { success: false, clientSecret };

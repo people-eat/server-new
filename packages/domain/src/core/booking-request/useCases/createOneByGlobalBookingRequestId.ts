@@ -67,6 +67,11 @@ export async function createOneByGlobalBookingRequestId({
         kitchenId,
         globalBookingRequestId,
         createdAt: new Date(),
+        paymentData: {
+            provider: 'STRIPE',
+            setupIntentId: '',
+            clientSecret: '',
+        },
     });
 
     if (!success) return false;
