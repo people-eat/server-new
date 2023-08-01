@@ -63,7 +63,7 @@ export async function createOne({
 
     const paymentData: { setupIntentId: string; clientSecret: string } | undefined = await paymentAdapter.STRIPE.createSetupIntent();
 
-    if (!paymentData) return { success: false, clientSecret: '' };
+    if (!paymentData) return { success: false, clientSecret: JSON.stringify(paymentData) };
 
     const { clientSecret } = paymentData;
 
