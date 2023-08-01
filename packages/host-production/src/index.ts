@@ -52,7 +52,7 @@ async function bootstrap(): Promise<void> {
     };
 
     const paymentAdapter: PaymentProvider.Adapter = {
-        ['STRIPE']: { createPaymentIntent: async () => undefined },
+        ['STRIPE']: { createPaymentIntent: async () => false, createSetupIntent: async () => undefined },
     };
 
     const service: Service = createService({
