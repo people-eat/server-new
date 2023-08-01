@@ -27,6 +27,7 @@ export function createPaymentAdapter({ logger, stripeSecretKey }: CreatePaymentA
                     };
                 } catch (error) {
                     logger.error(error);
+                    throw error;
                     return undefined;
                 }
             },
