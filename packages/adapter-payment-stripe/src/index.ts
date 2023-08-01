@@ -27,21 +27,18 @@ export function createPaymentAdapter({ logger, stripeSecretKey }: CreatePaymentA
                     };
                 } catch (error) {
                     logger.error(error);
-                    throw error;
                     return undefined;
                 }
             },
             createPaymentIntent: async ({ setupIntentId, amount }: CreatePaymentIntentInput): Promise<boolean> => {
                 try {
                     const setupIntent: Stripe.SetupIntent = await client.setupIntents.retrieve(setupIntentId);
-                    console.log({ setupIntent });
 
                     const paymentMethodId: string | null | Stripe.PaymentMethod = setupIntent.payment_method;
 
                     if (typeof paymentMethodId !== 'string') return false;
 
                     const customer: Stripe.Customer = await client.customers.create({});
-                    console.log({ customer });
 
                     await client.paymentMethods.attach(paymentMethodId, { customer: customer.id });
 
@@ -53,9 +50,7 @@ export function createPaymentAdapter({ logger, stripeSecretKey }: CreatePaymentA
                         confirm: true,
                     });
 
-                    console.log({ paymentIntent });
-
-                    return true;
+                    return paymentIntent.status === 'succeeded';
                 } catch (error) {
                     logger.error(error);
                     return false;

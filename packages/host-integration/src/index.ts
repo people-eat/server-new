@@ -1,6 +1,7 @@
 import { createDataSourceAdapter } from '@people-eat/server-adapter-data-source-typeorm';
 import { createEmailAdapter } from '@people-eat/server-adapter-email-nodemailer';
 import { createLogger } from '@people-eat/server-adapter-logger';
+import { createPaymentAdapter } from '@people-eat/server-adapter-payment-stripe';
 import { createSMSAdapter } from '@people-eat/server-adapter-sms-twilio';
 import { startApolloServerApp } from '@people-eat/server-app-apollo-server';
 import {
@@ -51,9 +52,10 @@ async function bootstrap(): Promise<void> {
         ['GOOGLE']: async (_idToken: string) => undefined,
     };
 
-    const paymentAdapter: PaymentProvider.Adapter = {
-        ['STRIPE']: { createPaymentIntent: async () => false, createSetupIntent: async () => undefined },
-    };
+    const paymentAdapter: PaymentProvider.Adapter = createPaymentAdapter({
+        logger,
+        stripeSecretKey: environmentVariables.payment.stripeSecretKey,
+    });
 
     const service: Service = createService({
         dataSourceAdapter,
