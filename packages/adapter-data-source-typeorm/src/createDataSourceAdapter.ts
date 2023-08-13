@@ -32,10 +32,12 @@ export async function createDataSourceAdapter({ logger, connection, reset }: Cre
     });
 
     const { options } = await AppDataSource.initialize();
-    logger.log(`🔌 TypeORM connected to ${options.type} database`);
+    logger.info(`🔌 TypeORM connected to ${options.type} database`);
 
     return {
+        logRepository: createGenericRepository(AppDataSource.getRepository(entities.LogEntity), logger),
         userRepository: createGenericRepository(AppDataSource.getRepository(entities.UserEntity), logger),
+
         oneTimeAccessTokenRepository: createGenericRepository(AppDataSource.getRepository(entities.OneTimeAccessTokenEntity), logger),
         emailAddressUpdateRepository: createGenericRepository(AppDataSource.getRepository(entities.EmailAddressUpdateEntity), logger),
         phoneNumberUpdateRepository: createGenericRepository(AppDataSource.getRepository(entities.PhoneNumberUpdateEntity), logger),

@@ -22,6 +22,7 @@ import {
     type DBFavoriteCook,
     type DBKitchen,
     type DBLanguage,
+    type DBLog,
     type DBMeal,
     type DBMealOption,
     type DBMenu,
@@ -38,6 +39,8 @@ import { type DBUser } from './entities/User';
 import { type Repository } from './Repository';
 
 export interface Adapter {
+    logRepository: Repository<DBLog>;
+
     userRepository: Repository<DBUser>;
     oneTimeAccessTokenRepository: Repository<DBOneTimeAccessToken>;
     emailAddressUpdateRepository: Repository<DBEmailAddressUpdate>;

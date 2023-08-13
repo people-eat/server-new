@@ -19,6 +19,7 @@ export { FavoriteCook } from './favorite-cook/FavoriteCook';
 export { GlobalBookingRequest } from './global-booking-request/GlobalBookingRequest';
 export { Kitchen } from './kitchen/Kitchen';
 export { Language } from './language/Language';
+export { Log } from './log';
 export { MealOption } from './meal-option/MealOption';
 export { Meal } from './meal/Meal';
 export { MenuCategory } from './menu-category/MenuCategory';

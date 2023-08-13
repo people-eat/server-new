@@ -68,6 +68,8 @@ async function bootstrap(): Promise<void> {
         webAppUrl: 'https://integration.people-eat.com',
     });
 
+    logger.setService(service);
+
     const { path } = await startApolloServerApp({
         dataSourceAdapter,
         logger,
@@ -82,7 +84,7 @@ async function bootstrap(): Promise<void> {
         stripePublishableKey: environmentVariables.payment.stripePublishableKey,
     });
 
-    logger.log(`🚀 Apollo server started at ${path}`);
+    logger.info(`🚀 Apollo server started at ${path}`);
 }
 
 bootstrap()

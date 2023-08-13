@@ -12,6 +12,7 @@ import { type EmailAddressUpdateService } from './email-address-update/createEma
 import { type GlobalBookingRequestService } from './global-booking-request/createGlobalBookingRequestService';
 import { type KitchenService } from './kitchen/createKitchenService';
 import { type LanguageService } from './language/createLanguageService';
+import { type LogService } from './log/createLogService';
 import { type MealOptionService } from './meal-option/createMealOptionService';
 import { type MealService } from './meal/createMealService';
 import { type MenuCategoryService } from './menu-category/createMenuCategoryService';
@@ -26,6 +27,8 @@ import { type SessionService } from './session/createSessionService';
 import { type UserService } from './user/createUserService';
 
 export interface Service {
+    log: LogService;
+
     language: LanguageService;
     category: CategoryService;
     kitchen: KitchenService;

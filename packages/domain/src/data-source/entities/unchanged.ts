@@ -13,6 +13,7 @@ export { type CustomerFeeUpdate as DBCustomerFeeUpdate } from '../../core/custom
 export { type FavoriteCook as DBFavoriteCook } from '../../core/favorite-cook/FavoriteCook';
 export { type Kitchen as DBKitchen } from '../../core/kitchen/Kitchen';
 export { type Language as DBLanguage } from '../../core/language/Language';
+export { type Log as DBLog } from '../../core/log/Log';
 export { type MealOption as DBMealOption } from '../../core/meal-option/MealOption';
 export { type Meal as DBMeal } from '../../core/meal/Meal';
 export { type MenuCategory as DBMenuCategory } from '../../core/menu-category/MenuCategory';

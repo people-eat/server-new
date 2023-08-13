@@ -13,6 +13,7 @@ import { createEmailAddressUpdateService } from './email-address-update/createEm
 import { createGlobalBookingRequestService } from './global-booking-request/createGlobalBookingRequestService';
 import { createKitchenService } from './kitchen/createKitchenService';
 import { createLanguageService } from './language/createLanguageService';
+import { createLogService } from './log/createLogService';
 import { createMealOptionService } from './meal-option/createMealOptionService';
 import { createMealService } from './meal/createMealService';
 import { createMenuCategoryService } from './menu-category/createMenuCategoryService';
@@ -49,6 +50,8 @@ export function createService({
     webAppUrl,
 }: CreateServiceInput): Service {
     return {
+        log: createLogService({ dataSourceAdapter }),
+
         language: createLanguageService({ dataSourceAdapter, logger }),
         category: createCategoryService({ dataSourceAdapter, logger }),
         kitchen: createKitchenService({ dataSourceAdapter, logger }),

@@ -18,6 +18,7 @@ export { FavoriteCookEntity } from './FavoriteCookEntity';
 export { GlobalBookingRequestEntity } from './GlobalBookingRequestEntity';
 export { KitchenEntity } from './KitchenEntity';
 export { LanguageEntity } from './LanguageEntity';
+export { LogEntity } from './LogEntity';
 export { MealEntity } from './MealEntity';
 export { MealOptionEntity } from './MealOptionEntity';
 export { MenuCategoryEntity } from './MenuCategoryEntity';
