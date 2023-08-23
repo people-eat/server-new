@@ -8,16 +8,20 @@ import {
     type GQLUserMutationCreateOneByEmailAddressArgs,
     type GQLUserMutationCreateOneByIdentityProviderArgs,
     type GQLUserMutationCreateOneByPhoneNumberArgs,
+    type GQLUserMutationEmailAddressUpdateArgs,
     type GQLUserMutationGlobalBookingRequestsArgs,
+    type GQLUserMutationPhoneNumberUpdateArgs,
     type GQLUserMutationSessionsArgs,
     type GQLUserMutationUpdateGenderArgs,
     type GQLUserMutationUpdatePasswordArgs,
     type GQLUserMutationUpdateProfilePictureArgs,
     type GQLUserQuery,
     type GQLUserQueryBookingRequestsArgs,
+    type GQLUserQueryEmailAddressUpdateArgs,
     type GQLUserQueryFindManyArgs,
     type GQLUserQueryFindOneArgs,
     type GQLUserQueryGlobalBookingRequestsArgs,
+    type GQLUserQueryPhoneNumberUpdateArgs,
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
 
@@ -95,8 +99,8 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
                 }),
 
             sessions: (_parent: GQLUserMutation, { userId }: GQLUserMutationSessionsArgs) => ({ userId } as any),
-            phoneNumberUpdate: () => ({} as any),
-            emailAddressUpdate: () => ({} as any),
+            phoneNumberUpdate: (_parent: GQLUserMutation, { userId }: GQLUserMutationPhoneNumberUpdateArgs) => ({ userId } as any),
+            emailAddressUpdate: (_parent: GQLUserMutation, { userId }: GQLUserMutationEmailAddressUpdateArgs) => ({ userId } as any),
             addresses: (_parent: GQLUserMutation, { userId }: GQLUserMutationAddressesArgs) => ({ userId } as any),
             globalBookingRequests: (_parent: GQLUserMutation, { userId }: GQLUserMutationGlobalBookingRequestsArgs) => ({ userId } as any),
             bookingRequests: (_parent: GQLUserMutation, { userId }: GQLUserMutationBookingRequestsArgs) => ({ userId } as any),
@@ -123,8 +127,8 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
                 return service.user.findOneByUserId(context, { userId }) as any;
             },
 
-            phoneNumberUpdate: () => ({} as any),
-            emailAddressUpdate: () => ({} as any),
+            phoneNumberUpdate: (_parent: GQLUserQuery, { userId }: GQLUserQueryPhoneNumberUpdateArgs) => ({ userId } as any),
+            emailAddressUpdate: (_parent: GQLUserQuery, { userId }: GQLUserQueryEmailAddressUpdateArgs) => ({ userId } as any),
             addresses: () => ({} as any),
             globalBookingRequests: (_parent: GQLUserQuery, { userId }: GQLUserQueryGlobalBookingRequestsArgs) => ({ userId } as any),
             bookingRequests: (_parent: GQLUserQuery, { userId }: GQLUserQueryBookingRequestsArgs) => ({ userId } as any),
