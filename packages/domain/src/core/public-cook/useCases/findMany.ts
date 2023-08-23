@@ -11,25 +11,19 @@ export interface FindManyPublicCooksInput {
     request: FindManyRequest;
 }
 
-export async function findMany({ dataSourceAdapter, logger }: FindManyPublicCooksInput): Promise<PublicCook[] | undefined> {
+export async function findMany({ dataSourceAdapter }: FindManyPublicCooksInput): Promise<PublicCook[] | undefined> {
     const cooks: DataSource.DBCook[] | undefined = await dataSourceAdapter.cookRepository.findMany({});
-
-    logger.info({ cooks });
 
     if (!cooks) return;
 
     const publicCooks: PublicCook[] = [];
 
     for (const cook of cooks) {
-        logger.info({ cookId: cook.cookId, step: 1 });
         if (!cook.isVisible || cook.isLocked) break;
 
-        logger.info({ cookId: cook.cookId, step: 2 });
         const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cook.cookId });
-        logger.info({ cookId: cook.cookId, step: 3 });
 
         if (!user) break;
-        logger.info({ cookId: cook.cookId, step: 4 });
 
         publicCooks.push({ ...packLocation(cook), user });
     }

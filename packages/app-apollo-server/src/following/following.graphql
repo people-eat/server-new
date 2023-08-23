@@ -8,11 +8,13 @@ type Following {
 }
 
 type UserFollowingQuery {
+    userId: String!
+
     findAll: [Following!]!
 }
 
 type UserQuery {
-    followings: UserFollowingQuery!
+    followings(userId: String!): UserFollowingQuery!
 }
 
 type CookFollowingQuery {
@@ -24,10 +26,12 @@ type CookQuery {
 }
 
 type UserFollowingMutation {
+    userId: String!
+
     createOne(cookId: String!): Boolean!
     deleteOne(cookId: String!): Boolean!
 }
 
 type UserMutation {
-    followings: UserFollowingMutation!
+    followings(userId: String!): UserFollowingMutation!
 }

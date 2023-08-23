@@ -10,6 +10,7 @@ import { createCookLanguageService } from './cook-language/createCookLanguageSer
 import { createCookService } from './cook/createCookService';
 import { createCourseService } from './course/createCourseService';
 import { createEmailAddressUpdateService } from './email-address-update/createEmailAddressUpdateService';
+import { createFavoriteCookService } from './favorite-cook/createFavoriteCookService';
 import { createGlobalBookingRequestService } from './global-booking-request/createGlobalBookingRequestService';
 import { createKitchenService } from './kitchen/createKitchenService';
 import { createLanguageService } from './language/createLanguageService';
@@ -78,5 +79,6 @@ export function createService({
         bookingRequest: createBookingRequestService({ dataSourceAdapter, paymentAdapter, logger, emailAdapter }),
         chatMessage: createChatMessageService({ dataSourceAdapter, logger }),
         configuredMenu: createConfiguredMenuService({ dataSourceAdapter, logger }),
+        favoriteCook: createFavoriteCookService({ dataSourceAdapter, logger }),
     };
 }

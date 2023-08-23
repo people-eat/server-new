@@ -1,5 +1,6 @@
 import { type Address, type Admin, type Authorization, type Cook, type Service } from '@people-eat/server-domain';
 import {
+    type GQLFollowing,
     type GQLUser,
     type GQLUserMutation,
     type GQLUserMutationAddressesArgs,
@@ -44,6 +45,9 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
                 service.emailAddressUpdate.findOneByUserId(context, { userId }),
             phoneNumberUpdate: ({ userId }: GQLUser, _input: unknown, context: Authorization.Context) =>
                 service.phoneNumberUpdate.findOneByUserId(context, { userId }),
+
+            followings: ({ userId }: GQLUser, _input: unknown, context: Authorization.Context) =>
+                service.favoriteCook.findManyByUserId(context, { userId }) as unknown as GQLFollowing[],
         },
         UserMutation: {
             createOneByEmailAddress: async (
@@ -96,6 +100,7 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
             addresses: (_parent: GQLUserMutation, { userId }: GQLUserMutationAddressesArgs) => ({ userId } as any),
             globalBookingRequests: (_parent: GQLUserMutation, { userId }: GQLUserMutationGlobalBookingRequestsArgs) => ({ userId } as any),
             bookingRequests: (_parent: GQLUserMutation, { userId }: GQLUserMutationBookingRequestsArgs) => ({ userId } as any),
+            followings: (_parent: GQLUserMutation, { userId }: GQLUserMutationBookingRequestsArgs) => ({ userId } as any),
         },
         UserQuery: {
             findMany: async (
@@ -123,6 +128,7 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
             addresses: () => ({} as any),
             globalBookingRequests: (_parent: GQLUserQuery, { userId }: GQLUserQueryGlobalBookingRequestsArgs) => ({ userId } as any),
             bookingRequests: (_parent: GQLUserQuery, { userId }: GQLUserQueryBookingRequestsArgs) => ({ userId } as any),
+            followings: (_parent: GQLUserQuery, { userId }: GQLUserQueryBookingRequestsArgs) => ({ userId } as any),
         },
     };
 }

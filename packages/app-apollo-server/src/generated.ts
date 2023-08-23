@@ -1708,6 +1708,7 @@ export type GQLUserFollowingMutation = {
     __typename?: 'UserFollowingMutation';
     createOne: Scalars['Boolean'];
     deleteOne: Scalars['Boolean'];
+    userId: Scalars['String'];
 };
 
 export type GQLUserFollowingMutationCreateOneArgs = {
@@ -1721,6 +1722,7 @@ export type GQLUserFollowingMutationDeleteOneArgs = {
 export type GQLUserFollowingQuery = {
     __typename?: 'UserFollowingQuery';
     findAll: Array<GQLFollowing>;
+    userId: Scalars['String'];
 };
 
 export type GQLUserGlobalBookingRequestMutation = {
@@ -1826,6 +1828,10 @@ export type GQLUserMutationCreateOneByPhoneNumberArgs = {
 };
 
 export type GQLUserMutationEmailAddressUpdateArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserMutationFollowingsArgs = {
     userId: Scalars['String'];
 };
 
@@ -1990,6 +1996,10 @@ export type GQLUserQueryFindManyArgs = {
 };
 
 export type GQLUserQueryFindOneArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserQueryFollowingsArgs = {
     userId: Scalars['String'];
 };
 
@@ -4204,6 +4214,7 @@ export type GQLUserFollowingMutationResolvers<
         ContextType,
         RequireFields<GQLUserFollowingMutationDeleteOneArgs, 'cookId'>
     >;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4212,6 +4223,7 @@ export type GQLUserFollowingQueryResolvers<
     ParentType extends GQLResolversParentTypes['UserFollowingQuery'] = GQLResolversParentTypes['UserFollowingQuery'],
 > = {
     findAll?: Resolver<Array<GQLResolversTypes['Following']>, ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4320,7 +4332,12 @@ export type GQLUserMutationResolvers<
         ContextType,
         RequireFields<GQLUserMutationEmailAddressUpdateArgs, 'userId'>
     >;
-    followings?: Resolver<GQLResolversTypes['UserFollowingMutation'], ParentType, ContextType>;
+    followings?: Resolver<
+        GQLResolversTypes['UserFollowingMutation'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationFollowingsArgs, 'userId'>
+    >;
     globalBookingRequests?: Resolver<
         GQLResolversTypes['UserGlobalBookingRequestMutation'],
         ParentType,
@@ -4518,7 +4535,12 @@ export type GQLUserQueryResolvers<
         RequireFields<GQLUserQueryFindManyArgs, 'request'>
     >;
     findOne?: Resolver<Maybe<GQLResolversTypes['User']>, ParentType, ContextType, RequireFields<GQLUserQueryFindOneArgs, 'userId'>>;
-    followings?: Resolver<GQLResolversTypes['UserFollowingQuery'], ParentType, ContextType>;
+    followings?: Resolver<
+        GQLResolversTypes['UserFollowingQuery'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserQueryFollowingsArgs, 'userId'>
+    >;
     globalBookingRequests?: Resolver<
         GQLResolversTypes['UserGlobalBookingRequestQuery'],
         ParentType,

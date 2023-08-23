@@ -9,6 +9,7 @@ import { type CookLanguageService } from './cook-language/createCookLanguageServ
 import { type CookService } from './cook/createCookService';
 import { type CourseService } from './course/createCourseService';
 import { type EmailAddressUpdateService } from './email-address-update/createEmailAddressUpdateService';
+import { type FavoriteCookService } from './favorite-cook/createFavoriteCookService';
 import { type GlobalBookingRequestService } from './global-booking-request/createGlobalBookingRequestService';
 import { type KitchenService } from './kitchen/createKitchenService';
 import { type LanguageService } from './language/createLanguageService';
@@ -55,4 +56,5 @@ export interface Service {
     bookingRequest: BookingRequestService;
     chatMessage: ChatMessageService;
     configuredMenu: ConfiguredMenuService;
+    favoriteCook: FavoriteCookService;
 }
