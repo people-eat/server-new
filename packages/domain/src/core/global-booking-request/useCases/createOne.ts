@@ -1,3 +1,4 @@
+import { globalBookingRequestCustomerConfirmation } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
 import { Authorization, type DataSource, type Email, type Logger } from '../../..';
 import { type DBAllergy, type DBCategory, type DBKitchen, type DBUser } from '../../../data-source';
@@ -8,6 +9,7 @@ import { type CreateOneGlobalBookingRequestRequest } from '../CreateOneGlobalBoo
 export interface CreateOneGlobalBookingRequestInput {
     dataSourceAdapter: DataSource.Adapter;
     emailAdapter: Email.Adapter;
+    webAppUrl: string;
     logger: Logger.Adapter;
     context: Authorization.Context;
     request: CreateOneGlobalBookingRequestRequest & { userId: NanoId };
@@ -17,6 +19,7 @@ export interface CreateOneGlobalBookingRequestInput {
 export async function createOne({
     dataSourceAdapter,
     emailAdapter,
+    webAppUrl,
     logger,
     context,
     request,
@@ -89,8 +92,8 @@ export async function createOne({
 
     const formattedDateTime: string = moment(dateTime).format('MMMM Do YYYY, h:mm a');
     const emailSuccess: boolean = await emailAdapter.sendToMany(
-        'Booking Request',
-        ['contact@people-eat.com', 'yilmaz.cem.2603@gmail.com'],
+        'Global Booking Request',
+        ['yilmaz.cem.2603@gmail.com'],
         `from ${user.firstName} ${user.lastName}`,
         `A new Booking Request was received from <b>${user.firstName} ${
             user.lastName
@@ -105,5 +108,35 @@ export async function createOne({
             .join(', ')}<br/><br/>Categories: ${categories.map(({ title }: DBCategory) => title).join(', ')}`,
     );
 
-    return emailSuccess;
+    if (!emailSuccess) logger.info('sending email failed');
+
+    if (!user.emailAddress) return true;
+
+    const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
+        'Global Booking Request',
+        user.emailAddress,
+        'was received',
+        globalBookingRequestCustomerConfirmation({
+            webAppUrl,
+            customer: { firstName: user.firstName, profilePictureUrl: user.profilePictureUrl },
+            globalBookingRequest: {
+                occasion,
+                adults: adultParticipants,
+                children,
+                location: location.text,
+                date: dateTime.toDateString(),
+                time: dateTime.toTimeString(),
+                price: {
+                    perPerson: price.amount / (children + adultParticipants),
+                    total: price.amount,
+                    currency: price.currencyCode,
+                },
+            },
+            chatMessage: message.trim(),
+        }),
+    );
+
+    if (!customerEmailSuccess) logger.info('sending email failed');
+
+    return true;
 }

@@ -75,9 +75,9 @@ export function createService({
         cookLanguage: createCookLanguageService({ dataSourceAdapter, logger }),
         course: createCourseService({ dataSourceAdapter, logger }),
         mealOption: createMealOptionService({ dataSourceAdapter, logger }),
-        globalBookingRequest: createGlobalBookingRequestService({ dataSourceAdapter, logger, emailAdapter }),
+        globalBookingRequest: createGlobalBookingRequestService({ dataSourceAdapter, logger, emailAdapter, webAppUrl }),
         bookingRequest: createBookingRequestService({ dataSourceAdapter, paymentAdapter, logger, emailAdapter }),
-        chatMessage: createChatMessageService({ dataSourceAdapter, logger }),
+        chatMessage: createChatMessageService({ dataSourceAdapter, logger, emailAdapter, webAppUrl }),
         configuredMenu: createConfiguredMenuService({ dataSourceAdapter, logger }),
         favoriteCook: createFavoriteCookService({ dataSourceAdapter, logger }),
     };

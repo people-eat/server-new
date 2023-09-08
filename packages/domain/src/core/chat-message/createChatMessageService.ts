@@ -1,4 +1,4 @@
-import { type Authorization, type ChatMessage, type DataSource, type Logger } from '../..';
+import { type Authorization, type ChatMessage, type DataSource, type Email, type Logger } from '../..';
 import { type FindManyRequest, type NanoId } from '../shared';
 import { type CreateOneChatMessageRequest } from './CreateOneChatMessageRequest';
 import { createOneByCookId } from './useCases/createOneByCookId';
@@ -28,10 +28,17 @@ export interface ChatMessageService {
 
 export interface CreateChatMessageServiceInput {
     dataSourceAdapter: DataSource.Adapter;
+    emailAdapter: Email.Adapter;
     logger: Logger.Adapter;
+    webAppUrl: string;
 }
 
-export function createChatMessageService({ dataSourceAdapter, logger }: CreateChatMessageServiceInput): ChatMessageService {
+export function createChatMessageService({
+    dataSourceAdapter,
+    logger,
+    emailAdapter,
+    webAppUrl,
+}: CreateChatMessageServiceInput): ChatMessageService {
     return {
         findManyByCookId: (context: Authorization.Context, request: FindManyRequest & { cookId: NanoId; bookingRequestId: NanoId }) =>
             findManyByCookId({ dataSourceAdapter, logger, context, request }),
@@ -41,10 +48,10 @@ export function createChatMessageService({ dataSourceAdapter, logger }: CreateCh
         createOneByCookId: (
             context: Authorization.Context,
             request: { cookId: NanoId; bookingRequestId: NanoId } & CreateOneChatMessageRequest,
-        ) => createOneByCookId({ dataSourceAdapter, logger, context, request }),
+        ) => createOneByCookId({ dataSourceAdapter, logger, emailAdapter, webAppUrl, context, request }),
         createOneByUserId: (
             context: Authorization.Context,
             request: { userId: NanoId; bookingRequestId: NanoId } & CreateOneChatMessageRequest,
-        ) => createOneByUserId({ dataSourceAdapter, logger, context, request }),
+        ) => createOneByUserId({ dataSourceAdapter, logger, emailAdapter, webAppUrl, context, request }),
     };
 }

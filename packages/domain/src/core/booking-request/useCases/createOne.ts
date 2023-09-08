@@ -1,3 +1,4 @@
+import { cookBookingRequestCookConfirmation, cookBookingRequestCustomerConfirmation } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
 import {
     Authorization,
@@ -9,6 +10,7 @@ import {
     type PaymentProvider,
     type PublicMenu,
 } from '../../..';
+import { type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type ConfiguredMenuCourse } from '../../configured-menu';
 import { findAllCourses } from '../../public-menu/useCases/findAllCourses';
@@ -28,7 +30,7 @@ export interface CreateOneBookingRequestInput {
 // eslint-disable-next-line max-statements
 export async function createOne({
     dataSourceAdapter,
-    // emailAdapter,
+    emailAdapter,
     paymentAdapter,
     logger,
     context,
@@ -58,6 +60,14 @@ export async function createOne({
     const daysUntilEventStart: number = moment(dateTime).diff(moment(), 'days');
 
     if (daysUntilEventStart < 7) return { success: false, clientSecret: '' };
+
+    const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
+
+    if (!user) return { success: false, clientSecret: '' };
+
+    const cookUser: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cookId });
+
+    if (!cookUser) return { success: false, clientSecret: '' };
 
     const bookingRequestId: NanoId = createNanoId();
 
@@ -148,6 +158,42 @@ export async function createOne({
         kitchenId: publicMenu.kitchen?.kitchenId,
         courses: configuredMenuCourses,
     });
+
+    if (user.emailAddress) {
+        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
+            'PeopleEat',
+            user.emailAddress,
+            'Neue Buchungsanfrage',
+            cookBookingRequestCustomerConfirmation(),
+        );
+
+        if (!customerEmailSuccess) logger.info('sending email failed');
+    }
+
+    if (cookUser.emailAddress) {
+        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
+            user.firstName,
+            cookUser.emailAddress,
+            'Neue Buchungsanfrage',
+            cookBookingRequestCookConfirmation({
+                webAppUrl: '',
+                customer: {
+                    firstName: user.firstName,
+                },
+                cook: {
+                    firstName: cookUser.firstName,
+                    profilePictureUrl: cookUser.profilePictureUrl ?? '',
+                },
+                bookingRequest: {
+                    occasion,
+                    adults: adultParticipants,
+                    children,
+                },
+            }),
+        );
+
+        if (!customerEmailSuccess) logger.info('sending email failed');
+    }
 
     return { success: saveConfiguredMenuSuccess, clientSecret };
 }

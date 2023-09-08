@@ -1,0 +1,70 @@
+{
+    "name": "adapter-email-template",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "packages/adapter-email-template/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/esbuild:esbuild",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "platform": "node",
+                "outputPath": "dist/packages/adapter-email-template",
+                "format": ["cjs"],
+                "bundle": false,
+                "main": "packages/adapter-email-template/src/index.ts",
+                "tsConfig": "packages/adapter-email-template/tsconfig.app.json",
+                "assets": ["packages/adapter-email-template/src/assets"],
+                "generatePackageJson": true,
+                "esbuildOptions": {
+                    "sourcemap": true,
+                    "outExtension": {
+                        ".js": ".js"
+                    }
+                }
+            },
+            "configurations": {
+                "development": {},
+                "production": {
+                    "esbuildOptions": {
+                        "sourcemap": false,
+                        "outExtension": {
+                            ".js": ".js"
+                        }
+                    }
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nrwl/js:node",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "adapter-email-template:build"
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "adapter-email-template:build:development"
+                },
+                "production": {
+                    "buildTarget": "adapter-email-template:build:production"
+                }
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "packages/adapter-email-template/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        }
+    },
+    "tags": []
+}

@@ -30,12 +30,14 @@ export interface GlobalBookingRequestService {
 export interface CreateGlobalBookingRequestServiceInput {
     dataSourceAdapter: DataSource.Adapter;
     emailAdapter: Email.Adapter;
+    webAppUrl: string;
     logger: Logger.Adapter;
 }
 
 export function createGlobalBookingRequestService({
     dataSourceAdapter,
     emailAdapter,
+    webAppUrl,
     logger,
 }: CreateGlobalBookingRequestServiceInput): GlobalBookingRequestService {
     return {
@@ -47,7 +49,7 @@ export function createGlobalBookingRequestService({
         findManyByUserId: (context: Authorization.Context, request: FindManyRequest & { userId: NanoId }) =>
             findManyByUserId({ dataSourceAdapter, logger, context, request }),
         createOne: (context: Authorization.Context, request: CreateOneGlobalBookingRequestRequest & { userId: NanoId }) =>
-            createOne({ dataSourceAdapter, logger, context, request, emailAdapter }),
+            createOne({ dataSourceAdapter, logger, context, request, emailAdapter, webAppUrl }),
         deleteOne: (context: Authorization.Context, request: { userId: NanoId; globalBookingRequestId: NanoId }) =>
             deleteOne({ dataSourceAdapter, logger, context, request }),
     };
