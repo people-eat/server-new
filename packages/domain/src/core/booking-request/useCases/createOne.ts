@@ -20,6 +20,7 @@ import { type CreateOneBookingRequestRequest } from '../CreateOneBookingRequestR
 
 export interface CreateOneBookingRequestInput {
     dataSourceAdapter: DataSource.Adapter;
+    webAppUrl: string;
     emailAdapter: Email.Adapter;
     paymentAdapter: PaymentProvider.Adapter;
     logger: Logger.Adapter;
@@ -30,6 +31,7 @@ export interface CreateOneBookingRequestInput {
 // eslint-disable-next-line max-statements
 export async function createOne({
     dataSourceAdapter,
+    webAppUrl,
     emailAdapter,
     paymentAdapter,
     logger,
@@ -110,7 +112,75 @@ export async function createOne({
         createdAt: new Date(),
     });
 
-    if (!messageSuccess) return { success: false, clientSecret };
+    if (!messageSuccess) logger.info('creating message did fail');
+
+    if (user.emailAddress) {
+        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
+            'PeopleEat',
+            user.emailAddress,
+            'Bestätigung Deiner Buchungsanfrage',
+            cookBookingRequestCustomerConfirmation({
+                webAppUrl,
+                customer: {
+                    firstName: user.firstName,
+                },
+                cook: {
+                    firstName: cookUser.firstName,
+                    profilePictureUrl: cookUser.profilePictureUrl ?? '',
+                },
+                bookingRequest: {
+                    occasion,
+                    children,
+                    adults: adultParticipants,
+                    location: 'Mannheim',
+                    date: dateTime.toDateString(),
+                    time: moment(dateTime).format('LT'),
+                    price: {
+                        perPerson: price.amount / (children + adultParticipants),
+                        total: price.amount,
+                        currency: price.currencyCode,
+                    },
+                },
+                chatMessage: message.trim(),
+            }),
+        );
+
+        if (!customerEmailSuccess) logger.info('sending email failed');
+    }
+
+    if (cookUser.emailAddress) {
+        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
+            user.firstName,
+            cookUser.emailAddress,
+            'Neue Buchungsanfrage',
+            cookBookingRequestCookConfirmation({
+                webAppUrl,
+                customer: {
+                    firstName: user.firstName,
+                },
+                cook: {
+                    firstName: cookUser.firstName,
+                    profilePictureUrl: cookUser.profilePictureUrl ?? '',
+                },
+                bookingRequest: {
+                    occasion,
+                    children,
+                    adults: adultParticipants,
+                    location: 'Mannheim',
+                    date: dateTime.toDateString(),
+                    time: moment(dateTime).format('LT'),
+                    price: {
+                        perPerson: price.amount / (children + adultParticipants),
+                        total: price.amount,
+                        currency: price.currencyCode,
+                    },
+                },
+                chatMessage: message.trim(),
+            }),
+        );
+
+        if (!customerEmailSuccess) logger.info('sending email failed');
+    }
 
     if (!configuredMenu) return { success: true, clientSecret };
 
@@ -158,42 +228,6 @@ export async function createOne({
         kitchenId: publicMenu.kitchen?.kitchenId,
         courses: configuredMenuCourses,
     });
-
-    if (user.emailAddress) {
-        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-            'PeopleEat',
-            user.emailAddress,
-            'Neue Buchungsanfrage',
-            cookBookingRequestCustomerConfirmation(),
-        );
-
-        if (!customerEmailSuccess) logger.info('sending email failed');
-    }
-
-    if (cookUser.emailAddress) {
-        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-            user.firstName,
-            cookUser.emailAddress,
-            'Neue Buchungsanfrage',
-            cookBookingRequestCookConfirmation({
-                webAppUrl: '',
-                customer: {
-                    firstName: user.firstName,
-                },
-                cook: {
-                    firstName: cookUser.firstName,
-                    profilePictureUrl: cookUser.profilePictureUrl ?? '',
-                },
-                bookingRequest: {
-                    occasion,
-                    adults: adultParticipants,
-                    children,
-                },
-            }),
-        );
-
-        if (!customerEmailSuccess) logger.info('sending email failed');
-    }
 
     return { success: saveConfiguredMenuSuccess, clientSecret };
 }

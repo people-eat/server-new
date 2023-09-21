@@ -60,8 +60,8 @@ export async function createOneByUserId({
         'Neue Nachricht',
         bookingRequestNewMessage({
             webAppUrl,
-            recipient: { firstName: customerUser.firstName },
-            sender: { firstName: cookUser.firstName },
+            recipient: { firstName: cookUser.firstName },
+            sender: { firstName: customerUser.firstName },
         }),
     );
 

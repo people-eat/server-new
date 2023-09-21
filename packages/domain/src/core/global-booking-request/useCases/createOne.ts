@@ -110,33 +110,33 @@ export async function createOne({
 
     if (!emailSuccess) logger.info('sending email failed');
 
-    if (!user.emailAddress) return true;
-
-    const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-        'Global Booking Request',
-        user.emailAddress,
-        'was received',
-        globalBookingRequestCustomerConfirmation({
-            webAppUrl,
-            customer: { firstName: user.firstName, profilePictureUrl: user.profilePictureUrl },
-            globalBookingRequest: {
-                occasion,
-                adults: adultParticipants,
-                children,
-                location: location.text,
-                date: dateTime.toDateString(),
-                time: dateTime.toTimeString(),
-                price: {
-                    perPerson: price.amount / (children + adultParticipants),
-                    total: price.amount,
-                    currency: price.currencyCode,
+    if (user.emailAddress) {
+        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
+            'Global Booking Request',
+            user.emailAddress,
+            'was received',
+            globalBookingRequestCustomerConfirmation({
+                webAppUrl,
+                customer: { firstName: user.firstName, profilePictureUrl: user.profilePictureUrl },
+                globalBookingRequest: {
+                    occasion,
+                    adults: adultParticipants,
+                    children,
+                    location: location.text,
+                    date: dateTime.toDateString(),
+                    time: moment(dateTime).format('LT'),
+                    price: {
+                        perPerson: price.amount / (children + adultParticipants),
+                        total: price.amount,
+                        currency: price.currencyCode,
+                    },
                 },
-            },
-            chatMessage: message.trim(),
-        }),
-    );
+                chatMessage: message.trim(),
+            }),
+        );
 
-    if (!customerEmailSuccess) logger.info('sending email failed');
+        if (!customerEmailSuccess) logger.info('sending email failed');
+    }
 
     return true;
 }
