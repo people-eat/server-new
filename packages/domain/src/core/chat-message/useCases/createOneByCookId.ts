@@ -55,9 +55,9 @@ export async function createOneByCookId({
     if (!customerUser.emailAddress) return true;
 
     const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-        cookUser.firstName,
+        'PeopleEat',
         customerUser.emailAddress,
-        'Neue Nachricht',
+        `Neue Nachricht ${cookUser.firstName}`,
         bookingRequestNewMessage({
             webAppUrl,
             recipient: { firstName: customerUser.firstName },

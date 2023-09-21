@@ -132,7 +132,7 @@ export async function createOne({
                     occasion,
                     children,
                     adults: adultParticipants,
-                    location: 'Mannheim',
+                    location: location.text ?? '',
                     date: dateTime.toDateString(),
                     time: moment(dateTime).format('LT'),
                     price: {
@@ -150,9 +150,9 @@ export async function createOne({
 
     if (cookUser.emailAddress) {
         const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-            user.firstName,
+            'PeopleEat',
             cookUser.emailAddress,
-            'Neue Buchungsanfrage',
+            `Neue Buchungsanfrage ${user.firstName}`,
             cookBookingRequestCookConfirmation({
                 webAppUrl,
                 customer: {
@@ -166,7 +166,7 @@ export async function createOne({
                     occasion,
                     children,
                     adults: adultParticipants,
-                    location: 'Mannheim',
+                    location: location.text ?? '',
                     date: dateTime.toDateString(),
                     time: moment(dateTime).format('LT'),
                     price: {

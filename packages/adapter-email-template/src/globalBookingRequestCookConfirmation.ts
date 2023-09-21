@@ -320,7 +320,7 @@ export function globalBookingRequestCookConfirmation({
                                                                         <!--[if mso]><td class=t15 style="width:398px;padding:0 0 20px 0;"><![endif]-->
                                                                         <h1 class=t21
                                                                             style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:28px;font-weight:800;font-style:normal;font-size:22px;text-decoration:none;text-transform:none;letter-spacing:-1.04px;direction:ltr;color:#191919;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                            Du hast die globale Buchungsanfrage von${customer.firstName} angenommen! 🎉</h1>
+                                                                            Du hast die globale Buchungsanfrage von ${customer.firstName} angenommen! 🎉</h1>
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -335,9 +335,6 @@ export function globalBookingRequestCookConfirmation({
                                                                     <td class=t126 style="width:600px;padding:0 0 22px 0;">
                                                                         <!--<![endif]-->
                                                                         <!--[if mso]><td class=t126 style="width:600px;padding:0 0 22px 0;"><![endif]-->
-                                                                        <p class=t132 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:14px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#333333;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                            Wir haben deine <span class=t372 style="margin-bottom:0;Margin-bottom:0;color:#FF6433;mso-line-height-rule:exactly;">Anfrage erhalten</span>🧑🏼‍🍳. Privatköche in deiner Umgebung wurden soeben informiert und werden sich mit einer Rückmeldung <span class=t384 style="margin-bottom:0;Margin-bottom:0;color:#FF6433;mso-line-height-rule:exactly;">binnen 48 Std</span>. bei dir melden.
-                                                                        </p>
                                                                     </td>
                                                                 </tr>
                                                             </table>

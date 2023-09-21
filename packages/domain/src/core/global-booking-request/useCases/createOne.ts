@@ -112,9 +112,9 @@ export async function createOne({
 
     if (user.emailAddress) {
         const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-            'Global Booking Request',
+            'PeopleEat',
             user.emailAddress,
-            'was received',
+            'Bestätigung Deiner Buchungsanfrage',
             globalBookingRequestCustomerConfirmation({
                 webAppUrl,
                 customer: { firstName: user.firstName, profilePictureUrl: user.profilePictureUrl },

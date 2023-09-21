@@ -140,11 +140,6 @@ export function bookingRequestNewMessage({ webAppUrl, sender, recipient }: Booki
         <!--[if !mso]><!--><td class=t57 style="width:80px;padding:0 0 50px 0;">
         <!--<![endif]-->
         <!--[if mso]><td class=t57 style="width:80px;padding:0 0 50px 0;"><![endif]-->
-        <img
-            style="display:block;border:0;height:auto;width:100%;Margin:0;max-width:100%;"
-            width=287 height=73.53125
-            src="https://www.people-eat.com/_next/image?url=%2Flogo.svg&w=256&q=75"
-            />
         </td>
         </tr></table>
         </td></tr><tr><td><div class=t55 style="mso-line-height-rule:exactly;mso-line-height-alt:45px;line-height:45px;font-size:1px;display:block;">&nbsp;</div></td></tr><tr><td><div class=t24 style="mso-line-height-rule:exactly;mso-line-height-alt:3px;line-height:3px;font-size:1px;display:block;">&nbsp;</div></td></tr><tr><td>
