@@ -31,6 +31,8 @@ export function globalBookingRequestCookConfirmation({
 }: GlobalBookingRequestCookConfirmationInput): string {
     const cookProfileBookingRequestsUrl: string = webAppUrl + '/de/chef-profile?tab=3';
 
+    const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
+
     return `
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
@@ -320,7 +322,9 @@ export function globalBookingRequestCookConfirmation({
                                                                         <!--[if mso]><td class=t15 style="width:398px;padding:0 0 20px 0;"><![endif]-->
                                                                         <h1 class=t21
                                                                             style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:28px;font-weight:800;font-style:normal;font-size:22px;text-decoration:none;text-transform:none;letter-spacing:-1.04px;direction:ltr;color:#191919;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                            Du hast die globale Buchungsanfrage von ${customer.firstName} angenommen! 🎉</h1>
+                                                                            Du hast die globale Buchungsanfrage von ${
+                                                                                customer.firstName
+                                                                            } angenommen! 🎉</h1>
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -553,7 +557,9 @@ export function globalBookingRequestCookConfirmation({
                                                                                                                                             <!--[if mso]><td class=t222 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t228
                                                                                                                                                 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Anlass: ${globalBookingRequest.occasion}
+                                                                                                                                                Anlass: ${
+                                                                                                                                                    globalBookingRequest.occasion
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -575,7 +581,9 @@ export function globalBookingRequestCookConfirmation({
                                                                                                                                             <!--<![endif]-->
                                                                                                                                             <!--[if mso]><td class=t232 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t238 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Datum: ${globalBookingRequest.date}
+                                                                                                                                                Datum: ${
+                                                                                                                                                    globalBookingRequest.date
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -597,7 +605,9 @@ export function globalBookingRequestCookConfirmation({
                                                                                                                                             <!--<![endif]-->
                                                                                                                                             <!--[if mso]><td class=t242 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t248 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Uhrzeit: ${globalBookingRequest.time}
+                                                                                                                                                Uhrzeit: ${
+                                                                                                                                                    globalBookingRequest.time
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -619,7 +629,9 @@ export function globalBookingRequestCookConfirmation({
                                                                                                                                             <!--<![endif]-->
                                                                                                                                             <!--[if mso]><td class=t252 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t258 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Adresse des Events: ${globalBookingRequest.location}
+                                                                                                                                                Adresse des Events: ${
+                                                                                                                                                    globalBookingRequest.location
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -695,7 +707,9 @@ export function globalBookingRequestCookConfirmation({
                                                                                                                                             <!--<![endif]-->
                                                                                                                                             <!--[if mso]><td class=t271 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t277 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Anzahl Erwachsene: ${globalBookingRequest.adults}
+                                                                                                                                                Anzahl Erwachsene: ${
+                                                                                                                                                    globalBookingRequest.adults
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -718,7 +732,9 @@ export function globalBookingRequestCookConfirmation({
                                                                                                                                             <!--[if mso]><td class=t281 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t287
                                                                                                                                                 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Anzahl Kinder: ${globalBookingRequest.children}
+                                                                                                                                                Anzahl Kinder: ${
+                                                                                                                                                    globalBookingRequest.children
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -744,7 +760,14 @@ export function globalBookingRequestCookConfirmation({
                                                                                                                                                 <span
                                                                                                                                                     class=t320
                                                                                                                                                     style="margin-bottom:0;Margin-bottom:0;font-weight:400;font-style:normal;mso-line-height-rule:exactly;">
-                                                                                                                                                    Budget pro Person: ${globalBookingRequest.price.perPerson} ${globalBookingRequest.price.currency}
+                                                                                                                                                    Budget pro Person: ${formatPrice(
+                                                                                                                                                        globalBookingRequest
+                                                                                                                                                            .price
+                                                                                                                                                            .perPerson,
+                                                                                                                                                        globalBookingRequest
+                                                                                                                                                            .price
+                                                                                                                                                            .currency,
+                                                                                                                                                    )}
                                                                                                                                                 </span>
                                                                                                                                             </p>
                                                                                                                                         </td>
@@ -769,7 +792,14 @@ export function globalBookingRequestCookConfirmation({
                                                                                                                                             <p class=t330
                                                                                                                                                 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
                                                                                                                                                 <span class="t331" style="margin-bottom:0;Margin-bottom:0;font-weight:700;font-style:normal;mso-line-height-rule:exactly;">
-                                                                                                                                                    Gesamtsumme: ${globalBookingRequest.price.total} ${globalBookingRequest.price.currency}
+                                                                                                                                                    Gesamtsumme: ${formatPrice(
+                                                                                                                                                        globalBookingRequest
+                                                                                                                                                            .price
+                                                                                                                                                            .total,
+                                                                                                                                                        globalBookingRequest
+                                                                                                                                                            .price
+                                                                                                                                                            .currency,
+                                                                                                                                                    )}
                                                                                                                                                 </span>
                                                                                                                                             </p>
                                                                                                                                         </td>

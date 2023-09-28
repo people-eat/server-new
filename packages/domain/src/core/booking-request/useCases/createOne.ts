@@ -87,6 +87,7 @@ export async function createOne({
         cookAccepted: undefined,
         latitude: location.latitude,
         longitude: location.longitude,
+        locationText: location.text ?? '',
         dateTime,
         preparationTime,
         duration,

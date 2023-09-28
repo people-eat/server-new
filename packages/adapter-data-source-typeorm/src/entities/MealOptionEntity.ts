@@ -5,16 +5,16 @@ import { MealEntity } from './MealEntity';
 
 @Entity('MealOptions')
 export class MealOptionEntity implements DataSource.DBMealOption {
-    @PrimaryColumn('char', { length: 20 })
+    @Column('char', { length: 20 })
     mealId!: string;
 
-    @Column('char', { length: 20 })
+    @PrimaryColumn('char', { length: 20 })
     courseId!: string;
 
     @Column('char', { length: 20 })
     cookId!: string;
 
-    @Column('tinyint', { unsigned: true })
+    @PrimaryColumn('tinyint', { unsigned: true })
     index!: number;
 
     /* relations */

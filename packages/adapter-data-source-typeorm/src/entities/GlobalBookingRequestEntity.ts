@@ -47,6 +47,9 @@ export class GlobalBookingRequestEntity implements DataSource.DBGlobalBookingReq
     @Column('float', { unsigned: true })
     longitude!: number;
 
+    @Column('varchar')
+    locationText!: string;
+
     @Column('datetime')
     expiresAt!: Date;
 

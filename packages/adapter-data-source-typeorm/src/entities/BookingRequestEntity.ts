@@ -28,6 +28,9 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
     @Column('float', { unsigned: true })
     longitude!: number;
 
+    @Column('varchar')
+    locationText!: string;
+
     @Column('datetime')
     dateTime!: Date;
 

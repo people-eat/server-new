@@ -58,6 +58,7 @@ export async function createOne({
         kitchenId,
         latitude: location.latitude,
         longitude: location.longitude,
+        locationText: location.text ?? '',
         expiresAt: moment().add(14, 'days').toDate(),
         createdAt: new Date(),
     });

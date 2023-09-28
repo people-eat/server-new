@@ -54,6 +54,7 @@ export async function createOneByGlobalBookingRequestId({
         kitchenId,
         latitude,
         longitude,
+        locationText,
         // expiresAt,
         // createdAt,
     } = globalBookingRequest;
@@ -68,6 +69,7 @@ export async function createOneByGlobalBookingRequestId({
         userAccepted: true,
         latitude,
         longitude,
+        locationText,
         dateTime,
         preparationTime: 120,
         duration,
@@ -118,7 +120,7 @@ export async function createOneByGlobalBookingRequestId({
                     occasion,
                     children,
                     adults: adultParticipants,
-                    location: 'Mannheim',
+                    location: locationText,
                     date: dateTime.toDateString(),
                     time: moment(dateTime).format('LT'),
                     price: {
@@ -148,7 +150,7 @@ export async function createOneByGlobalBookingRequestId({
                     occasion,
                     adults: adultParticipants,
                     children,
-                    location: '',
+                    location: locationText,
                     date: dateTime.toDateString(),
                     time: moment(dateTime).format('LT'),
                     price: {

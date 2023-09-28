@@ -47,6 +47,7 @@ input PriceInput {
 type Location {
     latitude: Latitude!
     longitude: Longitude!
+    text: String!
 }
 
 input LocationInput {

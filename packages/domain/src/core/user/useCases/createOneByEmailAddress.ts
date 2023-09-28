@@ -142,6 +142,7 @@ export async function createOneByEmailAddress({
             kitchenId: globalBookingRequest.kitchenId,
             latitude: globalBookingRequest.location.latitude,
             longitude: globalBookingRequest.location.longitude,
+            locationText: globalBookingRequest.location.text ?? '',
             expiresAt: moment().add(14, 'days').toDate(),
             createdAt: new Date(),
         });

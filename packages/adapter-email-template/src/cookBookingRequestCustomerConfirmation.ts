@@ -37,6 +37,8 @@ export function cookBookingRequestCustomerConfirmation({
 }: CookBookingBookingRequestCustomerConfirmationInput): string {
     const customerProfileBookingRequestsUrl: string = webAppUrl + '/de/profile?tab=1';
 
+    const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
+
     return `
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
@@ -353,7 +355,9 @@ export function cookBookingRequestCustomerConfirmation({
                                                                         <!--<![endif]-->
                                                                         <!--[if mso]><td class=t126 style="width:600px;padding:0 0 22px 0;"><![endif]-->
                                                                         <p class=t132 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:14px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#333333;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                            Wir haben deine <span class=t372 style="margin-bottom:0;Margin-bottom:0;color:#FF6433;mso-line-height-rule:exactly;">Anfrage erhalten</span>🧑🏼‍🍳. <span class=t372 style="margin-bottom:0;Margin-bottom:0;color:#FF6433;mso-line-height-rule:exactly;">${cook.firstName}</span> wurde soeben informiert und wird sich innerhalb von <span class=t384 style="margin-bottom:0;Margin-bottom:0;color:#FF6433;mso-line-height-rule:exactly;">48 Std</span>. bei dir melden.
+                                                                            Wir haben deine <span class=t372 style="margin-bottom:0;Margin-bottom:0;color:#FF6433;mso-line-height-rule:exactly;">Anfrage erhalten</span>🧑🏼‍🍳. <span class=t372 style="margin-bottom:0;Margin-bottom:0;color:#FF6433;mso-line-height-rule:exactly;">${
+                                                                                cook.firstName
+                                                                            }</span> wurde soeben informiert und wird sich innerhalb von <span class=t384 style="margin-bottom:0;Margin-bottom:0;color:#FF6433;mso-line-height-rule:exactly;">48 Std</span>. bei dir melden.
                                                                         </p>
                                                                     </td>
                                                                 </tr>
@@ -573,7 +577,9 @@ export function cookBookingRequestCustomerConfirmation({
                                                                                                                                             <!--[if mso]><td class=t222 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t228
                                                                                                                                                 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Anlass: ${bookingRequest.occasion}
+                                                                                                                                                Anlass: ${
+                                                                                                                                                    bookingRequest.occasion
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -595,7 +601,9 @@ export function cookBookingRequestCustomerConfirmation({
                                                                                                                                             <!--<![endif]-->
                                                                                                                                             <!--[if mso]><td class=t232 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t238 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Datum: ${bookingRequest.date}
+                                                                                                                                                Datum: ${
+                                                                                                                                                    bookingRequest.date
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -617,7 +625,9 @@ export function cookBookingRequestCustomerConfirmation({
                                                                                                                                             <!--<![endif]-->
                                                                                                                                             <!--[if mso]><td class=t242 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t248 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Uhrzeit: ${bookingRequest.time}
+                                                                                                                                                Uhrzeit: ${
+                                                                                                                                                    bookingRequest.time
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -639,7 +649,9 @@ export function cookBookingRequestCustomerConfirmation({
                                                                                                                                             <!--<![endif]-->
                                                                                                                                             <!--[if mso]><td class=t252 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t258 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Adresse des Events: ${bookingRequest.location}
+                                                                                                                                                Adresse des Events: ${
+                                                                                                                                                    bookingRequest.location
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -715,7 +727,9 @@ export function cookBookingRequestCustomerConfirmation({
                                                                                                                                             <!--<![endif]-->
                                                                                                                                             <!--[if mso]><td class=t271 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t277 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Anzahl Erwachsene: ${bookingRequest.adults}
+                                                                                                                                                Anzahl Erwachsene: ${
+                                                                                                                                                    bookingRequest.adults
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -738,7 +752,9 @@ export function cookBookingRequestCustomerConfirmation({
                                                                                                                                             <!--[if mso]><td class=t281 style="width:600px;"><![endif]-->
                                                                                                                                             <p class=t287
                                                                                                                                                 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
-                                                                                                                                                Anzahl Kinder: ${bookingRequest.children}
+                                                                                                                                                Anzahl Kinder: ${
+                                                                                                                                                    bookingRequest.children
+                                                                                                                                                }
                                                                                                                                             </p>
                                                                                                                                         </td>
                                                                                                                                     </tr>
@@ -764,7 +780,14 @@ export function cookBookingRequestCustomerConfirmation({
                                                                                                                                                 <span
                                                                                                                                                     class=t320
                                                                                                                                                     style="margin-bottom:0;Margin-bottom:0;font-weight:400;font-style:normal;mso-line-height-rule:exactly;">
-                                                                                                                                                    Budget pro Person: ${bookingRequest.price.perPerson} ${bookingRequest.price.currency}
+                                                                                                                                                    Budget pro Person: ${formatPrice(
+                                                                                                                                                        bookingRequest
+                                                                                                                                                            .price
+                                                                                                                                                            .perPerson,
+                                                                                                                                                        bookingRequest
+                                                                                                                                                            .price
+                                                                                                                                                            .currency,
+                                                                                                                                                    )}
                                                                                                                                                 </span>
                                                                                                                                             </p>
                                                                                                                                         </td>
@@ -789,7 +812,14 @@ export function cookBookingRequestCustomerConfirmation({
                                                                                                                                             <p class=t330
                                                                                                                                                 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:12px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#242424;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
                                                                                                                                                 <span class="t331" style="margin-bottom:0;Margin-bottom:0;font-weight:700;font-style:normal;mso-line-height-rule:exactly;">
-                                                                                                                                                    Gesamtsumme: ${bookingRequest.price.total} ${bookingRequest.price.currency}
+                                                                                                                                                    Gesamtsumme: ${formatPrice(
+                                                                                                                                                        bookingRequest
+                                                                                                                                                            .price
+                                                                                                                                                            .total,
+                                                                                                                                                        bookingRequest
+                                                                                                                                                            .price
+                                                                                                                                                            .currency,
+                                                                                                                                                    )}
                                                                                                                                                 </span>
                                                                                                                                             </p>
                                                                                                                                         </td>
