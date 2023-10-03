@@ -25,6 +25,7 @@ import {
     URLResolver,
     UUIDResolver,
 } from 'graphql-scalars';
+import { PubSub } from 'graphql-subscriptions';
 import { GraphQLUpload, graphqlUploadExpress } from 'graphql-upload-minimal';
 import { type Disposable } from 'graphql-ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
@@ -47,7 +48,7 @@ import { createCourseResolvers } from './course/createCourseResolvers';
 import { createCustomerFeeUpdateResolvers } from './customer-fee-update/createCustomerFeeUpdateResolvers';
 import { createEmailAddressUpdateResolvers } from './email-address-update/createEmailAddressUpdateResolvers';
 import { createFollowingResolvers } from './following/createFollowingResolvers';
-import { type GQLResolvers } from './generated';
+import { type GQLMutationTestArgs, type GQLResolvers } from './generated';
 import { createGlobalBookingRequestResolvers } from './global-booking-request/createGlobalBookingRequestResolvers';
 import { createKitchenResolvers } from './kitchen/createKitchenResolvers';
 import { createLanguageResolvers } from './language/createLanguageResolvers';
@@ -70,6 +71,7 @@ import { createTermsUpdateResolvers } from './terms-update/createTermsUpdateReso
 import { createUserRatingResolvers } from './user-rating/createUserRatingResolvers';
 import { createUserResolvers } from './user/createUserResolvers';
 
+const pubsub: PubSub = new PubSub();
 export interface StartApolloServerAppOptions {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
@@ -129,6 +131,18 @@ export async function startApolloServerApp({
             users: () => ({} as any),
             sessions: () => ({} as any),
             cooks: () => ({} as any),
+            test: async (_parent: unknown, { message }: GQLMutationTestArgs) => {
+                await pubsub.publish('POST_CREATED', { test: message });
+                return true;
+            },
+        },
+        Subscription: {
+            test: {
+                subscribe: (_parent: any, _input: any, context: Authorization.Context) => {
+                    console.log(context);
+                    return { [Symbol.asyncIterator]: () => pubsub.asyncIterator(['POST_CREATED']) };
+                },
+            },
         },
         ...createLanguageResolvers(service),
         ...createCategoryResolvers(service),
@@ -194,16 +208,24 @@ export async function startApolloServerApp({
 
     const serverCleanup: Disposable = useServer(
         {
-            context: (
+            context: async (
                 context: Authorization.Context & { extra: { request: IncomingMessage & { sessionId?: string } } },
-            ): Authorization.Context => {
+            ): Promise<Authorization.Context> => {
                 const sessionId: string | undefined = context.extra.request.sessionId;
 
                 if (!sessionId) throw new Error('Subscription requested without session id');
 
+                const result: Authorization.AuthorizeSessionOutput | undefined = await Authorization.authorizeSession({
+                    dataSourceAdapter,
+                    logger,
+                    sessionId,
+                });
+
+                if (!result || result.sessionId !== sessionId) throw new Error('websocket session error');
+
                 return {
-                    sessionId: sessionId,
-                    userId: undefined,
+                    sessionId: result.sessionId,
+                    userId: result.userId,
                 };
             },
             schema,
@@ -255,6 +277,7 @@ export async function startApolloServerApp({
                     logger,
                     sessionId,
                 });
+
                 if (!result) throw new Error();
 
                 res.cookie(sessionIdCookie.name, result.sessionId, {

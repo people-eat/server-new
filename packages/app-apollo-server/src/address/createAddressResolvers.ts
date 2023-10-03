@@ -35,7 +35,7 @@ export function createAddressResolvers(service: Service): Resolvers<'Address' | 
                 { userId }: GQLUserAddressQuery,
                 _input: GQLUserAddressQueryFindManyArgs,
                 context: Authorization.Context,
-            ): Promise<GQLAddress[] | undefined> => service.address.findMany(context, { userId }),
+            ): Promise<GQLAddress[] | undefined> => service.address.findMany(context, { userId }) as any,
         },
     };
 }
