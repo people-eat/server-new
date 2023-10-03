@@ -1093,6 +1093,7 @@ export type GQLLocation = {
     __typename?: 'Location';
     latitude: Scalars['Latitude'];
     longitude: Scalars['Longitude'];
+    text: Scalars['String'];
 };
 
 export type GQLLocationInput = {
@@ -1490,6 +1491,15 @@ export type GQLSessionMutationUpdateCookieSettingsArgs = {
 export type GQLSessionQuery = {
     __typename?: 'SessionQuery';
     current?: Maybe<GQLSession>;
+};
+
+export type GQLSubscription = {
+    __typename?: 'Subscription';
+    bookingRequestChatMessageCreations: GQLChatMessage;
+};
+
+export type GQLSubscriptionBookingRequestChatMessageCreationsArgs = {
+    bookingRequestId: Scalars['String'];
 };
 
 export type GQLTermsUpdate = {
@@ -2277,6 +2287,7 @@ export type GQLResolversTypes = {
     SessionMutation: ResolverTypeWrapper<GQLSessionMutation>;
     SessionQuery: ResolverTypeWrapper<GQLSessionQuery>;
     String: ResolverTypeWrapper<Scalars['String']>;
+    Subscription: ResolverTypeWrapper<{}>;
     TermsUpdate: ResolverTypeWrapper<GQLTermsUpdate>;
     TermsUpdateMutation: ResolverTypeWrapper<GQLTermsUpdateMutation>;
     TermsUpdateQuery: ResolverTypeWrapper<GQLTermsUpdateQuery>;
@@ -2442,6 +2453,7 @@ export type GQLResolversParentTypes = {
     SessionMutation: GQLSessionMutation;
     SessionQuery: GQLSessionQuery;
     String: Scalars['String'];
+    Subscription: {};
     TermsUpdate: GQLTermsUpdate;
     TermsUpdateMutation: GQLTermsUpdateMutation;
     TermsUpdateQuery: GQLTermsUpdateQuery;
@@ -3437,6 +3449,7 @@ export type GQLLocationResolvers<
 > = {
     latitude?: Resolver<GQLResolversTypes['Latitude'], ParentType, ContextType>;
     longitude?: Resolver<GQLResolversTypes['Longitude'], ParentType, ContextType>;
+    text?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3919,6 +3932,19 @@ export type GQLSessionQueryResolvers<
 > = {
     current?: Resolver<Maybe<GQLResolversTypes['Session']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLSubscriptionResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['Subscription'] = GQLResolversParentTypes['Subscription'],
+> = {
+    bookingRequestChatMessageCreations?: SubscriptionResolver<
+        GQLResolversTypes['ChatMessage'],
+        'bookingRequestChatMessageCreations',
+        ParentType,
+        ContextType,
+        RequireFields<GQLSubscriptionBookingRequestChatMessageCreationsArgs, 'bookingRequestId'>
+    >;
 };
 
 export type GQLTermsUpdateResolvers<
@@ -4739,6 +4765,7 @@ export type GQLResolvers<ContextType = any> = {
     SessionCookieSettings?: GQLSessionCookieSettingsResolvers<ContextType>;
     SessionMutation?: GQLSessionMutationResolvers<ContextType>;
     SessionQuery?: GQLSessionQueryResolvers<ContextType>;
+    Subscription?: GQLSubscriptionResolvers<ContextType>;
     TermsUpdate?: GQLTermsUpdateResolvers<ContextType>;
     TermsUpdateMutation?: GQLTermsUpdateMutationResolvers<ContextType>;
     TermsUpdateQuery?: GQLTermsUpdateQueryResolvers<ContextType>;

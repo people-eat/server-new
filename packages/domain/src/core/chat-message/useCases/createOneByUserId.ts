@@ -1,7 +1,8 @@
 import { bookingRequestNewMessage } from '@people-eat/server-adapter-email-template';
-import { Authorization, type DataSource, type Email, type Logger } from '../../..';
+import { Authorization, type ChatMessage, type DataSource, type Email, type Logger } from '../../..';
 import { type DBBookingRequest, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type Publisher } from '../../Service';
 import { type NanoId } from '../../shared';
 import { type CreateOneChatMessageRequest } from '../CreateOneChatMessageRequest';
 
@@ -11,6 +12,7 @@ export interface CreateOneChatMessageByUserIdInput {
     emailAdapter: Email.Adapter;
     webAppUrl: string;
     context: Authorization.Context;
+    publisher: Publisher;
     request: { userId: NanoId; bookingRequestId: NanoId } & CreateOneChatMessageRequest;
 }
 
@@ -20,6 +22,7 @@ export async function createOneByUserId({
     emailAdapter,
     webAppUrl,
     context,
+    publisher,
     request,
 }: CreateOneChatMessageByUserIdInput): Promise<boolean> {
     const { userId, bookingRequestId, message } = request;
@@ -43,29 +46,38 @@ export async function createOneByUserId({
 
     if (!cookUser) return false;
 
-    const success: boolean = await dataSourceAdapter.chatMessageRepository.insertOne({
+    const chatMessage: ChatMessage = {
         chatMessageId: createNanoId(),
         bookingRequestId,
         message: message.trim(),
         generated: false,
         createdBy: userId,
         createdAt: new Date(),
+    };
+
+    const success: boolean = await dataSourceAdapter.chatMessageRepository.insertOne(chatMessage);
+
+    await publisher.publish(`booking-request-chat-message-creations-${bookingRequestId}`, {
+        bookingRequestChatMessageCreations: chatMessage,
     });
 
     if (!cookUser.emailAddress) return true;
 
-    const cookEmailSuccess: boolean = await emailAdapter.sendToOne(
-        'PeopleEat',
-        cookUser.emailAddress,
-        ` Neue Nachricht ${customerUser.firstName}`,
-        bookingRequestNewMessage({
-            webAppUrl,
-            recipient: { firstName: cookUser.firstName },
-            sender: { firstName: customerUser.firstName },
-        }),
-    );
-
-    if (!cookEmailSuccess) logger.info('sending email failed');
+    emailAdapter
+        .sendToOne(
+            'PeopleEat',
+            cookUser.emailAddress,
+            ` Neue Nachricht ${customerUser.firstName}`,
+            bookingRequestNewMessage({
+                webAppUrl,
+                recipient: { firstName: cookUser.firstName },
+                sender: { firstName: customerUser.firstName },
+            }),
+        )
+        .then((cookEmailSuccess: boolean) => {
+            if (!cookEmailSuccess) logger.info('sending email failed');
+        })
+        .catch(() => undefined);
 
     return success;
 }

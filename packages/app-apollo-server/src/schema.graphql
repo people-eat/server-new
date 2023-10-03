@@ -15,6 +15,10 @@ enum UserLanguage {
     ENGLISH
 }
 
+type Subscription {
+    bookingRequestChatMessageCreations(bookingRequestId: String!): ChatMessage!
+}
+
 enum Gender {
     MALE
     FEMALE

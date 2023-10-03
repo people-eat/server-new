@@ -25,7 +25,7 @@ import { createPublicMenuService } from './public-menu/createPublicMenuService';
 import { createPublicPrivacyPolicyUpdateService } from './public-privacy-policy-update/createPublicPrivacyPolicyUpdateService';
 import { createPublicTermsUpdateService } from './public-terms-update/createPublicTermsUpdateService';
 import { createPublicUserService } from './public-user/createPublicUserService';
-import { type Service } from './Service';
+import { type Publisher, type Service } from './Service';
 import { createSessionService } from './session/createSessionService';
 import { createUserService } from './user/createUserService';
 
@@ -38,6 +38,7 @@ export interface CreateServiceInput {
     paymentAdapter: PaymentProvider.Adapter;
     serverUrl: string;
     webAppUrl: string;
+    publisher: Publisher;
 }
 
 export function createService({
@@ -49,9 +50,11 @@ export function createService({
     paymentAdapter,
     serverUrl,
     webAppUrl,
+    publisher,
 }: CreateServiceInput): Service {
     return {
         log: createLogService({ dataSourceAdapter }),
+        publisher,
 
         language: createLanguageService({ dataSourceAdapter, logger }),
         category: createCategoryService({ dataSourceAdapter, logger }),
@@ -77,7 +80,7 @@ export function createService({
         mealOption: createMealOptionService({ dataSourceAdapter, logger }),
         globalBookingRequest: createGlobalBookingRequestService({ dataSourceAdapter, logger, emailAdapter, webAppUrl }),
         bookingRequest: createBookingRequestService({ dataSourceAdapter, paymentAdapter, logger, emailAdapter, webAppUrl }),
-        chatMessage: createChatMessageService({ dataSourceAdapter, logger, emailAdapter, webAppUrl }),
+        chatMessage: createChatMessageService({ dataSourceAdapter, logger, emailAdapter, webAppUrl, publisher: publisher }),
         configuredMenu: createConfiguredMenuService({ dataSourceAdapter, logger }),
         favoriteCook: createFavoriteCookService({ dataSourceAdapter, logger }),
     };

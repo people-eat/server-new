@@ -27,8 +27,14 @@ import { type PublicUserService } from './public-user/createPublicUserService';
 import { type SessionService } from './session/createSessionService';
 import { type UserService } from './user/createUserService';
 
+export interface Publisher {
+    publish: (key: string, payload: any) => Promise<void>;
+    asyncIterator: (key: string) => AsyncIterator<any>;
+}
+
 export interface Service {
     log: LogService;
+    publisher: Publisher;
 
     language: LanguageService;
     category: CategoryService;
