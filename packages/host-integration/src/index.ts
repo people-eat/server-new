@@ -14,6 +14,7 @@ import {
     type Service,
     type SMS,
 } from '@people-eat/server-domain';
+import { PubSub } from 'graphql-subscriptions';
 import { type EnvironmentVariables } from './EnvironmentVariables.js';
 import { getEnvironmentVariables } from './getEnvironmentVariables.js';
 
@@ -57,6 +58,8 @@ async function bootstrap(): Promise<void> {
         stripeSecretKey: environmentVariables.payment.stripeSecretKey,
     });
 
+    const pubsub: PubSub = new PubSub();
+
     const service: Service = createService({
         dataSourceAdapter,
         logger,
@@ -66,6 +69,12 @@ async function bootstrap(): Promise<void> {
         paymentAdapter,
         serverUrl: 'https://api-integration.people-eat.com',
         webAppUrl: 'https://integration.people-eat.com',
+        publisher: {
+            publish: async (key: string, payload: any) => {
+                await pubsub.publish(key, payload);
+            },
+            asyncIterator: (key: string): AsyncIterator<unknown> => pubsub.asyncIterator([key]),
+        },
     });
 
     logger.setService(service);
