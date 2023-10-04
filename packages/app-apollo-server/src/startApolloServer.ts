@@ -190,12 +190,6 @@ export async function startApolloServerApp({
         path,
     });
 
-    expressApp.use((_req: any, res: any, next: any) => {
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-        next();
-    });
-
     webSocketServer.on('headers', (_headers: string[], request: IncomingMessage & { sessionId?: string }) => {
         if (!request.headers.cookie) throw new Error('Websocket connection without session id was declined');
 
