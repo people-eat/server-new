@@ -30,7 +30,7 @@ import { type Disposable } from 'graphql-ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { createServer as createHttpServer, type IncomingMessage, type Server as HttpServer } from 'http';
 import { join } from 'path';
-import { WebSocketServer } from 'ws';
+import { WebSocketServer, type WebSocket } from 'ws';
 import { createAddressResolvers } from './address/createAddressResolvers';
 import { createAdminResolvers } from './admin/createAdminResolvers';
 import { createAllergyResolvers } from './allergy/createAllergyResolvers';
@@ -188,9 +188,12 @@ export async function startApolloServerApp({
     const webSocketServer: WebSocketServer = new WebSocketServer({
         server: httpServer,
         path,
-        verifyClient: (_info: any, done: any): void => {
-            done(true);
-        },
+    });
+
+    httpServer.on('upgrade', async function upgrade(request: any, socket: any, head: any) {
+        webSocketServer.handleUpgrade(request, socket, head, function done(ws: WebSocket) {
+            webSocketServer.emit('connection', ws, request);
+        });
     });
 
     webSocketServer.on('headers', (_headers: string[], request: IncomingMessage & { sessionId?: string }) => {
