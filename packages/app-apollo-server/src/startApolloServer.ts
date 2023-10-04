@@ -190,6 +190,9 @@ export async function startApolloServerApp({
         path,
     });
 
+    webSocketServer.on('connection', (_ws: any, _req: any) => {
+        undefined;
+    });
     httpServer.on('upgrade', async function upgrade(request: any, socket: any, head: any) {
         webSocketServer.handleUpgrade(request, socket, head, function done(ws: WebSocket) {
             webSocketServer.emit('connection', ws, request);
