@@ -30,7 +30,7 @@ import { type Disposable } from 'graphql-ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { createServer as createHttpServer, type IncomingMessage, type Server as HttpServer } from 'http';
 import { join } from 'path';
-import { WebSocketServer, type WebSocket } from 'ws';
+import { WebSocketServer } from 'ws';
 import { createAddressResolvers } from './address/createAddressResolvers';
 import { createAdminResolvers } from './admin/createAdminResolvers';
 import { createAllergyResolvers } from './allergy/createAllergyResolvers';
@@ -185,17 +185,7 @@ export async function startApolloServerApp({
 
     const expressApp: Express = express();
     const httpServer: HttpServer = createHttpServer(expressApp);
-    const webSocketServer: WebSocketServer = new WebSocketServer({ server: httpServer, path });
-
-    webSocketServer.on('connection', function connection(ws: WebSocket) {
-        ws.on('error', console.error);
-
-        ws.on('message', function message(data: any) {
-            console.log('received: %s', data);
-        });
-
-        ws.send('something');
-    });
+    const webSocketServer: WebSocketServer = new WebSocketServer({ server: httpServer, path, verifyClient: () => true });
 
     webSocketServer.on('headers', (_headers: string[], request: IncomingMessage & { sessionId?: string }) => {
         if (!request.headers.cookie) throw new Error('Websocket connection without session id was declined');
