@@ -1,6 +1,7 @@
-import { Authorization, type DataSource, type Logger, type PaymentProvider } from '../../..';
+import { Authorization, type ChatMessage, type DataSource, type Logger, type PaymentProvider } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type Publisher } from '../../Service';
 import { type NanoId } from '../../shared';
 
 export interface AcceptOneBookingRequestByCookIdInput {
@@ -8,6 +9,7 @@ export interface AcceptOneBookingRequestByCookIdInput {
     logger: Logger.Adapter;
     paymentAdapter: PaymentProvider.Adapter;
     context: Authorization.Context;
+    publisher: Publisher;
     request: { cookId: NanoId; bookingRequestId: NanoId };
 }
 
@@ -35,6 +37,7 @@ export async function acceptOneByCookId({
     paymentAdapter,
     logger,
     context,
+    publisher,
     request,
 }: AcceptOneBookingRequestByCookIdInput): Promise<boolean> {
     const { cookId, bookingRequestId } = request;
@@ -66,13 +69,19 @@ export async function acceptOneByCookId({
 
     if (!paymentSuccess) return false;
 
-    await dataSourceAdapter.chatMessageRepository.insertOne({
+    const chatMessage: ChatMessage = {
         chatMessageId: createNanoId(),
         bookingRequestId,
         message: 'Accepted the Booking Request',
         generated: true,
         createdBy: cookId,
         createdAt: new Date(),
+    };
+
+    await dataSourceAdapter.chatMessageRepository.insertOne(chatMessage);
+
+    await publisher.publish(`booking-request-chat-message-creations-${bookingRequestId}`, {
+        bookingRequestChatMessageCreations: chatMessage,
     });
 
     return success;

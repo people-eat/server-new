@@ -1,4 +1,5 @@
 import { type Authorization, type DataSource, type Email, type Logger, type PaymentProvider } from '../..';
+import { type Publisher } from '../Service';
 import { type FindManyRequest, type NanoId, type Price } from '../shared';
 import { type BookingRequest } from './BookingRequest';
 import { type CreateOneBookingRequestRequest } from './CreateOneBookingRequestRequest';
@@ -60,6 +61,7 @@ export interface CreateBookingRequestServiceInput {
     paymentAdapter: PaymentProvider.Adapter;
     emailAdapter: Email.Adapter;
     webAppUrl: string;
+    publisher: Publisher;
     logger: Logger.Adapter;
 }
 
@@ -68,6 +70,7 @@ export function createBookingRequestService({
     paymentAdapter,
     emailAdapter,
     webAppUrl,
+    publisher,
     logger,
 }: CreateBookingRequestServiceInput): BookingRequestService {
     return {
@@ -87,13 +90,13 @@ export function createBookingRequestService({
         createOneByGlobalBookingRequestId: (context: Authorization.Context, request: { cookId: NanoId; globalBookingRequestId: NanoId }) =>
             createOneByGlobalBookingRequestId({ dataSourceAdapter, logger, webAppUrl, context, request, emailAdapter }),
         acceptOneByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }) =>
-            acceptOneByCookId({ dataSourceAdapter, logger, context, request, paymentAdapter }),
+            acceptOneByCookId({ dataSourceAdapter, logger, context, publisher, request, paymentAdapter }),
         declineOneByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }) =>
-            declineOneByCookId({ dataSourceAdapter, logger, context, request }),
+            declineOneByCookId({ dataSourceAdapter, logger, context, publisher, request }),
         acceptOneByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
-            acceptOneByUserId({ dataSourceAdapter, logger, context, request }),
+            acceptOneByUserId({ dataSourceAdapter, logger, context, publisher, request }),
         declineOneByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
-            declineOneByUserId({ dataSourceAdapter, logger, context, request }),
+            declineOneByUserId({ dataSourceAdapter, logger, context, publisher, request }),
         updatePriceByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId; price: Price }) =>
             updatePriceByCookId({ dataSourceAdapter, logger, context, request }),
         updatePriceByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId; price: Price }) =>
