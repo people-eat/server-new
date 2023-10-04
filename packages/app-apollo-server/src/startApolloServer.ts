@@ -185,7 +185,7 @@ export async function startApolloServerApp({
 
     const expressApp: Express = express();
     const httpServer: HttpServer = createHttpServer(expressApp);
-    const webSocketServer: WebSocketServer = new WebSocketServer({ server: httpServer });
+    const webSocketServer: WebSocketServer = new WebSocketServer({ server: httpServer, path });
 
     webSocketServer.on('headers', (_headers: string[], request: IncomingMessage & { sessionId?: string }) => {
         if (!request.headers.cookie) throw new Error('Websocket connection without session id was declined');
