@@ -19,6 +19,7 @@ import { createMealOptionService } from './meal-option/createMealOptionService';
 import { createMealService } from './meal/createMealService';
 import { createMenuCategoryService } from './menu-category/createMenuCategoryService';
 import { createMenuService } from './menu/createMenuService';
+import { createOneTimeAccessTokenService } from './one-time-access-token/createOneTimeAccessTokenService';
 import { createPhoneNumberUpdateService } from './phone-number-update/createPhoneNumberUpdateService';
 import { createPublicCookService } from './public-cook/createPublicCookService';
 import { createPublicMenuService } from './public-menu/createPublicMenuService';
@@ -83,5 +84,6 @@ export function createService({
         chatMessage: createChatMessageService({ dataSourceAdapter, logger, emailAdapter, webAppUrl, publisher }),
         configuredMenu: createConfiguredMenuService({ dataSourceAdapter, logger }),
         favoriteCook: createFavoriteCookService({ dataSourceAdapter, logger }),
+        oneTimeAccessToken: createOneTimeAccessTokenService({ dataSourceAdapter, logger, emailAdapter, webAppUrl }),
     };
 }

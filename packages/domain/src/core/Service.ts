@@ -18,6 +18,7 @@ import { type MealOptionService } from './meal-option/createMealOptionService';
 import { type MealService } from './meal/createMealService';
 import { type MenuCategoryService } from './menu-category/createMenuCategoryService';
 import { type MenuService } from './menu/createMenuService';
+import { type OneTimeAccessTokenService } from './one-time-access-token/createOneTimeAccessTokenService';
 import { type PhoneNumberUpdateService } from './phone-number-update/createPhoneNumberUpdateService';
 import { type PublicCookService } from './public-cook/createPublicCookService';
 import { type PublicMenuService } from './public-menu/createPublicMenuService';
@@ -63,4 +64,5 @@ export interface Service {
     chatMessage: ChatMessageService;
     configuredMenu: ConfiguredMenuService;
     favoriteCook: FavoriteCookService;
+    oneTimeAccessToken: OneTimeAccessTokenService;
 }

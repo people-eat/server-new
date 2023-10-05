@@ -1,2 +1,2 @@
-export * from './CreateOneOneTimeAccessTokenRequest';
+export * from './CreateOneOneTimeAccessTokenForEmailAddressRequest';
 export * from './OneTimeAccessToken';

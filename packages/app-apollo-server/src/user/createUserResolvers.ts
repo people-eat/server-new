@@ -105,6 +105,7 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
             globalBookingRequests: (_parent: GQLUserMutation, { userId }: GQLUserMutationGlobalBookingRequestsArgs) => ({ userId } as any),
             bookingRequests: (_parent: GQLUserMutation, { userId }: GQLUserMutationBookingRequestsArgs) => ({ userId } as any),
             followings: (_parent: GQLUserMutation, { userId }: GQLUserMutationBookingRequestsArgs) => ({ userId } as any),
+            oneTimeAccessToken: () => ({} as any),
         },
         UserQuery: {
             findMany: async (

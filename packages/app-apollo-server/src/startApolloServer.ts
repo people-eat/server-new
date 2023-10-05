@@ -58,6 +58,7 @@ import { createMenuVisitResolvers } from './menu-visit/createMenuVisitResolvers'
 import { createMenuResolvers } from './menu/createMenuResolvers';
 import { createNotificationConfigurationResolvers } from './notification-configuration/createNotificationConfigurationResolvers';
 import { createNotificationResolvers } from './notification/createNotificationResolvers';
+import { createOneTimeAccessTokenResolvers } from './one-time-access-token/createOneTimeAccessTokenResolvers';
 import { createPhoneNumberUpdateResolvers } from './phone-number-update/createPhoneNumberUpdateResolvers';
 import { createPrivacyPolicyUpdateResolvers } from './privacy-policy-update/createPrivacyPolicyUpdateResolvers';
 import { createPublicCookResolvers } from './public-cook/createPublicCookResolvers';
@@ -175,6 +176,7 @@ export async function startApolloServerApp({
         ...createCookVisitResolvers(),
         ...createMenuVisitResolvers(),
         ...createFollowingResolvers(service),
+        ...createOneTimeAccessTokenResolvers(service),
     };
 
     const path: string = '/graphql';
