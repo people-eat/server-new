@@ -1,3 +1,4 @@
+import { welcome } from '@people-eat/server-adapter-email-template';
 import bcrypt from 'bcryptjs';
 import { createWriteStream } from 'fs';
 import moment from 'moment';
@@ -105,6 +106,8 @@ export async function createOneByEmailAddress({
             context,
             request: { userId, emailAddress: emailAddress.trim() },
         });
+
+        await emailAdapter.sendToOne('PeopleEat', emailAddress, 'Herzlich Willkommen', welcome({ webAppUrl }));
 
         if (!emailSuccess) return false;
     }

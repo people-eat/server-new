@@ -8,205 +8,235 @@ export interface BookingRequestNewMessageInput {
     recipient: {
         firstName: string;
     };
+
+    message: string;
 }
 
-export function bookingRequestNewMessage({ webAppUrl, sender, recipient }: BookingRequestNewMessageInput): string {
+export function bookingRequestNewMessage({ webAppUrl, sender, recipient, message }: BookingRequestNewMessageInput): string {
     const cookProfileBookingRequestsUrl: string = webAppUrl + '/de/chef-profile?tab=3';
 
     return `
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-        <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
-        <head>
-        <meta name=x-apple-disable-message-reformatting>
-        <meta http-equiv=X-UA-Compatible>
-        <meta charset=utf-8>
-        <meta name=viewport content=target-densitydpi=device-dpi>
-        <meta content=true name=HandheldFriendly>
-        <meta content=width=device-width name=viewport>
-        <style type="text/css">
-        table {
-        border-collapse: separate;
-        table-layout: fixed;
-        mso-table-lspace: 0pt;
-        mso-table-rspace: 0pt
-        }
-        table td {
-        border-collapse: collapse
-        }
-        .ExternalClass {
-        width: 100%
-        }
-        .ExternalClass,
-        .ExternalClass p,
-        .ExternalClass span,
-        .ExternalClass font,
-        .ExternalClass td,
-        .ExternalClass div {
-        line-height: 100%
-        }
-        * {
-        line-height: inherit;
-        text-size-adjust: 100%;
-        -ms-text-size-adjust: 100%;
-        -moz-text-size-adjust: 100%;
-        -o-text-size-adjust: 100%;
-        -webkit-text-size-adjust: 100%;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale
-        }
-        html {
-        -webkit-text-size-adjust: none !important
-        }
-        img+div {
-        display: none;
-        display: none !important
-        }
-        img {
-        Margin: 0;
-        padding: 0;
-        -ms-interpolation-mode: bicubic
-        }
-        h1, h2, h3, p, a {
-        line-height: 1;
-        overflow-wrap: normal;
-        white-space: normal;
-        word-break: break-word
-        }
-        a {
-        text-decoration: none
-        }
-        h1, h2, h3, p {
-        min-width: 100%!important;
-        width: 100%!important;
-        max-width: 100%!important;
-        display: inline-block!important;
-        border: 0;
-        padding: 0;
-        margin: 0
-        }
-        a[x-apple-data-detectors] {
-        color: inherit !important;
-        text-decoration: none !important;
-        font-size: inherit !important;
-        font-family: inherit !important;
-        font-weight: inherit !important;
-        line-height: inherit !important
-        }
-        a[href^="mailto"],
-        a[href^="tel"],
-        a[href^="sms"] {
-        color: inherit;
-        text-decoration: none
-        }
-        @media (min-width: 481px) {
-        .hd { display: none!important }
-        }
-        @media (max-width: 480px) {
-        .hm { display: none!important }
-        }
-        [style*="Albert Sans"] {font-family: 'Albert Sans', BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif !important;}
-        @media only screen and (min-width: 481px) {.t3{mso-line-height-alt:45px!important;line-height:45px!important;display:block!important}.t9{padding-left:50px!important;padding-bottom:60px!important;padding-right:50px!important}.t11{padding-left:50px!important;padding-bottom:60px!important;padding-right:50px!important;width:500px!important}.t15,.t23{width:250px!important}.t27,.t32{padding-bottom:25px!important}.t33{line-height:41px!important;font-size:39px!important;letter-spacing:-1.56px!important}.t37,.t42{padding-bottom:19px!important}.t57{padding-bottom:0!important;width:181px!important}.t62{padding-bottom:0!important}}
+    <!DOCTYPE html>
+    <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
+
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"><!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch><o:AllowPNG/></o:OfficeDocumentSettings></xml><![endif]-->
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            a[x-apple-data-detectors] {
+                color: inherit !important;
+                text-decoration: inherit !important;
+            }
+
+            #MessageViewBody a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            p {
+                line-height: inherit
+            }
+
+            .desktop_hide,
+            .desktop_hide table {
+                mso-hide: all;
+                display: none;
+                max-height: 0px;
+                overflow: hidden;
+            }
+
+            .image_block img+div {
+                display: none;
+            }
+
+            @media (max-width:620px) {
+                .image_block img.fullWidth {
+                    max-width: 100% !important;
+                }
+
+                .mobile_hide {
+                    display: none;
+                }
+
+                .row-content {
+                    width: 100% !important;
+                }
+
+                .stack .column {
+                    width: 100%;
+                    display: block;
+                }
+
+                .mobile_hide {
+                    min-height: 0;
+                    max-height: 0;
+                    max-width: 0;
+                    overflow: hidden;
+                    font-size: 0px;
+                }
+
+                .desktop_hide,
+                .desktop_hide table {
+                    display: table !important;
+                    max-height: none !important;
+                }
+            }
         </style>
-        <!--[if !mso]><!-->
-        <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@500;800&display=swap" rel="stylesheet" type="text/css">
-        <!--<![endif]-->
-        <!--[if mso]>
-        <style type="text/css">
-        div.t3{mso-line-height-alt:45px !important;line-height:45px !important;display:block !important}td.t11,td.t9{padding-left:50px !important;padding-bottom:60px !important;padding-right:50px !important}td.t15,td.t23{width:250px !important}td.t27,td.t32{padding-bottom:25px !important}h1.t33{line-height:41px !important;font-size:39px !important;letter-spacing:-1.56px !important}td.t37,td.t42{padding-bottom:19px !important}td.t57{padding-bottom:0 !important;width:181px !important}td.t62{padding-bottom:0 !important}
-        </style>
-        <![endif]-->
-        <!--[if mso]>
-        <xml>
-        <o:OfficeDocumentSettings>
-        <o:AllowPNG/>
-        <o:PixelsPerInch>96</o:PixelsPerInch>
-        </o:OfficeDocumentSettings>
-        </xml>
-        <![endif]-->
-        </head>
-        <body class=t0 style="min-width:100%;Margin:0px;padding:0px;background-color:#FFFFFF;"><div class=t1 style="background-color:#FFFFFF;"><table role=presentation width=100% cellpadding=0 cellspacing=0 border=0 align=center><tr><td class=t74 style="font-size:0;line-height:0;mso-line-height-rule:exactly;" valign=top align=center>
-        <!--[if mso]>
-        <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false">
-        <v:fill color=#FFFFFF />
-        </v:background>
-        <![endif]-->
-        <table role=presentation width=100% cellpadding=0 cellspacing=0 border=0 align=center><tr><td><div class=t3 style="mso-line-height-rule:exactly;font-size:1px;display:none;">&nbsp;</div></td></tr><tr><td>
-        <table class=t10 role=presentation cellpadding=0 cellspacing=0 align=center><tr>
-        <!--[if !mso]><!--><td class=t11 style="background-color:#F8F8F8;overflow:hidden;width:540px;padding:0 30px 40px 30px;">
-        <!--<![endif]-->
-        <!--[if mso]><td class=t11 style="background-color:#F8F8F8;overflow:hidden;width:600px;padding:0 30px 40px 30px;"><![endif]-->
-        <table role=presentation width=100% cellpadding=0 cellspacing=0><tr><td><div class=t54 style="mso-line-height-rule:exactly;mso-line-height-alt:27px;line-height:27px;font-size:1px;display:block;">&nbsp;</div></td></tr><tr><td>
-        <table class=t56 role=presentation cellpadding=0 cellspacing=0 align=left><tr>
-        <!--[if !mso]><!--><td class=t57 style="width:80px;padding:0 0 50px 0;">
-        <!--<![endif]-->
-        <!--[if mso]><td class=t57 style="width:80px;padding:0 0 50px 0;"><![endif]-->
-        </td>
-        </tr></table>
-        </td></tr><tr><td><div class=t55 style="mso-line-height-rule:exactly;mso-line-height-alt:45px;line-height:45px;font-size:1px;display:block;">&nbsp;</div></td></tr><tr><td><div class=t24 style="mso-line-height-rule:exactly;mso-line-height-alt:3px;line-height:3px;font-size:1px;display:block;">&nbsp;</div></td></tr><tr><td>
-        <table class=t26 role=presentation cellpadding=0 cellspacing=0 align=center><tr>
-        <!--[if !mso]><!--><td class=t27 style="width:524px;padding:0 0 20px 0;">
-        <!--<![endif]-->
-        <!--[if mso]><td class=t27 style="width:524px;padding:0 0 20px 0;"><![endif]-->
-        <h1 class=t33 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:28px;font-weight:800;font-style:normal;font-size:26px;text-decoration:none;text-transform:none;letter-spacing:-1.04px;direction:ltr;color:#191919;text-align:left;mso-line-height-rule:exactly;mso-text-raise:1px;">Du hast eine neue Nachricht!</h1></td>
-        </tr></table>
-        </td></tr><tr><td><div class=t64 style="mso-line-height-rule:exactly;mso-line-height-alt:3px;line-height:3px;font-size:1px;display:block;">&nbsp;</div></td></tr><tr><td>
-        <table class=t66 role=presentation cellpadding=0 cellspacing=0 align=center><tr>
-        <!--[if !mso]><!--><td class=t67 style="width:600px;padding:0 0 22px 0;">
-        <!--<![endif]-->
-        <!--[if mso]><td class=t67 style="width:600px;padding:0 0 22px 0;"><![endif]-->
-        <p class=t73 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:14px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#333333;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">Hallo Liebe(r) ${recipient.firstName},</p></td>
-        </tr></table>
-        </td></tr><tr><td><div class=t44 style="mso-line-height-rule:exactly;mso-line-height-alt:3px;line-height:3px;font-size:1px;display:block;">&nbsp;</div></td></tr><tr><td>
-        <table class=t46 role=presentation cellpadding=0 cellspacing=0 align=center><tr>
-        <!--[if !mso]><!--><td class=t47 style="width:600px;padding:0 0 22px 0;">
-        <!--<![endif]-->
-        <!--[if mso]><td class=t47 style="width:600px;padding:0 0 22px 0;"><![endif]-->
-        <p class=t53 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:14px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#333333;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">du hast eine neue Nachricht von ${sender.firstName}.</p></td>
-        </tr></table>
-        </td></tr><tr><td><div class=t34 style="mso-line-height-rule:exactly;mso-line-height-alt:3px;line-height:3px;font-size:1px;display:block;">&nbsp;</div></td></tr><tr><td>
-        <table class=t36 role=presentation cellpadding=0 cellspacing=0 align=center><tr>
-        <!--[if !mso]><!--><td class=t37 style="width:600px;padding:0 0 34px 0;">
-        <!--<![endif]-->
-        <!--[if mso]><td class=t37 style="width:600px;padding:0 0 34px 0;"><![endif]-->
-        <p class=t43 style="margin-bottom:0;Margin-bottom:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:14px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#333333;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">Bitte klicke auf den Button, um mit ${sender.firstName} zu chatten. </p></td>
-        </tr></table>
-        </td></tr><tr><td><div class=t12 style="mso-line-height-rule:exactly;mso-line-height-alt:3px;line-height:3px;font-size:1px;display:block;">&nbsp;</div></td></tr><tr><td>
-        <table class=t14 role=presentation cellpadding=0 cellspacing=0 align=left><tr>
-        <!--[if !mso]><!--><td class=t15 style="background-color:#FF6433;overflow:hidden;width:353px;text-align:center;line-height:44px;mso-line-height-rule:exactly;mso-text-raise:10px;border-radius:44px 44px 44px 44px;">
-        <!--<![endif]-->
-        <!--[if mso]><td class=t15 style="background-color:#FF6433;overflow:hidden;width:353px;text-align:center;line-height:44px;mso-line-height-rule:exactly;mso-text-raise:10px;border-radius:44px 44px 44px 44px;"><![endif]-->
-        <a
-            href="${cookProfileBookingRequestsUrl}"
-            class="t21"
-            style="
-            display: block;
-            font-family: BlinkMacSystemFont,
-                Segoe UI, Helvetica Neue, Arial,
-                sans-serif, 'Albert Sans';
-            line-height: 44px;
-            font-weight: 800;
-            font-style: normal;
-            font-size: 12px;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 2.4px;
-            direction: ltr;
-            color: #f8f8f8;
-            text-align: center;
-            mso-line-height-rule: exactly;
-            mso-text-raise: 10px;
-            "
-            target="_blank"
-        >
-            Zum Chat
-        </a>
-        </td>
-        </tr></table>
-        </td></tr></table></td>
-        </tr></table>
-        </td></tr><tr><td><div class=t4 style="mso-line-height-rule:exactly;mso-line-height-alt:18px;line-height:18px;font-size:1px;display:block;">&nbsp;</div></td></tr></table></td></tr></table>
-        </div>
-        </body>
-        </html>
+    </head>
+
+    <body style="margin: 0; padding: 0; -webkit-text-size-adjust: none; text-size-adjust: none; background-color: #fff;">
+        <table class="nl-container" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff;">
+            <tbody>
+                <tr>
+                    <td>
+                        <table class="row row-1" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; border-radius: 0; width: 600px; margin: 0 auto;" width="600">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                        <table class="image_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                            <tr>
+                                                                <td class="pad" style="padding-bottom:10px;width:100%;padding-right:0px;padding-left:0px;">
+                                                                    <div class="alignment" align="center" style="line-height:10px"><img src="https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/BeeProAgency/1068458_1053702/1.png" style="display: block; height: auto; border: 0; max-width: 270px; width: 100%;" width="270" alt="www.people-eat.com" title="www.people-eat.com"></div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="row row-2" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; background-position: center top; width: 600px; margin: 0 auto;" width="600">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 10px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                        <table class="image_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                            <tr>
+                                                                <td class="pad" style="padding-bottom:5px;padding-left:20px;padding-right:20px;padding-top:5px;width:100%;">
+                                                                    <div class="alignment" align="center" style="line-height:10px"><img class="fullWidth" src="https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/BeeProAgency/1068458_1053702/Du%20hast%20eine%20neue%20Nachricht%20erhalten.png" style="display: block; height: auto; border: 0; max-width: 330px; width: 100%;" width="330"></div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="row row-3" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433; background-size: auto;">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #fff; color: #000; width: 600px; margin: 0 auto;" width="600">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                        <table class="heading_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                            <tr>
+                                                                <td class="pad" style="padding-bottom:5px;padding-left:30px;padding-top:25px;text-align:center;width:100%;">
+                                                                    <h1 style="margin: 0; color: #182029; direction: ltr; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size: 36px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><strong>Du hast eine neue Nachricht!</strong></h1>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                            <tr>
+                                                                <td class="pad" style="padding-bottom:30px;padding-left:30px;padding-right:10px;padding-top:20px;">
+                                                                    <div style="color:#737487;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-size:18px;line-height:180%;text-align:left;mso-line-height-alt:32.4px;">
+                                                                        <p style="margin: 0; word-break: break-word;">Hallo ${recipient.firstName},</p>
+                                                                        <p style="margin: 0;">du hast eine neue Nachricht von ${sender.firstName} erhalten.</p>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="heading_block block-3" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                            <tr>
+                                                                <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;text-align:center;width:100%;">
+                                                                    <h2 style="margin: 0; color: #000000; direction: ltr; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size: 30px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">Nachricht</span></h2>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="paragraph_block block-4" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                            <tr>
+                                                                <td class="pad" style="padding-bottom:30px;padding-left:30px;padding-right:10px;padding-top:20px;">
+                                                                    <div style="color:#737487;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-size:18px;line-height:180%;text-align:left;mso-line-height-alt:32.4px;">
+                                                                        <p style="margin: 0;">${message}</p>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="paragraph_block block-5" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                            <tr>
+                                                                <td class="pad" style="padding-bottom:30px;padding-left:30px;padding-right:10px;padding-top:20px;">
+                                                                    <div style="color:#737487;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-size:18px;line-height:180%;text-align:left;mso-line-height-alt:32.4px;">
+                                                                        <p style="margin: 0;">Klicke auf den Button, um ${sender.firstName} zu antworten.</p>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="button_block block-6" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                            <tr>
+                                                                <td class="pad" style="padding-bottom:20px;padding-left:15px;padding-right:15px;padding-top:20px;text-align:center;">
+                                                                    <div class="alignment" align="center">
+                                                                        <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" style="height:52px;width:202px;v-text-anchor:middle;" arcsize="116%" stroke="false" fillcolor="#ff6433"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:16px"><![endif]-->
+                                                                            <div style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#ff6433;border-radius:60px;width:auto;border-top:0px solid transparent;font-weight:undefined;border-right:0px solid transparent;border-bottom:0px solid transparent;border-left:0px solid transparent;padding-top:10px;padding-bottom:10px;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;">
+                                                                                <span style="padding-left:60px;padding-right:60px;font-size:16px;display:inline-block;letter-spacing:normal;">
+                                                                                    <a href="${cookProfileBookingRequestsUrl}" style="word-break: break-word; line-height: 32px; text-decoration: none; color: #f8f8f8;">
+                                                                                        Chat öffnen
+                                                                                    </a>
+                                                                                </span>
+                                                                            </div>
+                                                                        <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="text_block block-7" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                            <tr>
+                                                                <td class="pad" style="padding-bottom:20px;padding-left:5px;padding-right:5px;padding-top:30px;">
+                                                                    <div style="font-family: sans-serif">
+                                                                        <div class style="font-size: 12px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #000000; line-height: 1.2;">
+                                                                            <p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;">© 2023| PeopleEat UG | Frankfurt am Main</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table><!-- End -->
+    </body>
+
+    </html>
     `;
 }

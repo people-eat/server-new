@@ -72,6 +72,7 @@ export async function createOneByUserId({
                 webAppUrl,
                 recipient: { firstName: cookUser.firstName },
                 sender: { firstName: customerUser.firstName },
+                message,
             }),
         )
         .then((cookEmailSuccess: boolean) => {

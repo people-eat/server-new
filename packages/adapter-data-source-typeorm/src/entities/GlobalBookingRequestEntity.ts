@@ -11,7 +11,7 @@ export class GlobalBookingRequestEntity implements DataSource.DBGlobalBookingReq
     @Column('char', { length: 20 })
     userId!: string;
 
-    @Column('smallint', { unsigned: true })
+    @Column('int', { unsigned: true })
     amount!: number;
 
     @Column('enum', {

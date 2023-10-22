@@ -46,7 +46,7 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
     @Column('smallint', { unsigned: true })
     children!: number;
 
-    @Column('smallint', { unsigned: true })
+    @Column('int', { unsigned: true })
     amount!: number;
 
     @Column('enum', {

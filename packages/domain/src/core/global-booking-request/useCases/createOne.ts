@@ -120,6 +120,7 @@ export async function createOne({
                 webAppUrl,
                 customer: { firstName: user.firstName, profilePictureUrl: user.profilePictureUrl },
                 globalBookingRequest: {
+                    globalBookingRequestId,
                     occasion,
                     adults: adultParticipants,
                     children,
