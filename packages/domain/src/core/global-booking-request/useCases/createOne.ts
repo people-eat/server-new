@@ -94,7 +94,7 @@ export async function createOne({
     const formattedDateTime: string = moment(dateTime).format('MMMM Do YYYY, h:mm a');
     const emailSuccess: boolean = await emailAdapter.sendToMany(
         'Global Booking Request',
-        ['yilmaz.cem.2603@gmail.com'],
+        ['yilmaz.cem.2603@gmail.com', 'contact@people-eat.com'],
         `from ${user.firstName} ${user.lastName}`,
         `A new Booking Request was received from <b>${user.firstName} ${
             user.lastName

@@ -1,4 +1,3 @@
-import { cookBookingRequestCookConfirmation, cookBookingRequestCustomerConfirmation } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
 import {
     Authorization,
@@ -20,8 +19,10 @@ import { type CreateOneBookingRequestRequest } from '../CreateOneBookingRequestR
 
 export interface CreateOneBookingRequestInput {
     dataSourceAdapter: DataSource.Adapter;
+    // remove
     webAppUrl: string;
     emailAdapter: Email.Adapter;
+
     paymentAdapter: PaymentProvider.Adapter;
     logger: Logger.Adapter;
     context: Authorization.Context;
@@ -29,18 +30,12 @@ export interface CreateOneBookingRequestInput {
 }
 
 // eslint-disable-next-line max-statements
-export async function createOne({
-    dataSourceAdapter,
-    webAppUrl,
-    emailAdapter,
-    paymentAdapter,
-    logger,
-    context,
-    request,
-}: CreateOneBookingRequestInput): Promise<{
+export async function createOne({ dataSourceAdapter, paymentAdapter, logger, context, request }: CreateOneBookingRequestInput): Promise<{
     success: boolean;
     clientSecret: string;
+    bookingRequestId: string;
 }> {
+    const bookingRequestId: NanoId = createNanoId();
     const {
         userId,
         cookId,
@@ -61,21 +56,19 @@ export async function createOne({
 
     const daysUntilEventStart: number = moment(dateTime).diff(moment(), 'days');
 
-    if (daysUntilEventStart < 7) return { success: false, clientSecret: '' };
+    if (daysUntilEventStart < 7) return { success: false, clientSecret: '', bookingRequestId };
 
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
 
-    if (!user) return { success: false, clientSecret: '' };
+    if (!user) return { success: false, clientSecret: '', bookingRequestId };
 
     const cookUser: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cookId });
 
-    if (!cookUser) return { success: false, clientSecret: '' };
-
-    const bookingRequestId: NanoId = createNanoId();
+    if (!cookUser) return { success: false, clientSecret: '', bookingRequestId };
 
     const paymentData: { setupIntentId: string; clientSecret: string } | undefined = await paymentAdapter.STRIPE.createSetupIntent();
 
-    if (!paymentData) return { success: false, clientSecret: JSON.stringify(paymentData) };
+    if (!paymentData) return { success: false, clientSecret: JSON.stringify(paymentData), bookingRequestId };
 
     const { clientSecret } = paymentData;
 
@@ -102,7 +95,7 @@ export async function createOne({
         paymentData: { ...paymentData, provider: 'STRIPE' },
     });
 
-    if (!success) return { success: false, clientSecret };
+    if (!success) return { success: false, clientSecret, bookingRequestId };
 
     const messageSuccess: boolean = await dataSourceAdapter.chatMessageRepository.insertOne({
         chatMessageId: createNanoId(),
@@ -115,75 +108,75 @@ export async function createOne({
 
     if (!messageSuccess) logger.info('creating message did fail');
 
-    if (user.emailAddress) {
-        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-            'PeopleEat',
-            user.emailAddress,
-            'Bestätigung Deiner Buchungsanfrage',
-            cookBookingRequestCustomerConfirmation({
-                webAppUrl,
-                customer: {
-                    firstName: user.firstName,
-                },
-                cook: {
-                    firstName: cookUser.firstName,
-                    profilePictureUrl: cookUser.profilePictureUrl ?? '',
-                },
-                bookingRequest: {
-                    occasion,
-                    children,
-                    adults: adultParticipants,
-                    location: location.text ?? '',
-                    date: dateTime.toDateString(),
-                    time: moment(dateTime).format('LT'),
-                    price: {
-                        perPerson: price.amount / (children + adultParticipants),
-                        total: price.amount,
-                        currency: price.currencyCode,
-                    },
-                },
-                chatMessage: message.trim(),
-            }),
-        );
+    // if (user.emailAddress) {
+    //     const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
+    //         'PeopleEat',
+    //         user.emailAddress,
+    //         'Bestätigung Deiner Buchungsanfrage',
+    //         cookBookingRequestCustomerConfirmation({
+    //             webAppUrl,
+    //             customer: {
+    //                 firstName: user.firstName,
+    //             },
+    //             cook: {
+    //                 firstName: cookUser.firstName,
+    //                 profilePictureUrl: cookUser.profilePictureUrl ?? '',
+    //             },
+    //             bookingRequest: {
+    //                 occasion,
+    //                 children,
+    //                 adults: adultParticipants,
+    //                 location: location.text ?? '',
+    //                 date: dateTime.toDateString(),
+    //                 time: moment(dateTime).format('LT'),
+    //                 price: {
+    //                     perPerson: price.amount / (children + adultParticipants),
+    //                     total: price.amount,
+    //                     currency: price.currencyCode,
+    //                 },
+    //             },
+    //             chatMessage: message.trim(),
+    //         }),
+    //     );
 
-        if (!customerEmailSuccess) logger.info('sending email failed');
-    }
+    //     if (!customerEmailSuccess) logger.info('sending email failed');
+    // }
 
-    if (cookUser.emailAddress) {
-        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-            'PeopleEat',
-            cookUser.emailAddress,
-            `Neue Buchungsanfrage ${user.firstName}`,
-            cookBookingRequestCookConfirmation({
-                webAppUrl,
-                customer: {
-                    firstName: user.firstName,
-                },
-                cook: {
-                    firstName: cookUser.firstName,
-                    profilePictureUrl: cookUser.profilePictureUrl ?? '',
-                },
-                bookingRequest: {
-                    occasion,
-                    children,
-                    adults: adultParticipants,
-                    location: location.text ?? '',
-                    date: dateTime.toDateString(),
-                    time: moment(dateTime).format('LT'),
-                    price: {
-                        perPerson: price.amount / (children + adultParticipants),
-                        total: price.amount,
-                        currency: price.currencyCode,
-                    },
-                },
-                chatMessage: message.trim(),
-            }),
-        );
+    // if (cookUser.emailAddress) {
+    //     const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
+    //         'PeopleEat',
+    //         cookUser.emailAddress,
+    //         `Neue Buchungsanfrage ${user.firstName}`,
+    //         cookBookingRequestCookConfirmation({
+    //             webAppUrl,
+    //             customer: {
+    //                 firstName: user.firstName,
+    //             },
+    //             cook: {
+    //                 firstName: cookUser.firstName,
+    //                 profilePictureUrl: cookUser.profilePictureUrl ?? '',
+    //             },
+    //             bookingRequest: {
+    //                 occasion,
+    //                 children,
+    //                 adults: adultParticipants,
+    //                 location: location.text ?? '',
+    //                 date: dateTime.toDateString(),
+    //                 time: moment(dateTime).format('LT'),
+    //                 price: {
+    //                     perPerson: price.amount / (children + adultParticipants),
+    //                     total: price.amount,
+    //                     currency: price.currencyCode,
+    //                 },
+    //             },
+    //             chatMessage: message.trim(),
+    //         }),
+    //     );
 
-        if (!customerEmailSuccess) logger.info('sending email failed');
-    }
+    //     if (!customerEmailSuccess) logger.info('sending email failed');
+    // }
 
-    if (!configuredMenu) return { success: true, clientSecret };
+    if (!configuredMenu) return { success: true, clientSecret, bookingRequestId };
 
     const publicMenu: PublicMenu | undefined = await findOnePublicMenu({
         dataSourceAdapter,
@@ -199,17 +192,17 @@ export async function createOne({
         request: { menuId: configuredMenu.menuId },
     });
 
-    if (!publicMenu || !courses) return { success: false, clientSecret };
+    if (!publicMenu || !courses) return { success: false, clientSecret, bookingRequestId };
 
     const configuredMenuCourses: ConfiguredMenuCourse[] = [];
 
     for (const configuredCourse of configuredMenu.courses) {
         const course: Course | undefined = courses.find((c: Course) => c.courseId === configuredCourse.courseId);
-        if (!course) return { success: false, clientSecret };
+        if (!course) return { success: false, clientSecret, bookingRequestId };
         const selectedMeal: MealOption | undefined = course.mealOptions?.find(
             (mealOption: MealOption) => mealOption.mealId === configuredCourse.mealId,
         );
-        if (!selectedMeal) return { success: false, clientSecret };
+        if (!selectedMeal) return { success: false, clientSecret, bookingRequestId };
         configuredMenuCourses.push({
             index: course.index,
             title: course.title,
@@ -230,5 +223,5 @@ export async function createOne({
         courses: configuredMenuCourses,
     });
 
-    return { success: saveConfiguredMenuSuccess, clientSecret };
+    return { success: saveConfiguredMenuSuccess, clientSecret, bookingRequestId };
 }

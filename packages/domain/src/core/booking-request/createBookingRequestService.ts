@@ -5,6 +5,7 @@ import { type BookingRequest } from './BookingRequest';
 import { type CreateOneBookingRequestRequest } from './CreateOneBookingRequestRequest';
 import { acceptOneByCookId } from './useCases/acceptOneByCookId';
 import { acceptOneByUserId } from './useCases/acceptOneByUserId';
+import { confirmPaymentSetup } from './useCases/confirmPaymentSetup';
 import { createOne } from './useCases/createOne';
 import { createOneByGlobalBookingRequestId } from './useCases/createOneByGlobalBookingRequestId';
 import { declineOneByCookId } from './useCases/declineOneByCookId';
@@ -37,6 +38,7 @@ export interface BookingRequestService {
     ): Promise<{
         success: boolean;
         clientSecret: string;
+        bookingRequestId: string;
     }>;
     createOneByGlobalBookingRequestId(
         context: Authorization.Context,
@@ -54,6 +56,7 @@ export interface BookingRequestService {
         context: Authorization.Context,
         request: { userId: NanoId; bookingRequestId: NanoId; price: Price },
     ): Promise<boolean>;
+    confirmPaymentSetup(context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }): Promise<boolean>;
 }
 
 export interface CreateBookingRequestServiceInput {
@@ -101,5 +104,7 @@ export function createBookingRequestService({
             updatePriceByCookId({ dataSourceAdapter, logger, context, request }),
         updatePriceByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId; price: Price }) =>
             updatePriceByUserId({ dataSourceAdapter, logger, context, request }),
+        confirmPaymentSetup: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
+            confirmPaymentSetup({ dataSourceAdapter, logger, webAppUrl, emailAdapter, context, request }),
     };
 }

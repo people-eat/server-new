@@ -49,6 +49,7 @@ export function createBookingRequestResolvers(
             ): Promise<{
                 success: boolean;
                 clientSecret: string;
+                bookingRequestId: string;
             }> => service.bookingRequest.createOne(context, { userId, ...request }),
             accept: async (
                 { userId }: GQLUserBookingRequestMutation,
@@ -65,6 +66,11 @@ export function createBookingRequestResolvers(
                 { bookingRequestId, price }: GQLUserBookingRequestMutationUpdatePriceArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.bookingRequest.updatePriceByUserId(context, { userId, bookingRequestId, price }),
+            confirmPaymentSetup: (
+                { userId }: GQLUserBookingRequestMutation,
+                { bookingRequestId }: GQLUserBookingRequestMutationChatMessagesArgs,
+                context: Authorization.Context,
+            ): Promise<boolean> => service.bookingRequest.confirmPaymentSetup(context, { userId, bookingRequestId }),
 
             chatMessages: (
                 { userId }: GQLUserBookingRequestMutation,

@@ -73,11 +73,13 @@ type UserBookingRequestMutation {
     accept(bookingRequestId: String!): Boolean!
     decline(bookingRequestId: String!): Boolean!
     updatePrice(bookingRequestId: String!, price: PriceInput!): Boolean!
+    confirmPaymentSetup(bookingRequestId: String!): Boolean!
 }
 
 type UserCreateOneBookingRequestResponse {
     success: Boolean!
     clientSecret: String!
+    bookingRequestId: String!
 }
 
 type UserMutation {

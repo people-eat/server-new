@@ -1623,6 +1623,7 @@ export type GQLUserBookingRequestMutation = {
     __typename?: 'UserBookingRequestMutation';
     accept: Scalars['Boolean'];
     chatMessages: GQLUserBookingRequestChatMessageMutation;
+    confirmPaymentSetup: Scalars['Boolean'];
     createOne: GQLUserCreateOneBookingRequestResponse;
     decline: Scalars['Boolean'];
     updatePrice: Scalars['Boolean'];
@@ -1634,6 +1635,10 @@ export type GQLUserBookingRequestMutationAcceptArgs = {
 };
 
 export type GQLUserBookingRequestMutationChatMessagesArgs = {
+    bookingRequestId: Scalars['String'];
+};
+
+export type GQLUserBookingRequestMutationConfirmPaymentSetupArgs = {
     bookingRequestId: Scalars['String'];
 };
 
@@ -1688,6 +1693,7 @@ export type GQLUserCookVisitQueryFindManyArgs = {
 
 export type GQLUserCreateOneBookingRequestResponse = {
     __typename?: 'UserCreateOneBookingRequestResponse';
+    bookingRequestId: Scalars['String'];
     clientSecret: Scalars['String'];
     success: Scalars['Boolean'];
 };
@@ -4119,6 +4125,12 @@ export type GQLUserBookingRequestMutationResolvers<
         ContextType,
         RequireFields<GQLUserBookingRequestMutationChatMessagesArgs, 'bookingRequestId'>
     >;
+    confirmPaymentSetup?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserBookingRequestMutationConfirmPaymentSetupArgs, 'bookingRequestId'>
+    >;
     createOne?: Resolver<
         GQLResolversTypes['UserCreateOneBookingRequestResponse'],
         ParentType,
@@ -4189,6 +4201,7 @@ export type GQLUserCreateOneBookingRequestResponseResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['UserCreateOneBookingRequestResponse'] = GQLResolversParentTypes['UserCreateOneBookingRequestResponse'],
 > = {
+    bookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     clientSecret?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     success?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
