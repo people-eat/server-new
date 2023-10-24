@@ -48,7 +48,7 @@ export async function findMany({ dataSourceAdapter }: FindManyPublicMenusInput):
 
         let kitchen: DBKitchen | undefined;
 
-        if (menu.kitchenId) kitchen = await dataSourceAdapter.kitchenRepository.findOne({ kitchenId: kitchen?.kitchenId });
+        if (menu.kitchenId) kitchen = await dataSourceAdapter.kitchenRepository.findOne({ kitchenId: menu?.kitchenId });
 
         publicMenus.push({
             ...menu,
