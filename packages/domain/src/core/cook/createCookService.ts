@@ -40,12 +40,12 @@ export interface CreateCookServiceInput {
     smsAdapter: SMS.Adapter;
 }
 
-export function createCookService({ dataSourceAdapter, logger }: CreateCookServiceInput): CookService {
+export function createCookService({ dataSourceAdapter, emailAdapter, logger }: CreateCookServiceInput): CookService {
     return {
         findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),
         findOne: (context: Authorization.Context, cookId: string) => findOne({ dataSourceAdapter, logger, context, request: { cookId } }),
         createOne: (context: Authorization.Context, cookId: string, request: CreateOneCookRequest) =>
-            createOne({ dataSourceAdapter, logger, context, request: { cookId, ...request } }),
+            createOne({ dataSourceAdapter, logger, emailAdapter, context, request: { cookId, ...request } }),
         updateIsLocked: (context: Authorization.Context, cookId: string, isLocked: boolean) =>
             updateIsLocked({ dataSourceAdapter, logger, context, request: { cookId, isLocked } }),
         updateIsVisible: (context: Authorization.Context, cookId: string, isVisible: boolean) =>

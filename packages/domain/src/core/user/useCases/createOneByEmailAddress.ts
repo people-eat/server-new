@@ -128,7 +128,7 @@ export async function createOneByEmailAddress({
     if (addresses)
         for (const address of addresses) await createOneAddress({ dataSourceAdapter, logger, context, request: { userId, ...address } });
 
-    if (cook) await createOneCook({ dataSourceAdapter, logger, context, request: { cookId: userId, ...cook } });
+    if (cook) await createOneCook({ dataSourceAdapter, logger, emailAdapter, context, request: { cookId: userId, ...cook } });
 
     if (globalBookingRequest) {
         const globalBookingRequestSuccess: boolean = await dataSourceAdapter.globalBookingRequestRepository.insertOne({

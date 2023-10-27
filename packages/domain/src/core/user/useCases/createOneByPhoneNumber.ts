@@ -2,7 +2,6 @@ import bcrypt from 'bcryptjs';
 import { type Authorization, type DataSource, type Logger, type SMS } from '../../..';
 import { createNanoId } from '../../../utils/createNanoId';
 import { createOne as createOneAddress } from '../../address/useCases/createOne';
-import { createOne as createOneCook } from '../../cook/useCases/createOne';
 import { createOne as createOnePhoneNumberUpdate } from '../../phone-number-update/useCases/createOne';
 import { type NanoId } from '../../shared';
 import { type CreateOneUserByPhoneNumberRequest } from '../CreateOneUserRequest';
@@ -24,7 +23,9 @@ export async function createOneByPhoneNumber({
     context,
     request,
 }: CreateOneUserByPhoneNumberInput): Promise<boolean> {
-    const { phoneNumber, password, firstName, lastName, language, gender, birthDate, cook, addresses } = request;
+    const { phoneNumber, password, firstName, lastName, language, gender, birthDate, addresses } = request;
+
+    // cook
 
     const userId: NanoId = createNanoId();
 
@@ -62,7 +63,7 @@ export async function createOneByPhoneNumber({
     if (addresses)
         for (const address of addresses) await createOneAddress({ dataSourceAdapter, logger, context, request: { userId, ...address } });
 
-    if (cook) await createOneCook({ dataSourceAdapter, logger, context, request: { cookId: userId, ...cook } });
+    // if (cook) await createOneCook({ dataSourceAdapter, logger, emailAdapter, context, request: { cookId: userId, ...cook } });
 
     return true;
 }

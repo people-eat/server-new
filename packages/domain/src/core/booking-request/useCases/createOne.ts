@@ -198,11 +198,20 @@ export async function createOne({ dataSourceAdapter, paymentAdapter, logger, con
 
     for (const configuredCourse of configuredMenu.courses) {
         const course: Course | undefined = courses.find((c: Course) => c.courseId === configuredCourse.courseId);
-        if (!course) return { success: false, clientSecret, bookingRequestId };
+        if (!course) {
+            logger.info("Didn't find course");
+            return { success: false, clientSecret, bookingRequestId };
+        }
+
         const selectedMeal: MealOption | undefined = course.mealOptions?.find(
             (mealOption: MealOption) => mealOption.mealId === configuredCourse.mealId,
         );
-        if (!selectedMeal) return { success: false, clientSecret, bookingRequestId };
+
+        if (!selectedMeal) {
+            logger.info("Didn't find selected email");
+            return { success: false, clientSecret, bookingRequestId };
+        }
+
         configuredMenuCourses.push({
             index: course.index,
             title: course.title,

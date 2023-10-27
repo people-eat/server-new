@@ -1,5 +1,5 @@
 import { type Authorization, type DataSource, type Logger, type PublicMenu } from '../../..';
-import { type DBUser } from '../../../data-source';
+import { type DBKitchen, type DBUser } from '../../../data-source';
 import packLocation from '../../packLocation';
 import { type NanoId } from '../../shared';
 
@@ -27,10 +27,14 @@ export async function findOne({ dataSourceAdapter, request }: FindOnePublicCookI
 
     if (!user) return;
 
+    let kitchen: DBKitchen | undefined;
+
+    if (menu.kitchenId) kitchen = await dataSourceAdapter.kitchenRepository.findOne({ kitchenId: menu?.kitchenId });
+
     return {
         ...menu,
         cook: { ...packLocation(cook), user },
-        kitchen: undefined,
+        kitchen,
         categories: [],
     };
 }

@@ -1,15 +1,17 @@
-import { Authorization, type CookLanguage, type DataSource, type Logger } from '../../..';
+import { Authorization, type CookLanguage, type DataSource, type Email, type Logger } from '../../..';
+import { type DBUser } from '../../../data-source';
 import { type NanoId } from '../../shared';
 import { type CreateOneCookRequest } from '../CreateOneCookRequest';
 
 export interface CreateOneCookInput {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
+    emailAdapter: Email.Adapter;
     context: Authorization.Context;
     request: CreateOneCookRequest & { cookId: NanoId };
 }
 
-export async function createOne({ dataSourceAdapter, logger, context, request }: CreateOneCookInput): Promise<boolean> {
+export async function createOne({ dataSourceAdapter, logger, emailAdapter, context, request }: CreateOneCookInput): Promise<boolean> {
     const {
         cookId,
         isVisible,
@@ -46,6 +48,17 @@ export async function createOne({ dataSourceAdapter, logger, context, request }:
         maximumParticipants,
         createdAt: new Date(),
     });
+
+    const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cookId });
+
+    if (user) {
+        await emailAdapter.sendToOne(
+            'PeopleEat',
+            'contact@people-eat.com',
+            'Neue Koch Registrierung',
+            `${user.firstName} ${user.lastName} hat sich als PeopleEat Koch registriert`,
+        );
+    }
 
     if (languageIds) {
         const languageSuccess: boolean = await dataSourceAdapter.cookLanguageRepository.insertMany(
