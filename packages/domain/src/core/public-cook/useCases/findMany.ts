@@ -19,11 +19,11 @@ export async function findMany({ dataSourceAdapter }: FindManyPublicCooksInput):
     const publicCooks: PublicCook[] = [];
 
     for (const cook of cooks) {
-        if (!cook.isVisible || cook.isLocked) break;
+        if (!cook.isVisible || cook.isLocked) continue;
 
         const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cook.cookId });
 
-        if (!user) break;
+        if (!user) continue;
 
         publicCooks.push({ ...packLocation(cook), user });
     }
