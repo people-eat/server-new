@@ -92,7 +92,7 @@ export async function createOne({ dataSourceAdapter, paymentAdapter, logger, con
         occasion: occasion.trim(),
         kitchenId,
         createdAt: new Date(),
-        paymentData: { ...paymentData, provider: 'STRIPE' },
+        paymentData: { ...paymentData, provider: 'STRIPE', unlocked: false },
     });
 
     if (!success) return { success: false, clientSecret, bookingRequestId };

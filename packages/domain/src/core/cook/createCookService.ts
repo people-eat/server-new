@@ -1,4 +1,4 @@
-import { type Authorization, type Cook, type DataSource, type Email, type Logger, type SMS } from '../..';
+import { type Authorization, type Cook, type DataSource, type Email, type Logger, type PaymentProvider, type SMS } from '../..';
 import { type CookRank, type FindManyRequest, type Location } from '../shared';
 import { type CreateOneCookRequest } from './CreateOneCookRequest';
 import { createOne } from './useCases/createOne';
@@ -37,15 +37,16 @@ export interface CreateCookServiceInput {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
     emailAdapter: Email.Adapter;
+    paymentAdapter: PaymentProvider.Adapter;
     smsAdapter: SMS.Adapter;
 }
 
-export function createCookService({ dataSourceAdapter, emailAdapter, logger }: CreateCookServiceInput): CookService {
+export function createCookService({ dataSourceAdapter, emailAdapter, paymentAdapter, logger }: CreateCookServiceInput): CookService {
     return {
         findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),
         findOne: (context: Authorization.Context, cookId: string) => findOne({ dataSourceAdapter, logger, context, request: { cookId } }),
         createOne: (context: Authorization.Context, cookId: string, request: CreateOneCookRequest) =>
-            createOne({ dataSourceAdapter, logger, emailAdapter, context, request: { cookId, ...request } }),
+            createOne({ dataSourceAdapter, logger, emailAdapter, paymentAdapter, context, request: { cookId, ...request } }),
         updateIsLocked: (context: Authorization.Context, cookId: string, isLocked: boolean) =>
             updateIsLocked({ dataSourceAdapter, logger, context, request: { cookId, isLocked } }),
         updateIsVisible: (context: Authorization.Context, cookId: string, isVisible: boolean) =>

@@ -1,5 +1,6 @@
 import { Shared, type DataSource } from '@people-eat/server-domain';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
+import { type CookPayoutMethodStripe } from '../../../domain/src/core/cook/CookPayoutMethod';
 import { CookLanguageEntity } from './CookLanguageEntity';
 import { MealEntity } from './MealEntity';
 import { MenuEntity } from './MenuEntity';
@@ -54,6 +55,9 @@ export class CookEntity implements DataSource.DBCook {
 
     @Column('smallint', { nullable: true, unsigned: true })
     maximumParticipants?: number | undefined;
+
+    @Column('json')
+    payoutMethods!: CookPayoutMethodStripe[];
 
     @Column('datetime')
     createdAt!: Date;

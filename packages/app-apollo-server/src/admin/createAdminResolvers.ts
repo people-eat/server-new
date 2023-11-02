@@ -3,6 +3,7 @@ import {
     type GQLAdmin,
     type GQLAdminMutation,
     type GQLAdminMutationCreateOneArgs,
+    type GQLAdminMutationUnlockBookingRequestPaymentArgs,
     type GQLAdminQuery,
     type GQLAdminQueryFindManyArgs,
     type GQLAdminQueryFindOneArgs,
@@ -18,6 +19,11 @@ export function createAdminResolvers(service: Service): Resolvers<'Admin' | 'Adm
                 { request }: GQLAdminMutationCreateOneArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.admin.createOne(context, request),
+            unlockBookingRequestPayment: async (
+                _parent: GQLAdminMutation,
+                { bookingRequestId }: GQLAdminMutationUnlockBookingRequestPaymentArgs,
+                context: Authorization.Context,
+            ): Promise<boolean> => service.bookingRequest.unlockPayment(context, { bookingRequestId }),
         },
         AdminQuery: {
             findOne: async (

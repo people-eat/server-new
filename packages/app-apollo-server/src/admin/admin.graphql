@@ -18,6 +18,7 @@ input CreateOneAdminRequest {
 
 type AdminMutation {
     createOne(request: CreateOneAdminRequest!): Boolean!
+    unlockBookingRequestPayment(bookingRequestId: String!): Boolean!
 }
 
 type Mutation {

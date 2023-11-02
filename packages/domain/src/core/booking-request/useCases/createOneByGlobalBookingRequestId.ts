@@ -86,6 +86,7 @@ export async function createOneByGlobalBookingRequestId({
             provider: 'STRIPE',
             setupIntentId: '',
             clientSecret: '',
+            unlocked: false,
         },
     });
 

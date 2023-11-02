@@ -1,6 +1,5 @@
 import { type Logger, type PaymentProvider } from '@people-eat/server-domain';
 import { Stripe } from 'stripe';
-import { type CreatePaymentIntentInput } from '../../domain/src/payment-provider';
 
 export interface CreatePaymentAdapterInput {
     logger: Logger.Adapter;
@@ -30,7 +29,7 @@ export function createPaymentAdapter({ logger, stripeSecretKey }: CreatePaymentA
                     return undefined;
                 }
             },
-            createPaymentIntent: async ({ setupIntentId, amount }: CreatePaymentIntentInput): Promise<boolean> => {
+            createPaymentIntent: async ({ setupIntentId, amount }: PaymentProvider.CreatePaymentIntentInput): Promise<boolean> => {
                 try {
                     const setupIntent: Stripe.SetupIntent = await client.setupIntents.retrieve(setupIntentId);
 
@@ -51,6 +50,55 @@ export function createPaymentAdapter({ logger, stripeSecretKey }: CreatePaymentA
                     });
 
                     return paymentIntent.status === 'succeeded';
+                } catch (error) {
+                    logger.error(error);
+                    return false;
+                }
+            },
+            createConnectedAccount: async ({
+                emailAddress,
+            }: PaymentProvider.CreateConnectedAccountInput): Promise<{ accountId: string } | undefined> => {
+                try {
+                    const account: Stripe.Account = await client.accounts.create({
+                        type: 'standard',
+                        email: emailAddress,
+                    });
+
+                    return { accountId: account.id };
+                } catch (error) {
+                    logger.error(error);
+                    return undefined;
+                }
+            },
+            createConnectedAccountUrl: async ({
+                accountId,
+            }: PaymentProvider.CreateConnectedAccountUrlInput): Promise<{ url: string } | undefined> => {
+                try {
+                    const accountLink: Stripe.AccountLink = await client.accountLinks.create({
+                        account: accountId,
+                        refresh_url: 'https://example.com/reauth',
+                        return_url: 'https://example.com/return',
+                        type: 'account_onboarding',
+                    });
+
+                    return { url: accountLink.url };
+                } catch (error) {
+                    logger.error(error);
+                    return undefined;
+                }
+            },
+            transferPaymentToCookAccount: async ({
+                accountId,
+                price,
+            }: PaymentProvider.TransferPaymentToCookAccountInput): Promise<boolean> => {
+                try {
+                    await client.transfers.create({
+                        amount: price.amount,
+                        currency: 'eur',
+                        destination: accountId,
+                    });
+
+                    return true;
                 } catch (error) {
                     logger.error(error);
                     return false;

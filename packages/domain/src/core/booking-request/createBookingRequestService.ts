@@ -16,6 +16,7 @@ import { findManyByUserId } from './useCases/findManyByUserId';
 import { findOne } from './useCases/findOne';
 import { findOneByCookId } from './useCases/findOneByCookId';
 import { findOneByUserId } from './useCases/findOneByUserId';
+import { unlockPayment } from './useCases/unlockPayment';
 import { updatePriceByCookId } from './useCases/updatePriceByCookId';
 import { updatePriceByUserId } from './useCases/updatePriceByUserId';
 
@@ -57,6 +58,7 @@ export interface BookingRequestService {
         request: { userId: NanoId; bookingRequestId: NanoId; price: Price },
     ): Promise<boolean>;
     confirmPaymentSetup(context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }): Promise<boolean>;
+    unlockPayment(context: Authorization.Context, request: { bookingRequestId: NanoId }): Promise<boolean>;
 }
 
 export interface CreateBookingRequestServiceInput {
@@ -106,5 +108,7 @@ export function createBookingRequestService({
             updatePriceByUserId({ dataSourceAdapter, logger, context, request }),
         confirmPaymentSetup: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
             confirmPaymentSetup({ dataSourceAdapter, logger, webAppUrl, emailAdapter, context, request }),
+        unlockPayment: (context: Authorization.Context, request: { bookingRequestId: NanoId }) =>
+            unlockPayment({ dataSourceAdapter, paymentAdapter, logger, context, request }),
     };
 }

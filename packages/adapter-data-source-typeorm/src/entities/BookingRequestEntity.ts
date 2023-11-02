@@ -75,6 +75,7 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
         provider: Shared.PaymentProvider;
         setupIntentId: string;
         clientSecret: string;
+        unlocked: boolean;
     };
 
     /* relations */

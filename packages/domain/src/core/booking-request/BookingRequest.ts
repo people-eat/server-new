@@ -24,5 +24,6 @@ export interface BookingRequest {
         provider: PaymentProvider;
         setupIntentId: string;
         clientSecret: string;
+        unlocked: boolean;
     };
 }

@@ -1,1 +1,7 @@
-export { Adapter, CreatePaymentIntentInput } from './Adapter';
+export {
+    Adapter,
+    CreateConnectedAccountInput,
+    CreateConnectedAccountUrlInput,
+    CreatePaymentIntentInput,
+    TransferPaymentToCookAccountInput,
+} from './Adapter';

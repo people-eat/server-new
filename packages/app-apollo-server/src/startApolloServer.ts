@@ -123,6 +123,7 @@ export async function startApolloServerApp({
             stripePublishableKey: () => stripePublishableKey,
         },
         Mutation: {
+            admins: () => ({} as any),
             languages: () => ({} as any),
             categories: () => ({} as any),
             kitchens: () => ({} as any),

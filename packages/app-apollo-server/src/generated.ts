@@ -47,10 +47,15 @@ export type GQLAdmin = {
 export type GQLAdminMutation = {
     __typename?: 'AdminMutation';
     createOne: Scalars['Boolean'];
+    unlockBookingRequestPayment: Scalars['Boolean'];
 };
 
 export type GQLAdminMutationCreateOneArgs = {
     request: GQLCreateOneAdminRequest;
+};
+
+export type GQLAdminMutationUnlockBookingRequestPaymentArgs = {
+    bookingRequestId: Scalars['String'];
 };
 
 export type GQLAdminQuery = {
@@ -2524,6 +2529,12 @@ export type GQLAdminMutationResolvers<
     ParentType extends GQLResolversParentTypes['AdminMutation'] = GQLResolversParentTypes['AdminMutation'],
 > = {
     createOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType, RequireFields<GQLAdminMutationCreateOneArgs, 'request'>>;
+    unlockBookingRequestPayment?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLAdminMutationUnlockBookingRequestPaymentArgs, 'bookingRequestId'>
+    >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

@@ -1,4 +1,5 @@
 import { type CookRank, type Location, type NanoId } from '../shared';
+import { type CookPayoutMethod } from './CookPayoutMethod';
 
 export interface Cook {
     cookId: NanoId;
@@ -15,5 +16,6 @@ export interface Cook {
     maximumPrice?: number;
     minimumParticipants?: number;
     maximumParticipants?: number;
+    payoutMethods: CookPayoutMethod[];
     createdAt: Date;
 }

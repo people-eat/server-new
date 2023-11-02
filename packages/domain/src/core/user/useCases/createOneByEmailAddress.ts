@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { createWriteStream } from 'fs';
 import moment from 'moment';
 import { join } from 'path';
-import { type Authorization, type DataSource, type Email, type Logger, type SMS } from '../../..';
+import { type Authorization, type DataSource, type Email, type Logger, type PaymentProvider, type SMS } from '../../..';
 import { type DBAllergy, type DBCategory, type DBKitchen } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { createOne as createOneAddress } from '../../address/useCases/createOne';
@@ -17,6 +17,7 @@ export interface CreateOneUserByEmailAddressInput {
     dataSourceAdapter: DataSource.Adapter;
     emailAdapter: Email.Adapter;
     smsAdapter: SMS.Adapter;
+    paymentAdapter: PaymentProvider.Adapter;
     logger: Logger.Adapter;
     serverUrl: string;
     webAppUrl: string;
@@ -28,6 +29,7 @@ export interface CreateOneUserByEmailAddressInput {
 export async function createOneByEmailAddress({
     dataSourceAdapter,
     emailAdapter,
+    paymentAdapter,
     smsAdapter,
     logger,
     serverUrl,
@@ -128,7 +130,8 @@ export async function createOneByEmailAddress({
     if (addresses)
         for (const address of addresses) await createOneAddress({ dataSourceAdapter, logger, context, request: { userId, ...address } });
 
-    if (cook) await createOneCook({ dataSourceAdapter, logger, emailAdapter, context, request: { cookId: userId, ...cook } });
+    if (cook)
+        await createOneCook({ dataSourceAdapter, logger, emailAdapter, paymentAdapter, context, request: { cookId: userId, ...cook } });
 
     if (globalBookingRequest) {
         const globalBookingRequestSuccess: boolean = await dataSourceAdapter.globalBookingRequestRepository.insertOne({

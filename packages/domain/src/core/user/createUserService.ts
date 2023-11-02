@@ -1,5 +1,5 @@
 import { type ReadStream } from 'fs';
-import { type Authorization, type DataSource, type Email, type IdentityProvider, type Logger, type SMS } from '../..';
+import { type Authorization, type DataSource, type Email, type IdentityProvider, type Logger, type PaymentProvider, type SMS } from '../..';
 import { type FindManyRequest, type Gender, type NanoId } from '../shared';
 import {
     type CreateOneUserByEmailAddressRequest,
@@ -32,6 +32,7 @@ export interface CreateUserServiceInput {
     logger: Logger.Adapter;
     emailAdapter: Email.Adapter;
     smsAdapter: SMS.Adapter;
+    paymentAdapter: PaymentProvider.Adapter;
     identityProviderAdapter: IdentityProvider.Adapter;
     serverUrl: string;
     webAppUrl: string;
@@ -41,6 +42,7 @@ export function createUserService({
     dataSourceAdapter,
     logger,
     emailAdapter,
+    paymentAdapter,
     smsAdapter,
     identityProviderAdapter,
     serverUrl,
@@ -51,7 +53,17 @@ export function createUserService({
             findOneByUserId({ dataSourceAdapter, logger, context, request }),
         findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),
         createOneByEmailAddress: (context: Authorization.Context, request: CreateOneUserByEmailAddressRequest) =>
-            createOneByEmailAddress({ dataSourceAdapter, logger, emailAdapter, smsAdapter, serverUrl, webAppUrl, context, request }),
+            createOneByEmailAddress({
+                dataSourceAdapter,
+                logger,
+                emailAdapter,
+                smsAdapter,
+                paymentAdapter,
+                serverUrl,
+                webAppUrl,
+                context,
+                request,
+            }),
         createOneByPhoneNumber: (context: Authorization.Context, request: CreateOneUserByPhoneNumberRequest) =>
             createOneByPhoneNumber({ dataSourceAdapter, logger, smsAdapter, webAppUrl, context, request }),
         createOneByIdentityProvider: (context: Authorization.Context, request: CreateOneUserByIdentityProviderRequest) =>
