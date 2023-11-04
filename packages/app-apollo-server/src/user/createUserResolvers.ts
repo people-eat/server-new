@@ -121,7 +121,6 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
             ): Promise<GQLUser | undefined> => service.user.findOneByUserId(context, { userId }) as any,
 
             me: async (_parent: GQLUserQuery, _input: unknown, context: Authorization.Context): Promise<GQLUser | undefined> => {
-                console.log({ contextInMe: context });
                 const { userId } = context;
 
                 if (!userId) return undefined;

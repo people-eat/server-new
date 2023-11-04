@@ -1,7 +1,7 @@
-import { cookBookingRequestCookConfirmation, cookBookingRequestCustomerConfirmation } from '@people-eat/server-adapter-email-template';
+import { menuBookingRequestCookConfirmation, menuBookingRequestCustomerConfirmation } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
 import { Authorization, type DataSource, type Email, type Logger } from '../../..';
-import { type DBBookingRequest, type DBUser } from '../../../data-source';
+import { type DBBookingRequest, type DBChatMessage, type DBConfiguredMenu, type DBUser } from '../../../data-source';
 import { type NanoId } from '../../shared';
 
 export interface ConfirmPaymentSetupInput {
@@ -13,6 +13,7 @@ export interface ConfirmPaymentSetupInput {
     request: { userId: NanoId; bookingRequestId: NanoId };
 }
 
+// eslint-disable-next-line max-statements
 export async function confirmPaymentSetup({
     dataSourceAdapter,
     logger,
@@ -42,12 +43,17 @@ export async function confirmPaymentSetup({
 
     if (!cookUser) return false;
 
+    const configuredMenu: DBConfiguredMenu | undefined = await dataSourceAdapter.configuredMenuRepository.findOne({ bookingRequestId });
+    const chatMessage: DBChatMessage | undefined = await dataSourceAdapter.chatMessageRepository.findOne({ bookingRequestId });
+
     if (user.emailAddress) {
+        if (!configuredMenu) return true;
+
         const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
             'PeopleEat',
             user.emailAddress,
             'Bestätigung Deiner Buchungsanfrage',
-            cookBookingRequestCustomerConfirmation({
+            menuBookingRequestCustomerConfirmation({
                 webAppUrl,
                 customer: {
                     firstName: user.firstName,
@@ -57,6 +63,7 @@ export async function confirmPaymentSetup({
                     profilePictureUrl: cookUser.profilePictureUrl ?? '',
                 },
                 bookingRequest: {
+                    bookingRequestId,
                     occasion,
                     children,
                     adults: adultParticipants,
@@ -68,10 +75,15 @@ export async function confirmPaymentSetup({
                         total: amount,
                         currency: currencyCode,
                     },
+                    menu: {
+                        title: configuredMenu.title,
+                        categories: [],
+                        kitchen: undefined,
+                        allergies: [],
+                        courses: configuredMenu.courses,
+                    },
                 },
-                // todo
-                chatMessage: '',
-                // message.trim(),
+                chatMessage: chatMessage?.message ?? '',
             }),
         );
 
@@ -79,11 +91,13 @@ export async function confirmPaymentSetup({
     }
 
     if (cookUser.emailAddress) {
+        if (!configuredMenu) return true;
+
         const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
             'PeopleEat',
             cookUser.emailAddress,
             `Neue Buchungsanfrage ${user.firstName}`,
-            cookBookingRequestCookConfirmation({
+            menuBookingRequestCookConfirmation({
                 webAppUrl,
                 customer: {
                     firstName: user.firstName,
@@ -93,6 +107,7 @@ export async function confirmPaymentSetup({
                     profilePictureUrl: cookUser.profilePictureUrl ?? '',
                 },
                 bookingRequest: {
+                    bookingRequestId,
                     occasion,
                     children,
                     adults: adultParticipants,
@@ -104,10 +119,15 @@ export async function confirmPaymentSetup({
                         total: amount,
                         currency: currencyCode,
                     },
+                    menu: {
+                        title: configuredMenu.title,
+                        categories: [],
+                        kitchen: undefined,
+                        allergies: [],
+                        courses: configuredMenu.courses,
+                    },
                 },
-                // todo
-                chatMessage: '',
-                // message.trim(),
+                chatMessage: chatMessage?.message ?? '',
             }),
         );
 

@@ -16,7 +16,7 @@ export interface CreateOneCookInput {
 export async function createOne({
     dataSourceAdapter,
     logger,
-    emailAdapter,
+    // emailAdapter,
     paymentAdapter,
     context,
     request,
@@ -63,12 +63,12 @@ export async function createOne({
 
     if (!user) return false;
 
-    await emailAdapter.sendToOne(
-        'PeopleEat',
-        'contact@people-eat.com',
-        'Neue Koch Registrierung',
-        `${user.firstName} ${user.lastName} hat sich als PeopleEat Koch registriert`,
-    );
+    // await emailAdapter.sendToOne(
+    //     'PeopleEat',
+    //     'contact@people-eat.com',
+    //     'Neue Koch Registrierung',
+    //     `${user.firstName} ${user.lastName} hat sich als PeopleEat Koch registriert`,
+    // );
 
     if (languageIds) {
         const languageSuccess: boolean = await dataSourceAdapter.cookLanguageRepository.insertMany(
