@@ -25,13 +25,11 @@ export interface GlobalBookingRequestCustomerConfirmationInput {
 }
 
 export function globalBookingRequestCustomerConfirmation({
-    webAppUrl,
+    // webAppUrl,
     customer,
     globalBookingRequest,
     chatMessage,
 }: GlobalBookingRequestCustomerConfirmationInput): string {
-    const customerProfileGlobalBookingRequestsUrl: string = webAppUrl + '/de/profile?tab=2';
-
     const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
 
     return `
@@ -205,7 +203,7 @@ export function globalBookingRequestCustomerConfirmation({
                                                                             Hallo ${customer.firstName},
                                                                         </p>
                                                                         <p style="margin: 0; margin-bottom: 16px;">Vielen Dank für deine Buchungsanfrage!&nbsp;</p>
-                                                                        <p style="margin: 0; margin-bottom: 16px;">Hiermit bestätigen wir dir den Eingang deiner Individuellen Buchungsanfrage.</p>
+                                                                        <p style="margin: 0; margin-bottom: 16px;">Hiermit bestätigen wir dir den Eingang deiner Buchungsanfrage.</p>
                                                                         <p style="margin: 0;">Sobald deine Anfrage bearbeitet wurde, setzen wir uns direkt mit dir in Verbindung.</p>
                                                                     </div>
                                                                 </td>
@@ -264,21 +262,6 @@ export function globalBookingRequestCustomerConfirmation({
                                                                 <td class="pad" style="padding-bottom:5px;padding-left:30px;padding-right:10px;padding-top:10px;">
                                                                     <div style="color:#232323;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:25px;font-weight:400;line-height:120%;text-align:left;mso-line-height-alt:30px;">
                                                                         <p style="margin: 0; word-break: break-word;"><strong>Buchungsdetails</strong></p>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                        <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                            <tr>
-                                                                <td class="pad" style="padding-bottom:5px;padding-left:30px;padding-right:10px;">
-                                                                    <div style="color:#232323;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15px;font-weight:400;line-height:120%;text-align:left;mso-line-height-alt:18px;">
-                                                                        <p style="margin: 0; word-break: break-word;">
-                                                                            <a href="${customerProfileGlobalBookingRequestsUrl}">
-                                                                                <strong>
-                                                                                    Buchungsdetails ansehen
-                                                                                </strong>
-                                                                            </a>
-                                                                        </p>
                                                                     </div>
                                                                 </td>
                                                             </tr>
