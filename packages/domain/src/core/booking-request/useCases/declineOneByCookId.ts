@@ -1,5 +1,5 @@
 import { Authorization, type ChatMessage, type DataSource, type Logger } from '../../..';
-import { type DBBookingRequest } from '../../../data-source';
+import { type DBBookingRequest, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type Publisher } from '../../Service';
 import { type NanoId } from '../../shared';
@@ -37,10 +37,14 @@ export async function declineOneByCookId({
         { cookAccepted: false },
     );
 
+    const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cookId });
+
+    if (!user) return true;
+
     const chatMessage: ChatMessage = {
         chatMessageId: createNanoId(),
         bookingRequestId,
-        message: 'Declined the Booking Request',
+        message: `Koch:in ${user.firstName} hat die Buchungsanfrage abgelehnt`,
         generated: true,
         createdBy: cookId,
         createdAt: new Date(),
