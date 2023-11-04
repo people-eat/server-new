@@ -348,7 +348,11 @@ export function menuBookingRequestCustomerConfirmation({
                                                             <tr>
                                                                 <td class="pad" style="padding-bottom:10px;padding-left:35px;padding-right:10px;padding-top:10px;">
                                                                     <div style="color:#101112;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:13px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:15.6px;">
-                                                                        <p style="margin: 0;">Bitte beachte, dass die Zahlung erst nach Annahme des Privatkoch:in erfolgt.&nbsp;</p>
+                                                                        <p style="margin: 0;">
+                                                                            Bitte beachte, dass die Zahlung erst nach Annahme von Privatkoch:in ${
+                                                                                cook.firstName
+                                                                            } erfolgt.
+                                                                        </p>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -552,9 +556,10 @@ export function menuBookingRequestCustomerConfirmation({
                                                             <tr>
                                                                 <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
                                                                     <div style="color:#101112;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
-                                                                        <p style="margin: 0;"><strong>Kinder 6-12 Jahren: </strong><br>${
-                                                                            bookingRequest.children
-                                                                        }</p>
+                                                                        <p style="margin: 0;">
+                                                                            <strong>Kinder 6-12 Jahren: </strong>
+                                                                            ${bookingRequest.children}
+                                                                        </p>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -627,12 +632,13 @@ export function menuBookingRequestCustomerConfirmation({
                                                                 </td>
                                                             </tr>
                                                         </table>
-                                                        ${bookingRequest.menu.courses.map(
-                                                            ({
-                                                                title,
-                                                                mealTitle,
-                                                                mealDescription,
-                                                            }: any) => `<table class="heading_block block-3" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                        ${bookingRequest.menu.courses
+                                                            .map(
+                                                                ({
+                                                                    title,
+                                                                    mealTitle,
+                                                                    mealDescription,
+                                                                }: any) => `<table class="heading_block block-3" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                                                                     <tr>
                                                                         <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;text-align:center;width:100%;">
                                                                             <h2 style="margin: 0; color: #000000; direction: ltr; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">${title}</span></h2>
@@ -657,7 +663,8 @@ export function menuBookingRequestCustomerConfirmation({
                                                                         </td>
                                                                     </tr>
                                                                 </table>`,
-                                                        )}
+                                                            )
+                                                            .join('')}
                                                     </td>
                                                 </tr>
                                             </tbody>

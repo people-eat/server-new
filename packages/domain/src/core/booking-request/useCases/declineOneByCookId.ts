@@ -44,7 +44,7 @@ export async function declineOneByCookId({
     const chatMessage: ChatMessage = {
         chatMessageId: createNanoId(),
         bookingRequestId,
-        message: `Koch / Köchin ${user.firstName} hat die Buchungsanfrage abgelehnt`,
+        message: `Privatkoch:in ${user.firstName} hat die Buchungsanfrage abgelehnt`,
         generated: true,
         createdBy: cookId,
         createdAt: new Date(),
