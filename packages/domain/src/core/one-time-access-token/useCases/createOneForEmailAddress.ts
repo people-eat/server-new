@@ -1,3 +1,4 @@
+import { resetPassword } from '@people-eat/server-adapter-email-template';
 import { type DBUser } from '../../../data-source/index';
 import { type DataSource, type Email, type Logger } from '../../../index';
 import { createNanoId } from '../../../utils/createNanoId';
@@ -37,7 +38,7 @@ export async function createOneForEmailAddress({
         'PeopleEat',
         emailAddress,
         'Passwort vergessen',
-        `${webAppUrl}/forgot-password/${secret}`,
+        resetPassword({ webAppUrl, secret, user: { firstName: 'you' } }),
     );
 
     if (!emailSendigSuccess) return false;

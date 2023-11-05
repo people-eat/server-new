@@ -9,5 +9,6 @@ export { globalBookingRequestCookConfirmation } from './globalBookingRequestCook
 export { globalBookingRequestCustomerConfirmation } from './globalBookingRequestCustomerConfirmation';
 export { menuBookingRequestCookConfirmation } from './menuBookingRequestCookConfirmation';
 export { menuBookingRequestCustomerConfirmation } from './menuBookingRequestCustomerConfirmation';
+export { resetPassword } from './resetPassword';
 export { userRegistrationConfirmation } from './userRegistrationConfirmation';
 export { welcome } from './welcome';
