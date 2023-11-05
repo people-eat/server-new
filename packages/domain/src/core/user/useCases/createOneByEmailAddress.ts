@@ -1,4 +1,4 @@
-import { welcome } from '@people-eat/server-adapter-email-template';
+import { globalBookingRequestCustomerConfirmation, welcome } from '@people-eat/server-adapter-email-template';
 import bcrypt from 'bcryptjs';
 import { createWriteStream } from 'fs';
 import moment from 'moment';
@@ -134,8 +134,9 @@ export async function createOneByEmailAddress({
         await createOneCook({ dataSourceAdapter, logger, emailAdapter, paymentAdapter, context, request: { cookId: userId, ...cook } });
 
     if (globalBookingRequest) {
+        const globalBookingRequestId: NanoId = createNanoId();
         const globalBookingRequestSuccess: boolean = await dataSourceAdapter.globalBookingRequestRepository.insertOne({
-            globalBookingRequestId: createNanoId(),
+            globalBookingRequestId,
             userId,
             adultParticipants: globalBookingRequest.adultParticipants,
             children: globalBookingRequest.children,
@@ -181,6 +182,37 @@ export async function createOneByEmailAddress({
         }
 
         const formattedDateTime: string = moment(globalBookingRequest.dateTime).format('MMMM Do YYYY, h:mm a');
+
+        if (emailAddress) {
+            const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
+                'PeopleEat',
+                emailAddress,
+                'Bestätigung Deiner Buchungsanfrage',
+                globalBookingRequestCustomerConfirmation({
+                    webAppUrl,
+                    customer: { firstName, profilePictureUrl },
+                    globalBookingRequest: {
+                        globalBookingRequestId,
+                        occasion: globalBookingRequest.occasion,
+                        adults: globalBookingRequest.adultParticipants,
+                        children: globalBookingRequest.children,
+                        location: globalBookingRequest.location.text,
+                        date: globalBookingRequest.dateTime.toDateString(),
+                        time: moment(globalBookingRequest.dateTime).format('LT'),
+                        price: {
+                            perPerson:
+                                globalBookingRequest.price.amount /
+                                (globalBookingRequest.children + globalBookingRequest.adultParticipants),
+                            total: globalBookingRequest.price.amount,
+                            currency: globalBookingRequest.price.currencyCode,
+                        },
+                    },
+                    chatMessage: globalBookingRequest.message.trim(),
+                }),
+            );
+
+            if (!customerEmailSuccess) logger.info('sending email failed');
+        }
 
         const globalBookingRequestEmailSuccess: boolean = await emailAdapter.sendToMany(
             'Booking Request',
