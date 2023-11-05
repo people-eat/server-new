@@ -2,6 +2,7 @@ export { bookingRequestNewMessage } from './bookingRequestNewMessage';
 export { confirmEmailAddress } from './confirmEmailAddress';
 export { cookBookingRequestCookAcceptedNotification } from './cookBookingRequestCookAcceptedNotification';
 export { cookBookingRequestCookConfirmation } from './cookBookingRequestCookConfirmation';
+export { cookBookingRequestCookDeclinedNotification } from './cookBookingRequestCookDeclinedNotification';
 export { cookBookingRequestCustomerConfirmation } from './cookBookingRequestCustomerConfirmation';
 export { cookRegistrationConfirmation } from './cookRegistrationConfirmation';
 export { globalBookingRequestCookConfirmation } from './globalBookingRequestCookConfirmation';

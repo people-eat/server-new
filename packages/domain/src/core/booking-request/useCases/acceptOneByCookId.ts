@@ -1,5 +1,7 @@
-import { Authorization, type ChatMessage, type DataSource, type Logger, type PaymentProvider } from '../../..';
-import { type DBBookingRequest } from '../../../data-source';
+import { cookBookingRequestCookAcceptedNotification } from '@people-eat/server-adapter-email-template';
+import moment from 'moment';
+import { Authorization, type ChatMessage, type DataSource, type Email, type Logger, type PaymentProvider } from '../../..';
+import { type DBBookingRequest, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type Publisher } from '../../Service';
 import { type NanoId } from '../../shared';
@@ -8,6 +10,8 @@ export interface AcceptOneBookingRequestByCookIdInput {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
     paymentAdapter: PaymentProvider.Adapter;
+    emailAdapter: Email.Adapter;
+    webAppUrl: string;
     context: Authorization.Context;
     publisher: Publisher;
     request: { cookId: NanoId; bookingRequestId: NanoId };
@@ -32,11 +36,14 @@ export function calculateMenuPrice(
     return (underagedParticipants - basePriceCustomers - adultParticipants) * pricePerUnderaged + basePrice;
 }
 
+// eslint-disable-next-line max-statements
 export async function acceptOneByCookId({
     dataSourceAdapter,
     paymentAdapter,
     logger,
     context,
+    emailAdapter,
+    webAppUrl,
     publisher,
     request,
 }: AcceptOneBookingRequestByCookIdInput): Promise<boolean> {
@@ -50,6 +57,14 @@ export async function acceptOneByCookId({
     });
 
     if (!bookingRequest) return false;
+
+    const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId });
+
+    if (!user) return false;
+
+    const cookUser: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.cookId });
+
+    if (!cookUser) return false;
 
     if (bookingRequest.cookAccepted === true) return false;
 
@@ -84,7 +99,39 @@ export async function acceptOneByCookId({
         bookingRequestChatMessageCreations: chatMessage,
     });
 
-    // await cookBookingRequestCookAcceptedNotification({})
+    if (user.emailAddress) {
+        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
+            'PeopleEat',
+            user.emailAddress,
+            'Bestätigung Deiner Buchungsanfrage',
+            cookBookingRequestCookAcceptedNotification({
+                webAppUrl,
+                customer: {
+                    firstName: user.firstName,
+                },
+                cook: {
+                    firstName: cookUser.firstName,
+                    profilePictureUrl: cookUser.profilePictureUrl ?? '',
+                },
+                bookingRequest: {
+                    bookingRequestId,
+                    occasion: bookingRequest.occasion,
+                    children: bookingRequest.children,
+                    adults: bookingRequest.adultParticipants,
+                    location: bookingRequest.locationText,
+                    date: bookingRequest.dateTime.toDateString(),
+                    time: moment(bookingRequest.dateTime).format('LT'),
+                    price: {
+                        perPerson: bookingRequest.amount / (bookingRequest.children + bookingRequest.adultParticipants),
+                        total: bookingRequest.amount,
+                        currency: bookingRequest.currencyCode,
+                    },
+                },
+            }),
+        );
+
+        if (!customerEmailSuccess) logger.info('sending email failed');
+    }
 
     return success;
 }

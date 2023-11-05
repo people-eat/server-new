@@ -1,4 +1,4 @@
-export interface cookBookingRequestCookAcceptedNotificationInput {
+export interface CookBookingRequestCookDeclinedNotificationInput {
     webAppUrl: string;
 
     customer: {
@@ -27,12 +27,12 @@ export interface cookBookingRequestCookAcceptedNotificationInput {
     };
 }
 
-export function cookBookingRequestCookAcceptedNotification({
+export function cookBookingRequestCookDeclinedNotification({
     // webAppUrl,
     customer,
     cook,
     bookingRequest,
-}: cookBookingRequestCookAcceptedNotificationInput): string {
+}: CookBookingRequestCookDeclinedNotificationInput): string {
     // const customerProfileGlobalBookingRequestsUrl: string = webAppUrl + '/de/profile?tab=1';
 
     const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
@@ -122,7 +122,7 @@ export function cookBookingRequestCookAcceptedNotification({
                     text-align: left !important;
                 }
 
-                .row-10 .column-1 .block-1.heading_block h2 {
+                .row-8 .column-1 .block-1.heading_block h2 {
                     font-size: 22px !important;
                 }
             }
@@ -196,7 +196,7 @@ export function cookBookingRequestCookAcceptedNotification({
                                                                     <div style="color:#101112;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:25px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:30px;">
                                                                         <p style="margin: 0;"><strong>Deine Buchung ${
                                                                             bookingRequest.occasion
-                                                                        } wurde akzeptiert</strong></p>
+                                                                        } wurde abgelehnt</strong></p>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -209,10 +209,10 @@ export function cookBookingRequestCookAcceptedNotification({
                                                                         <p style="margin: 0; margin-bottom: 16px;">Hallo ${
                                                                             customer.firstName
                                                                         },</p>
-                                                                        <p style="margin: 0; margin-bottom: 16px;">Wir haben super Neuigkeiten für dich!&nbsp;</p>
-                                                                        <p style="margin: 0;">Privatkoch:in ${
+                                                                        <p style="margin: 0; margin-bottom: 16px;">Leider müssen wir dir mitteilen, dass Privatkoch:in ${
                                                                             cook.firstName
-                                                                        } hat deine Buchungsanfrage <strong>akzeptiert</strong>. 🎉</p>
+                                                                        } deine Buchungsanfrage abgelehnt hat.</p>
+                                                                        <p style="margin: 0;">Selbstverständlich werden wir uns bemühen, dir eine Lösung anzubieten. Wir werden uns zeitnah mit dir in Verbindung setzen.&nbsp;</p>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -296,14 +296,23 @@ export function cookBookingRequestCookAcceptedNotification({
                                                             <tr>
                                                                 <td class="pad" style="padding-bottom:10px;padding-left:35px;padding-right:10px;padding-top:10px;">
                                                                     <div style="color:#7b7b7b;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:20px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:24px;">
-                                                                        <p style="margin: 0;">
-                                                                            <span style="color: #000000;">
-                                                                                <strong>${formatPrice(
-                                                                                    bookingRequest.price.total,
-                                                                                    bookingRequest.price.currency,
-                                                                                )}</strong>
-                                                                            </span>
-                                                                        </p>
+                                                                    <p style="margin: 0;">
+                                                                    <span style="color: #000000;">
+                                                                        <strong>${formatPrice(
+                                                                            bookingRequest.price.total,
+                                                                            bookingRequest.price.currency,
+                                                                        )}</strong>
+                                                                    </span>
+                                                                </p>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table class="paragraph_block block-5" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                            <tr>
+                                                                <td class="pad" style="padding-bottom:10px;padding-left:35px;padding-right:10px;padding-top:10px;">
+                                                                    <div style="color:#7b7b7b;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:18px;">
+                                                                        <p style="margin: 0;">Bitte beachte, dass noch keine Zahlung erfolgt. Erst durch die Annahme deines Privatkoch:in wird der Betrag fällig.&nbsp;</p>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -316,59 +325,7 @@ export function cookBookingRequestCookAcceptedNotification({
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="row row-6" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; border-radius: 0; color: #000; width: 680px; margin: 0 auto;" width="680">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                                        <table class="divider_block block-1" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                                            <tr>
-                                                                <td class="pad">
-                                                                    <div class="alignment" align="center">
-                                                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                                                            <tr>
-                                                                                <td class="divider_inner" style="font-size: 1px; line-height: 1px; border-top: 1px solid #dddddd;"><span>&#8202;</span></td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                        <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                            <tr>
-                                                                <td class="pad" style="padding-bottom:5px;padding-left:30px;padding-right:10px;padding-top:10px;">
-                                                                    <div style="color:#232323;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:23px;font-weight:700;line-height:120%;text-align:left;mso-line-height-alt:27.599999999999998px;">
-                                                                        <p style="margin: 0; word-break: break-word;"><strong>${
-                                                                            cook.firstName
-                                                                        } ist dein Privatkoch:in</strong></p>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                        <table class="paragraph_block block-3" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                            <tr>
-                                                                <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:20px;">
-                                                                    <div style="color:#101112;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
-                                                                        <p style="margin: 0; margin-bottom: 16px;">Setzte dich direkt mit ${
-                                                                            cook.firstName
-                                                                        } in Verbindung und stimme die letzten Einzelheiten ab.</p>
-                                                                        <p style="margin: 0;"><span style="color: #ff6433;"><u><strong>Nachricht an Privatkoch:in senden</strong></u></span></p>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="row row-7" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
+                        <table class="row row-6" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
                             <tbody>
                                 <tr>
                                     <td>
@@ -399,55 +356,7 @@ export function cookBookingRequestCookAcceptedNotification({
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="row row-8" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; border-radius: 0; color: #000; width: 680px; margin: 0 auto;" width="680">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                                        <table class="heading_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                                            <tr>
-                                                                <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;text-align:center;width:100%;">
-                                                                    <h2 style="margin: 0; color: #000000; direction: ltr; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 23px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><strong>Denke daran:</strong></h2>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                        <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                            <tr>
-                                                                <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
-                                                                    <div style="color:#101112;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:180%;text-align:left;mso-line-height-alt:28.8px;">
-                                                                        <p style="margin: 0; margin-bottom: 16px;">Dein gebuchter Privatkoch:in wird in der Regel mindestens eine Stunde vor Beginn des Ereignisses ankommen. Denke daran dem Privatkoch:in über die aktuellen Parkmöglichkeiten zu informieren. Stimme dich frühzeitig über die finale Uhrzeit ab, damit der Zugang zu deiner Küche gewährleistet werden kann. Vergewissere dich, dass das Grundlegende Küchenausstattung vorhanden ist.</p>
-                                                                        <p style="margin: 0;"><span style="color: #ff6433;"><u><strong>Informationen anzeigen</strong></u></span></p>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                        <div class="spacer_block block-3" style="height:15px;line-height:15px;font-size:1px;">&#8202;</div>
-                                                        <table class="divider_block block-4" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                                            <tr>
-                                                                <td class="pad">
-                                                                    <div class="alignment" align="center">
-                                                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                                                            <tr>
-                                                                                <td class="divider_inner" style="font-size: 1px; line-height: 1px; border-top: 1px solid #D6D3D3;"><span>&#8202;</span></td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                        <div class="spacer_block block-5" style="height:10px;line-height:10px;font-size:1px;">&#8202;</div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="row row-9" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                        <table class="row row-7" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                             <tbody>
                                 <tr>
                                     <td>
@@ -494,7 +403,7 @@ export function cookBookingRequestCookAcceptedNotification({
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="row row-10" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                        <table class="row row-8" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                             <tbody>
                                 <tr>
                                     <td>
@@ -513,7 +422,7 @@ export function cookBookingRequestCookAcceptedNotification({
                                                             <tr>
                                                                 <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
                                                                     <div style="color:#6a6a6a;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:150%;text-align:left;mso-line-height-alt:24px;">
-                                                                        <p style="margin: 0;">Kostenlose Stornierung ist bis zur Annahme der Anfrage und bis zu zwei Wochen vor dem Ereignis möglich. Bei späteren Stornierungen können Gebühren anfallen. Wenn du deine Reservierung ändern musst, kontaktiere uns bitte so früh wie möglich, damit wir dir bestmöglich weiterhelfen können. Weitere Informationen kannst du aus unseren <span style="color: #ff6433;"><a href="https://www.people-eat.com/terms-and-conditions" target="_blank" style="text-decoration: underline; color: #ff6433;" rel="noopener">AGB</a><br></span>entnehmen.</p>
+                                                                        <p style="margin: 0;">Kostenlose Stornierung ist bis zur Annahme der Anfrage und bis zu zwei Wochen vor dem Ereignis möglich. Bei späteren Stornierungen können Gebühren anfallen. Wenn du deine Reservierung ändern musst, kontaktiere uns bitte so früh wie möglich, damit wir dir bestmöglich helfen können. Weitere Informationen kannst du aus unseren <span style="color: #ff6433;"><a href="https://www.people-eat.com/terms-and-conditions" target="_blank" style="text-decoration: underline; color: #ff6433;" rel="noopener">AGB </a></span>entnehmen.</p>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -541,7 +450,7 @@ export function cookBookingRequestCookAcceptedNotification({
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="row row-11" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                        <table class="row row-9" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                             <tbody>
                                 <tr>
                                     <td>
@@ -588,7 +497,7 @@ export function cookBookingRequestCookAcceptedNotification({
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="row row-12" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
+                        <table class="row row-10" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
                             <tbody>
                                 <tr>
                                     <td>
@@ -614,7 +523,7 @@ export function cookBookingRequestCookAcceptedNotification({
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="row row-13" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
+                        <table class="row row-11" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
                             <tbody>
                                 <tr>
                                     <td>
@@ -631,7 +540,7 @@ export function cookBookingRequestCookAcceptedNotification({
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="row row-14" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
+                        <table class="row row-12" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
                             <tbody>
                                 <tr>
                                     <td>
@@ -701,7 +610,7 @@ export function cookBookingRequestCookAcceptedNotification({
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="row row-15" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
+                        <table class="row row-13" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ff6433;">
                             <tbody>
                                 <tr>
                                     <td>

@@ -95,9 +95,9 @@ export function createBookingRequestService({
         createOneByGlobalBookingRequestId: (context: Authorization.Context, request: { cookId: NanoId; globalBookingRequestId: NanoId }) =>
             createOneByGlobalBookingRequestId({ dataSourceAdapter, logger, webAppUrl, context, request, emailAdapter }),
         acceptOneByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }) =>
-            acceptOneByCookId({ dataSourceAdapter, logger, context, publisher, request, paymentAdapter }),
+            acceptOneByCookId({ dataSourceAdapter, emailAdapter, logger, context, publisher, request, webAppUrl, paymentAdapter }),
         declineOneByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }) =>
-            declineOneByCookId({ dataSourceAdapter, logger, context, publisher, request }),
+            declineOneByCookId({ dataSourceAdapter, logger, context, emailAdapter, webAppUrl, publisher, request }),
         acceptOneByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
             acceptOneByUserId({ dataSourceAdapter, logger, context, publisher, request }),
         declineOneByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
