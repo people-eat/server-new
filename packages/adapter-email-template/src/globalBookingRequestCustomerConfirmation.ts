@@ -497,7 +497,7 @@ export function globalBookingRequestCustomerConfirmation({
                                                             <tr>
                                                                 <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
                                                                     <div style="color:#101112;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
-                                                                        <p style="margin: 0;"><strong>Erwachsene:</strong><br>${
+                                                                        <p style="margin: 0;"><strong>Erwachsene:</strong>${
                                                                             globalBookingRequest.adults
                                                                         }&nbsp;</p>
                                                                     </div>
@@ -510,7 +510,7 @@ export function globalBookingRequestCustomerConfirmation({
                                                             <tr>
                                                                 <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
                                                                     <div style="color:#101112;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
-                                                                        <p style="margin: 0;"><strong>Kinder 6-12 Jahren: </strong><br>${
+                                                                        <p style="margin: 0;"><strong>Kinder 6-12 Jahren: </strong>${
                                                                             globalBookingRequest.children
                                                                         }</p>
                                                                     </div>

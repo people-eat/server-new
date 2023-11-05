@@ -214,6 +214,8 @@ export async function createOneByEmailAddress({
             if (!customerEmailSuccess) logger.info('sending email failed');
         }
 
+        const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
+
         const globalBookingRequestEmailSuccess: boolean = await emailAdapter.sendToMany(
             'Booking Request',
             ['contact@people-eat.com', 'yilmaz.cem.2603@gmail.com'],
@@ -222,9 +224,10 @@ export async function createOneByEmailAddress({
                 globalBookingRequest.location.text
             }<br/><b>Occasion:</b> ${globalBookingRequest.occasion}<br/><br/><b>Adults:</b> ${
                 globalBookingRequest.adultParticipants
-            }<br/><b>Children:</b> ${globalBookingRequest.children}<br/><br/><b>Budget:</b> ${globalBookingRequest.price.amount} ${
-                globalBookingRequest.price.currencyCode
-            }<br/><br/><b>Message:</b><br/>${
+            }<br/><b>Children:</b> ${globalBookingRequest.children}<br/><br/><b>Budget:</b> ${formatPrice(
+                globalBookingRequest.price.amount,
+                globalBookingRequest.price.currencyCode,
+            )}<br/><br/><b>Message:</b><br/>${
                 globalBookingRequest.message
             }<br/><br/><br/><b>Contact:</b><br/>Email Address: ${emailAddress}<br/>Phone Number: ${phoneNumber}<br/><br/>Kitchen: ${
                 kitchen?.title ?? 'any'

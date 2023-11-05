@@ -91,6 +91,7 @@ export async function createOne({
         }
     }
 
+    const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
     const formattedDateTime: string = moment(dateTime).format('MMMM Do YYYY, h:mm a');
     const emailSuccess: boolean = await emailAdapter.sendToMany(
         'Global Booking Request',
@@ -100,9 +101,10 @@ export async function createOne({
             user.lastName
         }</b><br/><br/><b>When:</b> ${formattedDateTime}<br/><b>Where:</b> ${
             location.text
-        }<br/><b>Occasion:</b> ${occasion}<br/><br/><b>Adults:</b> ${adultParticipants}<br/><b>Children:</b> ${children}<br/><br/><b>Budget:</b> ${
-            price.amount
-        } ${price.currencyCode}<br/><br/><b>Message:</b><br/>${message}<br/><br/><br/><b>Contact:</b><br/>Email Address: ${
+        }<br/><b>Occasion:</b> ${occasion}<br/><br/><b>Adults:</b> ${adultParticipants}<br/><b>Children:</b> ${children}<br/><br/><b>Budget:</b> ${formatPrice(
+            price.amount,
+            price.currencyCode,
+        )}<br/><br/><b>Message:</b><br/>${message}<br/><br/><br/><b>Contact:</b><br/>Email Address: ${
             user.emailAddress
         }<br/>Phone Number: ${phoneNumber}<br/><br/>Kitchen: ${kitchen?.title ?? 'any'}<br/><br/>Allergies: ${allergies
             .map(({ title }: DBAllergy) => title)
