@@ -25,6 +25,7 @@ export interface MenuBookingRequestCustomerConfirmationInput {
             currency: string;
         };
         menu: {
+            hasGreetingFromKitchen: boolean;
             title: string;
             categories: { title: string }[];
             kitchen?: { title: string };
@@ -618,13 +619,17 @@ export function menuBookingRequestCustomerConfirmation({
                                             <tbody>
                                                 <tr>
                                                     <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                                        <table class="heading_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                                            <tr>
-                                                                <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;text-align:center;width:100%;">
-                                                                    <h2 style="margin: 0; color: #000000; direction: ltr; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">Gruß aus der Küche</span></h2>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
+                                                        ${
+                                                            bookingRequest.menu.hasGreetingFromKitchen
+                                                                ? `<table class="heading_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                                    <tr>
+                                                                        <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;text-align:center;width:100%;">
+                                                                            <h2 style="margin: 0; color: #000000; direction: ltr; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">Gruß aus der Küche</span></h2>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>`
+                                                                : ''
+                                                        }
                                                         <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
                                                             <tr>
                                                                 <td class="pad">

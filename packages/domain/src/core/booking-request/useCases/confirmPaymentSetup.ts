@@ -76,6 +76,7 @@ export async function confirmPaymentSetup({
                         currency: currencyCode,
                     },
                     menu: {
+                        hasGreetingFromKitchen: Boolean(configuredMenu.greetingFromKitchen),
                         title: configuredMenu.title,
                         categories: [],
                         kitchen: undefined,
@@ -120,6 +121,7 @@ export async function confirmPaymentSetup({
                         currency: currencyCode,
                     },
                     menu: {
+                        hasGreetingFromKitchen: Boolean(configuredMenu.greetingFromKitchen),
                         title: configuredMenu.title,
                         categories: [],
                         kitchen: undefined,
