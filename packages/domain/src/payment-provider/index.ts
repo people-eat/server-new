@@ -1,7 +1,9 @@
 export {
     Adapter,
+    CreateConnectedAccountDashboardUrlInput,
     CreateConnectedAccountInput,
-    CreateConnectedAccountUrlInput,
+    CreateConnectedAccountOnboardingUrlInput,
     CreatePaymentIntentInput,
+    IsConnectedAccountEnabledInput,
     TransferPaymentToCookAccountInput,
 } from './Adapter';

@@ -664,6 +664,8 @@ export type GQLCookQuery = {
     findMany: Array<GQLCook>;
     findOne?: Maybe<GQLCook>;
     followers: GQLCookFollowingQuery;
+    getStripeDashboardUrl?: Maybe<Scalars['Url']>;
+    getStripeOnboardingUrl?: Maybe<Scalars['Url']>;
     globalBookingRequests: GQLCookGlobalBookingRequestQuery;
     meals: GQLCookMealQuery;
     menuVisits: GQLUserAddressQuery;
@@ -688,6 +690,14 @@ export type GQLCookQueryFindManyArgs = {
 };
 
 export type GQLCookQueryFindOneArgs = {
+    cookId: Scalars['String'];
+};
+
+export type GQLCookQueryGetStripeDashboardUrlArgs = {
+    cookId: Scalars['String'];
+};
+
+export type GQLCookQueryGetStripeOnboardingUrlArgs = {
     cookId: Scalars['String'];
 };
 
@@ -3216,6 +3226,18 @@ export type GQLCookQueryResolvers<
     findMany?: Resolver<Array<GQLResolversTypes['Cook']>, ParentType, ContextType, RequireFields<GQLCookQueryFindManyArgs, 'request'>>;
     findOne?: Resolver<Maybe<GQLResolversTypes['Cook']>, ParentType, ContextType, RequireFields<GQLCookQueryFindOneArgs, 'cookId'>>;
     followers?: Resolver<GQLResolversTypes['CookFollowingQuery'], ParentType, ContextType>;
+    getStripeDashboardUrl?: Resolver<
+        Maybe<GQLResolversTypes['Url']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookQueryGetStripeDashboardUrlArgs, 'cookId'>
+    >;
+    getStripeOnboardingUrl?: Resolver<
+        Maybe<GQLResolversTypes['Url']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookQueryGetStripeOnboardingUrlArgs, 'cookId'>
+    >;
     globalBookingRequests?: Resolver<
         GQLResolversTypes['CookGlobalBookingRequestQuery'],
         ParentType,

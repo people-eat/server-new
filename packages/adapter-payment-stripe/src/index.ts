@@ -60,7 +60,7 @@ export function createPaymentAdapter({ logger, stripeSecretKey }: CreatePaymentA
             }: PaymentProvider.CreateConnectedAccountInput): Promise<{ accountId: string } | undefined> => {
                 try {
                     const account: Stripe.Account = await client.accounts.create({
-                        type: 'standard',
+                        type: 'express',
                         email: emailAddress,
                     });
 
@@ -70,18 +70,44 @@ export function createPaymentAdapter({ logger, stripeSecretKey }: CreatePaymentA
                     return undefined;
                 }
             },
-            createConnectedAccountUrl: async ({
+            isConnectedAccountEnabled: async ({ accountId }: PaymentProvider.IsConnectedAccountEnabledInput): Promise<boolean> => {
+                try {
+                    const account: Stripe.Account = await client.accounts.retrieve(accountId);
+
+                    const actionItems: string[] | null | undefined = account.requirements?.currently_due;
+
+                    if (!actionItems || actionItems.length < 1) return true;
+
+                    return false;
+                } catch (error) {
+                    logger.error(error);
+                    return false;
+                }
+            },
+            createConnectedAccountOnboardingUrl: async ({
                 accountId,
-            }: PaymentProvider.CreateConnectedAccountUrlInput): Promise<{ url: string } | undefined> => {
+            }: PaymentProvider.CreateConnectedAccountOnboardingUrlInput): Promise<{ url: string } | undefined> => {
                 try {
                     const accountLink: Stripe.AccountLink = await client.accountLinks.create({
                         account: accountId,
-                        refresh_url: 'https://example.com/reauth',
-                        return_url: 'https://example.com/return',
+                        refresh_url: 'https://people-eat.com',
+                        return_url: 'https://people-eat.com',
                         type: 'account_onboarding',
                     });
 
                     return { url: accountLink.url };
+                } catch (error) {
+                    logger.error(error);
+                    return undefined;
+                }
+            },
+            createConnectedAccountDashboardUrl: async ({
+                accountId,
+            }: PaymentProvider.CreateConnectedAccountOnboardingUrlInput): Promise<{ url: string } | undefined> => {
+                try {
+                    const loginLink: Stripe.LoginLink = await client.accounts.createLoginLink(accountId);
+
+                    return { url: loginLink.url };
                 } catch (error) {
                     logger.error(error);
                     return undefined;

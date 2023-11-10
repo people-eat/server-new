@@ -34,6 +34,8 @@ type Cook {
 type CookQuery {
     findMany(request: FindManyRequest!): [Cook!]!
     findOne(cookId: String!): Cook
+    getStripeOnboardingUrl(cookId: String!): Url
+    getStripeDashboardUrl(cookId: String!): Url
 }
 
 type Query {

@@ -23,6 +23,8 @@ import {
     type GQLCookQueryBookingRequestsArgs,
     type GQLCookQueryFindManyArgs,
     type GQLCookQueryFindOneArgs,
+    type GQLCookQueryGetStripeDashboardUrlArgs,
+    type GQLCookQueryGetStripeOnboardingUrlArgs,
     type GQLCookQueryGlobalBookingRequestsArgs,
     type GQLCookQueryMealsArgs,
     type GQLCookQueryMenusArgs,
@@ -149,6 +151,18 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
                 { request }: GQLCookQueryFindManyArgs,
                 context: Authorization.Context,
             ): Promise<GQLCook[]> => service.cook.findMany(context, request) as any,
+
+            getStripeOnboardingUrl: async (
+                _parent: GQLCookQuery,
+                { cookId }: GQLCookQueryGetStripeOnboardingUrlArgs,
+                context: Authorization.Context,
+            ): Promise<string | undefined> => service.cook.getStripeOnboardingUrl(context, cookId) as any,
+
+            getStripeDashboardUrl: async (
+                _parent: GQLCookQuery,
+                { cookId }: GQLCookQueryGetStripeDashboardUrlArgs,
+                context: Authorization.Context,
+            ): Promise<string | undefined> => service.cook.getStripeDashboardUrl(context, cookId) as any,
 
             meals: (_parent: GQLCookQuery, { cookId }: GQLCookQueryMealsArgs) => ({ cookId } as any),
             menus: (_parent: GQLCookQuery, { cookId }: GQLCookQueryMenusArgs) => ({ cookId } as any),

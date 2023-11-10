@@ -11,7 +11,15 @@ export interface CreateConnectedAccountInput {
     emailAddress: string;
 }
 
-export interface CreateConnectedAccountUrlInput {
+export interface CreateConnectedAccountOnboardingUrlInput {
+    accountId: string;
+}
+
+export interface IsConnectedAccountEnabledInput {
+    accountId: string;
+}
+
+export interface CreateConnectedAccountDashboardUrlInput {
     accountId: string;
 }
 
@@ -26,7 +34,9 @@ export type Adapter = Record<
         createSetupIntent: () => Promise<{ setupIntentId: string; clientSecret: string } | undefined>;
         createPaymentIntent: (input: CreatePaymentIntentInput) => Promise<boolean>;
         createConnectedAccount(input: CreateConnectedAccountInput): Promise<{ accountId: string } | undefined>;
-        createConnectedAccountUrl(input: CreateConnectedAccountUrlInput): Promise<{ url: string } | undefined>;
+        createConnectedAccountOnboardingUrl(input: CreateConnectedAccountOnboardingUrlInput): Promise<{ url: string } | undefined>;
+        isConnectedAccountEnabled(input: IsConnectedAccountEnabledInput): Promise<boolean>;
+        createConnectedAccountDashboardUrl(input: CreateConnectedAccountDashboardUrlInput): Promise<{ url: string } | undefined>;
         transferPaymentToCookAccount(input: TransferPaymentToCookAccountInput): Promise<boolean>;
     }
 >;

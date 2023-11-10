@@ -88,10 +88,10 @@ export async function createOne({
 
     await dataSourceAdapter.cookRepository.updateOne(
         { cookId },
-        { payoutMethods: [{ provider: 'STRIPE', stripeAccountId: connectedAccountResult.accountId }] },
+        { payoutMethods: [{ provider: 'STRIPE', stripeAccountId: connectedAccountResult.accountId, active: false }] },
     );
 
-    const connectedAccountUrlResult: { url: string } | undefined = await paymentAdapter.STRIPE.createConnectedAccountUrl({
+    const connectedAccountUrlResult: { url: string } | undefined = await paymentAdapter.STRIPE.createConnectedAccountOnboardingUrl({
         accountId: connectedAccountResult.accountId,
     });
 

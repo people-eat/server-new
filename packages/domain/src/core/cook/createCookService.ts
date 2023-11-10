@@ -4,6 +4,8 @@ import { type CreateOneCookRequest } from './CreateOneCookRequest';
 import { createOne } from './useCases/createOne';
 import { findMany } from './useCases/findMany';
 import { findOne } from './useCases/findOne';
+import { getStripeDashboardUrl } from './useCases/getStripeDashboardUrl';
+import { getStripeOnboardingUrl } from './useCases/getStripeOnboardingUrl';
 import { updateBiography } from './useCases/updateBiography';
 import { updateIsLocked } from './useCases/updateIsLocked';
 import { updateIsVisible } from './useCases/updateIsVisible';
@@ -31,6 +33,9 @@ export interface CookService {
     updateMaximumPrice(context: Authorization.Context, cookId: string, maximumPrice?: number): Promise<boolean>;
     updateMinimumParticipants(context: Authorization.Context, cookId: string, minimumParticipants?: number): Promise<boolean>;
     updateMaximumParticipants(context: Authorization.Context, cookId: string, maximumParticipants?: number): Promise<boolean>;
+
+    getStripeOnboardingUrl(context: Authorization.Context, cookId: string): Promise<string | undefined>;
+    getStripeDashboardUrl(context: Authorization.Context, cookId: string): Promise<string | undefined>;
 }
 
 export interface CreateCookServiceInput {
@@ -69,5 +74,10 @@ export function createCookService({ dataSourceAdapter, emailAdapter, paymentAdap
             updateMinimumParticipants({ dataSourceAdapter, logger, context, request: { cookId, minimumParticipants } }),
         updateMaximumParticipants: (context: Authorization.Context, cookId: string, maximumParticipants?: number) =>
             updateMaximumParticipants({ dataSourceAdapter, logger, context, request: { cookId, maximumParticipants } }),
+
+        getStripeOnboardingUrl: (context: Authorization.Context, cookId: string) =>
+            getStripeOnboardingUrl({ dataSourceAdapter, paymentAdapter, logger, context, request: { cookId } }),
+        getStripeDashboardUrl: (context: Authorization.Context, cookId: string) =>
+            getStripeDashboardUrl({ dataSourceAdapter, paymentAdapter, logger, context, request: { cookId } }),
     };
 }
