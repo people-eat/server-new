@@ -1,4 +1,5 @@
 import { type DataSource, type Logger } from '..';
+import { type DBAdmin } from '../data-source';
 import { type Context } from './Context';
 
 interface CanQueryUserDataInput {
@@ -8,12 +9,14 @@ interface CanQueryUserDataInput {
     userId: string;
 }
 
-export async function canQueryUserData({ context, userId }: CanQueryUserDataInput): Promise<void> {
+export async function canQueryUserData({ context, userId, dataSourceAdapter }: CanQueryUserDataInput): Promise<void> {
     if (!context.userId) throw new Error('Unauthorized');
 
     if (context.userId === userId) return;
 
-    // query database for admin
+    const admin: DBAdmin | undefined = await dataSourceAdapter.adminRepository.findOne({ adminId: context.userId });
+
+    if (admin) return;
 
     throw new Error('Unauthorized');
 }
