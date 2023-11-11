@@ -1,3 +1,5 @@
+import { CronJob } from 'cron';
+import moment from 'moment';
 import { createAddressService } from './address/createAddressService';
 import { createAdminService } from './admin/createAdminService';
 import { createAllergyService } from './allergy/createAllergyService';
@@ -29,9 +31,29 @@ import { type Runtime } from './Runtime';
 import { type Service } from './Service';
 import { createSessionService } from './session/createSessionService';
 import { createSupportRequestService } from './support-request/createSupportRequestService';
+import { type TimeTriggeredTask } from './time-triggered-tasks';
+import { findAllTimeTriggeredTasks } from './time-triggered-tasks/useCases/findAll';
+import { handleTimeTriggeredTask } from './time-triggered-tasks/useCases/handleTimeTriggeredTask';
 import { createUserService } from './user/createUserService';
 
 export function createService(runtime: Runtime): Service {
+    findAllTimeTriggeredTasks(runtime)
+        .then((timeTriggeredTasks: TimeTriggeredTask[]) =>
+            timeTriggeredTasks.forEach((timeTriggeredTask: TimeTriggeredTask) => {
+                const job: CronJob = CronJob.from({
+                    cronTime: '* * * * * *',
+                    start: true,
+                    onTick: async function () {
+                        const shouldTrigger: boolean = moment(timeTriggeredTask.dueDate).diff(moment()) < 0;
+                        if (!shouldTrigger) return;
+                        await handleTimeTriggeredTask(runtime, timeTriggeredTask);
+                        job.stop();
+                    },
+                });
+            }),
+        )
+        .catch((error: Error) => runtime.logger.error(error));
+
     return {
         log: createLogService(runtime),
         publisher: runtime.publisher,

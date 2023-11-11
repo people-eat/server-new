@@ -33,5 +33,6 @@ export { SearchRequestEntity } from './SearchRequestEntity';
 export { SessionEntity } from './SessionEntity';
 export { SupportRequestEntity } from './SupportRequestEntity';
 export { TermsUpdateEntity } from './TermsUpdateEntity';
+export { TimeTriggeredTaskEntity } from './TimeTriggeredTaskEntity';
 export { UserEntity } from './UserEntity';
 export { UserRatingEntity } from './UserRatingEntity';

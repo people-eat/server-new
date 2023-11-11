@@ -34,6 +34,7 @@ import {
     type DBSession,
     type DBSupportRequest,
     type DBTermsUpdate,
+    type DBTimeTriggeredTask,
     type DBUserRating,
 } from './entities/unchanged';
 import { type DBUser } from './entities/User';
@@ -85,6 +86,7 @@ export interface Adapter {
     userRatingRepository: Repository<DBUserRating>;
 
     supportRequestRepository: Repository<DBSupportRequest>;
+    timeTriggeredTaskRepository: Repository<DBTimeTriggeredTask>;
 
     query: <T>(request: string) => Promise<T>;
 }

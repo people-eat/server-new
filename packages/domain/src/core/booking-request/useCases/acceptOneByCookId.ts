@@ -1,52 +1,21 @@
 import { cookBookingRequestCookAcceptedNotification } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
-import { Authorization, type ChatMessage, type DataSource, type Email, type Logger, type PaymentProvider } from '../../..';
+import { Authorization, type ChatMessage } from '../../..';
 import { type DBBookingRequest, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
-import { type Publisher } from '../../Service';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
+import { createOneTimeTriggeredTask } from '../../time-triggered-tasks/useCases/createOne';
 
 export interface AcceptOneBookingRequestByCookIdInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-    paymentAdapter: PaymentProvider.Adapter;
-    emailAdapter: Email.Adapter;
-    webAppUrl: string;
+    runtime: Runtime;
     context: Authorization.Context;
-    publisher: Publisher;
     request: { cookId: NanoId; bookingRequestId: NanoId };
 }
 
-// probably does not belong in this file
-export function calculateMenuPrice(
-    adultParticipants: number,
-    underagedParticipants: number,
-    basePrice: number,
-    basePriceCustomers: number,
-    pricePerAdult: number,
-    pricePerUnderaged?: number,
-): number {
-    if (adultParticipants + underagedParticipants <= basePriceCustomers) return basePrice;
-
-    if (!pricePerUnderaged) return basePrice + (adultParticipants + underagedParticipants - basePriceCustomers) * pricePerAdult;
-
-    if (adultParticipants - basePriceCustomers >= 0)
-        return basePrice + (adultParticipants - basePriceCustomers) * pricePerAdult + underagedParticipants * pricePerUnderaged;
-
-    return (underagedParticipants - basePriceCustomers - adultParticipants) * pricePerUnderaged + basePrice;
-}
-
 // eslint-disable-next-line max-statements
-export async function acceptOneByCookId({
-    dataSourceAdapter,
-    paymentAdapter,
-    logger,
-    context,
-    emailAdapter,
-    webAppUrl,
-    publisher,
-    request,
-}: AcceptOneBookingRequestByCookIdInput): Promise<boolean> {
+export async function acceptOneByCookId({ runtime, context, request }: AcceptOneBookingRequestByCookIdInput): Promise<boolean> {
+    const { dataSourceAdapter, paymentAdapter, logger, emailAdapter, webAppUrl, publisher } = runtime;
     const { cookId, bookingRequestId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
@@ -73,16 +42,9 @@ export async function acceptOneByCookId({
         { cookAccepted: true },
     );
 
-    // const configuredMenu: ConfiguredMenu | undefined = await dataSourceAdapter.configuredMenuRepository.findOne({ bookingRequestId });
+    if (!success) return false;
 
-    const paymentSuccess: boolean = await paymentAdapter.STRIPE.createPaymentIntent({
-        currencyCode: bookingRequest.currencyCode,
-        amount: bookingRequest.amount,
-        userId: bookingRequest.userId,
-        setupIntentId: bookingRequest.paymentData.setupIntentId,
-    });
-
-    if (!paymentSuccess) return false;
+    // Notifications
 
     const chatMessage: ChatMessage = {
         chatMessageId: createNanoId(),
@@ -133,5 +95,43 @@ export async function acceptOneByCookId({
         if (!customerEmailSuccess) logger.info('sending email failed');
     }
 
-    return success;
+    if (!bookingRequest.userAccepted) return true;
+
+    // Pay if ready
+
+    const daysUntilEvent: number = moment(bookingRequest.dateTime).diff(moment(), 'days');
+
+    if (daysUntilEvent === 15) {
+        // send email
+        await createOneTimeTriggeredTask(runtime, {
+            dueDate: moment(bookingRequest.dateTime).subtract(14, 'days').toDate(),
+            task: { type: 'TIME_TRIGGERED_TASK_PULL_PAYMENT', bookingRequestId },
+        });
+
+        return true;
+    }
+
+    if (daysUntilEvent > 15) {
+        await createOneTimeTriggeredTask(runtime, {
+            dueDate: moment(bookingRequest.dateTime).subtract(15, 'days').toDate(),
+            task: { type: 'TIME_TRIGGERED_TASK_PULL_PAYMENT_ANNOUNCEMENT', bookingRequestId },
+        });
+        await createOneTimeTriggeredTask(runtime, {
+            dueDate: moment(bookingRequest.dateTime).subtract(14, 'days').toDate(),
+            task: { type: 'TIME_TRIGGERED_TASK_PULL_PAYMENT', bookingRequestId },
+        });
+
+        return true;
+    }
+
+    const paymentSuccess: boolean = await paymentAdapter.STRIPE.createPaymentIntent({
+        currencyCode: bookingRequest.currencyCode,
+        amount: bookingRequest.amount,
+        userId: bookingRequest.userId,
+        setupIntentId: bookingRequest.paymentData.setupIntentId,
+    });
+
+    if (!paymentSuccess) return false;
+
+    return true;
 }

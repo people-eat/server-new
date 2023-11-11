@@ -83,6 +83,7 @@ export async function createDataSourceAdapter({ logger, connection, reset }: Cre
         userRatingRepository: createGenericRepository(AppDataSource.getRepository(entities.UserRatingEntity), logger),
 
         supportRequestRepository: createGenericRepository(AppDataSource.getRepository(entities.SupportRequestEntity), logger),
+        timeTriggeredTaskRepository: createGenericRepository(AppDataSource.getRepository(entities.TimeTriggeredTaskEntity), logger),
 
         query: <T>(request: string) => AppDataSource.query(request) as Promise<T>,
     };

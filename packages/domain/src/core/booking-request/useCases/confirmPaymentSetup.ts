@@ -1,27 +1,19 @@
 import { menuBookingRequestCookConfirmation, menuBookingRequestCustomerConfirmation } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
-import { Authorization, type DataSource, type Email, type Logger } from '../../..';
+import { Authorization } from '../../..';
 import { type DBBookingRequest, type DBChatMessage, type DBConfiguredMenu, type DBUser } from '../../../data-source';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 export interface ConfirmPaymentSetupInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-    emailAdapter: Email.Adapter;
-    webAppUrl: string;
+    runtime: Runtime;
     context: Authorization.Context;
     request: { userId: NanoId; bookingRequestId: NanoId };
 }
 
 // eslint-disable-next-line max-statements
-export async function confirmPaymentSetup({
-    dataSourceAdapter,
-    logger,
-    emailAdapter,
-    webAppUrl,
-    context,
-    request,
-}: ConfirmPaymentSetupInput): Promise<boolean> {
+export async function confirmPaymentSetup({ runtime, context, request }: ConfirmPaymentSetupInput): Promise<boolean> {
+    const { dataSourceAdapter, logger, emailAdapter, webAppUrl } = runtime;
     const { userId, bookingRequestId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });

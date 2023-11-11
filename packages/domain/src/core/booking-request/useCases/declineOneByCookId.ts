@@ -1,31 +1,20 @@
 import { cookBookingRequestCookDeclinedNotification } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
-import { Authorization, type ChatMessage, type DataSource, type Email, type Logger } from '../../..';
+import { Authorization, type ChatMessage } from '../../..';
 import { type DBBookingRequest, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
-import { type Publisher } from '../../Service';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 export interface FindManyBookingRequestInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
-    emailAdapter: Email.Adapter;
-    webAppUrl: string;
-    publisher: Publisher;
     request: { cookId: NanoId; bookingRequestId: NanoId };
 }
 
 // eslint-disable-next-line max-statements
-export async function declineOneByCookId({
-    dataSourceAdapter,
-    logger,
-    context,
-    webAppUrl,
-    emailAdapter,
-    publisher,
-    request,
-}: FindManyBookingRequestInput): Promise<boolean> {
+export async function declineOneByCookId({ runtime, context, request }: FindManyBookingRequestInput): Promise<boolean> {
+    const { dataSourceAdapter, logger, webAppUrl, emailAdapter, publisher } = runtime;
     const { cookId, bookingRequestId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });

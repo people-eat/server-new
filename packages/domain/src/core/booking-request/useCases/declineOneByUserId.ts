@@ -1,24 +1,17 @@
-import { Authorization, type ChatMessage, type DataSource, type Logger } from '../../..';
+import { Authorization, type ChatMessage } from '../../..';
 import { type DBBookingRequest, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
-import { type Publisher } from '../../Service';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 export interface FindManyBookingRequestInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
-    publisher: Publisher;
     request: { userId: NanoId; bookingRequestId: NanoId };
 }
 
-export async function declineOneByUserId({
-    dataSourceAdapter,
-    logger,
-    context,
-    publisher,
-    request,
-}: FindManyBookingRequestInput): Promise<boolean> {
+export async function declineOneByUserId({ runtime, context, request }: FindManyBookingRequestInput): Promise<boolean> {
+    const { dataSourceAdapter, logger, publisher } = runtime;
     const { userId, bookingRequestId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });

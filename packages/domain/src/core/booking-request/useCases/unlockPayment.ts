@@ -1,18 +1,18 @@
-import { Authorization, type DataSource, type Logger, type PaymentProvider } from '../../..';
+import { Authorization } from '../../..';
 import { type DBBookingRequest, type DBCook } from '../../../data-source';
 import { type CookPayoutMethod } from '../../cook';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 export interface UnlockPaymentInput {
-    dataSourceAdapter: DataSource.Adapter;
-    paymentAdapter: PaymentProvider.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: { bookingRequestId: NanoId };
 }
 
 // eslint-disable-next-line max-statements
-export async function unlockPayment({ dataSourceAdapter, paymentAdapter, logger, context, request }: UnlockPaymentInput): Promise<boolean> {
+export async function unlockPayment({ runtime, context, request }: UnlockPaymentInput): Promise<boolean> {
+    const { dataSourceAdapter, paymentAdapter, logger } = runtime;
     const { bookingRequestId } = request;
 
     await Authorization.isAdmin({ context, dataSourceAdapter, logger });

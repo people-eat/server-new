@@ -40,5 +40,6 @@ export { Service } from './Service';
 export { Session } from './session/Session';
 export * as Shared from './shared';
 export { TermsUpdate } from './terms-update/TermsUpdate';
+export * from './time-triggered-tasks/TimeTriggeredTask';
 export { UserRating } from './user-rating/UserRating';
 export { User } from './user/User';

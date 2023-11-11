@@ -1,23 +1,19 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization, type DataSource } from '../../..';
 import packLocation from '../../packLocation';
 import packPrice from '../../packPrice';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type BookingRequest } from '../BookingRequest';
 import { toBookingRequestStatus } from './toBookingRequestStatus';
 
 export interface FindOneBookingRequestInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: { bookingRequestId: NanoId };
 }
 
-export async function findOne({
-    dataSourceAdapter,
-    logger,
-    context,
-    request,
-}: FindOneBookingRequestInput): Promise<BookingRequest | undefined> {
+export async function findOne({ runtime, context, request }: FindOneBookingRequestInput): Promise<BookingRequest | undefined> {
+    const { dataSourceAdapter, logger } = runtime;
     const { bookingRequestId } = request;
 
     await Authorization.isAdmin({ context, dataSourceAdapter, logger });

@@ -1,24 +1,20 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
 import packLocation from '../../packLocation';
 import packPrice from '../../packPrice';
+import { type Runtime } from '../../Runtime';
 import { type FindManyRequest, type NanoId } from '../../shared';
 import { type BookingRequest } from '../BookingRequest';
 import { toBookingRequestStatus } from './toBookingRequestStatus';
 
 export interface FindManyBookingRequestInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: FindManyRequest & { cookId: NanoId };
 }
 
-export async function findManyByCookId({
-    dataSourceAdapter,
-    logger,
-    context,
-    request,
-}: FindManyBookingRequestInput): Promise<BookingRequest[] | undefined> {
+export async function findManyByCookId({ runtime, context, request }: FindManyBookingRequestInput): Promise<BookingRequest[] | undefined> {
+    const { dataSourceAdapter, logger } = runtime;
     const { cookId } = request;
 
     await Authorization.canQueryUserData({ context, dataSourceAdapter, logger, userId: cookId });

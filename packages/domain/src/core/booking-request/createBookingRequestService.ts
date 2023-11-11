@@ -61,45 +61,37 @@ export interface BookingRequestService {
     unlockPayment(context: Authorization.Context, request: { bookingRequestId: NanoId }): Promise<boolean>;
 }
 
-export function createBookingRequestService({
-    dataSourceAdapter,
-    paymentAdapter,
-    emailAdapter,
-    webAppUrl,
-    publisher,
-    logger,
-}: Runtime): BookingRequestService {
+export function createBookingRequestService(runtime: Runtime): BookingRequestService {
     return {
-        findOne: (context: Authorization.Context, request: { bookingRequestId: NanoId }) =>
-            findOne({ dataSourceAdapter, logger, context, request }),
+        findOne: (context: Authorization.Context, request: { bookingRequestId: NanoId }) => findOne({ runtime, context, request }),
         findOneByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }) =>
-            findOneByCookId({ dataSourceAdapter, logger, context, request }),
+            findOneByCookId({ runtime, context, request }),
         findOneByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
-            findOneByUserId({ dataSourceAdapter, logger, context, request }),
-        findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),
+            findOneByUserId({ runtime, context, request }),
+        findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ runtime, context, request }),
         findManyByCookId: (context: Authorization.Context, request: FindManyRequest & { cookId: NanoId }) =>
-            findManyByCookId({ dataSourceAdapter, logger, context, request }),
+            findManyByCookId({ runtime, context, request }),
         findManyByUserId: (context: Authorization.Context, request: FindManyRequest & { userId: NanoId }) =>
-            findManyByUserId({ dataSourceAdapter, logger, context, request }),
+            findManyByUserId({ runtime, context, request }),
         createOne: (context: Authorization.Context, request: CreateOneBookingRequestRequest & { userId: NanoId }) =>
-            createOne({ dataSourceAdapter, logger, webAppUrl, context, request, emailAdapter, paymentAdapter }),
+            createOne({ runtime, context, request }),
         createOneByGlobalBookingRequestId: (context: Authorization.Context, request: { cookId: NanoId; globalBookingRequestId: NanoId }) =>
-            createOneByGlobalBookingRequestId({ dataSourceAdapter, logger, webAppUrl, context, request, emailAdapter }),
+            createOneByGlobalBookingRequestId({ runtime, context, request }),
         acceptOneByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }) =>
-            acceptOneByCookId({ dataSourceAdapter, emailAdapter, logger, context, publisher, request, webAppUrl, paymentAdapter }),
+            acceptOneByCookId({ runtime, context, request }),
         declineOneByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }) =>
-            declineOneByCookId({ dataSourceAdapter, logger, context, emailAdapter, webAppUrl, publisher, request }),
+            declineOneByCookId({ runtime, context, request }),
         acceptOneByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
-            acceptOneByUserId({ dataSourceAdapter, logger, context, publisher, request }),
+            acceptOneByUserId({ runtime, context, request }),
         declineOneByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
-            declineOneByUserId({ dataSourceAdapter, logger, context, publisher, request }),
+            declineOneByUserId({ runtime, context, request }),
         updatePriceByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId; price: Price }) =>
-            updatePriceByCookId({ dataSourceAdapter, logger, context, request }),
+            updatePriceByCookId({ runtime, context, request }),
         updatePriceByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId; price: Price }) =>
-            updatePriceByUserId({ dataSourceAdapter, logger, context, request }),
+            updatePriceByUserId({ runtime, context, request }),
         confirmPaymentSetup: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
-            confirmPaymentSetup({ dataSourceAdapter, logger, webAppUrl, emailAdapter, context, request }),
+            confirmPaymentSetup({ runtime, context, request }),
         unlockPayment: (context: Authorization.Context, request: { bookingRequestId: NanoId }) =>
-            unlockPayment({ dataSourceAdapter, paymentAdapter, logger, context, request }),
+            unlockPayment({ runtime, context, request }),
     };
 }

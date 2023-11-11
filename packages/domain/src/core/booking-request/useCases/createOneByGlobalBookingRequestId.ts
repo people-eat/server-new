@@ -1,28 +1,20 @@
 import { cookBookingRequestCustomerConfirmation, globalBookingRequestCookConfirmation } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
-import { Authorization, type DataSource, type Email, type Logger } from '../../..';
+import { Authorization } from '../../..';
 import { type DBGlobalBookingRequest, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 export interface CreateOneBookingRequestInput {
-    dataSourceAdapter: DataSource.Adapter;
-    emailAdapter: Email.Adapter;
-    webAppUrl: string;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: { cookId: NanoId; globalBookingRequestId: NanoId };
 }
 
 // eslint-disable-next-line max-statements
-export async function createOneByGlobalBookingRequestId({
-    dataSourceAdapter,
-    emailAdapter,
-    webAppUrl,
-    logger,
-    context,
-    request,
-}: CreateOneBookingRequestInput): Promise<boolean> {
+export async function createOneByGlobalBookingRequestId({ runtime, context, request }: CreateOneBookingRequestInput): Promise<boolean> {
+    const { dataSourceAdapter, emailAdapter, webAppUrl, logger } = runtime;
     const { cookId, globalBookingRequestId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });

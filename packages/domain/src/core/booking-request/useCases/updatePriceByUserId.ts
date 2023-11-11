@@ -1,21 +1,17 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type Runtime } from '../../Runtime';
 import { type NanoId, type Price } from '../../shared';
 
 export interface UpdateBookingRequestPriceByUserIdInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: { userId: NanoId; bookingRequestId: NanoId; price: Price };
 }
 
-export async function updatePriceByUserId({
-    dataSourceAdapter,
-    logger,
-    context,
-    request,
-}: UpdateBookingRequestPriceByUserIdInput): Promise<boolean> {
+export async function updatePriceByUserId({ runtime, context, request }: UpdateBookingRequestPriceByUserIdInput): Promise<boolean> {
+    const { dataSourceAdapter, logger } = runtime;
     const { userId, bookingRequestId, price } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });

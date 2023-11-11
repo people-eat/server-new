@@ -25,4 +25,5 @@ export { type PrivacyPolicyUpdate as DBPrivacyPolicyUpdate } from '../../core/pr
 export { type Session as DBSession } from '../../core/session/Session';
 export { type SupportRequest as DBSupportRequest } from '../../core/support-request/SupportRequest';
 export { type TermsUpdate as DBTermsUpdate } from '../../core/terms-update/TermsUpdate';
+export { type TimeTriggeredTask as DBTimeTriggeredTask } from '../../core/time-triggered-tasks/TimeTriggeredTask';
 export { type UserRating as DBUserRating } from '../../core/user-rating/UserRating';

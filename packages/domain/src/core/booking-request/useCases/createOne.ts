@@ -1,40 +1,27 @@
 import moment from 'moment';
-import {
-    Authorization,
-    type Course,
-    type DataSource,
-    type Email,
-    type Logger,
-    type MealOption,
-    type PaymentProvider,
-    type PublicMenu,
-} from '../../..';
+import { Authorization, type Course, type MealOption, type PublicMenu } from '../../..';
 import { type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type ConfiguredMenuCourse } from '../../configured-menu';
 import { findAllCourses } from '../../public-menu/useCases/findAllCourses';
 import { findOne as findOnePublicMenu } from '../../public-menu/useCases/findOne';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type CreateOneBookingRequestRequest } from '../CreateOneBookingRequestRequest';
 
 export interface CreateOneBookingRequestInput {
-    dataSourceAdapter: DataSource.Adapter;
-    // remove
-    webAppUrl: string;
-    emailAdapter: Email.Adapter;
-
-    paymentAdapter: PaymentProvider.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: CreateOneBookingRequestRequest & { userId: NanoId };
 }
 
 // eslint-disable-next-line max-statements
-export async function createOne({ dataSourceAdapter, paymentAdapter, logger, context, request }: CreateOneBookingRequestInput): Promise<{
+export async function createOne({ runtime, context, request }: CreateOneBookingRequestInput): Promise<{
     success: boolean;
     clientSecret: string;
     bookingRequestId: string;
 }> {
+    const { dataSourceAdapter, paymentAdapter, logger } = runtime;
     const bookingRequestId: NanoId = createNanoId();
     const {
         userId,

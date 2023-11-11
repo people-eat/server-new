@@ -1,19 +1,20 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
 import packLocation from '../../packLocation';
 import packPrice from '../../packPrice';
+import { type Runtime } from '../../Runtime';
 import { type FindManyRequest } from '../../shared';
 import { type BookingRequest } from '../BookingRequest';
 import { toBookingRequestStatus } from './toBookingRequestStatus';
 
 export interface FindManyBookingRequestInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: FindManyRequest;
 }
 
-export async function findMany({ dataSourceAdapter, logger, context }: FindManyBookingRequestInput): Promise<BookingRequest[] | undefined> {
+export async function findMany({ runtime, context }: FindManyBookingRequestInput): Promise<BookingRequest[] | undefined> {
+    const { dataSourceAdapter, logger } = runtime;
     await Authorization.isAdmin({ dataSourceAdapter, logger, context });
 
     const bookingRequests: DBBookingRequest[] | undefined = await dataSourceAdapter.bookingRequestRepository.findMany({});
