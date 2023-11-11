@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type NanoId } from '../shared';
 import { type CreateOneMealOptionRequest } from './CreateOneMealOptionRequest';
 import { createMany } from './useCases/createMany';
@@ -14,12 +15,7 @@ export interface MealOptionService {
     deleteOne(context: Authorization.Context, request: { cookId: NanoId; courseId: NanoId; mealId: NanoId }): Promise<boolean>;
 }
 
-export interface CreateMealOptionServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createMealOptionService({ dataSourceAdapter, logger }: CreateMealOptionServiceInput): MealOptionService {
+export function createMealOptionService({ dataSourceAdapter, logger }: Runtime): MealOptionService {
     return {
         createOne: (context: Authorization.Context, request: CreateOneMealOptionRequest & { cookId: NanoId; courseId: NanoId }) =>
             createOne({ dataSourceAdapter, logger, context, request }),

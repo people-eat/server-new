@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type NanoId } from '../shared';
 import { type Course } from './Course';
 import { type CreateOneCourseRequest } from './CreateOneCourseRequest';
@@ -12,12 +13,7 @@ export interface CourseService {
     deleteOne(context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId; courseId: NanoId }): Promise<boolean>;
 }
 
-export interface CreateCourseServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createCourseService({ dataSourceAdapter, logger }: CreateCourseServiceInput): CourseService {
+export function createCourseService({ dataSourceAdapter, logger }: Runtime): CourseService {
     return {
         findAll: (context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId }) =>
             findAll({ dataSourceAdapter, logger, context, request }),

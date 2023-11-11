@@ -1,5 +1,5 @@
-import { type Authorization, type ChatMessage, type DataSource, type Email, type Logger } from '../..';
-import { type Publisher } from '../Service';
+import { type Authorization, type ChatMessage } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type NanoId } from '../shared';
 import { type CreateOneChatMessageRequest } from './CreateOneChatMessageRequest';
 import { createOneByCookId } from './useCases/createOneByCookId';
@@ -27,21 +27,7 @@ export interface ChatMessageService {
     ): Promise<boolean>;
 }
 
-export interface CreateChatMessageServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    emailAdapter: Email.Adapter;
-    logger: Logger.Adapter;
-    webAppUrl: string;
-    publisher: Publisher;
-}
-
-export function createChatMessageService({
-    dataSourceAdapter,
-    logger,
-    emailAdapter,
-    webAppUrl,
-    publisher,
-}: CreateChatMessageServiceInput): ChatMessageService {
+export function createChatMessageService({ dataSourceAdapter, logger, emailAdapter, webAppUrl, publisher }: Runtime): ChatMessageService {
     return {
         findManyByCookId: (context: Authorization.Context, request: FindManyRequest & { cookId: NanoId; bookingRequestId: NanoId }) =>
             findManyByCookId({ dataSourceAdapter, logger, context, request }),

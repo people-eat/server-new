@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type NanoId } from '../shared';
 import { type CreateMenuCategoryRequest } from './CreateMenuCategoryRequest';
 import { type MenuCategory } from './MenuCategory';
@@ -12,12 +13,7 @@ export interface MenuCategoryService {
     deleteOne(context: Authorization.Context, request: CreateMenuCategoryRequest & { cookId: NanoId }): Promise<boolean>;
 }
 
-export interface CreateMenuCategoryServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createMenuCategoryService({ dataSourceAdapter, logger }: CreateMenuCategoryServiceInput): MenuCategoryService {
+export function createMenuCategoryService({ dataSourceAdapter, logger }: Runtime): MenuCategoryService {
     return {
         findAll: (context: Authorization.Context, request: { menuId: NanoId }) => findAll({ dataSourceAdapter, logger, context, request }),
         createOne: (context: Authorization.Context, request: CreateMenuCategoryRequest & { cookId: NanoId }) =>

@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger, type PhoneNumberUpdate, type SMS } from '../..';
+import { type Authorization, type PhoneNumberUpdate } from '../..';
+import { type Runtime } from '../Runtime';
 import { type NanoId } from '../shared';
 import { type CreateOnePhoneNumberUpdateRequest } from './CreateOnePhoneNumberUpdateRequest';
 import { confirmOne } from './useCases/confirmOne';
@@ -11,19 +12,7 @@ export interface PhoneNumberUpdateService {
     findOneByUserId(context: Authorization.Context, request: { userId: NanoId }): Promise<PhoneNumberUpdate | undefined>;
 }
 
-export interface CreatePhoneNumberUpdateServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    smsAdapter: SMS.Adapter;
-    logger: Logger.Adapter;
-    webAppUrl: string;
-}
-
-export function createPhoneNumberUpdateService({
-    dataSourceAdapter,
-    smsAdapter,
-    logger,
-    webAppUrl,
-}: CreatePhoneNumberUpdateServiceInput): PhoneNumberUpdateService {
+export function createPhoneNumberUpdateService({ dataSourceAdapter, smsAdapter, logger, webAppUrl }: Runtime): PhoneNumberUpdateService {
     return {
         createOne: (context: Authorization.Context, request: CreateOnePhoneNumberUpdateRequest) =>
             createOne({ dataSourceAdapter, smsAdapter, logger, webAppUrl, context, request }),

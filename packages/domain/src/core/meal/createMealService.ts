@@ -1,5 +1,6 @@
 import { type ReadStream } from 'fs';
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type MealType, type NanoId } from '../shared';
 import { type CreateOneMealRequest } from './CreateOneMealRequest';
 import { type Meal } from './Meal';
@@ -26,13 +27,7 @@ export interface MealService {
     updateType(context: Authorization.Context, request: { cookId: NanoId; mealId: NanoId; type: MealType }): Promise<boolean>;
 }
 
-export interface CreateMealServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-    serverUrl: string;
-}
-
-export function createMealService({ dataSourceAdapter, logger, serverUrl }: CreateMealServiceInput): MealService {
+export function createMealService({ dataSourceAdapter, logger, serverUrl }: Runtime): MealService {
     return {
         findOne: (context: Authorization.Context, request: { cookId: NanoId; mealId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),

@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type NanoId } from '../shared';
 import { type Allergy } from './Allergy';
 import { type CreateOneAllergyRequest } from './CreateOneAllergyRequest';
@@ -12,12 +13,7 @@ export interface AllergyService {
     createOne(context: Authorization.Context, request: CreateOneAllergyRequest): Promise<boolean>;
 }
 
-export interface CreateAllergyServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createAllergyService({ dataSourceAdapter, logger }: CreateAllergyServiceInput): AllergyService {
+export function createAllergyService({ dataSourceAdapter, logger }: Runtime): AllergyService {
     return {
         findOne: (context: Authorization.Context, request: { allergyId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),

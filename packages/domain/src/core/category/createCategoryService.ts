@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type NanoId } from '../shared';
 import { type Category } from './Category';
 import { type CreateOneCategoryRequest } from './CreateOneCategoryRequest';
@@ -12,12 +13,7 @@ export interface CategoryService {
     createOne(context: Authorization.Context, request: CreateOneCategoryRequest): Promise<boolean>;
 }
 
-export interface CreateCategoryServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createCategoryService({ dataSourceAdapter, logger }: CreateCategoryServiceInput): CategoryService {
+export function createCategoryService({ dataSourceAdapter, logger }: Runtime): CategoryService {
     return {
         findOne: (context: Authorization.Context, request: { categoryId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),

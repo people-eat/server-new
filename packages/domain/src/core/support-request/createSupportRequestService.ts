@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type NanoId } from '../shared';
 import { type CreateOneSupportRequestRequest } from './CreateOneSupportRequestRequest';
 import { type SupportRequest } from './SupportRequest';
@@ -12,12 +13,7 @@ export interface SupportRequestService {
     createOne(context: Authorization.Context, request: CreateOneSupportRequestRequest & { userId: NanoId }): Promise<boolean>;
 }
 
-export interface CreateSupportRequestServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createSupportRequestService({ dataSourceAdapter, logger }: CreateSupportRequestServiceInput): SupportRequestService {
+export function createSupportRequestService({ dataSourceAdapter, logger }: Runtime): SupportRequestService {
     return {
         findOne: (context: Authorization.Context, request: { supportRequestId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),

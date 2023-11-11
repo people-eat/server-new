@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Email, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type NanoId } from '../shared';
 import { type CreateOneOneTimeAccessTokenForEmailAddressRequest } from './CreateOneOneTimeAccessTokenForEmailAddressRequest';
 import { confirmOne } from './useCases/confirmOne';
@@ -9,19 +10,12 @@ export interface OneTimeAccessTokenService {
     confirmOne(context: Authorization.Context, request: { secret: NanoId }): Promise<boolean>;
 }
 
-export interface CreateOneTimeAccessTokenServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    emailAdapter: Email.Adapter;
-    logger: Logger.Adapter;
-    webAppUrl: string;
-}
-
 export function createOneTimeAccessTokenService({
     dataSourceAdapter,
     emailAdapter,
     logger,
     webAppUrl,
-}: CreateOneTimeAccessTokenServiceInput): OneTimeAccessTokenService {
+}: Runtime): OneTimeAccessTokenService {
     return {
         createOneForEmailAddress: (_context: Authorization.Context, request: CreateOneOneTimeAccessTokenForEmailAddressRequest) =>
             createOneForEmailAddress({ dataSourceAdapter, emailAdapter, logger, webAppUrl, request }),

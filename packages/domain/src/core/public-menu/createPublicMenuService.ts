@@ -1,4 +1,5 @@
-import { type Authorization, type Course, type DataSource, type Logger, type PublicMenu } from '../..';
+import { type Authorization, type Course, type PublicMenu } from '../..';
+import { type Runtime } from '../Runtime';
 import { type NanoId } from '../shared';
 import { findAllCourses } from './useCases/findAllCourses';
 import { findMany } from './useCases/findMany';
@@ -12,12 +13,7 @@ export interface PublicMenuService {
     findAllCourses(context: Authorization.Context, request: { menuId: NanoId }): Promise<Course[] | undefined>;
 }
 
-export interface CreatePublicMenuServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createPublicMenuService({ dataSourceAdapter, logger }: CreatePublicMenuServiceInput): PublicMenuService {
+export function createPublicMenuService({ dataSourceAdapter, logger }: Runtime): PublicMenuService {
     return {
         findOne: (context: Authorization.Context, menuId: string) => findOne({ dataSourceAdapter, logger, context, request: { menuId } }),
         findMany: (context: Authorization.Context) => findMany({ dataSourceAdapter, logger, context, request: {} }),

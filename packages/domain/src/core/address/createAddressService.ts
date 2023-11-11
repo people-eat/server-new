@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type NanoId } from '../shared';
 import { type Address } from './Address';
 import { type CreateOneAddressRequest } from './CreateOneAddressRequest';
@@ -16,12 +17,7 @@ export interface AddressService {
     update(context: Authorization.Context, request: { userId: NanoId; addressId: NanoId } & CreateOneAddressRequest): Promise<boolean>;
 }
 
-export interface CreateAddressServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createAddressService({ dataSourceAdapter, logger }: CreateAddressServiceInput): AddressService {
+export function createAddressService({ dataSourceAdapter, logger }: Runtime): AddressService {
     return {
         findOne: (context: Authorization.Context, request: { userId: NanoId; addressId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),

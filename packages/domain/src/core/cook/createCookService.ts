@@ -1,4 +1,5 @@
-import { type Authorization, type Cook, type DataSource, type Email, type Logger, type PaymentProvider, type SMS } from '../..';
+import { type Authorization, type Cook } from '../..';
+import { type Runtime } from '../Runtime';
 import { type CookRank, type FindManyRequest, type Location } from '../shared';
 import { type CreateOneCookRequest } from './CreateOneCookRequest';
 import { createOne } from './useCases/createOne';
@@ -38,15 +39,7 @@ export interface CookService {
     getStripeDashboardUrl(context: Authorization.Context, cookId: string): Promise<string | undefined>;
 }
 
-export interface CreateCookServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-    emailAdapter: Email.Adapter;
-    paymentAdapter: PaymentProvider.Adapter;
-    smsAdapter: SMS.Adapter;
-}
-
-export function createCookService({ dataSourceAdapter, emailAdapter, paymentAdapter, logger }: CreateCookServiceInput): CookService {
+export function createCookService({ dataSourceAdapter, emailAdapter, paymentAdapter, logger }: Runtime): CookService {
     return {
         findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),
         findOne: (context: Authorization.Context, cookId: string) => findOne({ dataSourceAdapter, logger, context, request: { cookId } }),

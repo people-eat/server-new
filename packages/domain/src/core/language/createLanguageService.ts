@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type NanoId } from '../shared';
 import { type CreateOneLanguageRequest } from './CreateOneLanguageRequest';
 import { type Language } from './Language';
@@ -12,12 +13,7 @@ export interface LanguageService {
     createOne(context: Authorization.Context, request: CreateOneLanguageRequest): Promise<boolean>;
 }
 
-export interface CreateLanguageServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createLanguageService({ dataSourceAdapter, logger }: CreateLanguageServiceInput): LanguageService {
+export function createLanguageService({ dataSourceAdapter, logger }: Runtime): LanguageService {
     return {
         findOne: (context: Authorization.Context, request: { languageId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),

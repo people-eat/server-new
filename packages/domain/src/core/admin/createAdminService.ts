@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type NanoId } from '../shared';
 import { type Admin } from './Admin';
 import { type CreateOneAdminRequest } from './CreateOneAdminRequest';
@@ -12,12 +13,7 @@ export interface AdminService {
     createOne(context: Authorization.Context, request: CreateOneAdminRequest): Promise<boolean>;
 }
 
-export interface CreateAdminServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createAdminService({ dataSourceAdapter, logger }: CreateAdminServiceInput): AdminService {
+export function createAdminService({ dataSourceAdapter, logger }: Runtime): AdminService {
     return {
         findOne: (context: Authorization.Context, request: { adminId: NanoId }) => findOne({ dataSourceAdapter, logger, context, request }),
         findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),

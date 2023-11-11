@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Email, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type NanoId } from '../shared';
 import { type CreateOneGlobalBookingRequestRequest } from './CreateOneGlobalBookingRequestRequest';
 import { type GlobalBookingRequest } from './GlobalBookingRequest';
@@ -24,19 +25,12 @@ export interface GlobalBookingRequestService {
     deleteOne(context: Authorization.Context, request: { userId: NanoId; globalBookingRequestId: NanoId }): Promise<boolean>;
 }
 
-export interface CreateGlobalBookingRequestServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    emailAdapter: Email.Adapter;
-    webAppUrl: string;
-    logger: Logger.Adapter;
-}
-
 export function createGlobalBookingRequestService({
     dataSourceAdapter,
     emailAdapter,
     webAppUrl,
     logger,
-}: CreateGlobalBookingRequestServiceInput): GlobalBookingRequestService {
+}: Runtime): GlobalBookingRequestService {
     return {
         findOne: (context: Authorization.Context, request: { globalBookingRequestId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),

@@ -1,4 +1,3 @@
-import { type DataSource, type Email, type IdentityProvider, type Logger, type PaymentProvider, type SMS } from '..';
 import { createAddressService } from './address/createAddressService';
 import { createAdminService } from './admin/createAdminService';
 import { createAllergyService } from './allergy/createAllergyService';
@@ -26,75 +25,45 @@ import { createPublicMenuService } from './public-menu/createPublicMenuService';
 import { createPublicPrivacyPolicyUpdateService } from './public-privacy-policy-update/createPublicPrivacyPolicyUpdateService';
 import { createPublicTermsUpdateService } from './public-terms-update/createPublicTermsUpdateService';
 import { createPublicUserService } from './public-user/createPublicUserService';
-import { type Publisher, type Service } from './Service';
+import { type Runtime } from './Runtime';
+import { type Service } from './Service';
 import { createSessionService } from './session/createSessionService';
 import { createSupportRequestService } from './support-request/createSupportRequestService';
 import { createUserService } from './user/createUserService';
 
-export interface CreateServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-    emailAdapter: Email.Adapter;
-    smsAdapter: SMS.Adapter;
-    identityProviderAdapter: IdentityProvider.Adapter;
-    paymentAdapter: PaymentProvider.Adapter;
-    serverUrl: string;
-    webAppUrl: string;
-    publisher: Publisher;
-}
-
-export function createService({
-    dataSourceAdapter,
-    logger,
-    emailAdapter,
-    smsAdapter,
-    identityProviderAdapter,
-    paymentAdapter,
-    serverUrl,
-    webAppUrl,
-    publisher,
-}: CreateServiceInput): Service {
+export function createService(runtime: Runtime): Service {
     return {
-        log: createLogService({ dataSourceAdapter }),
-        publisher,
+        log: createLogService(runtime),
+        publisher: runtime.publisher,
 
-        language: createLanguageService({ dataSourceAdapter, logger }),
-        category: createCategoryService({ dataSourceAdapter, logger }),
-        kitchen: createKitchenService({ dataSourceAdapter, logger }),
-        allergy: createAllergyService({ dataSourceAdapter, logger }),
-        user: createUserService({
-            dataSourceAdapter,
-            logger,
-            emailAdapter,
-            smsAdapter,
-            paymentAdapter,
-            identityProviderAdapter,
-            serverUrl,
-            webAppUrl,
-        }),
-        session: createSessionService({ dataSourceAdapter, logger, identityProviderAdapter }),
-        admin: createAdminService({ dataSourceAdapter, logger }),
-        publicTermsUpdates: createPublicTermsUpdateService({ dataSourceAdapter, logger }),
-        publicPrivacyPolicyUpdates: createPublicPrivacyPolicyUpdateService({ dataSourceAdapter, logger }),
-        emailAddressUpdate: createEmailAddressUpdateService({ dataSourceAdapter, logger, emailAdapter, webAppUrl }),
-        phoneNumberUpdate: createPhoneNumberUpdateService({ dataSourceAdapter, logger, smsAdapter, webAppUrl }),
-        address: createAddressService({ dataSourceAdapter, logger }),
-        cook: createCookService({ dataSourceAdapter, logger, smsAdapter, emailAdapter, paymentAdapter }),
-        publicUser: createPublicUserService({ dataSourceAdapter, logger }),
-        publicCook: createPublicCookService({ dataSourceAdapter, logger }),
-        publicMenu: createPublicMenuService({ dataSourceAdapter, logger }),
-        meal: createMealService({ dataSourceAdapter, logger, serverUrl }),
-        menu: createMenuService({ dataSourceAdapter, logger }),
-        menuCategory: createMenuCategoryService({ dataSourceAdapter, logger }),
-        cookLanguage: createCookLanguageService({ dataSourceAdapter, logger }),
-        course: createCourseService({ dataSourceAdapter, logger }),
-        mealOption: createMealOptionService({ dataSourceAdapter, logger }),
-        globalBookingRequest: createGlobalBookingRequestService({ dataSourceAdapter, logger, emailAdapter, webAppUrl }),
-        bookingRequest: createBookingRequestService({ dataSourceAdapter, paymentAdapter, logger, emailAdapter, webAppUrl, publisher }),
-        chatMessage: createChatMessageService({ dataSourceAdapter, logger, emailAdapter, webAppUrl, publisher }),
-        configuredMenu: createConfiguredMenuService({ dataSourceAdapter, logger }),
-        favoriteCook: createFavoriteCookService({ dataSourceAdapter, logger }),
-        oneTimeAccessToken: createOneTimeAccessTokenService({ dataSourceAdapter, logger, emailAdapter, webAppUrl }),
-        supportRequest: createSupportRequestService({ dataSourceAdapter, logger }),
+        language: createLanguageService(runtime),
+        category: createCategoryService(runtime),
+        kitchen: createKitchenService(runtime),
+        allergy: createAllergyService(runtime),
+        user: createUserService(runtime),
+        session: createSessionService(runtime),
+        admin: createAdminService(runtime),
+        publicTermsUpdates: createPublicTermsUpdateService(runtime),
+        publicPrivacyPolicyUpdates: createPublicPrivacyPolicyUpdateService(runtime),
+        emailAddressUpdate: createEmailAddressUpdateService(runtime),
+        phoneNumberUpdate: createPhoneNumberUpdateService(runtime),
+        address: createAddressService(runtime),
+        cook: createCookService(runtime),
+        publicUser: createPublicUserService(runtime),
+        publicCook: createPublicCookService(runtime),
+        publicMenu: createPublicMenuService(runtime),
+        meal: createMealService(runtime),
+        menu: createMenuService(runtime),
+        menuCategory: createMenuCategoryService(runtime),
+        cookLanguage: createCookLanguageService(runtime),
+        course: createCourseService(runtime),
+        mealOption: createMealOptionService(runtime),
+        globalBookingRequest: createGlobalBookingRequestService(runtime),
+        bookingRequest: createBookingRequestService(runtime),
+        chatMessage: createChatMessageService(runtime),
+        configuredMenu: createConfiguredMenuService(runtime),
+        favoriteCook: createFavoriteCookService(runtime),
+        oneTimeAccessToken: createOneTimeAccessTokenService(runtime),
+        supportRequest: createSupportRequestService(runtime),
     };
 }

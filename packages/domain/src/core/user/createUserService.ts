@@ -1,5 +1,6 @@
 import { type ReadStream } from 'fs';
-import { type Authorization, type DataSource, type Email, type IdentityProvider, type Logger, type PaymentProvider, type SMS } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type Gender, type NanoId } from '../shared';
 import {
     type CreateOneUserByEmailAddressRequest,
@@ -27,17 +28,6 @@ export interface UserService {
     updateProfilePicture(context: Authorization.Context, request: { userId: NanoId; profilePicture?: ReadStream }): Promise<boolean>;
 }
 
-export interface CreateUserServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-    emailAdapter: Email.Adapter;
-    smsAdapter: SMS.Adapter;
-    paymentAdapter: PaymentProvider.Adapter;
-    identityProviderAdapter: IdentityProvider.Adapter;
-    serverUrl: string;
-    webAppUrl: string;
-}
-
 export function createUserService({
     dataSourceAdapter,
     logger,
@@ -47,7 +37,7 @@ export function createUserService({
     identityProviderAdapter,
     serverUrl,
     webAppUrl,
-}: CreateUserServiceInput): UserService {
+}: Runtime): UserService {
     return {
         findOneByUserId: (context: Authorization.Context, request: FindOneUserByUserIdRequest) =>
             findOneByUserId({ dataSourceAdapter, logger, context, request }),

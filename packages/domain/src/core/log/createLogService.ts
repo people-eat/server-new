@@ -1,4 +1,4 @@
-import { type DataSource } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type NanoId } from '../shared';
 import { type CreateLogRequest } from './CreateLogRequest';
 import { type Log } from './Log';
@@ -12,11 +12,7 @@ export interface LogService {
     createOne(request: CreateLogRequest): Promise<boolean>;
 }
 
-export interface CreateLogServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-}
-
-export function createLogService({ dataSourceAdapter }: CreateLogServiceInput): LogService {
+export function createLogService({ dataSourceAdapter }: Runtime): LogService {
     return {
         findOne: (request: { logId: NanoId }) => findOne({ dataSourceAdapter, request }),
         findMany: (request: FindManyRequest) => findMany({ dataSourceAdapter, request }),

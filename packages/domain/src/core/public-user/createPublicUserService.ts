@@ -1,16 +1,12 @@
-import { type Authorization, type DataSource, type Logger, type PublicUser } from '../..';
+import { type Authorization, type PublicUser } from '../..';
+import { type Runtime } from '../Runtime';
 import { findOne } from './useCases/findOne';
 
 export interface PublicUserService {
     findOne(context: Authorization.Context, userId: string): Promise<PublicUser | undefined>;
 }
 
-export interface CreatePublicUserServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createPublicUserService({ dataSourceAdapter, logger }: CreatePublicUserServiceInput): PublicUserService {
+export function createPublicUserService({ dataSourceAdapter, logger }: Runtime): PublicUserService {
     return {
         findOne: (context: Authorization.Context, userId: string) => findOne({ dataSourceAdapter, logger, context, request: { userId } }),
     };

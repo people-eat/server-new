@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type NanoId } from '../shared';
 import { type CreateOneFavoriteCookRequest } from './CreateOneFavoriteCookRequest';
 import { type FavoriteCook } from './FavoriteCook';
@@ -12,12 +13,7 @@ export interface FavoriteCookService {
     deleteOne(context: Authorization.Context, request: { userId: NanoId; cookId: NanoId }): Promise<boolean>;
 }
 
-export interface CreateFavoriteCookServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createFavoriteCookService({ dataSourceAdapter, logger }: CreateFavoriteCookServiceInput): FavoriteCookService {
+export function createFavoriteCookService({ dataSourceAdapter, logger }: Runtime): FavoriteCookService {
     return {
         findManyByUserId: (context: Authorization.Context, request: { userId: NanoId }) =>
             findManyByUserId({ dataSourceAdapter, logger, context, request }),

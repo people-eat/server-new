@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Language, type Logger } from '../..';
+import { type Authorization, type Language } from '../..';
+import { type Runtime } from '../Runtime';
 import { type NanoId } from '../shared';
 import { type CreateOneCookLanguageRequest } from './CreateOneCookLanguageRequest';
 import { createOne } from './useCases/createOne';
@@ -11,12 +12,7 @@ export interface CookLanguageService {
     deleteOne(context: Authorization.Context, request: { cookId: NanoId; languageId: NanoId }): Promise<boolean>;
 }
 
-export interface CreateAddressServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createCookLanguageService({ dataSourceAdapter, logger }: CreateAddressServiceInput): CookLanguageService {
+export function createCookLanguageService({ dataSourceAdapter, logger }: Runtime): CookLanguageService {
     return {
         findAll: (context: Authorization.Context, request: { cookId: NanoId }) => findAll({ dataSourceAdapter, logger, context, request }),
         createOne: (context: Authorization.Context, request: CreateOneCookLanguageRequest & { cookId: NanoId }) =>

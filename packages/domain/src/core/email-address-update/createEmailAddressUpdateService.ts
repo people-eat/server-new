@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Email, type EmailAddressUpdate, type Logger } from '../..';
+import { type Authorization, type EmailAddressUpdate } from '../..';
+import { type Runtime } from '../Runtime';
 import { type NanoId } from '../shared';
 import { type CreateOneEmailAddressUpdateRequest } from './CreateOneEmailAddressUpdateRequest';
 import { confirmOne } from './useCases/confirmOne';
@@ -11,19 +12,12 @@ export interface EmailAddressUpdateService {
     findOneByUserId(context: Authorization.Context, request: { userId: NanoId }): Promise<EmailAddressUpdate | undefined>;
 }
 
-export interface CreateEmailAddressUpdateServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    emailAdapter: Email.Adapter;
-    logger: Logger.Adapter;
-    webAppUrl: string;
-}
-
 export function createEmailAddressUpdateService({
     dataSourceAdapter,
     emailAdapter,
     logger,
     webAppUrl,
-}: CreateEmailAddressUpdateServiceInput): EmailAddressUpdateService {
+}: Runtime): EmailAddressUpdateService {
     return {
         createOne: (context: Authorization.Context, request: CreateOneEmailAddressUpdateRequest) =>
             createOne({ dataSourceAdapter, emailAdapter, logger, webAppUrl, context, request }),

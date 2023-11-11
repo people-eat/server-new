@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type CurrencyCode, type FindManyRequest, type NanoId } from '../shared';
 import { type CreateOneMenuRequest } from './CreateOneMenuRequest';
 import { type Menu } from './Menu';
@@ -58,12 +59,7 @@ export interface MenuService {
     ): Promise<boolean>;
 }
 
-export interface CreateMenuServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-}
-
-export function createMenuService({ dataSourceAdapter, logger }: CreateMenuServiceInput): MenuService {
+export function createMenuService({ dataSourceAdapter, logger }: Runtime): MenuService {
     return {
         findOne: (context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),

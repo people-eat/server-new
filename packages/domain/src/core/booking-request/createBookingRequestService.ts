@@ -1,5 +1,5 @@
-import { type Authorization, type DataSource, type Email, type Logger, type PaymentProvider } from '../..';
-import { type Publisher } from '../Service';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type NanoId, type Price } from '../shared';
 import { type BookingRequest } from './BookingRequest';
 import { type CreateOneBookingRequestRequest } from './CreateOneBookingRequestRequest';
@@ -61,15 +61,6 @@ export interface BookingRequestService {
     unlockPayment(context: Authorization.Context, request: { bookingRequestId: NanoId }): Promise<boolean>;
 }
 
-export interface CreateBookingRequestServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    paymentAdapter: PaymentProvider.Adapter;
-    emailAdapter: Email.Adapter;
-    webAppUrl: string;
-    publisher: Publisher;
-    logger: Logger.Adapter;
-}
-
 export function createBookingRequestService({
     dataSourceAdapter,
     paymentAdapter,
@@ -77,7 +68,7 @@ export function createBookingRequestService({
     webAppUrl,
     publisher,
     logger,
-}: CreateBookingRequestServiceInput): BookingRequestService {
+}: Runtime): BookingRequestService {
     return {
         findOne: (context: Authorization.Context, request: { bookingRequestId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),

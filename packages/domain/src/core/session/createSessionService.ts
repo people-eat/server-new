@@ -1,4 +1,5 @@
-import { type Authorization, type DataSource, type IdentityProvider, type Logger } from '../..';
+import { type Authorization } from '../..';
+import { type Runtime } from '../Runtime';
 import { type Session } from './Session';
 import { assignOneByEmailAddress, type AssignOneSessionByEmailAddressRequest } from './useCases/assignOneByEmailAddress';
 import { assignOneByIdentityProvider, type AssignOneSessionByIdentityProviderRequest } from './useCases/assignOneByIdentityProvider';
@@ -18,13 +19,7 @@ export interface SessionService {
     findCurrent(context: Authorization.Context): Promise<Session | undefined>;
 }
 
-export interface CreateSessionServiceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-    identityProviderAdapter: IdentityProvider.Adapter;
-}
-
-export function createSessionService({ dataSourceAdapter, logger, identityProviderAdapter }: CreateSessionServiceInput): SessionService {
+export function createSessionService({ dataSourceAdapter, logger, identityProviderAdapter }: Runtime): SessionService {
     return {
         assignOneByEmailAddress: (context: Authorization.Context, request: AssignOneSessionByEmailAddressRequest) =>
             assignOneByEmailAddress({ dataSourceAdapter, logger, context, request }),
