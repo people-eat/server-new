@@ -935,6 +935,12 @@ export type GQLCreateOneSessionByPhoneNumberRequest = {
     title: Scalars['String'];
 };
 
+export type GQLCreateOneSupportRequest = {
+    bookingRequestId?: InputMaybe<Scalars['String']>;
+    message: Scalars['String'];
+    subject: Scalars['String'];
+};
+
 export type GQLCreateOneTermsUpdateRequest = {
     englishText: Scalars['String'];
     germanText: Scalars['String'];
@@ -1472,6 +1478,7 @@ export type GQLQuery = {
     publicTermsUpdates: GQLPublicTermsUpdateQuery;
     sessions: GQLSessionQuery;
     stripePublishableKey?: Maybe<Scalars['String']>;
+    supportRequests: GQLSupportRequestQuery;
     termsUpdates: GQLTermsUpdateQuery;
     users: GQLUserQuery;
 };
@@ -1535,6 +1542,30 @@ export type GQLSubscription = {
 
 export type GQLSubscriptionBookingRequestChatMessageCreationsArgs = {
     bookingRequestId: Scalars['String'];
+};
+
+export type GQLSupportRequest = {
+    __typename?: 'SupportRequest';
+    bookingRequestId?: Maybe<Scalars['String']>;
+    createdAt: Scalars['DateTime'];
+    message: Scalars['String'];
+    subject: Scalars['String'];
+    supportRequestId: Scalars['String'];
+    userId: Scalars['String'];
+};
+
+export type GQLSupportRequestQuery = {
+    __typename?: 'SupportRequestQuery';
+    findMany?: Maybe<Array<GQLSupportRequest>>;
+    findOne?: Maybe<GQLSupportRequest>;
+};
+
+export type GQLSupportRequestQueryFindManyArgs = {
+    request?: InputMaybe<GQLFindManyRequest>;
+};
+
+export type GQLSupportRequestQueryFindOneArgs = {
+    supportRequestId: Scalars['String'];
 };
 
 export type GQLTermsUpdate = {
@@ -1851,6 +1882,7 @@ export type GQLUserMutation = {
     oneTimeAccessToken: GQLUserOneTimeAccessTokenMutation;
     phoneNumberUpdate: GQLUserPhoneNumberUpdateMutation;
     sessions: GQLUserSessionMutation;
+    supportRequests: GQLUserSupportRequestMutation;
     updateGender: Scalars['Boolean'];
     updateIsLocked: Scalars['Boolean'];
     updatePassword: Scalars['Boolean'];
@@ -1907,6 +1939,10 @@ export type GQLUserMutationPhoneNumberUpdateArgs = {
 };
 
 export type GQLUserMutationSessionsArgs = {
+    userId: Scalars['String'];
+};
+
+export type GQLUserMutationSupportRequestsArgs = {
     userId: Scalars['String'];
 };
 
@@ -2121,6 +2157,16 @@ export type GQLUserSessionQuery = {
     userId: Scalars['String'];
 };
 
+export type GQLUserSupportRequestMutation = {
+    __typename?: 'UserSupportRequestMutation';
+    createOne: Scalars['Boolean'];
+    userId: Scalars['String'];
+};
+
+export type GQLUserSupportRequestMutationCreateOneArgs = {
+    request: GQLCreateOneSupportRequest;
+};
+
 export type GQLUserUserRatingQuery = {
     __typename?: 'UserUserRatingQuery';
     findMany: Array<GQLUserRating>;
@@ -2259,6 +2305,7 @@ export type GQLResolversTypes = {
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
+    CreateOneSupportRequest: GQLCreateOneSupportRequest;
     CreateOneTermsUpdateRequest: GQLCreateOneTermsUpdateRequest;
     CreateOneUserByEmailAddressRequest: GQLCreateOneUserByEmailAddressRequest;
     CreateOneUserByIdentityProviderRequest: GQLCreateOneUserByIdentityProviderRequest;
@@ -2331,6 +2378,8 @@ export type GQLResolversTypes = {
     SessionQuery: ResolverTypeWrapper<GQLSessionQuery>;
     String: ResolverTypeWrapper<Scalars['String']>;
     Subscription: ResolverTypeWrapper<{}>;
+    SupportRequest: ResolverTypeWrapper<GQLSupportRequest>;
+    SupportRequestQuery: ResolverTypeWrapper<GQLSupportRequestQuery>;
     TermsUpdate: ResolverTypeWrapper<GQLTermsUpdate>;
     TermsUpdateMutation: ResolverTypeWrapper<GQLTermsUpdateMutation>;
     TermsUpdateQuery: ResolverTypeWrapper<GQLTermsUpdateQuery>;
@@ -2366,6 +2415,7 @@ export type GQLResolversTypes = {
     UserRating: ResolverTypeWrapper<GQLUserRating>;
     UserSessionMutation: ResolverTypeWrapper<GQLUserSessionMutation>;
     UserSessionQuery: ResolverTypeWrapper<GQLUserSessionQuery>;
+    UserSupportRequestMutation: ResolverTypeWrapper<GQLUserSupportRequestMutation>;
     UserUserRatingQuery: ResolverTypeWrapper<GQLUserUserRatingQuery>;
 };
 
@@ -2433,6 +2483,7 @@ export type GQLResolversParentTypes = {
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
+    CreateOneSupportRequest: GQLCreateOneSupportRequest;
     CreateOneTermsUpdateRequest: GQLCreateOneTermsUpdateRequest;
     CreateOneUserByEmailAddressRequest: GQLCreateOneUserByEmailAddressRequest;
     CreateOneUserByIdentityProviderRequest: GQLCreateOneUserByIdentityProviderRequest;
@@ -2499,6 +2550,8 @@ export type GQLResolversParentTypes = {
     SessionQuery: GQLSessionQuery;
     String: Scalars['String'];
     Subscription: {};
+    SupportRequest: GQLSupportRequest;
+    SupportRequestQuery: GQLSupportRequestQuery;
     TermsUpdate: GQLTermsUpdate;
     TermsUpdateMutation: GQLTermsUpdateMutation;
     TermsUpdateQuery: GQLTermsUpdateQuery;
@@ -2533,6 +2586,7 @@ export type GQLResolversParentTypes = {
     UserRating: GQLUserRating;
     UserSessionMutation: GQLUserSessionMutation;
     UserSessionQuery: GQLUserSessionQuery;
+    UserSupportRequestMutation: GQLUserSupportRequestMutation;
     UserUserRatingQuery: GQLUserUserRatingQuery;
 };
 
@@ -3958,6 +4012,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     publicTermsUpdates?: Resolver<GQLResolversTypes['PublicTermsUpdateQuery'], ParentType, ContextType>;
     sessions?: Resolver<GQLResolversTypes['SessionQuery'], ParentType, ContextType>;
     stripePublishableKey?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    supportRequests?: Resolver<GQLResolversTypes['SupportRequestQuery'], ParentType, ContextType>;
     termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateQuery'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserQuery'], ParentType, ContextType>;
 };
@@ -4036,6 +4091,38 @@ export type GQLSubscriptionResolvers<
         ContextType,
         RequireFields<GQLSubscriptionBookingRequestChatMessageCreationsArgs, 'bookingRequestId'>
     >;
+};
+
+export type GQLSupportRequestResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['SupportRequest'] = GQLResolversParentTypes['SupportRequest'],
+> = {
+    bookingRequestId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    subject?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    supportRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLSupportRequestQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['SupportRequestQuery'] = GQLResolversParentTypes['SupportRequestQuery'],
+> = {
+    findMany?: Resolver<
+        Maybe<Array<GQLResolversTypes['SupportRequest']>>,
+        ParentType,
+        ContextType,
+        Partial<GQLSupportRequestQueryFindManyArgs>
+    >;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['SupportRequest']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLSupportRequestQueryFindOneArgs, 'supportRequestId'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLTermsUpdateResolvers<
@@ -4498,6 +4585,12 @@ export type GQLUserMutationResolvers<
         ContextType,
         RequireFields<GQLUserMutationSessionsArgs, 'userId'>
     >;
+    supportRequests?: Resolver<
+        GQLResolversTypes['UserSupportRequestMutation'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserMutationSupportRequestsArgs, 'userId'>
+    >;
     updateGender?: Resolver<
         GQLResolversTypes['Boolean'],
         ParentType,
@@ -4758,6 +4851,20 @@ export type GQLUserSessionQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLUserSupportRequestMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserSupportRequestMutation'] = GQLResolversParentTypes['UserSupportRequestMutation'],
+> = {
+    createOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserSupportRequestMutationCreateOneArgs, 'request'>
+    >;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLUserUserRatingQueryResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['UserUserRatingQuery'] = GQLResolversParentTypes['UserUserRatingQuery'],
@@ -4866,6 +4973,8 @@ export type GQLResolvers<ContextType = any> = {
     SessionMutation?: GQLSessionMutationResolvers<ContextType>;
     SessionQuery?: GQLSessionQueryResolvers<ContextType>;
     Subscription?: GQLSubscriptionResolvers<ContextType>;
+    SupportRequest?: GQLSupportRequestResolvers<ContextType>;
+    SupportRequestQuery?: GQLSupportRequestQueryResolvers<ContextType>;
     TermsUpdate?: GQLTermsUpdateResolvers<ContextType>;
     TermsUpdateMutation?: GQLTermsUpdateMutationResolvers<ContextType>;
     TermsUpdateQuery?: GQLTermsUpdateQueryResolvers<ContextType>;
@@ -4900,5 +5009,6 @@ export type GQLResolvers<ContextType = any> = {
     UserRating?: GQLUserRatingResolvers<ContextType>;
     UserSessionMutation?: GQLUserSessionMutationResolvers<ContextType>;
     UserSessionQuery?: GQLUserSessionQueryResolvers<ContextType>;
+    UserSupportRequestMutation?: GQLUserSupportRequestMutationResolvers<ContextType>;
     UserUserRatingQuery?: GQLUserUserRatingQueryResolvers<ContextType>;
 };

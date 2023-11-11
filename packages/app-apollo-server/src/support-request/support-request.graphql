@@ -1,0 +1,32 @@
+type SupportRequest {
+    supportRequestId: String!
+    userId: String!
+    bookingRequestId: String
+    subject: String!
+    message: String!
+    createdAt: DateTime!
+}
+
+type SupportRequestQuery {
+    findMany(request: FindManyRequest): [SupportRequest!]
+    findOne(supportRequestId: String!): SupportRequest
+}
+
+type Query {
+    supportRequests: SupportRequestQuery!
+}
+
+input CreateOneSupportRequest {
+    bookingRequestId: String
+    subject: String!
+    message: String!
+}
+
+type UserSupportRequestMutation {
+    userId: String!
+    createOne(request: CreateOneSupportRequest!): Boolean!
+}
+
+type UserMutation {
+    supportRequests(userId: String!): UserSupportRequestMutation!
+}

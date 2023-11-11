@@ -32,6 +32,7 @@ import {
     type DBNotificationConfiguration,
     type DBPrivacyPolicyUpdate,
     type DBSession,
+    type DBSupportRequest,
     type DBTermsUpdate,
     type DBUserRating,
 } from './entities/unchanged';
@@ -82,6 +83,8 @@ export interface Adapter {
 
     cookRatingRepository: Repository<DBCookRating>;
     userRatingRepository: Repository<DBUserRating>;
+
+    supportRequestRepository: Repository<DBSupportRequest>;
 
     query: <T>(request: string) => Promise<T>;
 }

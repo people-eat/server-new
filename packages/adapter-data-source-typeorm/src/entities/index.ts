@@ -31,6 +31,7 @@ export { PhoneNumberUpdateEntity } from './PhoneNumberUpdateEntity';
 export { PrivacyPolicyUpdateEntity } from './PrivacyPolicyUpdateEntity';
 export { SearchRequestEntity } from './SearchRequestEntity';
 export { SessionEntity } from './SessionEntity';
+export { SupportRequestEntity } from './SupportRequestEntity';
 export { TermsUpdateEntity } from './TermsUpdateEntity';
 export { UserEntity } from './UserEntity';
 export { UserRatingEntity } from './UserRatingEntity';

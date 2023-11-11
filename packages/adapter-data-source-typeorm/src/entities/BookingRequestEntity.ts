@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 
 import { ChatMessageEntity } from './ChatMessageEntity';
 import { CookEntity } from './CookEntity';
 import { KitchenEntity } from './KitchenEntity';
+import { SupportRequestEntity } from './SupportRequestEntity';
 import { UserEntity } from './UserEntity';
 
 @Entity('BookingRequests')
@@ -94,4 +95,7 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
     @ManyToOne(() => KitchenEntity, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     @JoinColumn({ name: 'kitchenId' })
     kitchen?: KitchenEntity;
+
+    @OneToMany(() => SupportRequestEntity, (supportRequest: SupportRequestEntity) => supportRequest.user)
+    supportRequests?: SupportRequestEntity[];
 }

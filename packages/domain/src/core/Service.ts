@@ -26,6 +26,7 @@ import { type PublicPrivacyPolicyUpdateService } from './public-privacy-policy-u
 import { type PublicTermsUpdateService } from './public-terms-update/createPublicTermsUpdateService';
 import { type PublicUserService } from './public-user/createPublicUserService';
 import { type SessionService } from './session/createSessionService';
+import { type SupportRequestService } from './support-request/createSupportRequestService';
 import { type UserService } from './user/createUserService';
 
 export interface Publisher {
@@ -65,4 +66,5 @@ export interface Service {
     configuredMenu: ConfiguredMenuService;
     favoriteCook: FavoriteCookService;
     oneTimeAccessToken: OneTimeAccessTokenService;
+    supportRequest: SupportRequestService;
 }

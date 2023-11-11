@@ -28,6 +28,7 @@ import { createPublicTermsUpdateService } from './public-terms-update/createPubl
 import { createPublicUserService } from './public-user/createPublicUserService';
 import { type Publisher, type Service } from './Service';
 import { createSessionService } from './session/createSessionService';
+import { createSupportRequestService } from './support-request/createSupportRequestService';
 import { createUserService } from './user/createUserService';
 
 export interface CreateServiceInput {
@@ -94,5 +95,6 @@ export function createService({
         configuredMenu: createConfiguredMenuService({ dataSourceAdapter, logger }),
         favoriteCook: createFavoriteCookService({ dataSourceAdapter, logger }),
         oneTimeAccessToken: createOneTimeAccessTokenService({ dataSourceAdapter, logger, emailAdapter, webAppUrl }),
+        supportRequest: createSupportRequestService({ dataSourceAdapter, logger }),
     };
 }

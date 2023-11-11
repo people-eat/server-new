@@ -23,5 +23,6 @@ export { type NotificationConfiguration as DBNotificationConfiguration } from '.
 export { type Notification as DBNotification } from '../../core/notification/Notification';
 export { type PrivacyPolicyUpdate as DBPrivacyPolicyUpdate } from '../../core/privacy-policy-update/PrivacyPolicyUpdate';
 export { type Session as DBSession } from '../../core/session/Session';
+export { type SupportRequest as DBSupportRequest } from '../../core/support-request/SupportRequest';
 export { type TermsUpdate as DBTermsUpdate } from '../../core/terms-update/TermsUpdate';
 export { type UserRating as DBUserRating } from '../../core/user-rating/UserRating';

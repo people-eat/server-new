@@ -12,6 +12,7 @@ import {
     type GQLUserMutationGlobalBookingRequestsArgs,
     type GQLUserMutationPhoneNumberUpdateArgs,
     type GQLUserMutationSessionsArgs,
+    type GQLUserMutationSupportRequestsArgs,
     type GQLUserMutationUpdateGenderArgs,
     type GQLUserMutationUpdatePasswordArgs,
     type GQLUserMutationUpdateProfilePictureArgs,
@@ -106,6 +107,7 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
             bookingRequests: (_parent: GQLUserMutation, { userId }: GQLUserMutationBookingRequestsArgs) => ({ userId } as any),
             followings: (_parent: GQLUserMutation, { userId }: GQLUserMutationBookingRequestsArgs) => ({ userId } as any),
             oneTimeAccessToken: () => ({} as any),
+            supportRequests: (_parent: GQLUserMutation, { userId }: GQLUserMutationSupportRequestsArgs) => ({ userId } as any),
         },
         UserQuery: {
             findMany: async (

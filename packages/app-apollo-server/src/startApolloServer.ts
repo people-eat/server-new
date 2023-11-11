@@ -67,6 +67,7 @@ import { createPublicPrivacyPolicyUpdateResolvers } from './public-privacy-polic
 import { createPublicTermsUpdateResolvers } from './public-terms-update/createPublicTermsUpdateResolvers';
 import { createPublicUserResolvers } from './public-user/createPublicUserResolvers';
 import { createSessionResolvers } from './session/createSessionResolvers';
+import { createSupportRequestResolvers } from './support-request/createSupportRequestResolvers';
 import { createTermsUpdateResolvers } from './terms-update/createTermsUpdateResolvers';
 import { createUserRatingResolvers } from './user-rating/createUserRatingResolvers';
 import { createUserResolvers } from './user/createUserResolvers';
@@ -123,6 +124,7 @@ export async function startApolloServerApp({
             stripePublishableKey: () => stripePublishableKey,
             globalBookingRequests: () => ({}),
             bookingRequests: () => ({}),
+            supportRequests: () => ({}),
         },
         Mutation: {
             admins: () => ({} as any),
@@ -180,6 +182,7 @@ export async function startApolloServerApp({
         ...createMenuVisitResolvers(),
         ...createFollowingResolvers(service),
         ...createOneTimeAccessTokenResolvers(service),
+        ...createSupportRequestResolvers(service),
     };
 
     const path: string = '/graphql';

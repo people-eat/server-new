@@ -8,6 +8,7 @@ import { type NotificationConfigurationEntity } from './NotificationConfiguratio
 import { OneTimeAccessTokenEntity } from './OneTimeAccessTokenEntity';
 import { PhoneNumberUpdateEntity } from './PhoneNumberUpdateEntity';
 import { SessionEntity } from './SessionEntity';
+import { SupportRequestEntity } from './SupportRequestEntity';
 
 @Entity('Users')
 export class UserEntity implements DataSource.DBUser {
@@ -91,4 +92,7 @@ export class UserEntity implements DataSource.DBUser {
     //     { cascade: true },
     // )
     notificationConfiguration?: NotificationConfigurationEntity;
+
+    @OneToMany(() => SupportRequestEntity, (supportRequest: SupportRequestEntity) => supportRequest.user)
+    supportRequests?: SupportRequestEntity[];
 }
