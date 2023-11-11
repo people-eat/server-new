@@ -66,3 +66,12 @@ type CookGlobalBookingRequestQuery {
 type CookQuery {
     globalBookingRequests(cookId: String!): CookGlobalBookingRequestQuery!
 }
+
+type GlobalBookingRequestQuery {
+    findMany: [GlobalBookingRequest!]
+    findOne(globalBookingRequestId: String!): GlobalBookingRequest
+}
+
+type Query {
+    globalBookingRequests: GlobalBookingRequestQuery!
+}

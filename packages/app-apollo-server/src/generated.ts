@@ -1070,6 +1070,16 @@ export type GQLGlobalBookingRequest = {
     userId: Scalars['String'];
 };
 
+export type GQLGlobalBookingRequestQuery = {
+    __typename?: 'GlobalBookingRequestQuery';
+    findMany?: Maybe<Array<GQLGlobalBookingRequest>>;
+    findOne?: Maybe<GQLGlobalBookingRequest>;
+};
+
+export type GQLGlobalBookingRequestQueryFindOneArgs = {
+    globalBookingRequestId: Scalars['String'];
+};
+
 export type GQLIdentityProvider = 'APPLE' | 'GOOGLE';
 
 export type GQLKitchen = {
@@ -1443,6 +1453,7 @@ export type GQLQuery = {
     cookSpecificFees: GQLCookSpecificFeeQuery;
     cooks: GQLCookQuery;
     customerFeeUpdates: GQLCustomerFeeUpdateQuery;
+    globalBookingRequests: GQLGlobalBookingRequestQuery;
     kitchens: GQLKitchenQuery;
     languages: GQLLanguageQuery;
     privacyPolicyUpdates: GQLPrivacyPolicyUpdateQuery;
@@ -2257,6 +2268,7 @@ export type GQLResolversTypes = {
     Following: ResolverTypeWrapper<GQLFollowing>;
     Gender: GQLGender;
     GlobalBookingRequest: ResolverTypeWrapper<GQLGlobalBookingRequest>;
+    GlobalBookingRequestQuery: ResolverTypeWrapper<GQLGlobalBookingRequestQuery>;
     IdentityProvider: GQLIdentityProvider;
     Kitchen: ResolverTypeWrapper<GQLKitchen>;
     KitchenMutation: ResolverTypeWrapper<GQLKitchenMutation>;
@@ -2427,6 +2439,7 @@ export type GQLResolversParentTypes = {
     FindManyRequest: GQLFindManyRequest;
     Following: GQLFollowing;
     GlobalBookingRequest: GQLGlobalBookingRequest;
+    GlobalBookingRequestQuery: GQLGlobalBookingRequestQuery;
     Kitchen: GQLKitchen;
     KitchenMutation: GQLKitchenMutation;
     KitchenQuery: GQLKitchenQuery;
@@ -3428,6 +3441,20 @@ export type GQLGlobalBookingRequestResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLGlobalBookingRequestQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['GlobalBookingRequestQuery'] = GQLResolversParentTypes['GlobalBookingRequestQuery'],
+> = {
+    findMany?: Resolver<Maybe<Array<GQLResolversTypes['GlobalBookingRequest']>>, ParentType, ContextType>;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['GlobalBookingRequest']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLGlobalBookingRequestQueryFindOneArgs, 'globalBookingRequestId'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLKitchenResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['Kitchen'] = GQLResolversParentTypes['Kitchen'],
@@ -3897,6 +3924,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     cookSpecificFees?: Resolver<GQLResolversTypes['CookSpecificFeeQuery'], ParentType, ContextType>;
     cooks?: Resolver<GQLResolversTypes['CookQuery'], ParentType, ContextType>;
     customerFeeUpdates?: Resolver<GQLResolversTypes['CustomerFeeUpdateQuery'], ParentType, ContextType>;
+    globalBookingRequests?: Resolver<GQLResolversTypes['GlobalBookingRequestQuery'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
     privacyPolicyUpdates?: Resolver<GQLResolversTypes['PrivacyPolicyUpdateQuery'], ParentType, ContextType>;
@@ -4768,6 +4796,7 @@ export type GQLResolvers<ContextType = any> = {
     EmailAddressUpdate?: GQLEmailAddressUpdateResolvers<ContextType>;
     Following?: GQLFollowingResolvers<ContextType>;
     GlobalBookingRequest?: GQLGlobalBookingRequestResolvers<ContextType>;
+    GlobalBookingRequestQuery?: GQLGlobalBookingRequestQueryResolvers<ContextType>;
     Kitchen?: GQLKitchenResolvers<ContextType>;
     KitchenMutation?: GQLKitchenMutationResolvers<ContextType>;
     KitchenQuery?: GQLKitchenQueryResolvers<ContextType>;

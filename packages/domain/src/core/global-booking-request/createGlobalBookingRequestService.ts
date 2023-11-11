@@ -10,10 +10,7 @@ import { findManyByUserId } from './useCases/findManyByUserId';
 import { findOne } from './useCases/findOne';
 
 export interface GlobalBookingRequestService {
-    findOne(
-        context: Authorization.Context,
-        request: { userId: NanoId; globalBookingRequestId: NanoId },
-    ): Promise<GlobalBookingRequest | undefined>;
+    findOne(context: Authorization.Context, request: { globalBookingRequestId: NanoId }): Promise<GlobalBookingRequest | undefined>;
     findMany(context: Authorization.Context, request: FindManyRequest): Promise<GlobalBookingRequest[] | undefined>;
     findManyByCookId(
         context: Authorization.Context,
@@ -41,7 +38,7 @@ export function createGlobalBookingRequestService({
     logger,
 }: CreateGlobalBookingRequestServiceInput): GlobalBookingRequestService {
     return {
-        findOne: (context: Authorization.Context, request: { userId: NanoId; globalBookingRequestId: NanoId }) =>
+        findOne: (context: Authorization.Context, request: { globalBookingRequestId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),
         findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),
         findManyByCookId: (context: Authorization.Context, request: FindManyRequest & { cookId: NanoId }) =>

@@ -2,6 +2,9 @@ import { type Authorization, type Service } from '@people-eat/server-domain';
 import {
     type GQLCookGlobalBookingRequestQuery,
     type GQLGlobalBookingRequest,
+    type GQLGlobalBookingRequestQuery,
+    type GQLGlobalBookingRequestQueryFindOneArgs,
+    type GQLPublicUser,
     type GQLUserGlobalBookingRequestMutation,
     type GQLUserGlobalBookingRequestMutationCreateOneArgs,
     type GQLUserGlobalBookingRequestQuery,
@@ -11,10 +14,17 @@ import { type Resolvers } from '../Resolvers';
 export function createGlobalBookingRequestResolvers(
     service: Service,
 ): Resolvers<
-    'GlobalBookingRequest' | 'CookGlobalBookingRequestQuery' | 'UserGlobalBookingRequestMutation' | 'UserGlobalBookingRequestQuery'
+    | 'GlobalBookingRequest'
+    | 'CookGlobalBookingRequestQuery'
+    | 'UserGlobalBookingRequestMutation'
+    | 'UserGlobalBookingRequestQuery'
+    | 'GlobalBookingRequestQuery'
 > {
     return {
-        GlobalBookingRequest: {},
+        GlobalBookingRequest: {
+            user: async ({ userId }: GQLGlobalBookingRequest, _: unknown, context: Authorization.Context): Promise<GQLPublicUser> =>
+                service.user.findOneByUserId(context, { userId }) as any,
+        },
         CookGlobalBookingRequestQuery: {
             findMany: async (
                 { cookId }: GQLCookGlobalBookingRequestQuery,
@@ -35,6 +45,19 @@ export function createGlobalBookingRequestResolvers(
                 _: unknown,
                 context: Authorization.Context,
             ): Promise<GQLGlobalBookingRequest[] | undefined> => service.globalBookingRequest.findManyByUserId(context, { userId }) as any,
+        },
+        GlobalBookingRequestQuery: {
+            findMany: async (
+                _parent: GQLGlobalBookingRequestQuery,
+                _: unknown,
+                context: Authorization.Context,
+            ): Promise<GQLGlobalBookingRequest[] | undefined> => service.globalBookingRequest.findMany(context, {}) as any,
+            findOne: async (
+                _parent: GQLGlobalBookingRequestQuery,
+                { globalBookingRequestId }: GQLGlobalBookingRequestQueryFindOneArgs,
+                context: Authorization.Context,
+            ): Promise<GQLGlobalBookingRequest | undefined> =>
+                service.globalBookingRequest.findOne(context, { globalBookingRequestId }) as any,
         },
     };
 }

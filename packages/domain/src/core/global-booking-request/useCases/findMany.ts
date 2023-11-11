@@ -14,8 +14,9 @@ export interface FindManyGlobalBookingRequestInput {
 export async function findMany({
     dataSourceAdapter,
     context,
+    logger,
 }: FindManyGlobalBookingRequestInput): Promise<GlobalBookingRequest[] | undefined> {
-    await Authorization.isSignedIn({ context });
+    await Authorization.isAdmin({ context, dataSourceAdapter, logger });
 
     const globalBookingRequests: DataSource.DBGlobalBookingRequest[] | undefined =
         await dataSourceAdapter.globalBookingRequestRepository.findMany({});

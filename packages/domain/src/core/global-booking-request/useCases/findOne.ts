@@ -8,7 +8,7 @@ export interface FindOneGlobalBookingRequestInput {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
     context: Authorization.Context;
-    request: { userId: NanoId; globalBookingRequestId: NanoId };
+    request: { globalBookingRequestId: NanoId };
 }
 
 export async function findOne({
@@ -17,12 +17,12 @@ export async function findOne({
     context,
     request,
 }: FindOneGlobalBookingRequestInput): Promise<GlobalBookingRequest | undefined> {
-    const { globalBookingRequestId, userId } = request;
+    const { globalBookingRequestId } = request;
 
-    await Authorization.canQueryUserData({ context, dataSourceAdapter, logger, userId });
+    await Authorization.isAdmin({ context, dataSourceAdapter, logger });
 
     const globalBookingRequest: DataSource.DBGlobalBookingRequest | undefined =
-        await dataSourceAdapter.globalBookingRequestRepository.findOne({ globalBookingRequestId, userId });
+        await dataSourceAdapter.globalBookingRequestRepository.findOne({ globalBookingRequestId });
 
     if (!globalBookingRequest) return;
 
