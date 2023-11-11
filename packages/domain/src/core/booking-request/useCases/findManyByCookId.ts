@@ -26,6 +26,7 @@ export async function findManyByCookId({ runtime, context, request }: FindManyBo
     bookingRequests.sort((a: DBBookingRequest, b: DBBookingRequest) => b.createdAt.getTime() - a.createdAt.getTime());
 
     return bookingRequests
+        .filter((bookingRequest: DBBookingRequest) => bookingRequest.paymentData.unlocked)
         .map((bookingRequest: DBBookingRequest) => ({ ...bookingRequest, status: toBookingRequestStatus(bookingRequest) }))
         .map(packLocation)
         .map(packPrice);
