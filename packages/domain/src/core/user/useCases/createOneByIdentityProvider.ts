@@ -1,20 +1,18 @@
-import { type Authorization, type DataSource, type IdentityProvider, type Logger } from '../../..';
+import { type Authorization } from '../../..';
 import { type IdentityProviderResult } from '../../../identity-provider/Adapter';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type CreateOneUserByIdentityProviderRequest } from '../CreateOneUserRequest';
 
 export interface CreateOneUserByIdentityProviderInput {
-    dataSourceAdapter: DataSource.Adapter;
-    identityProviderAdapter: IdentityProvider.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: CreateOneUserByIdentityProviderRequest;
 }
 
 export async function createOneByIdentityProvider({
-    dataSourceAdapter,
-    identityProviderAdapter,
+    runtime: { dataSourceAdapter, identityProviderAdapter },
     request,
 }: CreateOneUserByIdentityProviderInput): Promise<boolean> {
     const result: IdentityProviderResult | undefined = await identityProviderAdapter[request.identityProvider](request.idToken);

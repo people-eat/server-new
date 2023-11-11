@@ -11,4 +11,5 @@ export interface Runtime {
     serverUrl: string;
     webAppUrl: string;
     publisher: Publisher;
+    notificationEmailAddresses: string[];
 }

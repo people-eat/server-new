@@ -1,13 +1,12 @@
 import { createWriteStream, type ReadStream } from 'fs';
 import { join } from 'path';
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 export interface UpdateCookIsVisibleInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-    serverUrl: string;
+    runtime: Runtime;
     context: Authorization.Context;
     request: {
         userId: NanoId;
@@ -16,9 +15,7 @@ export interface UpdateCookIsVisibleInput {
 }
 
 export async function updateProfilePicture({
-    dataSourceAdapter,
-    logger,
-    serverUrl,
+    runtime: { dataSourceAdapter, logger, serverUrl },
     context,
     request,
 }: UpdateCookIsVisibleInput): Promise<boolean> {

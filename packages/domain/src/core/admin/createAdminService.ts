@@ -13,11 +13,10 @@ export interface AdminService {
     createOne(context: Authorization.Context, request: CreateOneAdminRequest): Promise<boolean>;
 }
 
-export function createAdminService({ dataSourceAdapter, logger }: Runtime): AdminService {
+export function createAdminService(runtime: Runtime): AdminService {
     return {
-        findOne: (context: Authorization.Context, request: { adminId: NanoId }) => findOne({ dataSourceAdapter, logger, context, request }),
-        findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),
-        createOne: (context: Authorization.Context, request: CreateOneAdminRequest) =>
-            createOne({ dataSourceAdapter, logger, context, request }),
+        findOne: (context: Authorization.Context, request: { adminId: NanoId }) => findOne({ runtime, context, request }),
+        findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ runtime, context, request }),
+        createOne: (context: Authorization.Context, request: CreateOneAdminRequest) => createOne({ runtime, context, request }),
     };
 }

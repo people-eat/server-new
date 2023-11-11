@@ -17,17 +17,16 @@ export interface AddressService {
     update(context: Authorization.Context, request: { userId: NanoId; addressId: NanoId } & CreateOneAddressRequest): Promise<boolean>;
 }
 
-export function createAddressService({ dataSourceAdapter, logger }: Runtime): AddressService {
+export function createAddressService(runtime: Runtime): AddressService {
     return {
-        findOne: (context: Authorization.Context, request: { userId: NanoId; addressId: NanoId }) =>
-            findOne({ dataSourceAdapter, logger, context, request }),
+        findOne: (context: Authorization.Context, request: { userId: NanoId; addressId: NanoId }) => findOne({ runtime, context, request }),
         findMany: (context: Authorization.Context, request: FindManyRequest & { userId: NanoId }) =>
-            findMany({ dataSourceAdapter, logger, context, request }),
+            findMany({ runtime, context, request }),
         createOne: (context: Authorization.Context, request: CreateOneAddressRequest & { userId: NanoId }) =>
-            createOne({ dataSourceAdapter, logger, context, request }),
+            createOne({ runtime, context, request }),
         deleteOne: (context: Authorization.Context, request: { userId: NanoId; addressId: NanoId }) =>
-            deleteOne({ dataSourceAdapter, logger, context, request }),
+            deleteOne({ runtime, context, request }),
         update: (context: Authorization.Context, request: { userId: NanoId; addressId: NanoId } & CreateOneAddressRequest) =>
-            update({ dataSourceAdapter, logger, context, request }),
+            update({ runtime, context, request }),
     };
 }

@@ -1,15 +1,15 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization, type DataSource } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type FindManyRequest } from '../../shared';
 import { type User } from '../User';
 
 export interface FindManyUsersInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: FindManyRequest;
 }
 
-export async function findMany({ dataSourceAdapter, logger, context }: FindManyUsersInput): Promise<User[] | undefined> {
+export async function findMany({ runtime: { dataSourceAdapter, logger }, context }: FindManyUsersInput): Promise<User[] | undefined> {
     await Authorization.isAdmin({ dataSourceAdapter, logger, context });
 
     const users: DataSource.DBUser[] | undefined = await dataSourceAdapter.userRepository.findMany({});

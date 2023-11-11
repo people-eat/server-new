@@ -3,40 +3,26 @@ import bcrypt from 'bcryptjs';
 import { createWriteStream } from 'fs';
 import moment from 'moment';
 import { join } from 'path';
-import { type Authorization, type DataSource, type Email, type Logger, type PaymentProvider, type SMS } from '../../..';
+import { type Authorization } from '../../..';
 import { type DBAllergy, type DBCategory, type DBKitchen } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { createOne as createOneAddress } from '../../address/useCases/createOne';
 import { createOne as createOneCook } from '../../cook/useCases/createOne';
 import { createOne as createOneEmailAddressUpdate } from '../../email-address-update/useCases/createOne';
 import { createOne as createOnePhoneNumberUpdate } from '../../phone-number-update/useCases/createOne';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type CreateOneUserByEmailAddressRequest } from '../CreateOneUserRequest';
 
 export interface CreateOneUserByEmailAddressInput {
-    dataSourceAdapter: DataSource.Adapter;
-    emailAdapter: Email.Adapter;
-    smsAdapter: SMS.Adapter;
-    paymentAdapter: PaymentProvider.Adapter;
-    logger: Logger.Adapter;
-    serverUrl: string;
-    webAppUrl: string;
+    runtime: Runtime;
     context: Authorization.Context;
     request: CreateOneUserByEmailAddressRequest;
 }
 
 // eslint-disable-next-line max-statements
-export async function createOneByEmailAddress({
-    dataSourceAdapter,
-    emailAdapter,
-    paymentAdapter,
-    smsAdapter,
-    logger,
-    serverUrl,
-    webAppUrl,
-    context,
-    request,
-}: CreateOneUserByEmailAddressInput): Promise<boolean> {
+export async function createOneByEmailAddress({ runtime, context, request }: CreateOneUserByEmailAddressInput): Promise<boolean> {
+    const { dataSourceAdapter, emailAdapter, smsAdapter, logger, serverUrl, webAppUrl } = runtime;
     const {
         emailAddress,
         phoneNumber,
@@ -127,11 +113,9 @@ export async function createOneByEmailAddress({
         if (!smsSuccess) return false;
     }
 
-    if (addresses)
-        for (const address of addresses) await createOneAddress({ dataSourceAdapter, logger, context, request: { userId, ...address } });
+    if (addresses) for (const address of addresses) await createOneAddress({ runtime, context, request: { userId, ...address } });
 
-    if (cook)
-        await createOneCook({ dataSourceAdapter, logger, emailAdapter, paymentAdapter, context, request: { cookId: userId, ...cook } });
+    if (cook) await createOneCook({ runtime, context, request: { cookId: userId, ...cook } });
 
     if (globalBookingRequest) {
         const globalBookingRequestId: NanoId = createNanoId();
@@ -218,7 +202,7 @@ export async function createOneByEmailAddress({
 
         const globalBookingRequestEmailSuccess: boolean = await emailAdapter.sendToMany(
             'Booking Request',
-            ['contact@people-eat.com', 'yilmaz.cem.2603@gmail.com'],
+            runtime.notificationEmailAddresses,
             `from ${firstName} ${lastName}`,
             `A new Booking Request was received from <b>${firstName} ${lastName}</b><br/><br/><b>When:</b> ${formattedDateTime}<br/><b>Where:</b> ${
                 globalBookingRequest.location.text

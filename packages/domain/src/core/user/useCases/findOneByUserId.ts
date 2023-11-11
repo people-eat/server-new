@@ -1,9 +1,9 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization, type DataSource } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type User } from '../User';
 
 export interface FindOneUserByUserIdInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: FindOneUserByUserIdRequest;
 }
@@ -13,8 +13,7 @@ export interface FindOneUserByUserIdRequest {
 }
 
 export async function findOneByUserId({
-    dataSourceAdapter,
-    logger,
+    runtime: { dataSourceAdapter, logger },
     context,
     request: { userId },
 }: FindOneUserByUserIdInput): Promise<User | undefined> {

@@ -28,41 +28,26 @@ export interface UserService {
     updateProfilePicture(context: Authorization.Context, request: { userId: NanoId; profilePicture?: ReadStream }): Promise<boolean>;
 }
 
-export function createUserService({
-    dataSourceAdapter,
-    logger,
-    emailAdapter,
-    paymentAdapter,
-    smsAdapter,
-    identityProviderAdapter,
-    serverUrl,
-    webAppUrl,
-}: Runtime): UserService {
+export function createUserService(runtime: Runtime): UserService {
     return {
         findOneByUserId: (context: Authorization.Context, request: FindOneUserByUserIdRequest) =>
-            findOneByUserId({ dataSourceAdapter, logger, context, request }),
-        findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),
+            findOneByUserId({ runtime, context, request }),
+        findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ runtime, context, request }),
         createOneByEmailAddress: (context: Authorization.Context, request: CreateOneUserByEmailAddressRequest) =>
             createOneByEmailAddress({
-                dataSourceAdapter,
-                logger,
-                emailAdapter,
-                smsAdapter,
-                paymentAdapter,
-                serverUrl,
-                webAppUrl,
+                runtime,
                 context,
                 request,
             }),
         createOneByPhoneNumber: (context: Authorization.Context, request: CreateOneUserByPhoneNumberRequest) =>
-            createOneByPhoneNumber({ dataSourceAdapter, logger, smsAdapter, webAppUrl, context, request }),
+            createOneByPhoneNumber({ runtime, context, request }),
         createOneByIdentityProvider: (context: Authorization.Context, request: CreateOneUserByIdentityProviderRequest) =>
-            createOneByIdentityProvider({ dataSourceAdapter, logger, identityProviderAdapter, context, request }),
+            createOneByIdentityProvider({ runtime, context, request }),
         updatePassword: (context: Authorization.Context, request: { userId: NanoId; password: string }) =>
-            updatePassword({ dataSourceAdapter, logger, context, request }),
+            updatePassword({ runtime, context, request }),
         updateGender: (context: Authorization.Context, request: { userId: NanoId; gender: Gender }) =>
-            updateGender({ dataSourceAdapter, logger, context, request }),
+            updateGender({ runtime, context, request }),
         updateProfilePicture: (context: Authorization.Context, request: { userId: NanoId; profilePicture?: ReadStream }) =>
-            updateProfilePicture({ dataSourceAdapter, logger, serverUrl, context, request }),
+            updateProfilePicture({ runtime, context, request }),
     };
 }

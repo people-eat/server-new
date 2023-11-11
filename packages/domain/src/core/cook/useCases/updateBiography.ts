@@ -1,9 +1,9 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 export interface UpdateCookBiographyInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: {
         cookId: NanoId;
@@ -11,7 +11,8 @@ export interface UpdateCookBiographyInput {
     };
 }
 
-export async function updateBiography({ dataSourceAdapter, logger, context, request }: UpdateCookBiographyInput): Promise<boolean> {
+export async function updateBiography({ runtime, context, request }: UpdateCookBiographyInput): Promise<boolean> {
+    const { dataSourceAdapter, logger } = runtime;
     const { cookId, biography } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });

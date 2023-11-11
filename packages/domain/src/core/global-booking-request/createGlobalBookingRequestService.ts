@@ -25,23 +25,17 @@ export interface GlobalBookingRequestService {
     deleteOne(context: Authorization.Context, request: { userId: NanoId; globalBookingRequestId: NanoId }): Promise<boolean>;
 }
 
-export function createGlobalBookingRequestService({
-    dataSourceAdapter,
-    emailAdapter,
-    webAppUrl,
-    logger,
-}: Runtime): GlobalBookingRequestService {
+export function createGlobalBookingRequestService(runtime: Runtime): GlobalBookingRequestService {
     return {
-        findOne: (context: Authorization.Context, request: { globalBookingRequestId: NanoId }) =>
-            findOne({ dataSourceAdapter, logger, context, request }),
-        findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),
+        findOne: (context: Authorization.Context, request: { globalBookingRequestId: NanoId }) => findOne({ runtime, context, request }),
+        findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ runtime, context, request }),
         findManyByCookId: (context: Authorization.Context, request: FindManyRequest & { cookId: NanoId }) =>
-            findManyByCookId({ dataSourceAdapter, logger, context, request }),
+            findManyByCookId({ runtime, context, request }),
         findManyByUserId: (context: Authorization.Context, request: FindManyRequest & { userId: NanoId }) =>
-            findManyByUserId({ dataSourceAdapter, logger, context, request }),
+            findManyByUserId({ runtime, context, request }),
         createOne: (context: Authorization.Context, request: CreateOneGlobalBookingRequestRequest & { userId: NanoId }) =>
-            createOne({ dataSourceAdapter, logger, context, request, emailAdapter, webAppUrl }),
+            createOne({ runtime, context, request }),
         deleteOne: (context: Authorization.Context, request: { userId: NanoId; globalBookingRequestId: NanoId }) =>
-            deleteOne({ dataSourceAdapter, logger, context, request }),
+            deleteOne({ runtime, context, request }),
     };
 }

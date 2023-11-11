@@ -1,21 +1,15 @@
-import { Authorization, type DataSource, type Logger, type PaymentProvider } from '../../..';
+import { Authorization, type DataSource } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 export interface GetStripeDashboardUrlInput {
-    dataSourceAdapter: DataSource.Adapter;
-    paymentAdapter: PaymentProvider.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: { cookId: NanoId };
 }
 
-export async function getStripeDashboardUrl({
-    dataSourceAdapter,
-    paymentAdapter,
-    logger,
-    context,
-    request,
-}: GetStripeDashboardUrlInput): Promise<string | undefined> {
+export async function getStripeDashboardUrl({ runtime, context, request }: GetStripeDashboardUrlInput): Promise<string | undefined> {
+    const { dataSourceAdapter, paymentAdapter, logger } = runtime;
     const { cookId } = request;
 
     await Authorization.canQueryUserData({ context, dataSourceAdapter, logger, userId: cookId });

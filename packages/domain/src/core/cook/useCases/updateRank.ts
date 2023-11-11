@@ -1,9 +1,9 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type CookRank, type NanoId } from '../../shared';
 
 export interface UpdateCookRankInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: {
         cookId: NanoId;
@@ -11,7 +11,7 @@ export interface UpdateCookRankInput {
     };
 }
 
-export async function updateRank({ dataSourceAdapter, logger, context, request }: UpdateCookRankInput): Promise<boolean> {
+export async function updateRank({ runtime: { dataSourceAdapter, logger }, context, request }: UpdateCookRankInput): Promise<boolean> {
     const { cookId, rank } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });

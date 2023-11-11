@@ -1,15 +1,15 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type CreateOneAddressRequest } from '../CreateOneAddressRequest';
 
 export interface UpdateAddressInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: { userId: NanoId; addressId: NanoId } & CreateOneAddressRequest;
 }
 
-export async function update({ dataSourceAdapter, logger, context, request }: UpdateAddressInput): Promise<boolean> {
+export async function update({ runtime: { dataSourceAdapter, logger }, context, request }: UpdateAddressInput): Promise<boolean> {
     const { title, country, city, postCode, street, houseNumber, location, addressId, userId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });

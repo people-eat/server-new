@@ -1,28 +1,20 @@
 import bcrypt from 'bcryptjs';
-import { type Authorization, type DataSource, type Logger, type SMS } from '../../..';
+import { type Authorization } from '../../..';
 import { createNanoId } from '../../../utils/createNanoId';
 import { createOne as createOneAddress } from '../../address/useCases/createOne';
 import { createOne as createOnePhoneNumberUpdate } from '../../phone-number-update/useCases/createOne';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type CreateOneUserByPhoneNumberRequest } from '../CreateOneUserRequest';
 
 export interface CreateOneUserByPhoneNumberInput {
-    dataSourceAdapter: DataSource.Adapter;
-    smsAdapter: SMS.Adapter;
-    logger: Logger.Adapter;
-    webAppUrl: string;
+    runtime: Runtime;
     context: Authorization.Context;
     request: CreateOneUserByPhoneNumberRequest;
 }
 
-export async function createOneByPhoneNumber({
-    dataSourceAdapter,
-    smsAdapter,
-    logger,
-    webAppUrl,
-    context,
-    request,
-}: CreateOneUserByPhoneNumberInput): Promise<boolean> {
+export async function createOneByPhoneNumber({ runtime, context, request }: CreateOneUserByPhoneNumberInput): Promise<boolean> {
+    const { dataSourceAdapter, smsAdapter, logger, webAppUrl } = runtime;
     const { phoneNumber, password, firstName, lastName, language, gender, birthDate, addresses } = request;
 
     // cook
@@ -60,8 +52,7 @@ export async function createOneByPhoneNumber({
 
     if (!smsSuccess) return false;
 
-    if (addresses)
-        for (const address of addresses) await createOneAddress({ dataSourceAdapter, logger, context, request: { userId, ...address } });
+    if (addresses) for (const address of addresses) await createOneAddress({ runtime, context, request: { userId, ...address } });
 
     // if (cook) await createOneCook({ dataSourceAdapter, logger, emailAdapter, context, request: { cookId: userId, ...cook } });
 

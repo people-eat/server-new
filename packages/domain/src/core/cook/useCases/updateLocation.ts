@@ -1,9 +1,9 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type Location, type NanoId } from '../../shared';
 
 export interface UpdateCookLocationInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: {
         cookId: NanoId;
@@ -11,7 +11,8 @@ export interface UpdateCookLocationInput {
     };
 }
 
-export async function updateLocation({ dataSourceAdapter, logger, context, request }: UpdateCookLocationInput): Promise<boolean> {
+export async function updateLocation({ runtime, context, request }: UpdateCookLocationInput): Promise<boolean> {
+    const { dataSourceAdapter, logger } = runtime;
     const {
         cookId,
         location: { latitude, longitude },

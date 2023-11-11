@@ -1,14 +1,14 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type CreateOneAdminRequest } from '../CreateOneAdminRequest';
 
 export interface CreateOneAdminInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: CreateOneAdminRequest;
 }
 
-export async function createOne({ dataSourceAdapter, logger, context, request }: CreateOneAdminInput): Promise<boolean> {
+export async function createOne({ runtime: { dataSourceAdapter, logger }, context, request }: CreateOneAdminInput): Promise<boolean> {
     const { adminId } = request;
 
     await Authorization.isAdmin({ context, dataSourceAdapter, logger });

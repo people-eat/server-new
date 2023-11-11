@@ -1,15 +1,15 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization, type DataSource } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type Admin } from '../Admin';
 
 export interface FindOneAdminInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: { adminId: NanoId };
 }
 
-export async function findOne({ dataSourceAdapter, logger, context, request }: FindOneAdminInput): Promise<Admin | undefined> {
+export async function findOne({ runtime: { dataSourceAdapter, logger }, context, request }: FindOneAdminInput): Promise<Admin | undefined> {
     const { adminId } = request;
 
     await Authorization.canQueryUserData({ context, dataSourceAdapter, logger, userId: adminId });

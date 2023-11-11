@@ -1,9 +1,9 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 export interface UpdateCookIsLockedInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: {
         cookId: NanoId;
@@ -11,7 +11,8 @@ export interface UpdateCookIsLockedInput {
     };
 }
 
-export async function updateIsLocked({ dataSourceAdapter, logger, context, request }: UpdateCookIsLockedInput): Promise<boolean> {
+export async function updateIsLocked({ runtime, context, request }: UpdateCookIsLockedInput): Promise<boolean> {
+    const { dataSourceAdapter, logger } = runtime;
     const { cookId, isLocked } = request;
 
     await Authorization.isAdmin({ context, dataSourceAdapter, logger });

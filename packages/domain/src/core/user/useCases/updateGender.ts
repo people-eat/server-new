@@ -1,9 +1,9 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type Gender, type NanoId } from '../../shared';
 
 export interface UpdateCookIsVisibleInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: {
         userId: NanoId;
@@ -11,7 +11,11 @@ export interface UpdateCookIsVisibleInput {
     };
 }
 
-export async function updateGender({ dataSourceAdapter, logger, context, request }: UpdateCookIsVisibleInput): Promise<boolean> {
+export async function updateGender({
+    runtime: { dataSourceAdapter, logger },
+    context,
+    request,
+}: UpdateCookIsVisibleInput): Promise<boolean> {
     const { userId, gender } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });

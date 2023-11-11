@@ -1,9 +1,9 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 export interface UpdateCookMinimumPriceInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: {
         cookId: NanoId;
@@ -11,7 +11,11 @@ export interface UpdateCookMinimumPriceInput {
     };
 }
 
-export async function updateMinimumPrice({ dataSourceAdapter, logger, context, request }: UpdateCookMinimumPriceInput): Promise<boolean> {
+export async function updateMinimumPrice({
+    runtime: { dataSourceAdapter, logger },
+    context,
+    request,
+}: UpdateCookMinimumPriceInput): Promise<boolean> {
     const { cookId, minimumPrice } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });

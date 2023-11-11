@@ -75,6 +75,7 @@ async function bootstrap(): Promise<void> {
             },
             asyncIterator: (key: string): AsyncIterator<unknown> => pubsub.asyncIterator([key]),
         },
+        notificationEmailAddresses: ['contact@people-eat.com', 'yilmaz.cem.2603@gmail.com'],
     });
 
     logger.setService(service);

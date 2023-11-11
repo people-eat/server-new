@@ -1,9 +1,9 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 export interface UpdateCookMinimumParticipantsInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: {
         cookId: NanoId;
@@ -12,8 +12,7 @@ export interface UpdateCookMinimumParticipantsInput {
 }
 
 export async function updateMinimumParticipants({
-    dataSourceAdapter,
-    logger,
+    runtime: { dataSourceAdapter, logger },
     context,
     request,
 }: UpdateCookMinimumParticipantsInput): Promise<boolean> {

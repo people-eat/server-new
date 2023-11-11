@@ -1,26 +1,18 @@
-import { Authorization, type CookLanguage, type DataSource, type Email, type Logger, type PaymentProvider } from '../../..';
+import { Authorization, type CookLanguage } from '../../..';
 import { type DBUser } from '../../../data-source';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type CreateOneCookRequest } from '../CreateOneCookRequest';
 
 export interface CreateOneCookInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
-    emailAdapter: Email.Adapter;
-    paymentAdapter: PaymentProvider.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: CreateOneCookRequest & { cookId: NanoId };
 }
 
 // eslint-disable-next-line max-statements
-export async function createOne({
-    dataSourceAdapter,
-    logger,
-    // emailAdapter,
-    paymentAdapter,
-    context,
-    request,
-}: CreateOneCookInput): Promise<boolean> {
+export async function createOne({ runtime, context, request }: CreateOneCookInput): Promise<boolean> {
+    const { dataSourceAdapter, logger, paymentAdapter } = runtime;
     const {
         cookId,
         isVisible,
@@ -63,12 +55,12 @@ export async function createOne({
 
     if (!user) return false;
 
-    // await emailAdapter.sendToOne(
-    //     'PeopleEat',
-    //     'contact@people-eat.com',
-    //     'Neue Koch Registrierung',
-    //     `${user.firstName} ${user.lastName} hat sich als PeopleEat Koch registriert`,
-    // );
+    await runtime.emailAdapter.sendToMany(
+        'PeopleEat',
+        runtime.notificationEmailAddresses,
+        'Neue Koch Registrierung',
+        `${user.firstName} ${user.lastName} hat sich als PeopleEat Koch registriert`,
+    );
 
     if (languageIds) {
         const languageSuccess: boolean = await dataSourceAdapter.cookLanguageRepository.insertMany(

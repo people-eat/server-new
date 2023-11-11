@@ -39,38 +39,38 @@ export interface CookService {
     getStripeDashboardUrl(context: Authorization.Context, cookId: string): Promise<string | undefined>;
 }
 
-export function createCookService({ dataSourceAdapter, emailAdapter, paymentAdapter, logger }: Runtime): CookService {
+export function createCookService(runtime: Runtime): CookService {
     return {
-        findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),
-        findOne: (context: Authorization.Context, cookId: string) => findOne({ dataSourceAdapter, logger, context, request: { cookId } }),
+        findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ runtime, context, request }),
+        findOne: (context: Authorization.Context, cookId: string) => findOne({ runtime, context, request: { cookId } }),
         createOne: (context: Authorization.Context, cookId: string, request: CreateOneCookRequest) =>
-            createOne({ dataSourceAdapter, logger, emailAdapter, paymentAdapter, context, request: { cookId, ...request } }),
+            createOne({ runtime, context, request: { cookId, ...request } }),
         updateIsLocked: (context: Authorization.Context, cookId: string, isLocked: boolean) =>
-            updateIsLocked({ dataSourceAdapter, logger, context, request: { cookId, isLocked } }),
+            updateIsLocked({ runtime, context, request: { cookId, isLocked } }),
         updateIsVisible: (context: Authorization.Context, cookId: string, isVisible: boolean) =>
-            updateIsVisible({ dataSourceAdapter, logger, context, request: { cookId, isVisible } }),
+            updateIsVisible({ runtime, context, request: { cookId, isVisible } }),
         updateLocation: (context: Authorization.Context, cookId: string, location: Location) =>
-            updateLocation({ dataSourceAdapter, logger, context, request: { cookId, location } }),
+            updateLocation({ runtime, context, request: { cookId, location } }),
         updateRank: (context: Authorization.Context, cookId: string, rank: CookRank) =>
-            updateRank({ dataSourceAdapter, logger, context, request: { cookId, rank } }),
+            updateRank({ runtime, context, request: { cookId, rank } }),
         updateBiography: (context: Authorization.Context, cookId: string, biography: string) =>
-            updateBiography({ dataSourceAdapter, logger, context, request: { cookId, biography } }),
+            updateBiography({ runtime, context, request: { cookId, biography } }),
         updateTravelExpenses: (context: Authorization.Context, cookId: string, travelExpenses: number) =>
-            updateTravelExpenses({ dataSourceAdapter, logger, context, request: { cookId, travelExpenses } }),
+            updateTravelExpenses({ runtime, context, request: { cookId, travelExpenses } }),
         updateMaximumTravelDistance: (context: Authorization.Context, cookId: string, maximumTravelDistance?: number) =>
-            updateMaximumTravelDistance({ dataSourceAdapter, logger, context, request: { cookId, maximumTravelDistance } }),
+            updateMaximumTravelDistance({ runtime, context, request: { cookId, maximumTravelDistance } }),
         updateMinimumPrice: (context: Authorization.Context, cookId: string, minimumPrice?: number) =>
-            updateMinimumPrice({ dataSourceAdapter, logger, context, request: { cookId, minimumPrice } }),
+            updateMinimumPrice({ runtime, context, request: { cookId, minimumPrice } }),
         updateMaximumPrice: (context: Authorization.Context, cookId: string, maximumPrice?: number) =>
-            updateMaximumPrice({ dataSourceAdapter, logger, context, request: { cookId, maximumPrice } }),
+            updateMaximumPrice({ runtime, context, request: { cookId, maximumPrice } }),
         updateMinimumParticipants: (context: Authorization.Context, cookId: string, minimumParticipants?: number) =>
-            updateMinimumParticipants({ dataSourceAdapter, logger, context, request: { cookId, minimumParticipants } }),
+            updateMinimumParticipants({ runtime, context, request: { cookId, minimumParticipants } }),
         updateMaximumParticipants: (context: Authorization.Context, cookId: string, maximumParticipants?: number) =>
-            updateMaximumParticipants({ dataSourceAdapter, logger, context, request: { cookId, maximumParticipants } }),
+            updateMaximumParticipants({ runtime, context, request: { cookId, maximumParticipants } }),
 
         getStripeOnboardingUrl: (context: Authorization.Context, cookId: string) =>
-            getStripeOnboardingUrl({ dataSourceAdapter, paymentAdapter, logger, context, request: { cookId } }),
+            getStripeOnboardingUrl({ runtime, context, request: { cookId } }),
         getStripeDashboardUrl: (context: Authorization.Context, cookId: string) =>
-            getStripeDashboardUrl({ dataSourceAdapter, paymentAdapter, logger, context, request: { cookId } }),
+            getStripeDashboardUrl({ runtime, context, request: { cookId } }),
     };
 }

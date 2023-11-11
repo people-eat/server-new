@@ -1,29 +1,21 @@
 import { globalBookingRequestCustomerConfirmation } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
-import { Authorization, type DataSource, type Email, type Logger } from '../../..';
+import { Authorization } from '../../..';
 import { type DBAllergy, type DBCategory, type DBKitchen, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type CreateOneGlobalBookingRequestRequest } from '../CreateOneGlobalBookingRequestRequest';
 
 export interface CreateOneGlobalBookingRequestInput {
-    dataSourceAdapter: DataSource.Adapter;
-    emailAdapter: Email.Adapter;
-    webAppUrl: string;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: CreateOneGlobalBookingRequestRequest & { userId: NanoId };
 }
 
 // eslint-disable-next-line max-statements
-export async function createOne({
-    dataSourceAdapter,
-    emailAdapter,
-    webAppUrl,
-    logger,
-    context,
-    request,
-}: CreateOneGlobalBookingRequestInput): Promise<boolean> {
+export async function createOne({ runtime, context, request }: CreateOneGlobalBookingRequestInput): Promise<boolean> {
+    const { dataSourceAdapter, emailAdapter, webAppUrl, logger } = runtime;
     const {
         adultParticipants,
         children,
@@ -95,7 +87,7 @@ export async function createOne({
     const formattedDateTime: string = moment(dateTime).format('MMMM Do YYYY, h:mm a');
     const emailSuccess: boolean = await emailAdapter.sendToMany(
         'Global Booking Request',
-        ['yilmaz.cem.2603@gmail.com', 'contact@people-eat.com'],
+        runtime.notificationEmailAddresses,
         `from ${user.firstName} ${user.lastName}`,
         `A new Booking Request was received from <b>${user.firstName} ${
             user.lastName

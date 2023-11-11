@@ -1,20 +1,19 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization, type DataSource } from '../../..';
 import packLocation from '../../packLocation';
 import packPrice from '../../packPrice';
+import { type Runtime } from '../../Runtime';
 import { type FindManyRequest } from '../../shared';
 import { type GlobalBookingRequest } from '../GlobalBookingRequest';
 
 export interface FindManyGlobalBookingRequestInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: FindManyRequest;
 }
 
 export async function findMany({
-    dataSourceAdapter,
+    runtime: { dataSourceAdapter, logger },
     context,
-    logger,
 }: FindManyGlobalBookingRequestInput): Promise<GlobalBookingRequest[] | undefined> {
     await Authorization.isAdmin({ context, dataSourceAdapter, logger });
 

@@ -1,16 +1,16 @@
-import { Authorization, type DataSource, type Logger } from '../../..';
+import { Authorization } from '../../..';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type CreateOneAddressRequest } from '../CreateOneAddressRequest';
 
 export interface CreateOneAddressInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context;
     request: CreateOneAddressRequest & { userId: NanoId };
 }
 
-export async function createOne({ dataSourceAdapter, logger, context, request }: CreateOneAddressInput): Promise<boolean> {
+export async function createOne({ runtime: { dataSourceAdapter, logger }, context, request }: CreateOneAddressInput): Promise<boolean> {
     const { title, country, city, postCode, street, houseNumber, location, userId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
