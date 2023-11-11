@@ -1551,6 +1551,7 @@ export type GQLSupportRequest = {
     message: Scalars['String'];
     subject: Scalars['String'];
     supportRequestId: Scalars['String'];
+    user: GQLPublicUser;
     userId: Scalars['String'];
 };
 
@@ -4102,6 +4103,7 @@ export type GQLSupportRequestResolvers<
     message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     subject?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     supportRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    user?: Resolver<GQLResolversTypes['PublicUser'], ParentType, ContextType>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

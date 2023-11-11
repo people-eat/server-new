@@ -16,9 +16,11 @@ export interface FindManyBookingRequestInput {
 export async function findMany({ dataSourceAdapter, logger, context }: FindManyBookingRequestInput): Promise<BookingRequest[] | undefined> {
     await Authorization.isAdmin({ dataSourceAdapter, logger, context });
 
-    const bookingRequests: DataSource.DBBookingRequest[] | undefined = await dataSourceAdapter.bookingRequestRepository.findMany({});
+    const bookingRequests: DBBookingRequest[] | undefined = await dataSourceAdapter.bookingRequestRepository.findMany({});
 
     if (!bookingRequests) return;
+
+    bookingRequests.sort((a: DBBookingRequest, b: DBBookingRequest) => b.createdAt.getTime() - a.createdAt.getTime());
 
     return bookingRequests
         .map((bookingRequest: DBBookingRequest) => ({ ...bookingRequest, status: toBookingRequestStatus(bookingRequest) }))

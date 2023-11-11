@@ -1,5 +1,6 @@
 import { type Authorization, type Service } from '@people-eat/server-domain';
 import {
+    type GQLPublicUser,
     type GQLSupportRequest,
     type GQLSupportRequestQuery,
     type GQLSupportRequestQueryFindManyArgs,
@@ -30,8 +31,11 @@ export function createSupportRequestResolvers(
                 _parent: GQLSupportRequestQuery,
                 { supportRequestId }: GQLSupportRequestQueryFindOneArgs,
                 context: Authorization.Context,
-            ): Promise<GQLSupportRequest | undefined> => service.supportRequest.findOne(context, { supportRequestId }),
+            ): Promise<GQLSupportRequest | undefined> => service.supportRequest.findOne(context, { supportRequestId }) as any,
         },
-        SupportRequest: {},
+        SupportRequest: {
+            user: async ({ userId }: GQLSupportRequest, _input: unknown, context: Authorization.Context): Promise<GQLPublicUser> =>
+                service.publicUser.findOne(context, userId) as any,
+        },
     };
 }

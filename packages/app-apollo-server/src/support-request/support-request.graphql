@@ -5,6 +5,8 @@ type SupportRequest {
     subject: String!
     message: String!
     createdAt: DateTime!
+
+    user: PublicUser!
 }
 
 type SupportRequestQuery {
