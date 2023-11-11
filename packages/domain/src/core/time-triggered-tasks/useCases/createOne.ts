@@ -9,21 +9,21 @@ import { handleTimeTriggeredTask } from './handleTimeTriggeredTask';
 export async function createOneTimeTriggeredTask(runtime: Runtime, { dueDate, task }: CreateOneTimeTriggeredTask): Promise<boolean> {
     const timeTriggeredTask: TimeTriggeredTask = {
         timeTriggeredTaskId: createNanoId(),
-        dueDate: dueDate,
-        task: task,
+        dueDate,
+        task,
         createdAt: new Date(),
     };
 
     const success: boolean = await runtime.dataSourceAdapter.timeTriggeredTaskRepository.insertOne(timeTriggeredTask);
 
     const job: CronJob = CronJob.from({
-        cronTime: '* * * * * *',
+        cronTime: dueDate,
         start: true,
         onTick: async function () {
             const shouldTrigger: boolean = moment(timeTriggeredTask.dueDate).diff(moment()) < 0;
             if (!shouldTrigger) return;
-            await handleTimeTriggeredTask(runtime, timeTriggeredTask);
             job.stop();
+            await handleTimeTriggeredTask(runtime, timeTriggeredTask);
         },
     });
 

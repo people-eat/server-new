@@ -5,6 +5,7 @@ export { cookBookingRequestCookConfirmation } from './cookBookingRequestCookConf
 export { cookBookingRequestCookDeclinedNotification } from './cookBookingRequestCookDeclinedNotification';
 export { cookBookingRequestCustomerConfirmation } from './cookBookingRequestCustomerConfirmation';
 export { cookRegistrationConfirmation } from './cookRegistrationConfirmation';
+export { customerPaymentAnnouncement } from './customerPaymentAnnouncement';
 export { globalBookingRequestCookConfirmation } from './globalBookingRequestCookConfirmation';
 export { globalBookingRequestCustomerConfirmation } from './globalBookingRequestCustomerConfirmation';
 export { menuBookingRequestCookConfirmation } from './menuBookingRequestCookConfirmation';

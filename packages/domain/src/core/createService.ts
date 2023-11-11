@@ -41,7 +41,7 @@ export function createService(runtime: Runtime): Service {
         .then((timeTriggeredTasks: TimeTriggeredTask[]) =>
             timeTriggeredTasks.forEach((timeTriggeredTask: TimeTriggeredTask) => {
                 const job: CronJob = CronJob.from({
-                    cronTime: '* * * * * *',
+                    cronTime: moment(timeTriggeredTask.dueDate).toDate(),
                     start: true,
                     onTick: async function () {
                         const shouldTrigger: boolean = moment(timeTriggeredTask.dueDate).diff(moment()) < 0;

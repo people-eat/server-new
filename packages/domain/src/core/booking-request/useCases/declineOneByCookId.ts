@@ -76,7 +76,7 @@ export async function declineOneByCookId({ runtime, context, request }: FindMany
                     children: bookingRequest.children,
                     adults: bookingRequest.adultParticipants,
                     location: bookingRequest.locationText,
-                    date: bookingRequest.dateTime.toDateString(),
+                    date: moment(bookingRequest.dateTime).format('L'),
                     time: moment(bookingRequest.dateTime).format('LT'),
                     price: {
                         perPerson: bookingRequest.amount / (bookingRequest.children + bookingRequest.adultParticipants),

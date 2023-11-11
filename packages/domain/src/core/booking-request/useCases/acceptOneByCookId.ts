@@ -1,4 +1,4 @@
-import { cookBookingRequestCookAcceptedNotification } from '@people-eat/server-adapter-email-template';
+import { cookBookingRequestCookAcceptedNotification, customerPaymentAnnouncement } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
 import { Authorization, type ChatMessage } from '../../..';
 import { type DBBookingRequest, type DBUser } from '../../../data-source';
@@ -81,7 +81,7 @@ export async function acceptOneByCookId({ runtime, context, request }: AcceptOne
                     children: bookingRequest.children,
                     adults: bookingRequest.adultParticipants,
                     location: bookingRequest.locationText,
-                    date: bookingRequest.dateTime.toDateString(),
+                    date: moment(bookingRequest.dateTime).format('L'),
                     time: moment(bookingRequest.dateTime).format('LT'),
                     price: {
                         perPerson: bookingRequest.amount / (bookingRequest.children + bookingRequest.adultParticipants),
@@ -102,7 +102,29 @@ export async function acceptOneByCookId({ runtime, context, request }: AcceptOne
     const daysUntilEvent: number = moment(bookingRequest.dateTime).diff(moment(), 'days');
 
     if (daysUntilEvent === 15) {
-        // send email
+        if (user.emailAddress) {
+            await emailAdapter.sendToOne(
+                'PeopleEat',
+                user.emailAddress,
+                'Deine Zahlung steht bevor',
+                customerPaymentAnnouncement({
+                    customer: {
+                        firstName: user.firstName,
+                        profilePictureUrl: user.profilePictureUrl ?? '',
+                    },
+                    bookingRequest: {
+                        bookingRequestId: bookingRequest.bookingRequestId,
+                        occasion: bookingRequest.occasion,
+                        date: moment(bookingRequest.dateTime).format('L'),
+                        time: moment(bookingRequest.dateTime).format('LT'),
+                        price: {
+                            total: bookingRequest.amount,
+                            currency: bookingRequest.currencyCode,
+                        },
+                    },
+                }),
+            );
+        }
         await createOneTimeTriggeredTask(runtime, {
             dueDate: moment(bookingRequest.dateTime).subtract(14, 'days').toDate(),
             task: { type: 'TIME_TRIGGERED_TASK_PULL_PAYMENT', bookingRequestId },
@@ -112,10 +134,12 @@ export async function acceptOneByCookId({ runtime, context, request }: AcceptOne
     }
 
     if (daysUntilEvent > 15) {
-        await createOneTimeTriggeredTask(runtime, {
-            dueDate: moment(bookingRequest.dateTime).subtract(15, 'days').toDate(),
-            task: { type: 'TIME_TRIGGERED_TASK_PULL_PAYMENT_ANNOUNCEMENT', bookingRequestId },
-        });
+        if (user.emailAddress) {
+            await createOneTimeTriggeredTask(runtime, {
+                dueDate: moment(bookingRequest.dateTime).subtract(15, 'days').toDate(),
+                task: { type: 'TIME_TRIGGERED_TASK_PULL_PAYMENT_ANNOUNCEMENT', bookingRequestId },
+            });
+        }
         await createOneTimeTriggeredTask(runtime, {
             dueDate: moment(bookingRequest.dateTime).subtract(14, 'days').toDate(),
             task: { type: 'TIME_TRIGGERED_TASK_PULL_PAYMENT', bookingRequestId },

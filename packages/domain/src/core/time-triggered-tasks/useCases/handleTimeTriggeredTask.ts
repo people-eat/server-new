@@ -1,11 +1,15 @@
+import { customerPaymentAnnouncement } from '@people-eat/server-adapter-email-template';
+import moment from 'moment';
 import { type DBBookingRequest, type DBUser } from '../../../data-source';
 import { type Runtime } from '../../Runtime';
 import { type TimeTriggeredTask } from '../TimeTriggeredTask';
 
+// eslint-disable-next-line max-statements
 export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTask: TimeTriggeredTask): Promise<void> {
     const { dataSourceAdapter, paymentAdapter, emailAdapter } = runtime;
 
     if (timeTriggeredTask.task.type === 'TIME_TRIGGERED_TASK_PULL_PAYMENT') {
+        runtime.logger.debug('Pull payment trigger was called');
         const bookingRequest: DBBookingRequest | undefined = await dataSourceAdapter.bookingRequestRepository.findOne({
             bookingRequestId: timeTriggeredTask.task.bookingRequestId,
         });
@@ -20,9 +24,12 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
         });
 
         if (!paymentSuccess) return;
+
+        await dataSourceAdapter.timeTriggeredTaskRepository.deleteOne({ timeTriggeredTaskId: timeTriggeredTask.timeTriggeredTaskId });
     }
 
     if (timeTriggeredTask.task.type === 'TIME_TRIGGERED_TASK_PULL_PAYMENT_ANNOUNCEMENT') {
+        runtime.logger.debug('Announce pull payment was called');
         const bookingRequest: DBBookingRequest | undefined = await dataSourceAdapter.bookingRequestRepository.findOne({
             bookingRequestId: timeTriggeredTask.task.bookingRequestId,
         });
@@ -33,11 +40,30 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
 
         if (!user || !user.emailAddress) return;
 
-        await emailAdapter.sendToOne(
+        const emailSuccess: boolean = await emailAdapter.sendToOne(
             'PeopleEat',
             user.emailAddress,
-            'Ankpndigung Zahlungseinzug',
-            'Wir werden Geld für deine Buchung einziehen',
+            'Deine Zahlung steht bevor',
+            customerPaymentAnnouncement({
+                customer: {
+                    firstName: user.firstName,
+                    profilePictureUrl: user.profilePictureUrl ?? '',
+                },
+                bookingRequest: {
+                    bookingRequestId: bookingRequest.bookingRequestId,
+                    occasion: bookingRequest.occasion,
+                    date: moment(bookingRequest.dateTime).format('L'),
+                    time: moment(bookingRequest.dateTime).format('LT'),
+                    price: {
+                        total: bookingRequest.amount,
+                        currency: bookingRequest.currencyCode,
+                    },
+                },
+            }),
         );
+
+        if (!emailSuccess) return;
+
+        await dataSourceAdapter.timeTriggeredTaskRepository.deleteOne({ timeTriggeredTaskId: timeTriggeredTask.timeTriggeredTaskId });
     }
 }
