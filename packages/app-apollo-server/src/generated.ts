@@ -130,6 +130,16 @@ export type GQLBookingRequest = {
     userId: Scalars['String'];
 };
 
+export type GQLBookingRequestQuery = {
+    __typename?: 'BookingRequestQuery';
+    findMany?: Maybe<Array<GQLBookingRequest>>;
+    findOne?: Maybe<GQLBookingRequest>;
+};
+
+export type GQLBookingRequestQueryFindOneArgs = {
+    bookingRequestId: Scalars['String'];
+};
+
 export type GQLBookingRequestStatus = 'CANCELED' | 'COMPLETED' | 'OPEN' | 'PENDING';
 
 export type GQLCategory = {
@@ -1438,9 +1448,7 @@ export type GQLPublicTermsUpdateQueryFindOneArgs = {
 
 export type GQLPublicUser = {
     __typename?: 'PublicUser';
-    createdAt: Scalars['DateTime'];
     firstName: Scalars['String'];
-    language: GQLUserLanguage;
     profilePictureUrl?: Maybe<Scalars['Url']>;
     userId: Scalars['String'];
 };
@@ -1449,6 +1457,7 @@ export type GQLQuery = {
     __typename?: 'Query';
     admins: GQLAdminQuery;
     allergies: GQLAllergyQuery;
+    bookingRequests: GQLBookingRequestQuery;
     categories: GQLCategoryQuery;
     cookSpecificFees: GQLCookSpecificFeeQuery;
     cooks: GQLCookQuery;
@@ -2196,6 +2205,7 @@ export type GQLResolversTypes = {
     AnonymousSession: ResolverTypeWrapper<GQLAnonymousSession>;
     AnonymousUser: ResolverTypeWrapper<GQLAnonymousUser>;
     BookingRequest: ResolverTypeWrapper<GQLBookingRequest>;
+    BookingRequestQuery: ResolverTypeWrapper<GQLBookingRequestQuery>;
     BookingRequestStatus: GQLBookingRequestStatus;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
     Category: ResolverTypeWrapper<GQLCategory>;
@@ -2371,6 +2381,7 @@ export type GQLResolversParentTypes = {
     AnonymousSession: GQLAnonymousSession;
     AnonymousUser: GQLAnonymousUser;
     BookingRequest: GQLBookingRequest;
+    BookingRequestQuery: GQLBookingRequestQuery;
     Boolean: Scalars['Boolean'];
     Category: GQLCategory;
     CategoryMutation: GQLCategoryMutation;
@@ -2643,6 +2654,20 @@ export type GQLBookingRequestResolvers<
     user?: Resolver<GQLResolversTypes['PublicUser'], ParentType, ContextType>;
     userAccepted?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLBookingRequestQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['BookingRequestQuery'] = GQLResolversParentTypes['BookingRequestQuery'],
+> = {
+    findMany?: Resolver<Maybe<Array<GQLResolversTypes['BookingRequest']>>, ParentType, ContextType>;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['BookingRequest']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLBookingRequestQueryFindOneArgs, 'bookingRequestId'>
+    >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3909,9 +3934,7 @@ export type GQLPublicUserResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['PublicUser'] = GQLResolversParentTypes['PublicUser'],
 > = {
-    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     firstName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-    language?: Resolver<GQLResolversTypes['UserLanguage'], ParentType, ContextType>;
     profilePictureUrl?: Resolver<Maybe<GQLResolversTypes['Url']>, ParentType, ContextType>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3920,6 +3943,7 @@ export type GQLPublicUserResolvers<
 export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
     admins?: Resolver<GQLResolversTypes['AdminQuery'], ParentType, ContextType>;
     allergies?: Resolver<GQLResolversTypes['AllergyQuery'], ParentType, ContextType>;
+    bookingRequests?: Resolver<GQLResolversTypes['BookingRequestQuery'], ParentType, ContextType>;
     categories?: Resolver<GQLResolversTypes['CategoryQuery'], ParentType, ContextType>;
     cookSpecificFees?: Resolver<GQLResolversTypes['CookSpecificFeeQuery'], ParentType, ContextType>;
     cooks?: Resolver<GQLResolversTypes['CookQuery'], ParentType, ContextType>;
@@ -4754,6 +4778,7 @@ export type GQLResolvers<ContextType = any> = {
     AnonymousSession?: GQLAnonymousSessionResolvers<ContextType>;
     AnonymousUser?: GQLAnonymousUserResolvers<ContextType>;
     BookingRequest?: GQLBookingRequestResolvers<ContextType>;
+    BookingRequestQuery?: GQLBookingRequestQueryResolvers<ContextType>;
     Category?: GQLCategoryResolvers<ContextType>;
     CategoryMutation?: GQLCategoryMutationResolvers<ContextType>;
     CategoryQuery?: GQLCategoryQueryResolvers<ContextType>;

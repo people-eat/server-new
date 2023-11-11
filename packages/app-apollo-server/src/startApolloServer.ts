@@ -122,6 +122,7 @@ export async function startApolloServerApp({
             publicPrivacyPolicyUpdates: () => ({} as any),
             stripePublishableKey: () => stripePublishableKey,
             globalBookingRequests: () => ({}),
+            bookingRequests: () => ({}),
         },
         Mutation: {
             admins: () => ({} as any),

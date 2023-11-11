@@ -1,6 +1,7 @@
 import { type Authorization, type Service } from '@people-eat/server-domain';
 import {
     type GQLBookingRequest,
+    type GQLBookingRequestQuery,
     type GQLConfiguredMenu,
     type GQLCookBookingRequestMutation,
     type GQLCookBookingRequestMutationAcceptArgs,
@@ -27,7 +28,12 @@ import { type Resolvers } from '../Resolvers';
 export function createBookingRequestResolvers(
     service: Service,
 ): Resolvers<
-    'BookingRequest' | 'UserBookingRequestMutation' | 'UserBookingRequestQuery' | 'CookBookingRequestMutation' | 'CookBookingRequestQuery'
+    | 'BookingRequest'
+    | 'UserBookingRequestMutation'
+    | 'UserBookingRequestQuery'
+    | 'CookBookingRequestMutation'
+    | 'CookBookingRequestQuery'
+    | 'BookingRequestQuery'
 > {
     return {
         BookingRequest: {
@@ -135,6 +141,18 @@ export function createBookingRequestResolvers(
 
             chatMessages: ({ cookId }: GQLCookBookingRequestQuery, { bookingRequestId }: GQLCookBookingRequestQueryChatMessagesArgs) =>
                 ({ cookId, bookingRequestId } as any),
+        },
+        BookingRequestQuery: {
+            findMany: async (
+                _parent: GQLBookingRequestQuery,
+                _input: unknown,
+                context: Authorization.Context,
+            ): Promise<GQLBookingRequest[] | undefined> => service.bookingRequest.findMany(context, {}) as any,
+            findOne: async (
+                _parent: GQLBookingRequestQuery,
+                { bookingRequestId }: GQLCookBookingRequestQueryFindOneArgs,
+                context: Authorization.Context,
+            ): Promise<GQLBookingRequest | undefined> => service.bookingRequest.findOne(context, { bookingRequestId }) as any,
         },
     };
 }

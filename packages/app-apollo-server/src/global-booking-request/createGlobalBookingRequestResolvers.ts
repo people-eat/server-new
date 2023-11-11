@@ -23,7 +23,7 @@ export function createGlobalBookingRequestResolvers(
     return {
         GlobalBookingRequest: {
             user: async ({ userId }: GQLGlobalBookingRequest, _: unknown, context: Authorization.Context): Promise<GQLPublicUser> =>
-                service.user.findOneByUserId(context, { userId }) as any,
+                service.publicUser.findOne(context, userId) as any,
         },
         CookGlobalBookingRequestQuery: {
             findMany: async (

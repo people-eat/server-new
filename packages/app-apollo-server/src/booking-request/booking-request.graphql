@@ -126,3 +126,12 @@ input CreateConfiguredMenuCourseRequest {
     courseId: String!
     mealId: String!
 }
+
+type BookingRequestQuery {
+    findMany: [BookingRequest!]
+    findOne(bookingRequestId: String!): BookingRequest
+}
+
+type Query {
+    bookingRequests: BookingRequestQuery!
+}
