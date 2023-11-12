@@ -25,7 +25,16 @@ export async function confirmPaymentSetup({ runtime, context, request }: Confirm
 
     if (!bookingRequest) return false;
 
-    const { dateTime, adultParticipants, children, occasion, amount, currencyCode, locationText } = bookingRequest;
+    const { dateTime, adultParticipants, children, occasion, amount, currencyCode, locationText, paymentData } = bookingRequest;
+
+    // stripe fetch status
+
+    const success: boolean = await dataSourceAdapter.bookingRequestRepository.updateOne(
+        { bookingRequestId },
+        { paymentData: { ...paymentData, confirmed: true } },
+    );
+
+    if (!success) return false;
 
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId });
 

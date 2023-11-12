@@ -1,6 +1,7 @@
 import { Shared, type DataSource } from '@people-eat/server-domain';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
 import { ChatMessageEntity } from './ChatMessageEntity';
+import { ConfiguredMenuEntity } from './ConfiguredMenuEntity';
 import { CookEntity } from './CookEntity';
 import { KitchenEntity } from './KitchenEntity';
 import { SupportRequestEntity } from './SupportRequestEntity';
@@ -76,6 +77,7 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
         provider: Shared.PaymentProvider;
         setupIntentId: string;
         clientSecret: string;
+        confirmed: boolean;
         unlocked: boolean;
     };
 
@@ -98,4 +100,7 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
 
     @OneToMany(() => SupportRequestEntity, (supportRequest: SupportRequestEntity) => supportRequest.user)
     supportRequests?: SupportRequestEntity[];
+
+    @OneToOne(() => ConfiguredMenuEntity, (configuredMenu: ConfiguredMenuEntity) => configuredMenu.bookingRequest)
+    configuredMenu?: ConfiguredMenuEntity;
 }

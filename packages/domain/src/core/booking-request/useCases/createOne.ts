@@ -79,7 +79,7 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
         occasion: occasion.trim(),
         kitchenId,
         createdAt: new Date(),
-        paymentData: { ...paymentData, provider: 'STRIPE', unlocked: false },
+        paymentData: { ...paymentData, provider: 'STRIPE', confirmed: false, unlocked: false },
     });
 
     if (!success) return { success: false, clientSecret, bookingRequestId };
