@@ -16,7 +16,11 @@ export { createService } from './createService';
 export { CustomerFeeUpdate } from './customer-fee-update/CustomerFeeUpdate';
 export { EmailAddressUpdate } from './email-address-update/EmailAddressUpdate';
 export { FavoriteCook } from './favorite-cook/FavoriteCook';
-export { GlobalBookingRequest } from './global-booking-request/GlobalBookingRequest';
+export {
+    GlobalBookingRequest,
+    GlobalBookingRequestPriceClass,
+    GlobalBookingRequestPriceClassType,
+} from './global-booking-request/GlobalBookingRequest';
 export { Kitchen } from './kitchen/Kitchen';
 export { Language } from './language/Language';
 export { Log } from './log';

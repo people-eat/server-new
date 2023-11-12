@@ -2,6 +2,7 @@ import { type Authorization, type Service } from '@people-eat/server-domain';
 import {
     type GQLCookGlobalBookingRequestQuery,
     type GQLGlobalBookingRequest,
+    type GQLGlobalBookingRequestPriceClass,
     type GQLGlobalBookingRequestQuery,
     type GQLGlobalBookingRequestQueryFindOneArgs,
     type GQLPublicUser,
@@ -24,6 +25,31 @@ export function createGlobalBookingRequestResolvers(
         GlobalBookingRequest: {
             user: async ({ userId }: GQLGlobalBookingRequest, _: unknown, context: Authorization.Context): Promise<GQLPublicUser> =>
                 service.publicUser.findOne(context, userId) as any,
+            priceClass: ({ priceClassType }: GQLGlobalBookingRequest): GQLGlobalBookingRequestPriceClass => {
+                switch (priceClassType) {
+                    case 'SIMPLE':
+                        return {
+                            type: priceClassType,
+                            min: 7000,
+                            max: 9000,
+                            currencyCode: 'EUR',
+                        };
+                    case 'FINE':
+                        return {
+                            type: priceClassType,
+                            min: 9000,
+                            max: 1500,
+                            currencyCode: 'EUR',
+                        };
+                    case 'GOURMET':
+                        return {
+                            type: priceClassType,
+                            min: 1500,
+                            max: 0,
+                            currencyCode: 'EUR',
+                        };
+                }
+            },
         },
         CookGlobalBookingRequestQuery: {
             findMany: async (

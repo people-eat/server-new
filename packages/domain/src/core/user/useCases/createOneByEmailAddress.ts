@@ -124,8 +124,7 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
             userId,
             adultParticipants: globalBookingRequest.adultParticipants,
             children: globalBookingRequest.children,
-            amount: globalBookingRequest.price.amount,
-            currencyCode: globalBookingRequest.price.currencyCode,
+            priceClassType: globalBookingRequest.priceClassType,
             dateTime: globalBookingRequest.dateTime,
             duration: globalBookingRequest.duration,
             occasion: globalBookingRequest.occasion.trim(),
@@ -183,13 +182,7 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
                         location: globalBookingRequest.location.text,
                         date: globalBookingRequest.dateTime.toDateString(),
                         time: moment(globalBookingRequest.dateTime).format('LT'),
-                        price: {
-                            perPerson:
-                                globalBookingRequest.price.amount /
-                                (globalBookingRequest.children + globalBookingRequest.adultParticipants),
-                            total: globalBookingRequest.price.amount,
-                            currency: globalBookingRequest.price.currencyCode,
-                        },
+                        priceClassType: globalBookingRequest.priceClassType,
                     },
                     chatMessage: globalBookingRequest.message.trim(),
                 }),
@@ -197,8 +190,6 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
 
             if (!customerEmailSuccess) logger.info('sending email failed');
         }
-
-        const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
 
         const globalBookingRequestEmailSuccess: boolean = await emailAdapter.sendToMany(
             'Booking Request',
@@ -208,10 +199,9 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
                 globalBookingRequest.location.text
             }<br/><b>Occasion:</b> ${globalBookingRequest.occasion}<br/><br/><b>Adults:</b> ${
                 globalBookingRequest.adultParticipants
-            }<br/><b>Children:</b> ${globalBookingRequest.children}<br/><br/><b>Budget:</b> ${formatPrice(
-                globalBookingRequest.price.amount,
-                globalBookingRequest.price.currencyCode,
-            )}<br/><br/><b>Message:</b><br/>${
+            }<br/><b>Children:</b> ${globalBookingRequest.children}<br/><br/><b>Budget:</b> ${
+                globalBookingRequest.priceClassType
+            }<br/><br/><b>Message:</b><br/>${
                 globalBookingRequest.message
             }<br/><br/><br/><b>Contact:</b><br/>Email Address: ${emailAddress}<br/>Phone Number: ${phoneNumber}<br/><br/>Kitchen: ${
                 kitchen?.title ?? 'any'

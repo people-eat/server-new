@@ -1,4 +1,4 @@
-import { Shared, type DataSource } from '@people-eat/server-domain';
+import { GlobalBookingRequestPriceClassType, type DataSource } from '@people-eat/server-domain';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { KitchenEntity } from './KitchenEntity';
 import { UserEntity } from './UserEntity';
@@ -11,14 +11,11 @@ export class GlobalBookingRequestEntity implements DataSource.DBGlobalBookingReq
     @Column('char', { length: 20 })
     userId!: string;
 
-    @Column('int', { unsigned: true })
-    amount!: number;
-
     @Column('enum', {
-        enum: ['EUR', 'USD'],
-        enumName: 'CurrencyCode',
+        enum: ['SIMPLE', 'FINE', 'GOURMET'],
+        enumName: 'GlobalBookingRequestPriceClassType',
     })
-    currencyCode!: Shared.CurrencyCode;
+    priceClassType!: GlobalBookingRequestPriceClassType;
 
     @Column('smallint', { unsigned: true })
     adultParticipants!: number;

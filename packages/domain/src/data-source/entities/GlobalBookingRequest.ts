@@ -1,11 +1,7 @@
 import { type GlobalBookingRequest } from '../../core/global-booking-request';
-import { type CurrencyCode } from '../../core/shared';
 
-export interface DBGlobalBookingRequest extends Omit<GlobalBookingRequest, 'location' | 'price'> {
+export interface DBGlobalBookingRequest extends Omit<GlobalBookingRequest, 'location'> {
     latitude: number;
     longitude: number;
     locationText: string;
-
-    amount: number;
-    currencyCode: CurrencyCode;
 }

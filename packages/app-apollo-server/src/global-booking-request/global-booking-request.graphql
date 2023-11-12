@@ -1,3 +1,16 @@
+enum GlobalBookingRequestPriceClassType {
+    SIMPLE
+    FINE
+    GOURMET
+}
+
+type GlobalBookingRequestPriceClass {
+    type: GlobalBookingRequestPriceClassType!
+    min: UInt!
+    max: UInt!
+    currencyCode: CurrencyCode!
+}
+
 type GlobalBookingRequest {
     globalBookingRequestId: String!
     userId: String!
@@ -6,13 +19,14 @@ type GlobalBookingRequest {
     duration: UInt
     adultParticipants: UInt!
     children: UInt!
-    price: Price!
+    priceClassType: GlobalBookingRequestPriceClassType!
     occasion: String!
     message: String!
     createdAt: DateTime!
 
     user: PublicUser!
     allergies: [Allergy!]!
+    priceClass: GlobalBookingRequestPriceClass!
 }
 
 input CreateOneGlobalBookingRequestRequest {
@@ -21,7 +35,7 @@ input CreateOneGlobalBookingRequestRequest {
     duration: UInt!
     adultParticipants: UInt!
     children: UInt!
-    price: PriceInput!
+    priceClassType: GlobalBookingRequestPriceClassType!
     occasion: String!
     message: String!
 
@@ -50,7 +64,7 @@ type UserGlobalBookingRequestMutation {
     updateOccasion(globalBookingRequestId: String!, occasion: String!): Boolean!
     updateMessage(globalBookingRequestId: String!, message: String!): Boolean!
     updateDateTime(globalBookingRequestId: String!, dateTime: DateTime!): Boolean!
-    updatePrice(globalBookingRequestId: String!, price: PriceInput!): Boolean!
+    updatePriceClass(globalBookingRequestId: String!, priceClassType: GlobalBookingRequestPriceClassType!): Boolean!
 }
 
 type UserMutation {

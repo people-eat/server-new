@@ -14,11 +14,7 @@ export interface GlobalBookingRequestCustomerConfirmationInput {
         location?: string;
         date: string;
         time: string;
-        price: {
-            perPerson: number;
-            total: number;
-            currency: string;
-        };
+        priceClassType: string;
     };
 
     chatMessage: string;
@@ -290,8 +286,9 @@ export function globalBookingRequestCustomerConfirmation({
                                                                             <span style="color: #000000;">
                                                                                 <strong>
                                                                                     ${formatPrice(
-                                                                                        globalBookingRequest.price.perPerson,
-                                                                                        globalBookingRequest.price.currency,
+                                                                                        0,
+                                                                                        // 'globalBookingRequest.price.perPerson',
+                                                                                        'globalBookingRequest.price.currency',
                                                                                     )}
                                                                                 </strong>
                                                                             </span>

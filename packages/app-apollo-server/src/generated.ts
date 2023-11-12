@@ -872,7 +872,7 @@ export type GQLCreateOneGlobalBookingRequestRequest = {
     message: Scalars['String'];
     occasion: Scalars['String'];
     phoneNumber?: InputMaybe<Scalars['PhoneNumber']>;
-    price: GQLPriceInput;
+    priceClassType: GQLGlobalBookingRequestPriceClassType;
 };
 
 export type GQLCreateOneMealOptionRequest = {
@@ -1081,10 +1081,21 @@ export type GQLGlobalBookingRequest = {
     location: GQLLocation;
     message: Scalars['String'];
     occasion: Scalars['String'];
-    price: GQLPrice;
+    priceClass: GQLGlobalBookingRequestPriceClass;
+    priceClassType: GQLGlobalBookingRequestPriceClassType;
     user: GQLPublicUser;
     userId: Scalars['String'];
 };
+
+export type GQLGlobalBookingRequestPriceClass = {
+    __typename?: 'GlobalBookingRequestPriceClass';
+    currencyCode: GQLCurrencyCode;
+    max: Scalars['UInt'];
+    min: Scalars['UInt'];
+    type: GQLGlobalBookingRequestPriceClassType;
+};
+
+export type GQLGlobalBookingRequestPriceClassType = 'FINE' | 'GOURMET' | 'SIMPLE';
 
 export type GQLGlobalBookingRequestQuery = {
     __typename?: 'GlobalBookingRequestQuery';
@@ -1815,7 +1826,7 @@ export type GQLUserGlobalBookingRequestMutation = {
     updateDateTime: Scalars['Boolean'];
     updateMessage: Scalars['Boolean'];
     updateOccasion: Scalars['Boolean'];
-    updatePrice: Scalars['Boolean'];
+    updatePriceClass: Scalars['Boolean'];
     userId: Scalars['String'];
 };
 
@@ -1842,9 +1853,9 @@ export type GQLUserGlobalBookingRequestMutationUpdateOccasionArgs = {
     occasion: Scalars['String'];
 };
 
-export type GQLUserGlobalBookingRequestMutationUpdatePriceArgs = {
+export type GQLUserGlobalBookingRequestMutationUpdatePriceClassArgs = {
     globalBookingRequestId: Scalars['String'];
-    price: GQLPriceInput;
+    priceClassType: GQLGlobalBookingRequestPriceClassType;
 };
 
 export type GQLUserGlobalBookingRequestQuery = {
@@ -2326,6 +2337,8 @@ export type GQLResolversTypes = {
     Following: ResolverTypeWrapper<GQLFollowing>;
     Gender: GQLGender;
     GlobalBookingRequest: ResolverTypeWrapper<GQLGlobalBookingRequest>;
+    GlobalBookingRequestPriceClass: ResolverTypeWrapper<GQLGlobalBookingRequestPriceClass>;
+    GlobalBookingRequestPriceClassType: GQLGlobalBookingRequestPriceClassType;
     GlobalBookingRequestQuery: ResolverTypeWrapper<GQLGlobalBookingRequestQuery>;
     IdentityProvider: GQLIdentityProvider;
     Kitchen: ResolverTypeWrapper<GQLKitchen>;
@@ -2502,6 +2515,7 @@ export type GQLResolversParentTypes = {
     FindManyRequest: GQLFindManyRequest;
     Following: GQLFollowing;
     GlobalBookingRequest: GQLGlobalBookingRequest;
+    GlobalBookingRequestPriceClass: GQLGlobalBookingRequestPriceClass;
     GlobalBookingRequestQuery: GQLGlobalBookingRequestQuery;
     Kitchen: GQLKitchen;
     KitchenMutation: GQLKitchenMutation;
@@ -3515,9 +3529,21 @@ export type GQLGlobalBookingRequestResolvers<
     location?: Resolver<GQLResolversTypes['Location'], ParentType, ContextType>;
     message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     occasion?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-    price?: Resolver<GQLResolversTypes['Price'], ParentType, ContextType>;
+    priceClass?: Resolver<GQLResolversTypes['GlobalBookingRequestPriceClass'], ParentType, ContextType>;
+    priceClassType?: Resolver<GQLResolversTypes['GlobalBookingRequestPriceClassType'], ParentType, ContextType>;
     user?: Resolver<GQLResolversTypes['PublicUser'], ParentType, ContextType>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLGlobalBookingRequestPriceClassResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['GlobalBookingRequestPriceClass'] = GQLResolversParentTypes['GlobalBookingRequestPriceClass'],
+> = {
+    currencyCode?: Resolver<GQLResolversTypes['CurrencyCode'], ParentType, ContextType>;
+    max?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    min?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    type?: Resolver<GQLResolversTypes['GlobalBookingRequestPriceClassType'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4474,11 +4500,11 @@ export type GQLUserGlobalBookingRequestMutationResolvers<
         ContextType,
         RequireFields<GQLUserGlobalBookingRequestMutationUpdateOccasionArgs, 'globalBookingRequestId' | 'occasion'>
     >;
-    updatePrice?: Resolver<
+    updatePriceClass?: Resolver<
         GQLResolversTypes['Boolean'],
         ParentType,
         ContextType,
-        RequireFields<GQLUserGlobalBookingRequestMutationUpdatePriceArgs, 'globalBookingRequestId' | 'price'>
+        RequireFields<GQLUserGlobalBookingRequestMutationUpdatePriceClassArgs, 'globalBookingRequestId' | 'priceClassType'>
     >;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -4930,6 +4956,7 @@ export type GQLResolvers<ContextType = any> = {
     EmailAddressUpdate?: GQLEmailAddressUpdateResolvers<ContextType>;
     Following?: GQLFollowingResolvers<ContextType>;
     GlobalBookingRequest?: GQLGlobalBookingRequestResolvers<ContextType>;
+    GlobalBookingRequestPriceClass?: GQLGlobalBookingRequestPriceClassResolvers<ContextType>;
     GlobalBookingRequestQuery?: GQLGlobalBookingRequestQueryResolvers<ContextType>;
     Kitchen?: GQLKitchenResolvers<ContextType>;
     KitchenMutation?: GQLKitchenMutationResolvers<ContextType>;

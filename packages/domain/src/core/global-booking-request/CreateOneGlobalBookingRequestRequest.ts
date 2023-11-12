@@ -1,9 +1,10 @@
-import { type Location, type NanoId, type Price } from '../shared';
+import { type Location, type NanoId } from '../shared';
+import { type GlobalBookingRequestPriceClassType } from './GlobalBookingRequest';
 
 export interface CreateOneGlobalBookingRequestRequest {
     adultParticipants: number;
     children: number;
-    price: Price;
+    priceClassType: GlobalBookingRequestPriceClassType;
     dateTime: Date;
     duration: number;
     occasion: string;

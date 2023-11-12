@@ -1,6 +1,5 @@
 import { Authorization, type DataSource } from '../../..';
 import packLocation from '../../packLocation';
-import packPrice from '../../packPrice';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type GlobalBookingRequest } from '../GlobalBookingRequest';
@@ -25,5 +24,5 @@ export async function findOne({
 
     if (!globalBookingRequest) return;
 
-    return packPrice(packLocation(globalBookingRequest));
+    return packLocation(globalBookingRequest);
 }

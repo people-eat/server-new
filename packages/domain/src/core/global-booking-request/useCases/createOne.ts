@@ -19,7 +19,7 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
     const {
         adultParticipants,
         children,
-        price,
+        priceClassType,
         dateTime,
         duration,
         occasion,
@@ -41,8 +41,7 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
         userId,
         adultParticipants,
         children,
-        amount: price.amount,
-        currencyCode: price.currencyCode,
+        priceClassType,
         dateTime,
         duration,
         occasion: occasion.trim(),
@@ -83,7 +82,6 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
         }
     }
 
-    const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
     const formattedDateTime: string = moment(dateTime).format('MMMM Do YYYY, h:mm a');
     const emailSuccess: boolean = await emailAdapter.sendToMany(
         'Global Booking Request',
@@ -93,10 +91,7 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
             user.lastName
         }</b><br/><br/><b>When:</b> ${formattedDateTime}<br/><b>Where:</b> ${
             location.text
-        }<br/><b>Occasion:</b> ${occasion}<br/><br/><b>Adults:</b> ${adultParticipants}<br/><b>Children:</b> ${children}<br/><br/><b>Budget:</b> ${formatPrice(
-            price.amount,
-            price.currencyCode,
-        )}<br/><br/><b>Message:</b><br/>${message}<br/><br/><br/><b>Contact:</b><br/>Email Address: ${
+        }<br/><b>Occasion:</b> ${occasion}<br/><br/><b>Adults:</b> ${adultParticipants}<br/><b>Children:</b> ${children}<br/><br/><b>Budget:</b> ${priceClassType}<br/><br/><b>Message:</b><br/>${message}<br/><br/><br/><b>Contact:</b><br/>Email Address: ${
             user.emailAddress
         }<br/>Phone Number: ${phoneNumber}<br/><br/>Kitchen: ${kitchen?.title ?? 'any'}<br/><br/>Allergies: ${allergies
             .map(({ title }: DBAllergy) => title)
@@ -121,11 +116,7 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
                     location: location.text,
                     date: dateTime.toDateString(),
                     time: moment(dateTime).format('LT'),
-                    price: {
-                        perPerson: price.amount / (children + adultParticipants),
-                        total: price.amount,
-                        currency: price.currencyCode,
-                    },
+                    priceClassType,
                 },
                 chatMessage: message.trim(),
             }),
