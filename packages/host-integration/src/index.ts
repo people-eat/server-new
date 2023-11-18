@@ -32,7 +32,7 @@ async function bootstrap(): Promise<void> {
             databaseUser: environmentVariables.database.user,
         },
         logger,
-        reset: true,
+        reset: false,
     });
 
     const emailAdapter: Email.Adapter = createEmailAdapter({
@@ -74,7 +74,7 @@ async function bootstrap(): Promise<void> {
         serverUrl: 'https://api-integration.people-eat.com',
         webAppUrl: 'https://integration.people-eat.com',
         publisher: {
-            publish: async (key: string, payload: any) => {
+            publish: async (key: string, payload: unknown) => {
                 await pubsub.publish(key, payload);
             },
             asyncIterator: (key: string): AsyncIterator<unknown> => pubsub.asyncIterator([key]),
