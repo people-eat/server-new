@@ -8,6 +8,7 @@ import { findOne } from './useCases/findOne';
 import { getStripeDashboardUrl } from './useCases/getStripeDashboardUrl';
 import { getStripeOnboardingUrl } from './useCases/getStripeOnboardingUrl';
 import { updateBiography } from './useCases/updateBiography';
+import { updateHasStripePayoutMethodActivated } from './useCases/updateHasStripePayoutMethodActivated';
 import { updateIsLocked } from './useCases/updateIsLocked';
 import { updateIsVisible } from './useCases/updateIsVisible';
 import { updateLocation } from './useCases/updateLocation';
@@ -35,6 +36,7 @@ export interface CookService {
     updateMinimumParticipants(context: Authorization.Context, cookId: string, minimumParticipants?: number): Promise<boolean>;
     updateMaximumParticipants(context: Authorization.Context, cookId: string, maximumParticipants?: number): Promise<boolean>;
 
+    updateHasStripePayoutMethodActivated(context: Authorization.Context, cookId: string): Promise<boolean>;
     getStripeOnboardingUrl(context: Authorization.Context, cookId: string): Promise<string | undefined>;
     getStripeDashboardUrl(context: Authorization.Context, cookId: string): Promise<string | undefined>;
 }
@@ -67,6 +69,9 @@ export function createCookService(runtime: Runtime): CookService {
             updateMinimumParticipants({ runtime, context, request: { cookId, minimumParticipants } }),
         updateMaximumParticipants: (context: Authorization.Context, cookId: string, maximumParticipants?: number) =>
             updateMaximumParticipants({ runtime, context, request: { cookId, maximumParticipants } }),
+
+        updateHasStripePayoutMethodActivated: (context: Authorization.Context, cookId: string) =>
+            updateHasStripePayoutMethodActivated({ runtime, context, request: { cookId } }),
 
         getStripeOnboardingUrl: (context: Authorization.Context, cookId: string) =>
             getStripeOnboardingUrl({ runtime, context, request: { cookId } }),

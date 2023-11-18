@@ -85,6 +85,7 @@ export async function createOne({ runtime, context, request }: CreateOneCookInpu
 
     const connectedAccountUrlResult: { url: string } | undefined = await paymentAdapter.STRIPE.createConnectedAccountOnboardingUrl({
         accountId: connectedAccountResult.accountId,
+        cookId,
     });
 
     if (!connectedAccountUrlResult) return false;

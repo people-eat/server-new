@@ -46,6 +46,7 @@ export async function getStripeOnboardingUrl({ runtime, context, request }: GetS
 
     const onboardingUrlResult: { url: string } | undefined = await paymentAdapter.STRIPE.createConnectedAccountOnboardingUrl({
         accountId: stripeAccountId,
+        cookId,
     });
 
     if (!onboardingUrlResult) return;

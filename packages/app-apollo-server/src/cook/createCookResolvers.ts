@@ -9,6 +9,7 @@ import {
     type GQLCookMutationMenusArgs,
     type GQLCookMutationRemoveOneLanguageArgs,
     type GQLCookMutationUpdateBiographyArgs,
+    type GQLCookMutationUpdateHasStripePayoutMethodActivatedArgs,
     type GQLCookMutationUpdateIsLockedArgs,
     type GQLCookMutationUpdateIsVisibleArgs,
     type GQLCookMutationUpdateLocationArgs,
@@ -123,12 +124,11 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
                 context: Authorization.Context,
             ): Promise<boolean> => service.cook.updateMaximumParticipants(context, cookId, maximumParticipants),
 
-            // todo
             updateHasStripePayoutMethodActivated: async (
                 _parent: GQLCookMutation,
-                // { cookId }: GQLCookMutationUpdateHasStripePayoutMethodActivatedArgs,
-                // context: Authorization.Context,
-            ): Promise<boolean> => false,
+                { cookId }: GQLCookMutationUpdateHasStripePayoutMethodActivatedArgs,
+                context: Authorization.Context,
+            ): Promise<boolean> => service.cook.updateHasStripePayoutMethodActivated(context, cookId),
 
             addOneLanguage: async (
                 _parent: GQLCookMutation,
