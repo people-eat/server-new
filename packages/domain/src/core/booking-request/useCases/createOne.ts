@@ -75,7 +75,7 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
         children,
         amount: price.amount,
         currencyCode: price.currencyCode,
-        fee: 18,
+        fee: 22,
         occasion: occasion.trim(),
         kitchenId,
         createdAt: new Date(),

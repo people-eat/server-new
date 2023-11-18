@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { Authorization, type ChatMessage } from '../../..';
-import { type DBBookingRequest } from '../../../data-source';
+import { type DBBookingRequest, type DBCook } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
@@ -25,6 +25,19 @@ export async function acceptOneByUserId({ runtime, context, request }: AcceptOne
     });
 
     if (!bookingRequest) return false;
+
+    const cook: DBCook | undefined = await dataSourceAdapter.cookRepository.findOne({
+        cookId: bookingRequest.cookId,
+    });
+
+    if (!cook) return false;
+
+    const [payoutMethod] = cook.payoutMethods ?? [];
+
+    if (!payoutMethod?.active) {
+        runtime.logger.error('Cook without payout methods tried to accept a booking - in user accepted');
+        return false;
+    }
 
     if (bookingRequest.userAccepted === true) return false;
 
@@ -82,9 +95,10 @@ export async function acceptOneByUserId({ runtime, context, request }: AcceptOne
 
     const paymentSuccess: boolean = await paymentAdapter.STRIPE.createPaymentIntent({
         currencyCode: bookingRequest.currencyCode,
-        amount: bookingRequest.amount,
+        amount: Math.trunc((bookingRequest.amount * (100 - bookingRequest.fee)) / 100),
         userId: bookingRequest.userId,
         setupIntentId: bookingRequest.paymentData.setupIntentId,
+        destinationAccountId: payoutMethod.stripeAccountId,
     });
 
     if (!paymentSuccess) return false;

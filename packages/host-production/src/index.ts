@@ -57,8 +57,8 @@ async function bootstrap(): Promise<void> {
         logger,
         stripeSecretKey: environmentVariables.payment.stripeSecretKey,
         stripeConnectedAccountOnboarding: {
-            refreshUrl: 'https://people-eat.com',
-            returnUrl: 'https://people-eat.com',
+            refreshUrl: 'https://people-eat.com/chef-profile',
+            returnUrl: 'https://people-eat.com/wallet-onboarding-successful',
         },
     });
 

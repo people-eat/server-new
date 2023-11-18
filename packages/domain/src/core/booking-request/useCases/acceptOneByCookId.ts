@@ -1,7 +1,7 @@
 import { cookBookingRequestCookAcceptedNotification, customerPaymentAnnouncement } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
 import { Authorization, type ChatMessage } from '../../..';
-import { type DBBookingRequest, type DBUser } from '../../../data-source';
+import { type DBBookingRequest, type DBCook, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
@@ -34,6 +34,17 @@ export async function acceptOneByCookId({ runtime, context, request }: AcceptOne
     const cookUser: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.cookId });
 
     if (!cookUser) return false;
+
+    const cook: DBCook | undefined = await dataSourceAdapter.cookRepository.findOne({ cookId: bookingRequest.cookId });
+
+    if (!cook) return false;
+
+    const [payoutMethod] = cook.payoutMethods ?? [];
+
+    if (!payoutMethod?.active) {
+        runtime.logger.error('Cook without payout methods tried to accept a booking');
+        return false;
+    }
 
     if (bookingRequest.cookAccepted === true) return false;
 
@@ -150,9 +161,10 @@ export async function acceptOneByCookId({ runtime, context, request }: AcceptOne
 
     const paymentSuccess: boolean = await paymentAdapter.STRIPE.createPaymentIntent({
         currencyCode: bookingRequest.currencyCode,
-        amount: bookingRequest.amount,
+        amount: Math.trunc((bookingRequest.amount * (100 - bookingRequest.fee)) / 100),
         userId: bookingRequest.userId,
         setupIntentId: bookingRequest.paymentData.setupIntentId,
+        destinationAccountId: payoutMethod.stripeAccountId,
     });
 
     if (!paymentSuccess) return false;

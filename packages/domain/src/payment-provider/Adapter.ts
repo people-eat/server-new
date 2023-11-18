@@ -5,6 +5,7 @@ export interface CreatePaymentIntentInput {
     amount: number;
     userId: string;
     setupIntentId: string;
+    destinationAccountId: string;
 }
 
 export interface CreateConnectedAccountInput {

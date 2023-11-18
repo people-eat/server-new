@@ -37,7 +37,11 @@ export function createPaymentAdapter({
                     return undefined;
                 }
             },
-            createPaymentIntent: async ({ setupIntentId, amount }: PaymentProvider.CreatePaymentIntentInput): Promise<boolean> => {
+            createPaymentIntent: async ({
+                setupIntentId,
+                amount,
+                destinationAccountId,
+            }: PaymentProvider.CreatePaymentIntentInput): Promise<boolean> => {
                 try {
                     const setupIntent: Stripe.SetupIntent = await client.setupIntents.retrieve(setupIntentId);
 
@@ -57,6 +61,12 @@ export function createPaymentAdapter({
                         confirm: true,
                     });
 
+                    await client.transfers.create({
+                        amount,
+                        currency: 'eur',
+                        destination: destinationAccountId,
+                    });
+
                     return paymentIntent.status === 'succeeded';
                 } catch (error) {
                     logger.error(error);
@@ -70,6 +80,13 @@ export function createPaymentAdapter({
                     const account: Stripe.Account = await client.accounts.create({
                         type: 'express',
                         email: emailAddress,
+                        settings: {
+                            payouts: {
+                                schedule: {
+                                    interval: 'manual',
+                                },
+                            },
+                        },
                     });
 
                     return { accountId: account.id };
@@ -126,13 +143,15 @@ export function createPaymentAdapter({
                 price,
             }: PaymentProvider.TransferPaymentToCookAccountInput): Promise<boolean> => {
                 try {
-                    await client.transfers.create({
-                        amount: price.amount,
-                        currency: 'eur',
-                        destination: accountId,
-                    });
+                    const result: Stripe.Payout = await client.payouts.create(
+                        {
+                            amount: price.amount,
+                            currency: 'eur',
+                        },
+                        { stripeAccount: accountId },
+                    );
 
-                    return true;
+                    return result.status !== 'failed';
                 } catch (error) {
                     logger.error(error);
                     return false;

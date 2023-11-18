@@ -1,6 +1,6 @@
 import { customerPaymentAnnouncement } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
-import { type DBBookingRequest, type DBUser } from '../../../data-source';
+import { type DBBookingRequest, type DBCook, type DBUser } from '../../../data-source';
 import { type Runtime } from '../../Runtime';
 import { type TimeTriggeredTask } from '../TimeTriggeredTask';
 
@@ -16,11 +16,25 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
 
         if (!bookingRequest) return;
 
+        const cook: DBCook | undefined = await dataSourceAdapter.cookRepository.findOne({
+            cookId: bookingRequest.cookId,
+        });
+
+        if (!cook) return;
+
+        const [payoutMethod] = cook.payoutMethods ?? [];
+
+        if (!payoutMethod?.active) {
+            runtime.logger.error('Time triggered pull payment task failed because cook had no payout methods');
+            return;
+        }
+
         const paymentSuccess: boolean = await paymentAdapter.STRIPE.createPaymentIntent({
             currencyCode: bookingRequest.currencyCode,
-            amount: bookingRequest.amount,
+            amount: Math.trunc((bookingRequest.amount * (100 - bookingRequest.fee)) / 100),
             userId: bookingRequest.userId,
             setupIntentId: bookingRequest.paymentData.setupIntentId,
+            destinationAccountId: payoutMethod.stripeAccountId,
         });
 
         if (!paymentSuccess) return;

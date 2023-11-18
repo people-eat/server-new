@@ -57,8 +57,8 @@ async function bootstrap(): Promise<void> {
         logger,
         stripeSecretKey: environmentVariables.payment.stripeSecretKey,
         stripeConnectedAccountOnboarding: {
-            refreshUrl: 'https://localhost:3000',
-            returnUrl: 'https://localhost:3000',
+            refreshUrl: 'http://localhost:3000/chef-profile',
+            returnUrl: 'http://localhost:3000/wallet-onboarding-successful',
         },
     });
 
