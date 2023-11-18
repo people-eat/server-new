@@ -573,6 +573,7 @@ export type GQLCookMutation = {
     menus: GQLCookMenuMutation;
     removeOneLanguage: Scalars['Boolean'];
     updateBiography: Scalars['Boolean'];
+    updateHasStripePayoutMethodActivated: Scalars['Boolean'];
     updateIsLocked: Scalars['Boolean'];
     updateIsVisible: Scalars['Boolean'];
     updateLocation: Scalars['Boolean'];
@@ -614,6 +615,10 @@ export type GQLCookMutationRemoveOneLanguageArgs = {
 
 export type GQLCookMutationUpdateBiographyArgs = {
     biography: Scalars['String'];
+    cookId: Scalars['String'];
+};
+
+export type GQLCookMutationUpdateHasStripePayoutMethodActivatedArgs = {
     cookId: Scalars['String'];
 };
 
@@ -3246,6 +3251,12 @@ export type GQLCookMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLCookMutationUpdateBiographyArgs, 'biography' | 'cookId'>
+    >;
+    updateHasStripePayoutMethodActivated?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMutationUpdateHasStripePayoutMethodActivatedArgs, 'cookId'>
     >;
     updateIsLocked?: Resolver<
         GQLResolversTypes['Boolean'],

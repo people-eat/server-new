@@ -73,6 +73,8 @@ type CookMutation {
     updateMinimumParticipants(cookId: String!, minimumParticipants: UInt): Boolean!
     updateMaximumParticipants(cookId: String!, maximumParticipants: UInt): Boolean!
 
+    updateHasStripePayoutMethodActivated(cookId: String!): Boolean!
+
     addOneLanguage(cookId: String!, languageId: String!): Boolean!
     removeOneLanguage(cookId: String!, languageId: String!): Boolean!
 }

@@ -123,6 +123,13 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
                 context: Authorization.Context,
             ): Promise<boolean> => service.cook.updateMaximumParticipants(context, cookId, maximumParticipants),
 
+            // todo
+            updateHasStripePayoutMethodActivated: async (
+                _parent: GQLCookMutation,
+                // { cookId }: GQLCookMutationUpdateHasStripePayoutMethodActivatedArgs,
+                // context: Authorization.Context,
+            ): Promise<boolean> => false,
+
             addOneLanguage: async (
                 _parent: GQLCookMutation,
                 { cookId, languageId }: GQLCookMutationAddOneLanguageArgs,
