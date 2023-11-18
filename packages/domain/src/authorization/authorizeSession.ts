@@ -18,7 +18,6 @@ export interface AuthorizeSessionOutput {
 // one month
 const sessionLifeTime: number = 30 * 24 * 60 * 60 * 1000;
 
-// eslint-disable-next-line max-statements
 export async function authorizeSession({
     dataSourceAdapter,
     logger,

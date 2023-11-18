@@ -86,7 +86,6 @@ export interface StartApolloServerAppResult {
     path: string;
 }
 
-// eslint-disable-next-line max-statements
 export async function startApolloServerApp({
     dataSourceAdapter,
     logger,

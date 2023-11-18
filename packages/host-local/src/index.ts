@@ -56,6 +56,10 @@ async function bootstrap(): Promise<void> {
     const paymentAdapter: PaymentProvider.Adapter = createPaymentAdapter({
         logger,
         stripeSecretKey: environmentVariables.payment.stripeSecretKey,
+        stripeConnectedAccountOnboarding: {
+            refreshUrl: 'https://localhost:3000',
+            returnUrl: 'https://localhost:3000',
+        },
     });
 
     const pubsub: PubSub = new PubSub();

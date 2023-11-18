@@ -13,7 +13,7 @@
                 "no-return-await": "error",
                 "eqeqeq": "error",
                 "max-depth": ["error", 3],
-                "max-statements": ["warn", 16],
+                "max-statements": ["warn", 32],
                 "no-else-return": "warn",
                 "yoda": "error",
                 "no-shadow": "off",

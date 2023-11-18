@@ -20,5 +20,5 @@ export async function findOne({ runtime, context, request }: FindOneCookInput): 
 
     if (!cook) return;
 
-    return packLocation(cook);
+    return { ...packLocation(cook), hasStripePayoutMethodActivated: cook.payoutMethods?.[0]?.active ?? false };
 }

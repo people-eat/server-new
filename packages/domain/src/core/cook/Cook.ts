@@ -18,4 +18,6 @@ export interface Cook {
     maximumParticipants?: number;
     payoutMethods: CookPayoutMethod[];
     createdAt: Date;
+
+    hasStripePayoutMethodActivated: boolean;
 }

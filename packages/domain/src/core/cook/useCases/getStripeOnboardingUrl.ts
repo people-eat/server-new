@@ -1,6 +1,8 @@
 import { Authorization, type DataSource } from '../../..';
+import { type DBUser } from '../../../data-source';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
+import { type CookPayoutMethod } from '../CookPayoutMethod';
 
 export interface GetStripeOnboardingUrlInput {
     runtime: Runtime;
@@ -18,9 +20,27 @@ export async function getStripeOnboardingUrl({ runtime, context, request }: GetS
 
     if (!cook) return;
 
-    const [payoutMethod] = cook.payoutMethods;
+    let [payoutMethod] = cook.payoutMethods;
 
-    if (!payoutMethod) return;
+    if (!payoutMethod) {
+        const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cookId });
+
+        if (!user || !user.emailAddress) return;
+
+        const connectedAccountResult: { accountId: string } | undefined = await paymentAdapter.STRIPE.createConnectedAccount({
+            emailAddress: user.emailAddress,
+        });
+
+        if (!connectedAccountResult) return;
+
+        const newPayoutMethod: CookPayoutMethod = { provider: 'STRIPE', stripeAccountId: connectedAccountResult.accountId, active: false };
+
+        const success: boolean = await dataSourceAdapter.cookRepository.updateOne({ cookId }, { payoutMethods: [newPayoutMethod] });
+
+        if (!success) return;
+
+        payoutMethod = newPayoutMethod;
+    }
 
     const { stripeAccountId } = payoutMethod;
 

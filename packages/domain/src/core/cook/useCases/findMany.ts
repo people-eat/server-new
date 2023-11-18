@@ -18,5 +18,10 @@ export async function findMany({ runtime, context }: FindManyCooksInput): Promis
 
     if (!cooks) return;
 
-    return cooks.map(packLocation);
+    return cooks.map(
+        (cook: DataSource.DBCook): Cook => ({
+            ...packLocation(cook),
+            hasStripePayoutMethodActivated: cook.payoutMethods?.[0]?.active ?? false,
+        }),
+    );
 }

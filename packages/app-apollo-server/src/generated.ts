@@ -196,6 +196,7 @@ export type GQLCook = {
     createdAt: Scalars['DateTime'];
     followerCount: Scalars['UInt'];
     followers: Array<GQLFollowing>;
+    hasStripePayoutMethodActivated: Scalars['Boolean'];
     isLocked: Scalars['Boolean'];
     isVisible: Scalars['Boolean'];
     languages: Array<GQLLanguage>;
@@ -2811,6 +2812,7 @@ export type GQLCookResolvers<ContextType = any, ParentType extends GQLResolversP
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     followerCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     followers?: Resolver<Array<GQLResolversTypes['Following']>, ParentType, ContextType>;
+    hasStripePayoutMethodActivated?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     isLocked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     isVisible?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     languages?: Resolver<Array<GQLResolversTypes['Language']>, ParentType, ContextType>;

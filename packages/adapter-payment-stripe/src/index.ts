@@ -4,9 +4,17 @@ import { Stripe } from 'stripe';
 export interface CreatePaymentAdapterInput {
     logger: Logger.Adapter;
     stripeSecretKey: string;
+    stripeConnectedAccountOnboarding: {
+        refreshUrl: string;
+        returnUrl: string;
+    };
 }
 
-export function createPaymentAdapter({ logger, stripeSecretKey }: CreatePaymentAdapterInput): PaymentProvider.Adapter {
+export function createPaymentAdapter({
+    logger,
+    stripeSecretKey,
+    stripeConnectedAccountOnboarding,
+}: CreatePaymentAdapterInput): PaymentProvider.Adapter {
     const client: Stripe = new Stripe(stripeSecretKey, { apiVersion: '2022-11-15' });
 
     return {
@@ -90,8 +98,8 @@ export function createPaymentAdapter({ logger, stripeSecretKey }: CreatePaymentA
                 try {
                     const accountLink: Stripe.AccountLink = await client.accountLinks.create({
                         account: accountId,
-                        refresh_url: 'https://people-eat.com',
-                        return_url: 'https://people-eat.com',
+                        refresh_url: stripeConnectedAccountOnboarding.refreshUrl,
+                        return_url: stripeConnectedAccountOnboarding.returnUrl,
                         type: 'account_onboarding',
                     });
 
