@@ -20,13 +20,19 @@ export interface GlobalBookingRequestCustomerConfirmationInput {
     chatMessage: string;
 }
 
+const priceClassTitles: Record<string, string> = Object.freeze({
+    ['SIMPLE']: 'Einfaches Menü: 70.00 - 90.00 EUR',
+    ['FINE']: 'Fine-Dining Menü: 90.00 - 130.00 EUR',
+    ['GOURMET']: 'Gourmet Menü: ab 130.00 EUR',
+});
+
 export function globalBookingRequestCustomerConfirmation({
     // webAppUrl,
     customer,
     globalBookingRequest,
     chatMessage,
 }: GlobalBookingRequestCustomerConfirmationInput): string {
-    const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
+    const priceClassLabel: string = priceClassTitles[globalBookingRequest.priceClassType]!;
 
     return `
     <!DOCTYPE html>
@@ -273,7 +279,7 @@ export function globalBookingRequestCustomerConfirmation({
                                                             <tr>
                                                                 <td class="pad" style="padding-bottom:10px;padding-left:35px;padding-right:10px;padding-top:10px;">
                                                                     <div style="color:#6e6e6e;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
-                                                                        <p style="margin: 0;">Angegebenes Budget pro Person</p>
+                                                                        <p style="margin: 0;">Presikategorie</p>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -285,11 +291,7 @@ export function globalBookingRequestCustomerConfirmation({
                                                                         <p style="margin: 0;">
                                                                             <span style="color: #000000;">
                                                                                 <strong>
-                                                                                    ${formatPrice(
-                                                                                        0,
-                                                                                        // 'globalBookingRequest.price.perPerson',
-                                                                                        'globalBookingRequest.price.currency',
-                                                                                    )}
+                                                                                    ${priceClassLabel}
                                                                                 </strong>
                                                                             </span>
                                                                         </p>
