@@ -69,7 +69,7 @@ async function persistMenuBookingRequest(
         publicMenu.pricePerChild,
     );
 
-    const totalAmountUser: number = menuPrice + travelExpensesAmount;
+    const totalAmountUser: number = (menuPrice + menuPrice * 0.04 + travelExpensesAmount + 25) / (1 - 0.015);
     const totalAmountCook: number = Math.trunc((menuPrice * (100 - fee)) / 100) + travelExpensesAmount;
 
     const success: boolean = await dataSourceAdapter.bookingRequestRepository.insertOne({
