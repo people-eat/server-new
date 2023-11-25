@@ -1,6 +1,5 @@
 import { Authorization, type DataSource, type Logger } from '../../..';
 import { type DBUser } from '../../../data-source';
-import packLocation from '../../packLocation';
 import { type FindManyRequest, type NanoId } from '../../shared';
 import { type FavoriteCook } from '../FavoriteCook';
 
@@ -44,7 +43,15 @@ export async function findManyByUserId({
             userId,
             cookId: favoriteCook.cookId,
             createdAt: favoriteCook.createdAt,
-            cook: { ...packLocation(cook), user },
+            cook: {
+                ...cook,
+                user,
+                location: {
+                    latitude: cook.latitude,
+                    longitude: cook.longitude,
+                    text: cook.city,
+                },
+            },
         });
     }
 

@@ -29,7 +29,7 @@ export async function findManyByCookId({ runtime, context, request }: FindManyBo
         .map((bookingRequest: DBBookingRequest) => ({
             ...bookingRequest,
             status: toBookingRequestStatus(bookingRequest),
-            price: { amount: bookingRequest.totalAmountCook, currencyCode: bookingRequest.currencyCode },
+            price: { amount: bookingRequest.totalAmountUser, currencyCode: bookingRequest.currencyCode },
         }))
         .map(packLocation);
 }
