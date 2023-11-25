@@ -88,7 +88,7 @@ async function persistMenuBookingRequest(
         totalAmountCook,
         totalAmountUser,
         currencyCode: 'EUR',
-        fee,
+        fee: 22,
         occasion: occasion.trim(),
         createdAt: new Date(),
         paymentData: { ...paymentData, provider: 'STRIPE', confirmed: false, unlocked: false },
