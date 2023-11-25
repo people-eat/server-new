@@ -56,7 +56,7 @@
         "packages/*"
     ],
     "engines": {
-        "node": "^20.0.0",
+        "node": "^20.10.0",
         "npm": "please-use-yarn"
     }
 }
