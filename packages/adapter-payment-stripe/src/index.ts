@@ -60,6 +60,8 @@ export function createPaymentAdapter({
                         amount: pullAmount,
                         currency: 'eur',
                         confirm: true,
+                        // consider using the value from the db
+                        application_fee_amount: pullAmount - payoutAmount,
                     });
 
                     await client.transfers.create({

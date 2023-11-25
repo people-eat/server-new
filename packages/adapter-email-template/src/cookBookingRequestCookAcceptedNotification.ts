@@ -28,12 +28,12 @@ export interface cookBookingRequestCookAcceptedNotificationInput {
 }
 
 export function cookBookingRequestCookAcceptedNotification({
-    // webAppUrl,
+    webAppUrl,
     customer,
     cook,
     bookingRequest,
 }: cookBookingRequestCookAcceptedNotificationInput): string {
-    // const customerProfileGlobalBookingRequestsUrl: string = webAppUrl + '/de/profile?tab=1';
+    const customerProfileGlobalBookingRequestsUrl: string = webAppUrl + `/de/profile/bookings/${bookingRequest.bookingRequestId}`;
 
     const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
 
@@ -276,9 +276,15 @@ export function cookBookingRequestCookAcceptedNotification({
                                                         </table>
                                                         <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
                                                             <tr>
-                                                                <td class="pad" style="padding-bottom:5px;padding-left:30px;padding-right:10px;">
+                                                                <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
                                                                     <div style="color:#232323;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15px;font-weight:400;line-height:120%;text-align:left;mso-line-height-alt:18px;">
-                                                                        <p style="margin: 0; word-break: break-word;"><span style="color: #ff6433;"><u><strong>Buchungsdetails ansehen</strong></u></span><u></u></p>
+                                                                        <p style="margin: 0; word-break: break-word;">
+                                                                            <a href="${customerProfileGlobalBookingRequestsUrl}">
+                                                                                <strong>
+                                                                                    Buchungsdetails ansehen
+                                                                                </strong>
+                                                                            </a>
+                                                                        </p>
                                                                     </div>
                                                                 </td>
                                                             </tr>
