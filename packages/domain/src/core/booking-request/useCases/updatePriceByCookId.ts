@@ -33,7 +33,7 @@ export async function updatePriceByCookId({ runtime, context, request }: UpdateB
     await dataSourceAdapter.chatMessageRepository.insertOne({
         chatMessageId: createNanoId(),
         bookingRequestId,
-        message: `Suggested ${price.amount} ${price.currencyCode} instead of ${bookingRequest.amount} ${bookingRequest.currencyCode}`,
+        message: `Suggested ${price.amount} ${price.currencyCode} instead of ${bookingRequest.totalAmountUser} ${bookingRequest.currencyCode}`,
         generated: true,
         createdBy: cookId,
         createdAt: new Date(),

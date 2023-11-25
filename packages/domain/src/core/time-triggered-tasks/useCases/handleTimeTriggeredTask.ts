@@ -31,7 +31,8 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
 
         const paymentSuccess: boolean = await paymentAdapter.STRIPE.createPaymentIntent({
             currencyCode: bookingRequest.currencyCode,
-            amount: Math.trunc((bookingRequest.amount * (100 - bookingRequest.fee)) / 100),
+            pullAmount: bookingRequest.totalAmountUser,
+            payoutAmount: bookingRequest.totalAmountCook,
             userId: bookingRequest.userId,
             setupIntentId: bookingRequest.paymentData.setupIntentId,
             destinationAccountId: payoutMethod.stripeAccountId,
@@ -69,7 +70,7 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
                     date: moment(bookingRequest.dateTime).format('L'),
                     time: moment(bookingRequest.dateTime).format('LT'),
                     price: {
-                        total: bookingRequest.amount,
+                        total: bookingRequest.totalAmountUser,
                         currency: bookingRequest.currencyCode,
                     },
                 },

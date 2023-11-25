@@ -25,7 +25,7 @@ export async function confirmPaymentSetup({ runtime, context, request }: Confirm
 
     if (!bookingRequest) return false;
 
-    const { dateTime, adultParticipants, children, occasion, amount, currencyCode, locationText, paymentData } = bookingRequest;
+    const { dateTime, adultParticipants, children, occasion, totalAmountUser, currencyCode, locationText, paymentData } = bookingRequest;
 
     // stripe fetch status
 
@@ -72,8 +72,8 @@ export async function confirmPaymentSetup({ runtime, context, request }: Confirm
                     date: dateTime.toDateString(),
                     time: moment(dateTime).format('LT'),
                     price: {
-                        perPerson: amount / (children + adultParticipants),
-                        total: amount,
+                        perPerson: totalAmountUser / (children + adultParticipants),
+                        total: totalAmountUser,
                         currency: currencyCode,
                     },
                     menu: {
@@ -117,8 +117,8 @@ export async function confirmPaymentSetup({ runtime, context, request }: Confirm
                     date: dateTime.toDateString(),
                     time: moment(dateTime).format('LT'),
                     price: {
-                        perPerson: amount / (children + adultParticipants),
-                        total: amount,
+                        perPerson: totalAmountUser / (children + adultParticipants),
+                        total: totalAmountUser,
                         currency: currencyCode,
                     },
                     menu: {

@@ -53,7 +53,7 @@ export async function unlockPayment({ runtime, context, request }: UnlockPayment
     const transferSuccess: boolean = await paymentAdapter.STRIPE.transferPaymentToCookAccount({
         accountId: payoutMethod.stripeAccountId,
         price: {
-            amount: bookingRequest.amount,
+            amount: bookingRequest.totalAmountUser,
             currencyCode: bookingRequest.currencyCode,
         },
     });

@@ -1,6 +1,5 @@
 import { Authorization, type DataSource } from '../../..';
 import packLocation from '../../packLocation';
-import packPrice from '../../packPrice';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type BookingRequest } from '../BookingRequest';
@@ -25,5 +24,9 @@ export async function findOneByUserId({ runtime, context, request }: FindOneBook
 
     if (!bookingRequest) return;
 
-    return { ...packPrice(packLocation(bookingRequest)), status: toBookingRequestStatus(bookingRequest) };
+    return {
+        ...packLocation(bookingRequest),
+        status: toBookingRequestStatus(bookingRequest),
+        price: { amount: bookingRequest.totalAmountUser, currencyCode: bookingRequest.currencyCode },
+    };
 }

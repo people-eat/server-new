@@ -95,7 +95,8 @@ export async function acceptOneByUserId({ runtime, context, request }: AcceptOne
 
     const paymentSuccess: boolean = await paymentAdapter.STRIPE.createPaymentIntent({
         currencyCode: bookingRequest.currencyCode,
-        amount: Math.trunc((bookingRequest.amount * (100 - bookingRequest.fee)) / 100),
+        pullAmount: bookingRequest.totalAmountUser,
+        payoutAmount: bookingRequest.totalAmountCook,
         userId: bookingRequest.userId,
         setupIntentId: bookingRequest.paymentData.setupIntentId,
         destinationAccountId: payoutMethod.stripeAccountId,

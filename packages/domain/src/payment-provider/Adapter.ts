@@ -2,7 +2,8 @@ import { type CurrencyCode, type PaymentProvider, type Price } from '../core/sha
 
 export interface CreatePaymentIntentInput {
     currencyCode: CurrencyCode;
-    amount: number;
+    pullAmount: number;
+    payoutAmount: number;
     userId: string;
     setupIntentId: string;
     destinationAccountId: string;

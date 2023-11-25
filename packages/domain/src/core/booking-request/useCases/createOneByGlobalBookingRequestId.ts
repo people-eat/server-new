@@ -67,7 +67,8 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
         adultParticipants,
         children,
         // todo
-        amount: 0,
+        totalAmountUser: 0,
+        totalAmountCook: 0,
         currencyCode: 'EUR',
         fee: 18,
         occasion,

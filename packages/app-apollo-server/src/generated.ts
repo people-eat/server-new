@@ -804,18 +804,8 @@ export type GQLCourse = {
 };
 
 export type GQLCreateBookingRequestRequest = {
-    adultParticipants: Scalars['UInt'];
-    children: Scalars['UInt'];
-    configuredMenu?: InputMaybe<GQLCreateConfiguredMenuRequest>;
-    cookId: Scalars['String'];
-    dateTime: Scalars['DateTime'];
-    duration: Scalars['UInt'];
-    kitchenId?: InputMaybe<Scalars['String']>;
-    location: GQLLocationInput;
-    message: Scalars['String'];
-    occasion: Scalars['String'];
-    preparationTime: Scalars['UInt'];
-    price: GQLPriceInput;
+    cook?: InputMaybe<GQLCreateCookBookingRequestRequest>;
+    menu?: InputMaybe<GQLCreateMenuBookingRequestRequest>;
 };
 
 export type GQLCreateChatMessageRequest = {
@@ -830,6 +820,35 @@ export type GQLCreateConfiguredMenuCourseRequest = {
 export type GQLCreateConfiguredMenuRequest = {
     courses: Array<GQLCreateConfiguredMenuCourseRequest>;
     menuId: Scalars['String'];
+};
+
+export type GQLCreateCookBookingRequestRequest = {
+    adultParticipants: Scalars['UInt'];
+    children: Scalars['UInt'];
+    cookId: Scalars['String'];
+    dateTime: Scalars['DateTime'];
+    duration: Scalars['UInt'];
+    kitchenId?: InputMaybe<Scalars['String']>;
+    location: GQLLocationInput;
+    message: Scalars['String'];
+    occasion: Scalars['String'];
+    preparationTime: Scalars['UInt'];
+    price: GQLPriceInput;
+    travelExpensesAmount: Scalars['UInt'];
+};
+
+export type GQLCreateMenuBookingRequestRequest = {
+    adultParticipants: Scalars['UInt'];
+    children: Scalars['UInt'];
+    configuredMenu: GQLCreateConfiguredMenuRequest;
+    cookId: Scalars['String'];
+    dateTime: Scalars['DateTime'];
+    duration: Scalars['UInt'];
+    location: GQLLocationInput;
+    message: Scalars['String'];
+    occasion: Scalars['String'];
+    preparationTime: Scalars['UInt'];
+    travelExpensesAmount: Scalars['UInt'];
 };
 
 export type GQLCreateOneAddressRequest = {
@@ -2310,6 +2329,8 @@ export type GQLResolversTypes = {
     CreateChatMessageRequest: GQLCreateChatMessageRequest;
     CreateConfiguredMenuCourseRequest: GQLCreateConfiguredMenuCourseRequest;
     CreateConfiguredMenuRequest: GQLCreateConfiguredMenuRequest;
+    CreateCookBookingRequestRequest: GQLCreateCookBookingRequestRequest;
+    CreateMenuBookingRequestRequest: GQLCreateMenuBookingRequestRequest;
     CreateOneAddressRequest: GQLCreateOneAddressRequest;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;
@@ -2490,6 +2511,8 @@ export type GQLResolversParentTypes = {
     CreateChatMessageRequest: GQLCreateChatMessageRequest;
     CreateConfiguredMenuCourseRequest: GQLCreateConfiguredMenuCourseRequest;
     CreateConfiguredMenuRequest: GQLCreateConfiguredMenuRequest;
+    CreateCookBookingRequestRequest: GQLCreateCookBookingRequestRequest;
+    CreateMenuBookingRequestRequest: GQLCreateMenuBookingRequestRequest;
     CreateOneAddressRequest: GQLCreateOneAddressRequest;
     CreateOneAdminRequest: GQLCreateOneAdminRequest;
     CreateOneCookRequest: GQLCreateOneCookRequest;

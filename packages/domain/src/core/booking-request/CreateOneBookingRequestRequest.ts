@@ -1,7 +1,7 @@
 import { type CreateOneConfiguredMenuRequest } from '../configured-menu';
 import { type Location, type NanoId, type Price } from '../shared';
 
-export interface CreateOneBookingRequestRequest {
+export interface CreateOneBookingRequestBaseRequest {
     cookId: NanoId;
     location: Location;
     dateTime: Date;
@@ -9,9 +9,30 @@ export interface CreateOneBookingRequestRequest {
     duration: number;
     adultParticipants: number;
     children: number;
-    price: Price;
     occasion: string;
     message: string;
-    kitchenId?: NanoId;
-    configuredMenu?: CreateOneConfiguredMenuRequest;
+    travelExpensesAmount: number;
 }
+
+export interface CreateOneCookBookingRequestRequest extends CreateOneBookingRequestBaseRequest {
+    kitchenId?: NanoId;
+    price: Price;
+}
+
+export function isCreateOneCookBookingRequestRequest(
+    request: CreateOneBookingRequestRequest,
+): request is CreateOneCookBookingRequestRequest {
+    return Object.prototype.hasOwnProperty.call(request, 'price');
+}
+
+export interface CreateOneMenuBookingRequestRequest extends CreateOneBookingRequestBaseRequest {
+    configuredMenu: CreateOneConfiguredMenuRequest;
+}
+
+export function isCreateOneMenuBookingRequestRequest(
+    request: CreateOneBookingRequestRequest,
+): request is CreateOneMenuBookingRequestRequest {
+    return Object.prototype.hasOwnProperty.call(request, 'configuredMenu');
+}
+
+export type CreateOneBookingRequestRequest = CreateOneCookBookingRequestRequest | CreateOneMenuBookingRequestRequest;

@@ -1,7 +1,6 @@
 import { Authorization } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
 import packLocation from '../../packLocation';
-import packPrice from '../../packPrice';
 import { type Runtime } from '../../Runtime';
 import { type FindManyRequest } from '../../shared';
 import { type BookingRequest } from '../BookingRequest';
@@ -24,7 +23,12 @@ export async function findMany({ runtime, context }: FindManyBookingRequestInput
     bookingRequests.sort((a: DBBookingRequest, b: DBBookingRequest) => b.createdAt.getTime() - a.createdAt.getTime());
 
     return bookingRequests
-        .map((bookingRequest: DBBookingRequest) => ({ ...bookingRequest, status: toBookingRequestStatus(bookingRequest) }))
-        .map(packLocation)
-        .map(packPrice);
+        .map((bookingRequest: DBBookingRequest) => ({
+            ...bookingRequest,
+            status: toBookingRequestStatus(bookingRequest),
+            price: { amount: bookingRequest.totalAmountUser, currencyCode: bookingRequest.currencyCode },
+            priceCook: { amount: bookingRequest.totalAmountCook, currencyCode: bookingRequest.currencyCode },
+            priceUser: { amount: bookingRequest.totalAmountUser, currencyCode: bookingRequest.currencyCode },
+        }))
+        .map(packLocation);
 }

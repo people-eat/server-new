@@ -13,7 +13,11 @@ export interface BookingRequest {
     duration: number;
     adultParticipants: number;
     children: number;
+
     price: Price;
+    priceUser?: Price;
+    priceCook?: Price;
+
     fee: number;
     occasion: string;
     kitchenId?: NanoId;

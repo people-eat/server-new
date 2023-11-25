@@ -39,7 +39,8 @@ export function createPaymentAdapter({
             },
             createPaymentIntent: async ({
                 setupIntentId,
-                amount,
+                pullAmount,
+                payoutAmount,
                 destinationAccountId,
             }: PaymentProvider.CreatePaymentIntentInput): Promise<boolean> => {
                 try {
@@ -56,13 +57,13 @@ export function createPaymentAdapter({
                     const paymentIntent: Stripe.PaymentIntent = await client.paymentIntents.create({
                         customer: customer.id,
                         payment_method: paymentMethodId,
-                        amount,
+                        amount: pullAmount,
                         currency: 'eur',
                         confirm: true,
                     });
 
                     await client.transfers.create({
-                        amount,
+                        amount: payoutAmount,
                         currency: 'eur',
                         destination: destinationAccountId,
                     });

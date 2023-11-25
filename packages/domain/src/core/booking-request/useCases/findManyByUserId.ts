@@ -1,7 +1,6 @@
 import { Authorization } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
 import packLocation from '../../packLocation';
-import packPrice from '../../packPrice';
 import { type Runtime } from '../../Runtime';
 import { type FindManyRequest, type NanoId } from '../../shared';
 import { type BookingRequest } from '../BookingRequest';
@@ -29,7 +28,10 @@ export async function findManyByUserId({ runtime, context, request }: FindManyBo
 
     return bookingRequests
         .filter((bookingRequest: DBBookingRequest) => bookingRequest.paymentData.confirmed)
-        .map((bookingRequest: DBBookingRequest) => ({ ...bookingRequest, status: toBookingRequestStatus(bookingRequest) }))
-        .map(packLocation)
-        .map(packPrice);
+        .map((bookingRequest: DBBookingRequest) => ({
+            ...bookingRequest,
+            status: toBookingRequestStatus(bookingRequest),
+            price: { amount: bookingRequest.totalAmountUser, currencyCode: bookingRequest.currencyCode },
+        }))
+        .map(packLocation);
 }

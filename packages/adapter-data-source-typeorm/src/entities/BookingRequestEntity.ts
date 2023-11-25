@@ -48,23 +48,11 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
     @Column('smallint', { unsigned: true })
     children!: number;
 
-    // @Column('int', { unsigned: true })
-    // cookAmount!: number;
-
-    // @Column('int', { unsigned: true })
-    // userAmount!: number;
-
-    // @Column('int', { unsigned: true })
-    // travelExpenseAmount!: number;
-
-    // @Column('int', { unsigned: true })
-    // totalServiceFeeAmount!: number;
-
-    // @Column('int', { unsigned: true })
-    // basePriceAmount!: number;
+    @Column('int', { unsigned: true })
+    totalAmountUser!: number;
 
     @Column('int', { unsigned: true })
-    amount!: number;
+    totalAmountCook!: number;
 
     @Column('enum', {
         enum: ['EUR', 'USD'],

@@ -56,7 +56,11 @@ export function createBookingRequestResolvers(
                 success: boolean;
                 clientSecret: string;
                 bookingRequestId: string;
-            }> => service.bookingRequest.createOne(context, { userId, ...request }),
+            }> => {
+                if (request.cook) return service.bookingRequest.createOne(context, { userId, ...request.cook });
+                if (request.menu) return service.bookingRequest.createOne(context, { userId, ...request.menu });
+                return { success: false, clientSecret: '', bookingRequestId: '' };
+            },
             accept: async (
                 { userId }: GQLUserBookingRequestMutation,
                 { bookingRequestId }: GQLUserBookingRequestMutationAcceptArgs,

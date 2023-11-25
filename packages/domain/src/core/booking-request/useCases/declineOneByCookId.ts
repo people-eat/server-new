@@ -60,7 +60,7 @@ export async function declineOneByCookId({ runtime, context, request }: FindMany
         const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
             'PeopleEat',
             user.emailAddress,
-            'Bestätigung Deiner Buchungsanfrage',
+            'Deine Buchungsanfrage wurde abgelehnt',
             cookBookingRequestCookDeclinedNotification({
                 webAppUrl,
                 customer: {
@@ -79,8 +79,8 @@ export async function declineOneByCookId({ runtime, context, request }: FindMany
                     date: moment(bookingRequest.dateTime).format('L'),
                     time: moment(bookingRequest.dateTime).format('LT'),
                     price: {
-                        perPerson: bookingRequest.amount / (bookingRequest.children + bookingRequest.adultParticipants),
-                        total: bookingRequest.amount,
+                        perPerson: bookingRequest.totalAmountUser / (bookingRequest.children + bookingRequest.adultParticipants),
+                        total: bookingRequest.totalAmountUser,
                         currency: bookingRequest.currencyCode,
                     },
                 },

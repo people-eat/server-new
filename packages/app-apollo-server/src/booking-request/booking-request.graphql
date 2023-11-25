@@ -52,7 +52,7 @@ type CookQuery {
     bookingRequests(cookId: String!): CookBookingRequestQuery!
 }
 
-input CreateBookingRequestRequest {
+input CreateCookBookingRequestRequest {
     cookId: String!
     location: LocationInput!
     dateTime: DateTime!
@@ -64,7 +64,26 @@ input CreateBookingRequestRequest {
     message: String!
     kitchenId: String
     occasion: String!
-    configuredMenu: CreateConfiguredMenuRequest
+    travelExpensesAmount: UInt!
+}
+
+input CreateMenuBookingRequestRequest {
+    cookId: String!
+    location: LocationInput!
+    dateTime: DateTime!
+    preparationTime: UInt!
+    duration: UInt!
+    adultParticipants: UInt!
+    children: UInt!
+    message: String!
+    occasion: String!
+    travelExpensesAmount: UInt!
+    configuredMenu: CreateConfiguredMenuRequest!
+}
+
+input CreateBookingRequestRequest {
+    cook: CreateCookBookingRequestRequest
+    menu: CreateMenuBookingRequestRequest
 }
 
 type UserBookingRequestMutation {
