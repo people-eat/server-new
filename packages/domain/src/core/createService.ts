@@ -40,16 +40,21 @@ export function createService(runtime: Runtime): Service {
     findAllTimeTriggeredTasks(runtime)
         .then((timeTriggeredTasks: TimeTriggeredTask[]) =>
             timeTriggeredTasks.forEach((timeTriggeredTask: TimeTriggeredTask) => {
-                const job: CronJob = CronJob.from({
-                    cronTime: moment(timeTriggeredTask.dueDate).toDate(),
-                    start: true,
-                    onTick: async function () {
-                        const shouldTrigger: boolean = moment(timeTriggeredTask.dueDate).diff(moment()) < 0;
-                        if (!shouldTrigger) return;
-                        await handleTimeTriggeredTask(runtime, timeTriggeredTask);
-                        job.stop();
-                    },
-                });
+                try {
+                    const job: CronJob = CronJob.from({
+                        // WARNING: Date in past. Will never be fired.
+                        cronTime: moment(timeTriggeredTask.dueDate).toDate(),
+                        start: true,
+                        onTick: async function () {
+                            const shouldTrigger: boolean = moment(timeTriggeredTask.dueDate).diff(moment()) < 0;
+                            if (!shouldTrigger) return;
+                            await handleTimeTriggeredTask(runtime, timeTriggeredTask);
+                            job.stop();
+                        },
+                    });
+                } catch (error) {
+                    runtime.logger.error(`Error during time triggered task initialization:\n` + error);
+                }
             }),
         )
         .catch((error: Error) => runtime.logger.error(error));
