@@ -40,6 +40,7 @@ export function createService(runtime: Runtime): Service {
     findAllTimeTriggeredTasks(runtime)
         .then((timeTriggeredTasks: TimeTriggeredTask[]) =>
             timeTriggeredTasks.forEach((timeTriggeredTask: TimeTriggeredTask) => {
+                runtime.logger.info(`Loaded: ${timeTriggeredTasks.length} time triggered tasks`);
                 try {
                     const job: CronJob = CronJob.from({
                         // WARNING: Date in past. Will never be fired.
