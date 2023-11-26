@@ -53,6 +53,8 @@ export function createService(runtime: Runtime): Service {
                             job.stop();
                         },
                     });
+
+                    runtime.logger.info(`Initialized time triggered task ${timeTriggeredTask.task}`);
                 } catch (error) {
                     runtime.logger.error(`Error during time triggered task initialization:\n` + error);
                 }
