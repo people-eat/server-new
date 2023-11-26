@@ -38,9 +38,9 @@ import { createUserService } from './user/createUserService';
 
 export function createService(runtime: Runtime): Service {
     findAllTimeTriggeredTasks(runtime)
-        .then((timeTriggeredTasks: TimeTriggeredTask[]) =>
+        .then((timeTriggeredTasks: TimeTriggeredTask[]) => {
+            runtime.logger.info(`Loaded: ${timeTriggeredTasks.length} time triggered tasks`);
             timeTriggeredTasks.forEach((timeTriggeredTask: TimeTriggeredTask) => {
-                runtime.logger.info(`Loaded: ${timeTriggeredTasks.length} time triggered tasks`);
                 try {
                     const job: CronJob = CronJob.from({
                         // WARNING: Date in past. Will never be fired.
@@ -56,8 +56,8 @@ export function createService(runtime: Runtime): Service {
                 } catch (error) {
                     runtime.logger.error(`Error during time triggered task initialization:\n` + error);
                 }
-            }),
-        )
+            });
+        })
         .catch((error: Error) => runtime.logger.error(error));
 
     return {
