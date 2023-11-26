@@ -54,7 +54,7 @@ export function createService(runtime: Runtime): Service {
                         },
                     });
 
-                    runtime.logger.info(`Initialized time triggered task ${timeTriggeredTask.task}`);
+                    runtime.logger.info(`Initialized time triggered task ${timeTriggeredTask.task.type}`);
                 } catch (error) {
                     runtime.logger.error(`Error during time triggered task initialization:\n` + error);
                 }
