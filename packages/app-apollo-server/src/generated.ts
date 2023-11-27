@@ -1402,6 +1402,7 @@ export type GQLPublicCook = {
 
 export type GQLPublicCookQuery = {
     __typename?: 'PublicCookQuery';
+    findHeroes: Array<GQLPublicCook>;
     findMany: Array<GQLPublicCook>;
     findOne?: Maybe<GQLPublicCook>;
 };
@@ -3936,6 +3937,7 @@ export type GQLPublicCookQueryResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['PublicCookQuery'] = GQLResolversParentTypes['PublicCookQuery'],
 > = {
+    findHeroes?: Resolver<Array<GQLResolversTypes['PublicCook']>, ParentType, ContextType>;
     findMany?: Resolver<
         Array<GQLResolversTypes['PublicCook']>,
         ParentType,

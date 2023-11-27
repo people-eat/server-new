@@ -33,6 +33,7 @@ input FindManyPublicCooksRequest {
 }
 
 type PublicCookQuery {
+    findHeroes: [PublicCook!]!
     findMany(request: FindManyPublicCooksRequest!): [PublicCook!]!
     findOne(cookId: String!): PublicCook
 }

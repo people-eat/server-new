@@ -29,6 +29,9 @@ export function createPublicCookResolvers(service: Service): Resolvers<'PublicCo
                 { request: _request }: GQLPublicCookQueryFindManyArgs,
                 context: Authorization.Context,
             ): Promise<GQLPublicCook[]> => service.publicCook.findMany(context) as any,
+
+            findHeroes: async (_parent: GQLPublicCookQuery, _input: unknown, context: Authorization.Context): Promise<GQLPublicCook[]> =>
+                service.publicCook.findHeroes(context) as any,
         },
     };
 }
