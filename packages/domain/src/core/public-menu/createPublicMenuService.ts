@@ -2,6 +2,7 @@ import { type Authorization, type Course, type PublicMenu } from '../..';
 import { type Runtime } from '../Runtime';
 import { type NanoId } from '../shared';
 import { findAllCourses } from './useCases/findAllCourses';
+import { findHeroes } from './useCases/findHeroes';
 import { findMany } from './useCases/findMany';
 import { findManyByCookId } from './useCases/findManyByCookId';
 import { findOne } from './useCases/findOne';
@@ -11,6 +12,7 @@ export interface PublicMenuService {
     findMany(context: Authorization.Context): Promise<PublicMenu[] | undefined>;
     findManyByCookId(context: Authorization.Context, request: { cookId: NanoId }): Promise<PublicMenu[] | undefined>;
     findAllCourses(context: Authorization.Context, request: { menuId: NanoId }): Promise<Course[] | undefined>;
+    findHeroes(context: Authorization.Context): Promise<PublicMenu[] | undefined>;
 }
 
 export function createPublicMenuService({ dataSourceAdapter, logger }: Runtime): PublicMenuService {
@@ -21,5 +23,6 @@ export function createPublicMenuService({ dataSourceAdapter, logger }: Runtime):
             findManyByCookId({ dataSourceAdapter, logger, context, request }),
         findAllCourses: (context: Authorization.Context, request: { menuId: NanoId }) =>
             findAllCourses({ dataSourceAdapter, logger, context, request }),
+        findHeroes: (context: Authorization.Context) => findHeroes({ dataSourceAdapter, logger, context, request: {} }),
     };
 }

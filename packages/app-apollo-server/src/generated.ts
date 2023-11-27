@@ -1439,6 +1439,7 @@ export type GQLPublicMenu = {
 
 export type GQLPublicMenuQuery = {
     __typename?: 'PublicMenuQuery';
+    findHeroes: Array<GQLPublicMenu>;
     findMany: Array<GQLPublicMenu>;
     findOne?: Maybe<GQLPublicMenu>;
 };
@@ -3982,6 +3983,7 @@ export type GQLPublicMenuQueryResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['PublicMenuQuery'] = GQLResolversParentTypes['PublicMenuQuery'],
 > = {
+    findHeroes?: Resolver<Array<GQLResolversTypes['PublicMenu']>, ParentType, ContextType>;
     findMany?: Resolver<
         Array<GQLResolversTypes['PublicMenu']>,
         ParentType,

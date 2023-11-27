@@ -38,6 +38,7 @@ input FindManyPublicMenusRequest {
 }
 
 type PublicMenuQuery {
+    findHeroes: [PublicMenu!]!
     findMany(request: FindManyPublicMenusRequest!): [PublicMenu!]!
     findOne(menuId: String!): PublicMenu
 }

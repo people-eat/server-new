@@ -28,6 +28,9 @@ export function createPublicMenuResolvers(service: Service): Resolvers<'PublicMe
                 { request: _request }: GQLPublicMenuQueryFindManyArgs,
                 context: Authorization.Context,
             ): Promise<GQLPublicMenu[]> => service.publicMenu.findMany(context) as any,
+
+            findHeroes: async (_parent: GQLPublicMenuQuery, _input: unknown, context: Authorization.Context): Promise<GQLPublicMenu[]> =>
+                service.publicMenu.findHeroes(context) as any,
         },
     };
 }
