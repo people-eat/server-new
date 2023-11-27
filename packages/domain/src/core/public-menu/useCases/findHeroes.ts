@@ -14,7 +14,7 @@ export interface FindManyPublicMenusInput {
 const heroMenuIds: string[] = [
     'lJUrAV6brdx44zF5UNKO',
     'nL98QFBJq36s7YtIDhlV',
-    '7zAcWk9fUAi1XubkRynl',
+    'U5ydHBxaEndVNhxVaQdl',
     '5RPq3PvlS3IqajPuBBQE',
     'smtOynj2WJmZKH2VNu36',
 ];
