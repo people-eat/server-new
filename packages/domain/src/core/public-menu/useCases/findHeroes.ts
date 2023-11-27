@@ -11,7 +11,13 @@ export interface FindManyPublicMenusInput {
     request: FindManyRequest;
 }
 
-const heroMenuIds: string[] = [''];
+const heroMenuIds: string[] = [
+    'lJUrAV6brdx44zF5UNKO',
+    'nL98QFBJq36s7YtIDhlV',
+    '7zAcWk9fUAi1XubkRynl',
+    '5RPq3PvlS3IqajPuBBQE',
+    'smtOynj2WJmZKH2VNu36',
+];
 
 // eslint-disable-next-line max-statements
 export async function findHeroes({ dataSourceAdapter }: FindManyPublicMenusInput): Promise<PublicMenu[] | undefined> {
