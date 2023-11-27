@@ -21,12 +21,12 @@ export async function findAllCourses({ dataSourceAdapter, request }: FindManyPub
             courseId: course.courseId,
         });
 
-        if (!mealOptions) break;
+        if (!mealOptions) continue;
 
         for (const mealOption of mealOptions) {
             const meal: DBMeal | undefined = await dataSourceAdapter.mealRepository.findOne({ mealId: mealOption.mealId });
 
-            if (!meal) break;
+            if (!meal) continue;
 
             mealOption.meal = meal;
         }

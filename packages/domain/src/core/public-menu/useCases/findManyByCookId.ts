@@ -22,21 +22,21 @@ export async function findManyByCookId({ dataSourceAdapter, request }: FindManyP
     const publicMenus: PublicMenu[] = [];
 
     for (const menu of menus) {
-        if (!menu.isVisible) break;
+        if (!menu.isVisible) continue;
 
         const cook: DataSource.DBCook | undefined = await dataSourceAdapter.cookRepository.findOne({ cookId: menu.cookId });
 
-        if (!cook || cook.isLocked || !cook.isVisible) break;
+        if (!cook || cook.isLocked || !cook.isVisible) continue;
 
         const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: menu.cookId });
 
-        if (!user) break;
+        if (!user) continue;
 
         const menuCategories: DBMenuCategory[] | undefined = await dataSourceAdapter.menuCategoryRepository.findMany({
             menuId: menu.menuId,
         });
 
-        if (!menuCategories) break;
+        if (!menuCategories) continue;
 
         const categories: DBCategory[] = [];
 
@@ -44,7 +44,7 @@ export async function findManyByCookId({ dataSourceAdapter, request }: FindManyP
             const category: DBCategory | undefined = await dataSourceAdapter.categoryRepository.findOne({
                 categoryId: menuCategory.categoryId,
             });
-            if (!category) break;
+            if (!category) continue;
             categories.push(category);
         }
 
