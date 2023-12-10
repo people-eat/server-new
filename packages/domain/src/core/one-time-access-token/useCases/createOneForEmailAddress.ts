@@ -34,14 +34,14 @@ export async function createOneForEmailAddress({
 
     if (!persistingSuccess) return false;
 
-    const emailSendigSuccess: boolean = await emailAdapter.sendToOne(
+    const emailSendingSuccess: boolean = await emailAdapter.sendToOne(
         'PeopleEat',
         emailAddress,
         'Passwort vergessen',
         resetPassword({ webAppUrl, secret, user: { firstName: 'you' } }),
     );
 
-    if (!emailSendigSuccess) return false;
+    if (!emailSendingSuccess) return false;
 
     return true;
 }

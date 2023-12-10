@@ -191,6 +191,9 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
             if (!customerEmailSuccess) logger.info('sending email failed');
         }
 
+        // @todo: create one time access token for setting password right after sign up
+        // createOneForEmailAddress
+
         const globalBookingRequestEmailSuccess: boolean = await emailAdapter.sendToMany(
             'Booking Request',
             runtime.notificationEmailAddresses,
