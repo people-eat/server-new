@@ -25,6 +25,7 @@ import { type PublicMenuService } from './public-menu/createPublicMenuService';
 import { type PublicPrivacyPolicyUpdateService } from './public-privacy-policy-update/createPublicPrivacyPolicyUpdateService';
 import { type PublicTermsUpdateService } from './public-terms-update/createPublicTermsUpdateService';
 import { type PublicUserService } from './public-user/createPublicUserService';
+import { type SearchRequestService } from './search-request/createMealService';
 import { type SessionService } from './session/createSessionService';
 import { type SupportRequestService } from './support-request/createSupportRequestService';
 import { type UserService } from './user/createUserService';
@@ -67,4 +68,5 @@ export interface Service {
     favoriteCook: FavoriteCookService;
     oneTimeAccessToken: OneTimeAccessTokenService;
     supportRequest: SupportRequestService;
+    searchRequest: SearchRequestService;
 }

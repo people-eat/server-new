@@ -66,6 +66,7 @@ import { createPublicMenuResolvers } from './public-menu/createPublicMenuResolve
 import { createPublicPrivacyPolicyUpdateResolvers } from './public-privacy-policy-update/createPublicPrivacyPolicyUpdateResolvers';
 import { createPublicTermsUpdateResolvers } from './public-terms-update/createPublicTermsUpdateResolvers';
 import { createPublicUserResolvers } from './public-user/createPublicUserResolvers';
+import { createSearchRequestResolvers } from './search-request/createSearchRequestResolvers';
 import { createSessionResolvers } from './session/createSessionResolvers';
 import { createSupportRequestResolvers } from './support-request/createSupportRequestResolvers';
 import { createTermsUpdateResolvers } from './terms-update/createTermsUpdateResolvers';
@@ -124,6 +125,7 @@ export async function startApolloServerApp({
             globalBookingRequests: () => ({}),
             bookingRequests: () => ({}),
             supportRequests: () => ({}),
+            searchRequests: () => ({} as any),
         },
         Mutation: {
             admins: () => ({} as any),
@@ -134,6 +136,7 @@ export async function startApolloServerApp({
             users: () => ({} as any),
             sessions: () => ({} as any),
             cooks: () => ({} as any),
+            searchRequests: () => ({} as any),
         },
         Subscription: {
             bookingRequestChatMessageCreations: {
@@ -182,6 +185,7 @@ export async function startApolloServerApp({
         ...createFollowingResolvers(service),
         ...createOneTimeAccessTokenResolvers(service),
         ...createSupportRequestResolvers(service),
+        ...createSearchRequestResolvers(service),
     };
 
     const path: string = '/graphql';

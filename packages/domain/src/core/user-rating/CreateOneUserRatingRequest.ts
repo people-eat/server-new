@@ -1,4 +1,4 @@
-export interface CreateOneSearchRequestRequest {
+export interface CreateOneUserRatingRequest {
     searchText: string;
     dateTime: Date;
     adults: number;

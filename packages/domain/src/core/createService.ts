@@ -28,6 +28,7 @@ import { createPublicPrivacyPolicyUpdateService } from './public-privacy-policy-
 import { createPublicTermsUpdateService } from './public-terms-update/createPublicTermsUpdateService';
 import { createPublicUserService } from './public-user/createPublicUserService';
 import { type Runtime } from './Runtime';
+import { createSearchRequestService } from './search-request/createMealService';
 import { type Service } from './Service';
 import { createSessionService } from './session/createSessionService';
 import { createSupportRequestService } from './support-request/createSupportRequestService';
@@ -95,5 +96,6 @@ export function createService(runtime: Runtime): Service {
         favoriteCook: createFavoriteCookService(runtime),
         oneTimeAccessToken: createOneTimeAccessTokenService(runtime),
         supportRequest: createSupportRequestService(runtime),
+        searchRequest: createSearchRequestService(runtime),
     };
 }

@@ -110,7 +110,7 @@ async function persistMenuBookingRequest(
         );
 
         if (!selectedMeal) {
-            logger.info("Didn't find selected email");
+            logger.info("Didn't find selected meal");
             return false;
         }
 

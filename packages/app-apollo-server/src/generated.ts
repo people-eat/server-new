@@ -937,6 +937,14 @@ export type GQLCreateOnePrivacyPolicyUpdateRequest = {
     germanText: Scalars['String'];
 };
 
+export type GQLCreateOneSearchRequestRequest = {
+    adults: Scalars['UInt'];
+    children: Scalars['UInt'];
+    date: Scalars['Date'];
+    locationText: Scalars['String'];
+    origin: GQLSearchRequestOrigin;
+};
+
 export type GQLCreateOneSessionByEmailAddressRequest = {
     emailAddress: Scalars['EmailAddress'];
     password: Scalars['String'];
@@ -1268,6 +1276,7 @@ export type GQLMutation = {
     languages: GQLLanguageMutation;
     notifications: GQLNotificationMutation;
     privacyPolicyUpdates: GQLPrivacyPolicyUpdateMutation;
+    searchRequests: GQLSearchRequestMutation;
     sessions: GQLSessionMutation;
     termsUpdates: GQLTermsUpdateMutation;
     users: GQLUserMutation;
@@ -1514,11 +1523,39 @@ export type GQLQuery = {
     publicMenus: GQLPublicMenuQuery;
     publicPrivacyPolicyUpdates: GQLPublicPrivacyPolicyUpdateQuery;
     publicTermsUpdates: GQLPublicTermsUpdateQuery;
+    searchRequests: GQLSearchRequestQuery;
     sessions: GQLSessionQuery;
     stripePublishableKey?: Maybe<Scalars['String']>;
     supportRequests: GQLSupportRequestQuery;
     termsUpdates: GQLTermsUpdateQuery;
     users: GQLUserQuery;
+};
+
+export type GQLSearchRequest = {
+    __typename?: 'SearchRequest';
+    adults: Scalars['UInt'];
+    children: Scalars['UInt'];
+    createdAt: Scalars['DateTime'];
+    date: Scalars['Date'];
+    locationText: Scalars['String'];
+    origin: GQLSearchRequestOrigin;
+    searchRequestId?: Maybe<Scalars['String']>;
+};
+
+export type GQLSearchRequestMutation = {
+    __typename?: 'SearchRequestMutation';
+    createOne: Scalars['Boolean'];
+};
+
+export type GQLSearchRequestMutationCreateOneArgs = {
+    request: GQLCreateOneSearchRequestRequest;
+};
+
+export type GQLSearchRequestOrigin = 'HOME' | 'PUBLIC_COOKS' | 'PUBLIC_MENUS';
+
+export type GQLSearchRequestQuery = {
+    __typename?: 'SearchRequestQuery';
+    findAll: Array<GQLSearchRequest>;
 };
 
 export type GQLSession = {
@@ -2343,6 +2380,7 @@ export type GQLResolversTypes = {
     CreateOneMenuRequest: GQLCreateOneMenuRequest;
     CreateOneNotificationRequest: GQLCreateOneNotificationRequest;
     CreateOnePrivacyPolicyUpdateRequest: GQLCreateOnePrivacyPolicyUpdateRequest;
+    CreateOneSearchRequestRequest: GQLCreateOneSearchRequestRequest;
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
@@ -2414,6 +2452,10 @@ export type GQLResolversTypes = {
     PublicTermsUpdateQuery: ResolverTypeWrapper<GQLPublicTermsUpdateQuery>;
     PublicUser: ResolverTypeWrapper<GQLPublicUser>;
     Query: ResolverTypeWrapper<{}>;
+    SearchRequest: ResolverTypeWrapper<GQLSearchRequest>;
+    SearchRequestMutation: ResolverTypeWrapper<GQLSearchRequestMutation>;
+    SearchRequestOrigin: GQLSearchRequestOrigin;
+    SearchRequestQuery: ResolverTypeWrapper<GQLSearchRequestQuery>;
     Session: ResolverTypeWrapper<GQLSession>;
     SessionCookieSettings: ResolverTypeWrapper<GQLSessionCookieSettings>;
     SessionCookieSettingsInput: GQLSessionCookieSettingsInput;
@@ -2525,6 +2567,7 @@ export type GQLResolversParentTypes = {
     CreateOneMenuRequest: GQLCreateOneMenuRequest;
     CreateOneNotificationRequest: GQLCreateOneNotificationRequest;
     CreateOnePrivacyPolicyUpdateRequest: GQLCreateOnePrivacyPolicyUpdateRequest;
+    CreateOneSearchRequestRequest: GQLCreateOneSearchRequestRequest;
     CreateOneSessionByEmailAddressRequest: GQLCreateOneSessionByEmailAddressRequest;
     CreateOneSessionByIdentityProviderRequest: GQLCreateOneSessionByIdentityProviderRequest;
     CreateOneSessionByPhoneNumberRequest: GQLCreateOneSessionByPhoneNumberRequest;
@@ -2589,6 +2632,9 @@ export type GQLResolversParentTypes = {
     PublicTermsUpdateQuery: GQLPublicTermsUpdateQuery;
     PublicUser: GQLPublicUser;
     Query: {};
+    SearchRequest: GQLSearchRequest;
+    SearchRequestMutation: GQLSearchRequestMutation;
+    SearchRequestQuery: GQLSearchRequestQuery;
     Session: GQLSession;
     SessionCookieSettings: GQLSessionCookieSettings;
     SessionCookieSettingsInput: GQLSessionCookieSettingsInput;
@@ -3768,6 +3814,7 @@ export type GQLMutationResolvers<
     languages?: Resolver<GQLResolversTypes['LanguageMutation'], ParentType, ContextType>;
     notifications?: Resolver<GQLResolversTypes['NotificationMutation'], ParentType, ContextType>;
     privacyPolicyUpdates?: Resolver<GQLResolversTypes['PrivacyPolicyUpdateMutation'], ParentType, ContextType>;
+    searchRequests?: Resolver<GQLResolversTypes['SearchRequestMutation'], ParentType, ContextType>;
     sessions?: Resolver<GQLResolversTypes['SessionMutation'], ParentType, ContextType>;
     termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateMutation'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserMutation'], ParentType, ContextType>;
@@ -4077,11 +4124,47 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     publicMenus?: Resolver<GQLResolversTypes['PublicMenuQuery'], ParentType, ContextType>;
     publicPrivacyPolicyUpdates?: Resolver<GQLResolversTypes['PublicPrivacyPolicyUpdateQuery'], ParentType, ContextType>;
     publicTermsUpdates?: Resolver<GQLResolversTypes['PublicTermsUpdateQuery'], ParentType, ContextType>;
+    searchRequests?: Resolver<GQLResolversTypes['SearchRequestQuery'], ParentType, ContextType>;
     sessions?: Resolver<GQLResolversTypes['SessionQuery'], ParentType, ContextType>;
     stripePublishableKey?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
     supportRequests?: Resolver<GQLResolversTypes['SupportRequestQuery'], ParentType, ContextType>;
     termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateQuery'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserQuery'], ParentType, ContextType>;
+};
+
+export type GQLSearchRequestResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['SearchRequest'] = GQLResolversParentTypes['SearchRequest'],
+> = {
+    adults?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    children?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    date?: Resolver<GQLResolversTypes['Date'], ParentType, ContextType>;
+    locationText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    origin?: Resolver<GQLResolversTypes['SearchRequestOrigin'], ParentType, ContextType>;
+    searchRequestId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLSearchRequestMutationResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['SearchRequestMutation'] = GQLResolversParentTypes['SearchRequestMutation'],
+> = {
+    createOne?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLSearchRequestMutationCreateOneArgs, 'request'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLSearchRequestQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['SearchRequestQuery'] = GQLResolversParentTypes['SearchRequestQuery'],
+> = {
+    findAll?: Resolver<Array<GQLResolversTypes['SearchRequest']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSessionResolvers<
@@ -5037,6 +5120,9 @@ export type GQLResolvers<ContextType = any> = {
     PublicTermsUpdateQuery?: GQLPublicTermsUpdateQueryResolvers<ContextType>;
     PublicUser?: GQLPublicUserResolvers<ContextType>;
     Query?: GQLQueryResolvers<ContextType>;
+    SearchRequest?: GQLSearchRequestResolvers<ContextType>;
+    SearchRequestMutation?: GQLSearchRequestMutationResolvers<ContextType>;
+    SearchRequestQuery?: GQLSearchRequestQueryResolvers<ContextType>;
     Session?: GQLSessionResolvers<ContextType>;
     SessionCookieSettings?: GQLSessionCookieSettingsResolvers<ContextType>;
     SessionMutation?: GQLSessionMutationResolvers<ContextType>;

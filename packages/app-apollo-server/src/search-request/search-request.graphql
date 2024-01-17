@@ -1,0 +1,39 @@
+enum SearchRequestOrigin {
+    HOME
+    PUBLIC_MENUS
+    PUBLIC_COOKS
+}
+
+type SearchRequest {
+    searchRequestId: String
+    adults: UInt!
+    children: UInt!
+    locationText: String!
+    date: Date!
+    origin: SearchRequestOrigin!
+    createdAt: DateTime!
+}
+
+type SearchRequestQuery {
+    findAll: [SearchRequest!]!
+}
+
+type Query {
+    searchRequests: SearchRequestQuery!
+}
+
+input CreateOneSearchRequestRequest {
+    adults: UInt!
+    children: UInt!
+    locationText: String!
+    date: Date!
+    origin: SearchRequestOrigin!
+}
+
+type SearchRequestMutation {
+    createOne(request: CreateOneSearchRequestRequest!): Boolean!
+}
+
+type Mutation {
+    searchRequests: SearchRequestMutation!
+}

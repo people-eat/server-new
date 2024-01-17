@@ -22,6 +22,7 @@ export { type Menu as DBMenu } from '../../core/menu/Menu';
 export { type NotificationConfiguration as DBNotificationConfiguration } from '../../core/notification-configuration/NotificationConfiguration';
 export { type Notification as DBNotification } from '../../core/notification/Notification';
 export { type PrivacyPolicyUpdate as DBPrivacyPolicyUpdate } from '../../core/privacy-policy-update/PrivacyPolicyUpdate';
+export { type SearchRequest as DBSearchRequest } from '../../core/search-request/SearchRequest';
 export { type Session as DBSession } from '../../core/session/Session';
 export { type SupportRequest as DBSupportRequest } from '../../core/support-request/SupportRequest';
 export { type TermsUpdate as DBTermsUpdate } from '../../core/terms-update/TermsUpdate';

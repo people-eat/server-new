@@ -1,6 +1,9 @@
+import { type SearchRequestOrigin } from './SearchRequest';
+
 export interface CreateOneSearchRequestRequest {
-    searchText: string;
-    dateTime: Date;
     adults: number;
     children: number;
+    locationText: string;
+    date: string;
+    origin: SearchRequestOrigin;
 }

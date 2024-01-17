@@ -1,5 +1,6 @@
 import { type DataSource } from '@people-eat/server-domain';
 import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { SearchRequestOrigin } from '../../../domain/src/core/search-request/SearchRequest';
 
 @Entity('SearchRequests')
 export class SearchRequestEntity implements DataSource.DBSearchRequest {
@@ -12,12 +13,18 @@ export class SearchRequestEntity implements DataSource.DBSearchRequest {
     @Column('smallint', { unsigned: true })
     children!: number;
 
-    @Column('float', { unsigned: true })
-    latitude!: number;
+    @Column('varchar')
+    locationText!: string;
 
-    @Column('float', { unsigned: true })
-    longitude!: number;
+    @Column('date')
+    date!: string;
 
-    // @Column('datetime')
-    // createdAt!: Date;
+    @Column('enum', {
+        enum: ['HOME', 'PUBLIC_MENUS', 'PUBLIC_COOKS'],
+        enumName: 'SearchRequestOrigin',
+    })
+    origin!: SearchRequestOrigin;
+
+    @Column('datetime')
+    createdAt!: Date;
 }

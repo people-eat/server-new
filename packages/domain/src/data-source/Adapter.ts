@@ -5,7 +5,6 @@ import { type DBEmailAddressUpdate } from './entities/EmailAddressUpdate';
 import { type DBGlobalBookingRequest } from './entities/GlobalBookingRequest';
 import { type DBOneTimeAccessToken } from './entities/OneTimeAccessToken';
 import { type DBPhoneNumberUpdate } from './entities/PhoneNumberUpdate';
-import { type DBSearchRequest } from './entities/SearchRequest';
 import {
     type DBAdmin,
     type DBAllergy,
@@ -31,6 +30,7 @@ import {
     type DBNotification,
     type DBNotificationConfiguration,
     type DBPrivacyPolicyUpdate,
+    type DBSearchRequest,
     type DBSession,
     type DBSupportRequest,
     type DBTermsUpdate,
