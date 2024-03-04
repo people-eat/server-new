@@ -15,6 +15,11 @@ export function createPublicMenuResolvers(service: Service): Resolvers<'PublicMe
                 service.menu.findImageUrls(context, { menuId }),
             courses: async ({ menuId }: GQLPublicMenu, _input: unknown, context: Authorization.Context): Promise<GQLCourse[]> =>
                 service.publicMenu.findAllCourses(context, { menuId }) as any,
+            courseCount: async ({ menuId }: GQLPublicMenu, _input: unknown, context: Authorization.Context): Promise<number> => {
+                const courses: GQLCourse[] | undefined = (await service.publicMenu.findAllCourses(context, { menuId })) as any;
+                if (!courses) return 0;
+                return courses.length;
+            },
         },
         PublicMenuQuery: {
             findOne: async (
