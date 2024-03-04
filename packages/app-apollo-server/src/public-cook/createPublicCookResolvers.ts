@@ -26,12 +26,18 @@ export function createPublicCookResolvers(service: Service): Resolvers<'PublicCo
 
             findMany: async (
                 _parent: GQLPublicCookQuery,
-                { request: _request }: GQLPublicCookQueryFindManyArgs,
+                { request }: GQLPublicCookQueryFindManyArgs,
                 context: Authorization.Context,
-            ): Promise<GQLPublicCook[]> => service.publicCook.findMany(context) as any,
+            ): Promise<GQLPublicCook[]> => service.publicCook.findMany(context, request) as any,
 
             findHeroes: async (_parent: GQLPublicCookQuery, _input: unknown, context: Authorization.Context): Promise<GQLPublicCook[]> =>
                 service.publicCook.findHeroes(context) as any,
+
+            checkAvailability: async (
+                _parent: GQLPublicCookQuery,
+                { request }: GQLPublicCookQueryFindManyArgs,
+                context: Authorization.Context,
+            ): Promise<boolean> => service.publicCook.checkAvailability(context, request),
         },
     };
 }

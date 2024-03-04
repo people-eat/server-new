@@ -41,6 +41,7 @@ type PublicMenuQuery {
     findHeroes: [PublicMenu!]!
     findMany(request: FindManyPublicMenusRequest!): [PublicMenu!]!
     findOne(menuId: String!): PublicMenu
+    checkAvailability(request: FindManyPublicMenusRequest!): Boolean!
 }
 
 type Query {

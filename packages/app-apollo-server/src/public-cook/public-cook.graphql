@@ -36,6 +36,7 @@ type PublicCookQuery {
     findHeroes: [PublicCook!]!
     findMany(request: FindManyPublicCooksRequest!): [PublicCook!]!
     findOne(cookId: String!): PublicCook
+    checkAvailability(request: FindManyPublicCooksRequest!): Boolean!
 }
 
 type Query {

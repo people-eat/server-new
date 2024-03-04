@@ -25,12 +25,18 @@ export function createPublicMenuResolvers(service: Service): Resolvers<'PublicMe
 
             findMany: async (
                 _parent: GQLPublicMenuQuery,
-                { request: _request }: GQLPublicMenuQueryFindManyArgs,
+                { request }: GQLPublicMenuQueryFindManyArgs,
                 context: Authorization.Context,
-            ): Promise<GQLPublicMenu[]> => service.publicMenu.findMany(context) as any,
+            ): Promise<GQLPublicMenu[]> => service.publicMenu.findMany(context, request) as any,
 
             findHeroes: async (_parent: GQLPublicMenuQuery, _input: unknown, context: Authorization.Context): Promise<GQLPublicMenu[]> =>
                 service.publicMenu.findHeroes(context) as any,
+
+            checkAvailability: async (
+                _parent: GQLPublicMenuQuery,
+                { request }: GQLPublicMenuQueryFindManyArgs,
+                context: Authorization.Context,
+            ): Promise<boolean> => service.publicMenu.checkAvailability(context, request),
         },
     };
 }

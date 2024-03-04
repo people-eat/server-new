@@ -1411,9 +1411,14 @@ export type GQLPublicCook = {
 
 export type GQLPublicCookQuery = {
     __typename?: 'PublicCookQuery';
+    checkAvailability: Scalars['Boolean'];
     findHeroes: Array<GQLPublicCook>;
     findMany: Array<GQLPublicCook>;
     findOne?: Maybe<GQLPublicCook>;
+};
+
+export type GQLPublicCookQueryCheckAvailabilityArgs = {
+    request: GQLFindManyPublicCooksRequest;
 };
 
 export type GQLPublicCookQueryFindManyArgs = {
@@ -1448,9 +1453,14 @@ export type GQLPublicMenu = {
 
 export type GQLPublicMenuQuery = {
     __typename?: 'PublicMenuQuery';
+    checkAvailability: Scalars['Boolean'];
     findHeroes: Array<GQLPublicMenu>;
     findMany: Array<GQLPublicMenu>;
     findOne?: Maybe<GQLPublicMenu>;
+};
+
+export type GQLPublicMenuQueryCheckAvailabilityArgs = {
+    request: GQLFindManyPublicMenusRequest;
 };
 
 export type GQLPublicMenuQueryFindManyArgs = {
@@ -3985,6 +3995,12 @@ export type GQLPublicCookQueryResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['PublicCookQuery'] = GQLResolversParentTypes['PublicCookQuery'],
 > = {
+    checkAvailability?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLPublicCookQueryCheckAvailabilityArgs, 'request'>
+    >;
     findHeroes?: Resolver<Array<GQLResolversTypes['PublicCook']>, ParentType, ContextType>;
     findMany?: Resolver<
         Array<GQLResolversTypes['PublicCook']>,
@@ -4030,6 +4046,12 @@ export type GQLPublicMenuQueryResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['PublicMenuQuery'] = GQLResolversParentTypes['PublicMenuQuery'],
 > = {
+    checkAvailability?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLPublicMenuQueryCheckAvailabilityArgs, 'request'>
+    >;
     findHeroes?: Resolver<Array<GQLResolversTypes['PublicMenu']>, ParentType, ContextType>;
     findMany?: Resolver<
         Array<GQLResolversTypes['PublicMenu']>,

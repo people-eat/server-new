@@ -1,18 +1,19 @@
 import { type Authorization, type DataSource, type Logger } from '../../..';
 import { type DBCategory, type DBKitchen, type DBMenuCategory, type DBUser } from '../../../data-source';
+import { geoDistance } from '../../../utils/geoDistance';
 import packLocation from '../../packLocation';
-import { type FindManyRequest } from '../../shared';
+import { type FindManyPublicMenusRequest } from '../FindManyPublicMenusRequest';
 import { type PublicMenu } from '../PublicMenu';
 
 export interface FindManyPublicMenusInput {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
     context: Authorization.Context;
-    request: FindManyRequest;
+    request: FindManyPublicMenusRequest;
 }
 
 // eslint-disable-next-line max-statements
-export async function findMany({ dataSourceAdapter }: FindManyPublicMenusInput): Promise<PublicMenu[] | undefined> {
+export async function findMany({ dataSourceAdapter, request }: FindManyPublicMenusInput): Promise<PublicMenu[] | undefined> {
     const menus: DataSource.DBMenu[] | undefined = await dataSourceAdapter.menuRepository.findMany({});
 
     if (!menus) return;
@@ -25,6 +26,11 @@ export async function findMany({ dataSourceAdapter }: FindManyPublicMenusInput):
         const cook: DataSource.DBCook | undefined = await dataSourceAdapter.cookRepository.findOne({ cookId: menu.cookId });
 
         if (!cook || cook.isLocked || !cook.isVisible) continue;
+
+        // check geo distance
+        const { latitude, longitude } = cook;
+        const distance: number = geoDistance({ location1: request.location, location2: { latitude, longitude } });
+        if (cook.maximumTravelDistance && distance > cook.maximumTravelDistance) continue;
 
         const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: menu.cookId });
 
