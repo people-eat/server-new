@@ -27,7 +27,7 @@ input FindManyPublicMenusRequest {
     skip: UInt
     take: UInt
 
-    location: LocationInput!
+    location: LocationInput
     adultParticipants: UInt!
     dateTime: DateTime!
     children: UInt

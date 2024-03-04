@@ -28,9 +28,11 @@ export async function findMany({ dataSourceAdapter, request }: FindManyPublicMen
         if (!cook || cook.isLocked || !cook.isVisible) continue;
 
         // check geo distance
-        const { latitude, longitude } = cook;
-        const distance: number = geoDistance({ location1: request.location, location2: { latitude, longitude } });
-        if (cook.maximumTravelDistance && distance > cook.maximumTravelDistance) continue;
+        if (request.location) {
+            const { latitude, longitude } = cook;
+            const distance: number = geoDistance({ location1: request.location, location2: { latitude, longitude } });
+            if (cook.maximumTravelDistance && distance > cook.maximumTravelDistance) continue;
+        }
 
         const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: menu.cookId });
 

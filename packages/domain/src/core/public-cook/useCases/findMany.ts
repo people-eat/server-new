@@ -23,9 +23,11 @@ export async function findMany({ dataSourceAdapter, request }: FindManyPublicCoo
         if (!cook.isVisible || cook.isLocked) continue;
 
         // check geo distance
-        const { latitude, longitude } = cook;
-        const distance: number = geoDistance({ location1: request.location, location2: { latitude, longitude } });
-        if (cook.maximumTravelDistance && distance > cook.maximumTravelDistance) continue;
+        if (request.location) {
+            const { latitude, longitude } = cook;
+            const distance: number = geoDistance({ location1: request.location, location2: { latitude, longitude } });
+            if (cook.maximumTravelDistance && distance > cook.maximumTravelDistance) continue;
+        }
 
         const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cook.cookId });
 

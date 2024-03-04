@@ -1065,7 +1065,7 @@ export type GQLFindManyPublicCooksRequest = {
     children?: InputMaybe<Scalars['UInt']>;
     dateTime: Scalars['DateTime'];
     kitchenIds?: InputMaybe<Array<Scalars['String']>>;
-    location: GQLLocationInput;
+    location?: InputMaybe<GQLLocationInput>;
     price?: InputMaybe<GQLPriceInput>;
     searchText?: InputMaybe<Scalars['String']>;
     skip?: InputMaybe<Scalars['UInt']>;
@@ -1078,7 +1078,7 @@ export type GQLFindManyPublicMenusRequest = {
     children?: InputMaybe<Scalars['UInt']>;
     dateTime: Scalars['DateTime'];
     kitchenIds?: InputMaybe<Array<Scalars['String']>>;
-    location: GQLLocationInput;
+    location?: InputMaybe<GQLLocationInput>;
     price?: InputMaybe<GQLPriceInput>;
     searchText?: InputMaybe<Scalars['String']>;
     skip?: InputMaybe<Scalars['UInt']>;
