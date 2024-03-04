@@ -1401,6 +1401,7 @@ export type GQLPublicCook = {
     maximumParticipants?: Maybe<Scalars['UInt']>;
     maximumPrice?: Maybe<Scalars['UInt']>;
     maximumTravelDistance?: Maybe<Scalars['UInt']>;
+    menuCount: Scalars['UInt'];
     menus: Array<GQLPublicMenu>;
     minimumParticipants?: Maybe<Scalars['UInt']>;
     minimumPrice?: Maybe<Scalars['UInt']>;
@@ -3982,6 +3983,7 @@ export type GQLPublicCookResolvers<
     maximumParticipants?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
     maximumPrice?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
     maximumTravelDistance?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
+    menuCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     menus?: Resolver<Array<GQLResolversTypes['PublicMenu']>, ParentType, ContextType>;
     minimumParticipants?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
     minimumPrice?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;

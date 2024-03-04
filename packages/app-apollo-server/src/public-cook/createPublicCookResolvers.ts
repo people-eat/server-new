@@ -1,4 +1,4 @@
-import { type Authorization, type Service } from '@people-eat/server-domain';
+import { type Authorization, type PublicMenu, type Service } from '@people-eat/server-domain';
 import {
     type GQLLanguage,
     type GQLPublicCook,
@@ -16,6 +16,11 @@ export function createPublicCookResolvers(service: Service): Resolvers<'PublicCo
                 service.cookLanguage.findAll(context, { cookId }) as any,
             menus: async ({ cookId }: GQLPublicCook, _input: unknown, context: Authorization.Context): Promise<GQLPublicMenu[]> =>
                 service.publicMenu.findManyByCookId(context, { cookId }) as any,
+            menuCount: async ({ cookId }: GQLPublicCook, _input: unknown, context: Authorization.Context): Promise<number> => {
+                const publicMenus: PublicMenu[] | undefined = await service.publicMenu.findManyByCookId(context, { cookId });
+                if (!publicMenus) return 0;
+                return publicMenus.length;
+            },
         },
         PublicCookQuery: {
             findOne: async (

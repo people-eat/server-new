@@ -15,6 +15,7 @@ type PublicCook {
     user: PublicUser!
     languages: [Language!]!
     menus: [PublicMenu!]!
+    menuCount: UInt!
 }
 
 input FindManyPublicCooksRequest {
