@@ -32,6 +32,7 @@ type CookMenuCourseMutation {
 
     createOne(request: CreateOneCourseRequest!): Boolean!
     deleteOne(courseId: String!): Boolean!
+    updateTitle(courseId: String!, title: String!): Boolean!
 }
 
 type CookMenuMutation {

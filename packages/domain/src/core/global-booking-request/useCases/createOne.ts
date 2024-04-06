@@ -73,6 +73,8 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
         }
     }
 
+    const allergyTitles: string[] = allergies.map(({ title }: DBAllergy) => title);
+
     const categories: DBCategory[] = [];
 
     if (categoryIds) {
@@ -81,6 +83,8 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
             if (category) categories.push(category);
         }
     }
+
+    const categoryTitles: string[] = categories.map(({ title }: DBCategory) => title);
 
     const formattedDateTime: string = moment(dateTime).format('MMMM Do YYYY, h:mm a');
     const emailSuccess: boolean = await emailAdapter.sendToMany(
@@ -93,9 +97,9 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
             location.text
         }<br/><b>Occasion:</b> ${occasion}<br/><br/><b>Adults:</b> ${adultParticipants}<br/><b>Children:</b> ${children}<br/><br/><b>Budget:</b> ${priceClassType}<br/><br/><b>Message:</b><br/>${message}<br/><br/><br/><b>Contact:</b><br/>Email Address: ${
             user.emailAddress
-        }<br/>Phone Number: ${phoneNumber}<br/><br/>Kitchen: ${kitchen?.title ?? 'any'}<br/><br/>Allergies: ${allergies
-            .map(({ title }: DBAllergy) => title)
-            .join(', ')}<br/><br/>Categories: ${categories.map(({ title }: DBCategory) => title).join(', ')}`,
+        }<br/>Phone Number: ${phoneNumber}<br/><br/>Kitchen: ${kitchen?.title ?? 'any'}<br/><br/>Allergies: ${allergyTitles.join(
+            ', ',
+        )}<br/><br/>Categories: ${categoryTitles.join(', ')}`,
     );
 
     if (!emailSuccess) logger.info('sending email failed');
@@ -119,6 +123,9 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
                     priceClassType,
                 },
                 chatMessage: message.trim(),
+                categories: categoryTitles,
+                allergies: allergyTitles,
+                kitchen: kitchen?.title,
             }),
         );
 

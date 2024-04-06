@@ -421,6 +421,7 @@ export type GQLCookMenuCourseMutation = {
     deleteOne: Scalars['Boolean'];
     mealOptions: GQLCookMenuCourseMealOptionMutation;
     menuId: Scalars['String'];
+    updateTitle: Scalars['Boolean'];
 };
 
 export type GQLCookMenuCourseMutationCreateOneArgs = {
@@ -433,6 +434,11 @@ export type GQLCookMenuCourseMutationDeleteOneArgs = {
 
 export type GQLCookMenuCourseMutationMealOptionsArgs = {
     courseId: Scalars['String'];
+};
+
+export type GQLCookMenuCourseMutationUpdateTitleArgs = {
+    courseId: Scalars['String'];
+    title: Scalars['String'];
 };
 
 export type GQLCookMenuCourseQuery = {
@@ -3172,6 +3178,12 @@ export type GQLCookMenuCourseMutationResolvers<
         RequireFields<GQLCookMenuCourseMutationMealOptionsArgs, 'courseId'>
     >;
     menuId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    updateTitle?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMenuCourseMutationUpdateTitleArgs, 'courseId' | 'title'>
+    >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

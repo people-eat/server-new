@@ -51,3 +51,5 @@ images/profile-pictures/*.jpeg
 images/meal-images/*.png
 images/meal-images/*.jpg
 images/meal-images/*.jpeg
+
+.nx

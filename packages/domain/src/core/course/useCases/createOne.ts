@@ -18,6 +18,8 @@ export async function createOne({ dataSourceAdapter, logger, context, request }:
 
     const courseId: NanoId = createNanoId();
 
+    // @todo: increment all courses with index >= the new index
+
     const success: boolean = await dataSourceAdapter.courseRepository.insertOne({
         courseId,
         cookId,

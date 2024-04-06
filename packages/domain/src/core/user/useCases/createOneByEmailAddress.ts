@@ -76,7 +76,10 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
         createdAt: new Date(),
     });
 
-    if (!success) return false;
+    if (!success) {
+        logger.warn('Persisting user did fail');
+        return false;
+    }
 
     // const { sessionId } = context;
 
@@ -97,7 +100,10 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
 
         await emailAdapter.sendToOne('PeopleEat', emailAddress, 'Herzlich Willkommen', welcome({ webAppUrl }));
 
-        if (!emailSuccess) return false;
+        if (!emailSuccess) {
+            logger.error('Could not create email address update');
+            return false;
+        }
     }
 
     if (phoneNumber) {
@@ -110,7 +116,10 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
             request: { userId, phoneNumber: phoneNumber.trim() },
         });
 
-        if (!smsSuccess) return false;
+        if (!smsSuccess) {
+            logger.error('Could not create phone number update');
+            return false;
+        }
     }
 
     if (addresses) for (const address of addresses) await createOneAddress({ runtime, context, request: { userId, ...address } });
@@ -154,6 +163,8 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
             }
         }
 
+        const allergyTitles: string[] = allergies.map(({ title }: DBAllergy) => title);
+
         const categories: DBCategory[] = [];
 
         if (globalBookingRequest.categoryIds) {
@@ -163,6 +174,8 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
                 if (category) categories.push(category);
             }
         }
+
+        const categoryTitles: string[] = categories.map(({ title }: DBCategory) => title);
 
         const formattedDateTime: string = moment(globalBookingRequest.dateTime).format('MMMM Do YYYY, h:mm a');
 
@@ -185,6 +198,9 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
                         priceClassType: globalBookingRequest.priceClassType,
                     },
                     chatMessage: globalBookingRequest.message.trim(),
+                    categories: categoryTitles,
+                    allergies: allergyTitles,
+                    kitchen: kitchen?.title,
                 }),
             );
 
@@ -208,9 +224,7 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
                 globalBookingRequest.message
             }<br/><br/><br/><b>Contact:</b><br/>Email Address: ${emailAddress}<br/>Phone Number: ${phoneNumber}<br/><br/>Kitchen: ${
                 kitchen?.title ?? 'any'
-            }<br/><br/>Allergies: ${allergies.map(({ title }: DBAllergy) => title).join(', ')}<br/><br/>Categories: ${categories
-                .map(({ title }: DBCategory) => title)
-                .join(', ')}`,
+            }<br/><br/>Allergies: ${allergyTitles.join(', ')}<br/><br/>Categories: ${categoryTitles.join(', ')}`,
         );
 
         if (!globalBookingRequestEmailSuccess) return false;

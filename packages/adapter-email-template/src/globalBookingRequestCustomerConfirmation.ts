@@ -18,6 +18,10 @@ export interface GlobalBookingRequestCustomerConfirmationInput {
     };
 
     chatMessage: string;
+
+    kitchen?: string;
+    allergies: string[];
+    categories: string[];
 }
 
 const priceClassTitles: Record<string, string> = Object.freeze({
@@ -31,6 +35,9 @@ export function globalBookingRequestCustomerConfirmation({
     customer,
     globalBookingRequest,
     chatMessage,
+    kitchen,
+    allergies,
+    categories,
 }: GlobalBookingRequestCustomerConfirmationInput): string {
     const priceClassLabel: string = priceClassTitles[globalBookingRequest.priceClassType]!;
 
@@ -575,9 +582,13 @@ export function globalBookingRequestCustomerConfirmation({
                                                             <tr>
                                                                 <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
                                                                     <div style="color:#101112;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
-                                                                        <p style="margin: 0; margin-bottom: 16px;">Kategorien: ${''}</p>
-                                                                        <p style="margin: 0; margin-bottom: 16px;">Küche:  ${''}</p>
-                                                                        <p style="margin: 0;">Allergien:  ${''}</p>
+                                                                        <p style="margin: 0; margin-bottom: 16px;">Kategorien: ${categories.join(
+                                                                            ', ',
+                                                                        )}</p>
+                                                                        <p style="margin: 0; margin-bottom: 16px;">Küche:  ${
+                                                                            kitchen ?? 'Keine Angabe'
+                                                                        }</p>
+                                                                        <p style="margin: 0;">Allergien:  ${allergies.join(', ')}</p>
                                                                     </div>
                                                                 </td>
                                                             </tr>
