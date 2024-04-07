@@ -72,7 +72,7 @@ async function bootstrap(): Promise<void> {
         identityProviderAdapter,
         paymentAdapter,
         serverUrl: 'http://localhost:4000',
-        webAppUrl: 'http://localhost:3000',
+        webAppUrl: 'http://localhost:4200',
         publisher: {
             publish: async (key: string, payload: any) => {
                 await pubsub.publish(key, payload);
