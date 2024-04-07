@@ -29,7 +29,7 @@ export function globalBookingRequestCookConfirmation({
     webAppUrl,
     chatMessage,
 }: GlobalBookingRequestCookConfirmationInput): string {
-    const cookProfileBookingRequestsUrl: string = webAppUrl + '/de/chef-profile?tab=3';
+    const cookProfileBookingRequestsUrl: string = webAppUrl + '/chef-profile?tab=3';
 
     const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
 

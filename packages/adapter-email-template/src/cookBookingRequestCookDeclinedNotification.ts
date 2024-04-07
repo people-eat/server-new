@@ -33,7 +33,7 @@ export function cookBookingRequestCookDeclinedNotification({
     cook,
     bookingRequest,
 }: CookBookingRequestCookDeclinedNotificationInput): string {
-    // const customerProfileGlobalBookingRequestsUrl: string = webAppUrl + '/de/profile?tab=1';
+    // const customerProfileGlobalBookingRequestsUrl: string = webAppUrl + '/profile?tab=1';
 
     const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
 

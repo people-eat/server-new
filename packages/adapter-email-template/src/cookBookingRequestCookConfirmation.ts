@@ -35,7 +35,7 @@ export function cookBookingRequestCookConfirmation({
     bookingRequest,
     chatMessage,
 }: CookBookingRequestCookConfirmationInput): string {
-    const cookProfileBookingRequestsUrl: string = webAppUrl + `/de/chef-profile/bookings/${bookingRequest.bookingRequestId}`;
+    const cookProfileBookingRequestsUrl: string = webAppUrl + `/chef-profile/bookings/${bookingRequest.bookingRequestId}`;
 
     const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
 

@@ -13,7 +13,7 @@ export interface BookingRequestNewMessageInput {
 }
 
 export function bookingRequestNewMessage({ webAppUrl, sender, recipient, message }: BookingRequestNewMessageInput): string {
-    const cookProfileBookingRequestsUrl: string = webAppUrl + '/de/chef-profile?tab=3';
+    const cookProfileBookingRequestsUrl: string = webAppUrl + '/chef-profile?tab=3';
 
     return `
     <!DOCTYPE html>
