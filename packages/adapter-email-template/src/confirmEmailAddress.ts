@@ -5,7 +5,7 @@ export interface ConfirmEmailAddressInput {
 }
 
 export function confirmEmailAddress({ webAppUrl, secret }: ConfirmEmailAddressInput): string {
-    const confirmEmailAddressUrl: string = webAppUrl + '/de/email-address-updates/confirm/' + secret;
+    const confirmEmailAddressUrl: string = webAppUrl + '/email-address-updates/confirm/' + secret;
 
     return `
     <!DOCTYPE html>
