@@ -154,7 +154,7 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
 
     const daysUntilEventStart: number = moment(dateTime).diff(moment(), 'days');
 
-    if (daysUntilEventStart < 7) return { success: false, clientSecret: '', bookingRequestId };
+    if (daysUntilEventStart < 3) return { success: false, clientSecret: '', bookingRequestId };
 
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
 
