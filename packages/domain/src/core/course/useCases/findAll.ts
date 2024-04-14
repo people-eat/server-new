@@ -38,5 +38,7 @@ export async function findAll({ dataSourceAdapter, logger, context, request }: F
         course.mealOptions = mealOptions;
     }
 
+    courses.sort((a: DataSource.DBCourse, b: DataSource.DBCourse) => a.index - b.index);
+
     return courses;
 }

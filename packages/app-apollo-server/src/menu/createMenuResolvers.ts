@@ -1,4 +1,4 @@
-import { type Authorization, type Category, type Kitchen, type MenuCategory, type Service } from '@people-eat/server-domain';
+import { type Authorization, type Category, type Course, type Kitchen, type MenuCategory, type Service } from '@people-eat/server-domain';
 import {
     type GQLCategory,
     type GQLCookMenuMutation,
@@ -48,6 +48,10 @@ export function createMenuResolvers(service: Service): Resolvers<'Menu' | 'CookM
                 service.menu.findImageUrls(context, { menuId }),
             courses: async ({ cookId, menuId }: GQLMenu, _input: unknown, context: Authorization.Context): Promise<GQLCourse[]> =>
                 service.course.findAll(context, { cookId, menuId }) as any,
+            courseCount: async ({ cookId, menuId }: GQLMenu, _input: unknown, context: Authorization.Context): Promise<number> => {
+                const results: Course[] | undefined = await service.course.findAll(context, { cookId, menuId });
+                return results?.length ?? 0;
+            },
         },
         CookMenuMutation: {
             createOne: async (
