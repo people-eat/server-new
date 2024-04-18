@@ -1,6 +1,7 @@
 import { type Authorization, type Service } from '@people-eat/server-domain';
 import {
     type GQLCookGlobalBookingRequestQuery,
+    type GQLCookGlobalBookingRequestQueryFindOneArgs,
     type GQLGlobalBookingRequest,
     type GQLGlobalBookingRequestPriceClass,
     type GQLGlobalBookingRequestQuery,
@@ -9,6 +10,7 @@ import {
     type GQLUserGlobalBookingRequestMutation,
     type GQLUserGlobalBookingRequestMutationCreateOneArgs,
     type GQLUserGlobalBookingRequestQuery,
+    type GQLUserGlobalBookingRequestQueryFindOneArgs,
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
 
@@ -57,6 +59,12 @@ export function createGlobalBookingRequestResolvers(
                 _: unknown,
                 context: Authorization.Context,
             ): Promise<GQLGlobalBookingRequest[] | undefined> => service.globalBookingRequest.findManyByCookId(context, { cookId }) as any,
+            findOne: async (
+                { cookId: _cookId }: GQLCookGlobalBookingRequestQuery,
+                { globalBookingRequestId }: GQLCookGlobalBookingRequestQueryFindOneArgs,
+                context: Authorization.Context,
+            ): Promise<GQLGlobalBookingRequest | undefined> =>
+                service.globalBookingRequest.findOne(context, { globalBookingRequestId }) as any,
         },
         UserGlobalBookingRequestMutation: {
             createOne: async (
@@ -71,6 +79,12 @@ export function createGlobalBookingRequestResolvers(
                 _: unknown,
                 context: Authorization.Context,
             ): Promise<GQLGlobalBookingRequest[] | undefined> => service.globalBookingRequest.findManyByUserId(context, { userId }) as any,
+            findOne: async (
+                { userId: _userId }: GQLUserGlobalBookingRequestQuery,
+                { globalBookingRequestId }: GQLUserGlobalBookingRequestQueryFindOneArgs,
+                context: Authorization.Context,
+            ): Promise<GQLGlobalBookingRequest | undefined> =>
+                service.globalBookingRequest.findOne(context, { globalBookingRequestId }) as any,
         },
         GlobalBookingRequestQuery: {
             findMany: async (

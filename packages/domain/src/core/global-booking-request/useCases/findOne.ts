@@ -17,12 +17,12 @@ export async function findOne({
 }: FindOneGlobalBookingRequestInput): Promise<GlobalBookingRequest | undefined> {
     const { globalBookingRequestId } = request;
 
-    await Authorization.isAdmin({ context, dataSourceAdapter, logger });
-
     const globalBookingRequest: DataSource.DBGlobalBookingRequest | undefined =
         await dataSourceAdapter.globalBookingRequestRepository.findOne({ globalBookingRequestId });
 
     if (!globalBookingRequest) return;
+
+    await Authorization.canQueryUserData({ context, dataSourceAdapter, logger, userId: globalBookingRequest.userId });
 
     return packLocation(globalBookingRequest);
 }

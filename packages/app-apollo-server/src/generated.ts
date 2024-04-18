@@ -1946,6 +1946,10 @@ export type GQLUserGlobalBookingRequestQuery = {
     userId: Scalars['String'];
 };
 
+export type GQLUserGlobalBookingRequestQueryFindOneArgs = {
+    globalBookingRequestId: Scalars['String'];
+};
+
 export type GQLUserLanguage = 'ENGLISH' | 'GERMAN';
 
 export type GQLUserMenuVisitQuery = {
@@ -4674,7 +4678,12 @@ export type GQLUserGlobalBookingRequestQueryResolvers<
     ParentType extends GQLResolversParentTypes['UserGlobalBookingRequestQuery'] = GQLResolversParentTypes['UserGlobalBookingRequestQuery'],
 > = {
     findMany?: Resolver<Maybe<Array<GQLResolversTypes['GlobalBookingRequest']>>, ParentType, ContextType>;
-    findOne?: Resolver<Maybe<GQLResolversTypes['GlobalBookingRequest']>, ParentType, ContextType>;
+    findOne?: Resolver<
+        Maybe<GQLResolversTypes['GlobalBookingRequest']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserGlobalBookingRequestQueryFindOneArgs, 'globalBookingRequestId'>
+    >;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
