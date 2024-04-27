@@ -209,5 +209,16 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
 
     if (!messageSuccess) logger.info('creating message did fail');
 
+    const formattedDateTime: string = moment(dateTime).format('MMMM Do YYYY, h:mm a');
+    runtime.emailAdapter
+        .sendToMany(
+            'Menu / Cook Booking Request',
+            runtime.notificationEmailAddresses,
+            `from ${user.firstName} ${user.lastName}`,
+            `A new Booking Request was received from <b>${user.firstName} ${user.lastName}</b><br/><br/><b>When:</b> ${formattedDateTime}<br/><b>Where:</b> ${location.text}<br/><b>Occasion:</b> ${occasion}<br/><br/><b>Adults:</b> ${adultParticipants}<br/><b>Children:</b> ${children}<br/><br/><b>Budget:</b><br/><b>Message:</b><br/>${message}<br/><br/><br/><b>Contact:</b><br/>Email Address: ${user.emailAddress}<br/>Phone Number: ${user.phoneNumber}`,
+        )
+        .then(() => undefined)
+        .catch(() => undefined);
+
     return { success: true, clientSecret, bookingRequestId };
 }

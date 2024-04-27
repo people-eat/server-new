@@ -13,6 +13,7 @@ export async function createOne({ dataSourceAdapter, logger, context, request }:
     const { index, mealId, cookId, courseId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
+
     const success: boolean = await dataSourceAdapter.mealOptionRepository.insertOne({
         courseId,
         cookId,

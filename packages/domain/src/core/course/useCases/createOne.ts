@@ -18,8 +18,6 @@ export async function createOne({ dataSourceAdapter, logger, context, request }:
 
     const courseId: NanoId = createNanoId();
 
-    // @todo: increment all courses with index >= the new index
-
     const success: boolean = await dataSourceAdapter.courseRepository.insertOne({
         courseId,
         cookId,
@@ -33,6 +31,21 @@ export async function createOne({ dataSourceAdapter, logger, context, request }:
             mealId,
         })),
     });
+
+    // last condition - ignore new course id, to avoid optimistic index updates for entries (before success)
+    if (success) {
+        await dataSourceAdapter.query(`
+            UPDATE
+                Courses
+            SET
+                Courses.index = Courses.index + 1
+            WHERE
+                Courses.cookId='${cookId}' AND
+                Courses.menuId='${menuId}' AND
+                Courses.index >= ${index} AND
+                Courses.courseId != '${courseId}'
+        `);
+    }
 
     return success;
 }
