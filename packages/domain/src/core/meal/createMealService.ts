@@ -3,6 +3,7 @@ import { type Authorization } from '../..';
 import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type MealType, type NanoId } from '../shared';
 import { type CreateOneMealRequest } from './CreateOneMealRequest';
+import { type DeleteMealResult } from './DeleteMealResult';
 import { type Meal } from './Meal';
 import { createOne } from './useCases/createOne';
 import { deleteOne } from './useCases/deleteOne';
@@ -20,7 +21,7 @@ export interface MealService {
         context: Authorization.Context,
         request: { cookId: NanoId; meal: CreateOneMealRequest } & { image?: ReadStream },
     ): Promise<boolean>;
-    deleteOne(context: Authorization.Context, request: { cookId: NanoId; mealId: NanoId }): Promise<boolean>;
+    deleteOne(context: Authorization.Context, request: { cookId: NanoId; mealId: NanoId }): Promise<DeleteMealResult>;
     updateTitle(context: Authorization.Context, request: { cookId: NanoId; mealId: NanoId; title: string }): Promise<boolean>;
     updateDescription(context: Authorization.Context, request: { cookId: NanoId; mealId: NanoId; description: string }): Promise<boolean>;
     updateImage(context: Authorization.Context, request: { cookId: NanoId; mealId: NanoId; image?: ReadStream }): Promise<boolean>;

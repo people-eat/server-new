@@ -1,4 +1,5 @@
 import { type Authorization, type Service } from '@people-eat/server-domain';
+import { type DeleteMealResult } from '../../../domain/src/core/meal/DeleteMealResult';
 import {
     type GQLCookMealMutation,
     type GQLCookMealMutationCreateOneArgs,
@@ -10,11 +11,12 @@ import {
     type GQLCookMealQuery,
     type GQLCookMealQueryFindManyArgs,
     type GQLCookMealQueryFindOneArgs,
+    type GQLDeleteMealResult,
     type GQLMeal,
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
 
-export function createMealResolvers(service: Service): Resolvers<'Meal' | 'CookMealMutation' | 'CookMealQuery'> {
+export function createMealResolvers(service: Service): Resolvers<'Meal' | 'CookMealMutation' | 'CookMealQuery' | 'DeleteMealResult'> {
     return {
         CookMealMutation: {
             createOne: async (
@@ -26,7 +28,7 @@ export function createMealResolvers(service: Service): Resolvers<'Meal' | 'CookM
                 { cookId }: GQLCookMealMutation,
                 { mealId }: GQLCookMealMutationDeleteOneArgs,
                 context: Authorization.Context,
-            ): Promise<boolean> => service.meal.deleteOne(context, { cookId, mealId }),
+            ): Promise<GQLDeleteMealResult> => service.meal.deleteOne(context, { cookId, mealId }),
             updateTitle: async (
                 { cookId }: GQLCookMealMutation,
                 request: GQLCookMealMutationUpdateTitleArgs,
@@ -66,5 +68,14 @@ export function createMealResolvers(service: Service): Resolvers<'Meal' | 'CookM
             ): Promise<GQLMeal | undefined> => service.meal.findOne(context, { cookId, mealId }),
         },
         Meal: {},
+        DeleteMealResult: {
+            __resolveType: (
+                obj: DeleteMealResult,
+            ): 'DeleteMealRequiredForMenuResult' | 'DeleteMealSuccessResult' | 'DeleteMealErrorResult' => {
+                if ('menuId' in obj) return 'DeleteMealRequiredForMenuResult';
+                if ('deletedAt' in obj) return 'DeleteMealSuccessResult';
+                return 'DeleteMealErrorResult';
+            },
+        },
     };
 }

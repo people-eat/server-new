@@ -5,6 +5,7 @@ export type InputMaybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -330,7 +331,7 @@ export type GQLCookMealMutation = {
     __typename?: 'CookMealMutation';
     cookId: Scalars['String'];
     createOne: Scalars['Boolean'];
-    deleteOne: Scalars['Boolean'];
+    deleteOne: GQLDeleteMealResult;
     updateDescription: Scalars['Boolean'];
     updateImage: Scalars['Boolean'];
     updateTitle: Scalars['Boolean'];
@@ -926,6 +927,7 @@ export type GQLCreateOneMenuRequest = {
     description: Scalars['String'];
     greetingFromKitchen?: InputMaybe<Scalars['String']>;
     isVisible: Scalars['Boolean'];
+    keyMealOptionCourseIndex?: InputMaybe<Scalars['UInt']>;
     keyMealOptionIndex?: InputMaybe<Scalars['UInt']>;
     kitchenId?: InputMaybe<Scalars['String']>;
     preparationTime: Scalars['UInt'];
@@ -1052,6 +1054,24 @@ export type GQLCustomerFeeUpdateQueryFindManyArgs = {
 
 export type GQLCustomerFeeUpdateQueryFindOneArgs = {
     adminId: Scalars['String'];
+};
+
+export type GQLDeleteMealErrorResult = {
+    __typename?: 'DeleteMealErrorResult';
+    failedAt: Scalars['DateTime'];
+};
+
+export type GQLDeleteMealRequiredForMenuResult = {
+    __typename?: 'DeleteMealRequiredForMenuResult';
+    menuId: Scalars['String'];
+    menuTitle: Scalars['String'];
+};
+
+export type GQLDeleteMealResult = GQLDeleteMealErrorResult | GQLDeleteMealRequiredForMenuResult | GQLDeleteMealSuccessResult;
+
+export type GQLDeleteMealSuccessResult = {
+    __typename?: 'DeleteMealSuccessResult';
+    deletedAt: Scalars['DateTime'];
 };
 
 export type GQLEmailAddressUpdate = {
@@ -2338,6 +2358,16 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
     info: GraphQLResolveInfo,
 ) => TResult | Promise<TResult>;
 
+/** Mapping of union types */
+export type GQLResolversUnionTypes = {
+    DeleteMealResult: GQLDeleteMealErrorResult | GQLDeleteMealRequiredForMenuResult | GQLDeleteMealSuccessResult;
+};
+
+/** Mapping of union parent types */
+export type GQLResolversUnionParentTypes = {
+    DeleteMealResult: GQLDeleteMealErrorResult | GQLDeleteMealRequiredForMenuResult | GQLDeleteMealSuccessResult;
+};
+
 /** Mapping between all available schema types and the resolvers types */
 export type GQLResolversTypes = {
     Address: ResolverTypeWrapper<GQLAddress>;
@@ -2368,7 +2398,7 @@ export type GQLResolversTypes = {
     CookCookVisitQuery: ResolverTypeWrapper<GQLCookCookVisitQuery>;
     CookFollowingQuery: ResolverTypeWrapper<GQLCookFollowingQuery>;
     CookGlobalBookingRequestQuery: ResolverTypeWrapper<GQLCookGlobalBookingRequestQuery>;
-    CookMealMutation: ResolverTypeWrapper<GQLCookMealMutation>;
+    CookMealMutation: ResolverTypeWrapper<Omit<GQLCookMealMutation, 'deleteOne'> & { deleteOne: GQLResolversTypes['DeleteMealResult'] }>;
     CookMealQuery: ResolverTypeWrapper<GQLCookMealQuery>;
     CookMenuCourseMealOptionMutation: ResolverTypeWrapper<GQLCookMenuCourseMealOptionMutation>;
     CookMenuCourseMealOptionQuery: ResolverTypeWrapper<GQLCookMenuCourseMealOptionQuery>;
@@ -2418,6 +2448,10 @@ export type GQLResolversTypes = {
     CustomerFeeUpdateQuery: ResolverTypeWrapper<GQLCustomerFeeUpdateQuery>;
     Date: ResolverTypeWrapper<Scalars['Date']>;
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
+    DeleteMealErrorResult: ResolverTypeWrapper<GQLDeleteMealErrorResult>;
+    DeleteMealRequiredForMenuResult: ResolverTypeWrapper<GQLDeleteMealRequiredForMenuResult>;
+    DeleteMealResult: ResolverTypeWrapper<GQLResolversUnionTypes['DeleteMealResult']>;
+    DeleteMealSuccessResult: ResolverTypeWrapper<GQLDeleteMealSuccessResult>;
     EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
     EmailAddressUpdate: ResolverTypeWrapper<GQLEmailAddressUpdate>;
     ExpireOneSessionRequest: GQLExpireOneSessionRequest;
@@ -2556,7 +2590,7 @@ export type GQLResolversParentTypes = {
     CookCookVisitQuery: GQLCookCookVisitQuery;
     CookFollowingQuery: GQLCookFollowingQuery;
     CookGlobalBookingRequestQuery: GQLCookGlobalBookingRequestQuery;
-    CookMealMutation: GQLCookMealMutation;
+    CookMealMutation: Omit<GQLCookMealMutation, 'deleteOne'> & { deleteOne: GQLResolversParentTypes['DeleteMealResult'] };
     CookMealQuery: GQLCookMealQuery;
     CookMenuCourseMealOptionMutation: GQLCookMenuCourseMealOptionMutation;
     CookMenuCourseMealOptionQuery: GQLCookMenuCourseMealOptionQuery;
@@ -2604,6 +2638,10 @@ export type GQLResolversParentTypes = {
     CustomerFeeUpdateQuery: GQLCustomerFeeUpdateQuery;
     Date: Scalars['Date'];
     DateTime: Scalars['DateTime'];
+    DeleteMealErrorResult: GQLDeleteMealErrorResult;
+    DeleteMealRequiredForMenuResult: GQLDeleteMealRequiredForMenuResult;
+    DeleteMealResult: GQLResolversUnionParentTypes['DeleteMealResult'];
+    DeleteMealSuccessResult: GQLDeleteMealSuccessResult;
     EmailAddress: Scalars['EmailAddress'];
     EmailAddressUpdate: GQLEmailAddressUpdate;
     ExpireOneSessionRequest: GQLExpireOneSessionRequest;
@@ -3079,7 +3117,12 @@ export type GQLCookMealMutationResolvers<
 > = {
     cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     createOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType, RequireFields<GQLCookMealMutationCreateOneArgs, 'meal'>>;
-    deleteOne?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType, RequireFields<GQLCookMealMutationDeleteOneArgs, 'mealId'>>;
+    deleteOne?: Resolver<
+        GQLResolversTypes['DeleteMealResult'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMealMutationDeleteOneArgs, 'mealId'>
+    >;
     updateDescription?: Resolver<
         GQLResolversTypes['Boolean'],
         ParentType,
@@ -3601,6 +3644,42 @@ export interface GQLDateScalarConfig extends GraphQLScalarTypeConfig<GQLResolver
 export interface GQLDateTimeScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['DateTime'], any> {
     name: 'DateTime';
 }
+
+export type GQLDeleteMealErrorResultResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['DeleteMealErrorResult'] = GQLResolversParentTypes['DeleteMealErrorResult'],
+> = {
+    failedAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLDeleteMealRequiredForMenuResultResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['DeleteMealRequiredForMenuResult'] = GQLResolversParentTypes['DeleteMealRequiredForMenuResult'],
+> = {
+    menuId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    menuTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLDeleteMealResultResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['DeleteMealResult'] = GQLResolversParentTypes['DeleteMealResult'],
+> = {
+    __resolveType: TypeResolveFn<
+        'DeleteMealErrorResult' | 'DeleteMealRequiredForMenuResult' | 'DeleteMealSuccessResult',
+        ParentType,
+        ContextType
+    >;
+};
+
+export type GQLDeleteMealSuccessResultResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['DeleteMealSuccessResult'] = GQLResolversParentTypes['DeleteMealSuccessResult'],
+> = {
+    deletedAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export interface GQLEmailAddressScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['EmailAddress'], any> {
     name: 'EmailAddress';
@@ -5123,6 +5202,10 @@ export type GQLResolvers<ContextType = any> = {
     CustomerFeeUpdateQuery?: GQLCustomerFeeUpdateQueryResolvers<ContextType>;
     Date?: GraphQLScalarType;
     DateTime?: GraphQLScalarType;
+    DeleteMealErrorResult?: GQLDeleteMealErrorResultResolvers<ContextType>;
+    DeleteMealRequiredForMenuResult?: GQLDeleteMealRequiredForMenuResultResolvers<ContextType>;
+    DeleteMealResult?: GQLDeleteMealResultResolvers<ContextType>;
+    DeleteMealSuccessResult?: GQLDeleteMealSuccessResultResolvers<ContextType>;
     EmailAddress?: GraphQLScalarType;
     EmailAddressUpdate?: GQLEmailAddressUpdateResolvers<ContextType>;
     Following?: GQLFollowingResolvers<ContextType>;

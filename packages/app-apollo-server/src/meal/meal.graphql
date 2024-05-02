@@ -24,10 +24,25 @@ input CreateOneMealRequest {
     type: MealType!
 }
 
+type DeleteMealSuccessResult {
+    deletedAt: DateTime!
+}
+
+type DeleteMealRequiredForMenuResult {
+    menuId: String!
+    menuTitle: String!
+}
+
+type DeleteMealErrorResult {
+    failedAt: DateTime!
+}
+
+union DeleteMealResult = DeleteMealSuccessResult | DeleteMealRequiredForMenuResult | DeleteMealErrorResult
+
 type CookMealMutation {
     cookId: String!
     createOne(meal: CreateOneMealRequest!, image: Upload): Boolean!
-    deleteOne(mealId: String!): Boolean!
+    deleteOne(mealId: String!): DeleteMealResult!
     updateTitle(mealId: String!, title: String!): Boolean!
     updateDescription(mealId: String!, description: String!): Boolean!
     updateImage(mealId: String!, image: Upload): Boolean!
