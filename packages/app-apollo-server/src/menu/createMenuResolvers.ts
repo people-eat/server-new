@@ -11,6 +11,7 @@ import {
     type GQLCookMenuMutationUpdateDescriptionArgs,
     type GQLCookMenuMutationUpdateGreetingFromKitchenArgs,
     type GQLCookMenuMutationUpdateIsVisibleArgs,
+    type GQLCookMenuMutationUpdateKeyMealOptionArgs,
     type GQLCookMenuMutationUpdateKitchenIdArgs,
     type GQLCookMenuMutationUpdatePreparationTimeArgs,
     type GQLCookMenuMutationUpdatePricePerAdultArgs,
@@ -67,6 +68,11 @@ export function createMenuResolvers(service: Service): Resolvers<'Menu' | 'CookM
                 context: Authorization.Context,
             ): Promise<boolean> => service.menu.deleteOne(context, { cookId, menuId }),
 
+            updateKeyMealOption: async (
+                { cookId }: GQLCookMenuMutation,
+                request: GQLCookMenuMutationUpdateKeyMealOptionArgs,
+                context: Authorization.Context,
+            ): Promise<boolean> => service.menu.updateKeyMealOption(context, { cookId, ...request }),
             updateIsVisible: async (
                 { cookId }: GQLCookMenuMutation,
                 request: GQLCookMenuMutationUpdateIsVisibleArgs,

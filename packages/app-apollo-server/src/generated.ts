@@ -466,6 +466,7 @@ export type GQLCookMenuMutation = {
     updateDescription: Scalars['Boolean'];
     updateGreetingFromKitchen: Scalars['Boolean'];
     updateIsVisible: Scalars['Boolean'];
+    updateKeyMealOption: Scalars['Boolean'];
     updateKitchenId: Scalars['Boolean'];
     updatePreparationTime: Scalars['Boolean'];
     updatePricePerAdult: Scalars['Boolean'];
@@ -512,6 +513,11 @@ export type GQLCookMenuMutationUpdateGreetingFromKitchenArgs = {
 
 export type GQLCookMenuMutationUpdateIsVisibleArgs = {
     isVisible: Scalars['Boolean'];
+    menuId: Scalars['String'];
+};
+
+export type GQLCookMenuMutationUpdateKeyMealOptionArgs = {
+    keyMealOption?: InputMaybe<GQLUpdateOneMenuKeyMealOptionRequest>;
     menuId: Scalars['String'];
 };
 
@@ -1713,6 +1719,11 @@ export type GQLTermsUpdateQueryFindOneArgs = {
     termsUpdateId: Scalars['String'];
 };
 
+export type GQLUpdateOneMenuKeyMealOptionRequest = {
+    courseId: Scalars['String'];
+    index: Scalars['UInt'];
+};
+
 export type GQLUser = {
     __typename?: 'User';
     acceptedPrivacyPolicy: Scalars['DateTime'];
@@ -2527,6 +2538,7 @@ export type GQLResolversTypes = {
     TermsUpdateQuery: ResolverTypeWrapper<GQLTermsUpdateQuery>;
     UInt: ResolverTypeWrapper<Scalars['UInt']>;
     UUID: ResolverTypeWrapper<Scalars['UUID']>;
+    UpdateOneMenuKeyMealOptionRequest: GQLUpdateOneMenuKeyMealOptionRequest;
     Upload: ResolverTypeWrapper<Scalars['Upload']>;
     Url: ResolverTypeWrapper<Scalars['Url']>;
     User: ResolverTypeWrapper<GQLUser>;
@@ -2710,6 +2722,7 @@ export type GQLResolversParentTypes = {
     TermsUpdateQuery: GQLTermsUpdateQuery;
     UInt: Scalars['UInt'];
     UUID: Scalars['UUID'];
+    UpdateOneMenuKeyMealOptionRequest: GQLUpdateOneMenuKeyMealOptionRequest;
     Upload: Scalars['Upload'];
     Url: Scalars['Url'];
     User: GQLUser;
@@ -3300,6 +3313,12 @@ export type GQLCookMenuMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLCookMenuMutationUpdateIsVisibleArgs, 'isVisible' | 'menuId'>
+    >;
+    updateKeyMealOption?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookMenuMutationUpdateKeyMealOptionArgs, 'menuId'>
     >;
     updateKitchenId?: Resolver<
         GQLResolversTypes['Boolean'],

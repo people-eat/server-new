@@ -15,6 +15,7 @@ import { updateCurrencyCode } from './useCases/updateCurrencyCode';
 import { updateDescription } from './useCases/updateDescription';
 import { updateGreetingFromKitchen } from './useCases/updateGreetingFromKitchen';
 import { updateIsVisible } from './useCases/updateIsVisible';
+import { updateKeyMealOption } from './useCases/updateKeyMealOption';
 import { updateKitchenId } from './useCases/updateKitchenId';
 import { updatePreparationTime } from './useCases/updatePreparationTime';
 import { updatePricePerAdult } from './useCases/updatePricePerAdult';
@@ -30,6 +31,10 @@ export interface MenuService {
     findImageUrls(context: Authorization.Context, request: { menuId: NanoId }): Promise<string[]>;
     findKeyMealOptionImageUrl(context: Authorization.Context, request: { menuId: NanoId }): Promise<string | undefined>;
 
+    updateKeyMealOption(
+        context: Authorization.Context,
+        request: { cookId: NanoId; menuId: NanoId; keyMealOption?: { courseId: NanoId; index: number } },
+    ): Promise<boolean>;
     updateIsVisible(context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId; isVisible: boolean }): Promise<boolean>;
     updateTitle(context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId; title: string }): Promise<boolean>;
     updateDescription(context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId; description: string }): Promise<boolean>;
@@ -78,6 +83,10 @@ export function createMenuService({ dataSourceAdapter, logger }: Runtime): MenuS
         findKeyMealOptionImageUrl: (context: Authorization.Context, request: { menuId: NanoId }) =>
             findKeyMealOptionImageUrl({ dataSourceAdapter, logger, context, request }),
 
+        updateKeyMealOption: (
+            context: Authorization.Context,
+            request: { cookId: NanoId; menuId: NanoId; keyMealOption: { courseId: NanoId; index: number } },
+        ) => updateKeyMealOption({ dataSourceAdapter, logger, context, request }),
         updateIsVisible: (context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId; isVisible: boolean }) =>
             updateIsVisible({ dataSourceAdapter, logger, context, request }),
         updateTitle: (context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId; title: string }) =>

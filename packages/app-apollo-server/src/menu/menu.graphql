@@ -54,11 +54,17 @@ input CreateOneMenuRequest {
     categoryIds: [String!]
 }
 
+input UpdateOneMenuKeyMealOptionRequest {
+    courseId: String!
+    index: UInt!
+}
+
 type CookMenuMutation {
     cookId: String!
     createOne(menu: CreateOneMenuRequest!): Boolean!
     deleteOne(menuId: String!): Boolean!
 
+    updateKeyMealOption(menuId: String!, keyMealOption: UpdateOneMenuKeyMealOptionRequest): Boolean!
     updateIsVisible(menuId: String!, isVisible: Boolean!): Boolean!
     updateTitle(menuId: String!, title: String!): Boolean!
     updateDescription(menuId: String!, description: String!): Boolean!
