@@ -1,14 +1,14 @@
 import { type Authorization, type DataSource, type Logger } from '../../..';
 import { type NanoId } from '../../shared';
 
-export interface FindOneMenuInput {
+export interface FindOneMenuImageUrlsInput {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
     context: Authorization.Context;
     request: { menuId: NanoId };
 }
 
-export async function findImageUrls({ dataSourceAdapter, request }: FindOneMenuInput): Promise<string[]> {
+export async function findImageUrls({ dataSourceAdapter, request }: FindOneMenuImageUrlsInput): Promise<string[]> {
     const { menuId } = request;
 
     const imageUrls: { imageUrl: string }[] = await dataSourceAdapter.query(`

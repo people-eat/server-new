@@ -21,6 +21,7 @@ type Menu {
     courses: [Course!]!
     courseCount: UInt!
 
+    imageUrl: Url
     imageUrls: [Url!]!
 }
 
@@ -35,6 +36,8 @@ type CookQuery {
 }
 
 input CreateOneMenuRequest {
+    keyMealOptionCourseIndex: UInt
+    keyMealOptionIndex: UInt
     isVisible: Boolean!
     title: String!
     description: String!

@@ -1,3 +1,4 @@
+import { type DBMenu } from './entities';
 import { type DBAddress } from './entities/Address';
 import { type DBBookingRequest } from './entities/BookingRequest';
 import { type DBCook } from './entities/Cook';
@@ -24,7 +25,6 @@ import {
     type DBLog,
     type DBMeal,
     type DBMealOption,
-    type DBMenu,
     type DBMenuCategory,
     type DBMenuVisit,
     type DBNotification,

@@ -1,5 +1,5 @@
 import { Authorization, type DataSource, type Logger } from '../../..';
-import { type DBCourse } from '../../../data-source';
+import { type DBCourse, type DBMealOption } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type CreateOneCourseRequest } from '../../course';
 import { type CreateOneMealOptionRequest } from '../../meal-option';
@@ -17,6 +17,8 @@ export async function createOne({ dataSourceAdapter, logger, context, request }:
     const {
         cookId,
         isVisible,
+        keyMealOptionCourseIndex,
+        keyMealOptionIndex,
         title,
         description,
         preparationTime,
@@ -50,23 +52,45 @@ export async function createOne({ dataSourceAdapter, logger, context, request }:
         pricePerChild,
         currencyCode,
         createdAt: new Date(),
-        courses: courses?.map(({ index: courseIndex, title: courseTitle, mealOptions }: CreateOneCourseRequest): DBCourse => {
-            const courseId: NanoId = createNanoId();
-            return {
-                courseId,
-                menuId,
-                cookId,
-                index: courseIndex,
-                title: courseTitle,
-                mealOptions: mealOptions?.map(({ index: mealOptionIndex, mealId }: CreateOneMealOptionRequest) => ({
-                    courseId,
-                    cookId,
-                    index: mealOptionIndex,
-                    mealId,
-                })),
-            };
-        }),
     });
+
+    const dbMealOptions: DBMealOption[] = [];
+
+    let keyMealOptionCourseId: string | undefined;
+
+    if (courses) {
+        await dataSourceAdapter.courseRepository.insertMany(
+            courses.map(({ index: courseIndex, title: courseTitle, mealOptions }: CreateOneCourseRequest): DBCourse => {
+                const courseId: NanoId = createNanoId();
+
+                if (keyMealOptionCourseIndex === courseIndex) keyMealOptionCourseId = courseId;
+
+                if (mealOptions) {
+                    dbMealOptions.push(
+                        ...mealOptions.map(({ index: mealOptionIndex, mealId }: CreateOneMealOptionRequest) => ({
+                            courseId,
+                            cookId,
+                            index: mealOptionIndex,
+                            mealId,
+                        })),
+                    );
+                }
+
+                return {
+                    courseId,
+                    menuId,
+                    cookId,
+                    index: courseIndex,
+                    title: courseTitle,
+                };
+            }),
+        );
+    }
+
+    if (dbMealOptions.length > 0) await dataSourceAdapter.mealOptionRepository.insertMany(dbMealOptions);
+
+    if (keyMealOptionCourseId !== undefined && keyMealOptionIndex !== undefined)
+        await dataSourceAdapter.menuRepository.updateOne({ menuId }, { keyMealOptionCourseId, keyMealOptionIndex });
 
     if (!categoryIds) return menuCreationSuccess;
 

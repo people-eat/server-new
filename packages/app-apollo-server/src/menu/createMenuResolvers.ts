@@ -46,6 +46,8 @@ export function createMenuResolvers(service: Service): Resolvers<'Menu' | 'CookM
             },
             imageUrls: async ({ menuId }: GQLMenu, _input: unknown, context: Authorization.Context): Promise<string[]> =>
                 service.menu.findImageUrls(context, { menuId }),
+            imageUrl: async ({ menuId }: GQLMenu, _input: unknown, context: Authorization.Context): Promise<string | undefined> =>
+                service.menu.findKeyMealOptionImageUrl(context, { menuId }),
             courses: async ({ cookId, menuId }: GQLMenu, _input: unknown, context: Authorization.Context): Promise<GQLCourse[]> =>
                 service.course.findAll(context, { cookId, menuId }) as any,
             courseCount: async ({ cookId, menuId }: GQLMenu, _input: unknown, context: Authorization.Context): Promise<number> => {

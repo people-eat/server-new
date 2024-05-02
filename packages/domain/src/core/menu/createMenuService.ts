@@ -6,6 +6,7 @@ import { type Menu } from './Menu';
 import { createOne } from './useCases/createOne';
 import { deleteOne } from './useCases/deleteOne';
 import { findImageUrls } from './useCases/findImageUrls';
+import { findKeyMealOptionImageUrl } from './useCases/findKeyMealOptionImageUrl';
 import { findMany } from './useCases/findMany';
 import { findOne } from './useCases/findOne';
 import { updateBasePrice } from './useCases/updateBasePrice';
@@ -27,6 +28,7 @@ export interface MenuService {
     deleteOne(context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId }): Promise<boolean>;
 
     findImageUrls(context: Authorization.Context, request: { menuId: NanoId }): Promise<string[]>;
+    findKeyMealOptionImageUrl(context: Authorization.Context, request: { menuId: NanoId }): Promise<string | undefined>;
 
     updateIsVisible(context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId; isVisible: boolean }): Promise<boolean>;
     updateTitle(context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId; title: string }): Promise<boolean>;
@@ -72,6 +74,9 @@ export function createMenuService({ dataSourceAdapter, logger }: Runtime): MenuS
 
         findImageUrls: (context: Authorization.Context, request: { menuId: NanoId }) =>
             findImageUrls({ dataSourceAdapter, logger, context, request }),
+
+        findKeyMealOptionImageUrl: (context: Authorization.Context, request: { menuId: NanoId }) =>
+            findKeyMealOptionImageUrl({ dataSourceAdapter, logger, context, request }),
 
         updateIsVisible: (context: Authorization.Context, request: { cookId: NanoId; menuId: NanoId; isVisible: boolean }) =>
             updateIsVisible({ dataSourceAdapter, logger, context, request }),

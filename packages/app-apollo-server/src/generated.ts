@@ -926,6 +926,7 @@ export type GQLCreateOneMenuRequest = {
     description: Scalars['String'];
     greetingFromKitchen?: InputMaybe<Scalars['String']>;
     isVisible: Scalars['Boolean'];
+    keyMealOptionIndex?: InputMaybe<Scalars['UInt']>;
     kitchenId?: InputMaybe<Scalars['String']>;
     preparationTime: Scalars['UInt'];
     pricePerAdult: Scalars['UInt'];
@@ -1226,6 +1227,7 @@ export type GQLMenu = {
     currencyCode: GQLCurrencyCode;
     description: Scalars['String'];
     greetingFromKitchen?: Maybe<Scalars['String']>;
+    imageUrl?: Maybe<Scalars['Url']>;
     imageUrls: Array<Scalars['Url']>;
     isVisible: Scalars['Boolean'];
     kitchen?: Maybe<GQLKitchen>;
@@ -3773,6 +3775,7 @@ export type GQLMenuResolvers<ContextType = any, ParentType extends GQLResolversP
     currencyCode?: Resolver<GQLResolversTypes['CurrencyCode'], ParentType, ContextType>;
     description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     greetingFromKitchen?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    imageUrl?: Resolver<Maybe<GQLResolversTypes['Url']>, ParentType, ContextType>;
     imageUrls?: Resolver<Array<GQLResolversTypes['Url']>, ParentType, ContextType>;
     isVisible?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     kitchen?: Resolver<Maybe<GQLResolversTypes['Kitchen']>, ParentType, ContextType>;

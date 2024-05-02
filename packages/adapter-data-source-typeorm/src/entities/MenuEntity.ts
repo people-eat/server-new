@@ -1,8 +1,10 @@
 import { Shared, type DataSource } from '@people-eat/server-domain';
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
+import { type NanoId } from '../../../domain/src/core/shared';
 import { CookEntity } from './CookEntity';
 import { CourseEntity } from './CourseEntity';
 import { KitchenEntity } from './KitchenEntity';
+import { MealOptionEntity } from './MealOptionEntity';
 import { MenuCategoryEntity } from './MenuCategoryEntity';
 
 @Entity('Menus')
@@ -13,6 +15,12 @@ export class MenuEntity implements DataSource.DBMenu {
 
     @Column('char', { length: 20 })
     cookId!: string;
+
+    @Column('char', { length: 20, nullable: true })
+    keyMealOptionCourseId?: NanoId;
+
+    @Column('tinyint', { unsigned: true, nullable: true })
+    keyMealOptionIndex?: number;
 
     @Column('bool')
     isVisible!: boolean;
@@ -72,4 +80,11 @@ export class MenuEntity implements DataSource.DBMenu {
 
     @OneToMany(() => MenuCategoryEntity, (menuCategory: MenuCategoryEntity) => menuCategory.menu, { cascade: true })
     menuCategories?: MenuCategoryEntity[];
+
+    @OneToOne(() => MealOptionEntity, { onDelete: 'SET NULL' })
+    @JoinColumn([
+        { name: 'keyMealOptionCourseId', referencedColumnName: 'courseId' },
+        { name: 'keyMealOptionIndex', referencedColumnName: 'index' },
+    ])
+    keyMealOption?: MealOptionEntity[];
 }
