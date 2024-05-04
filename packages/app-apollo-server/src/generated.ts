@@ -1477,7 +1477,7 @@ export type GQLPublicMenu = {
     currencyCode: GQLCurrencyCode;
     description: Scalars['String'];
     greetingFromKitchen?: Maybe<Scalars['String']>;
-    imageUrls: Array<Scalars['Url']>;
+    imageUrl?: Maybe<Scalars['Url']>;
     kitchen?: Maybe<GQLKitchen>;
     menuId: Scalars['String'];
     preparationTime: Scalars['UInt'];
@@ -4151,7 +4151,7 @@ export type GQLPublicMenuResolvers<
     currencyCode?: Resolver<GQLResolversTypes['CurrencyCode'], ParentType, ContextType>;
     description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     greetingFromKitchen?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-    imageUrls?: Resolver<Array<GQLResolversTypes['Url']>, ParentType, ContextType>;
+    imageUrl?: Resolver<Maybe<GQLResolversTypes['Url']>, ParentType, ContextType>;
     kitchen?: Resolver<Maybe<GQLResolversTypes['Kitchen']>, ParentType, ContextType>;
     menuId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     preparationTime?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;

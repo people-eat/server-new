@@ -19,7 +19,7 @@ type PublicMenu {
     courses: [Course!]!
     courseCount: UInt!
 
-    imageUrls: [Url!]!
+    imageUrl: Url
 }
 
 input FindManyPublicMenusRequest {

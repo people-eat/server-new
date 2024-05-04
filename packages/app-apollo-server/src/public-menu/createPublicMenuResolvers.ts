@@ -11,8 +11,8 @@ import { type Resolvers } from '../Resolvers';
 export function createPublicMenuResolvers(service: Service): Resolvers<'PublicMenu' | 'PublicMenuQuery'> {
     return {
         PublicMenu: {
-            imageUrls: async ({ menuId }: GQLPublicMenu, _input: unknown, context: Authorization.Context): Promise<string[]> =>
-                service.menu.findImageUrls(context, { menuId }),
+            imageUrl: async ({ menuId }: GQLPublicMenu, _input: unknown, context: Authorization.Context): Promise<string | undefined> =>
+                service.menu.findKeyMealOptionImageUrl(context, { menuId }),
             courses: async ({ menuId }: GQLPublicMenu, _input: unknown, context: Authorization.Context): Promise<GQLCourse[]> =>
                 service.publicMenu.findAllCourses(context, { menuId }) as any,
             courseCount: async ({ menuId }: GQLPublicMenu, _input: unknown, context: Authorization.Context): Promise<number> => {
