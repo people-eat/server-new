@@ -17,7 +17,14 @@ export async function findKeyMealOptionImageUrl({
 
     const menu: DBMenu | undefined = await dataSourceAdapter.menuRepository.findOne({ menuId });
 
-    if (!menu || menu.keyMealOptionCourseId === undefined || menu.keyMealOptionIndex === undefined) return undefined;
+    if (
+        !menu ||
+        menu.keyMealOptionCourseId === undefined ||
+        menu.keyMealOptionIndex === undefined ||
+        menu.keyMealOptionCourseId === null ||
+        menu.keyMealOptionIndex === null
+    )
+        return undefined;
 
     const keyMealOption: DBMealOption | undefined = await dataSourceAdapter.mealOptionRepository.findOne({
         courseId: menu.keyMealOptionCourseId,
