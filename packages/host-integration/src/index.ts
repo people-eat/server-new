@@ -58,7 +58,7 @@ async function bootstrap(): Promise<void> {
         stripeSecretKey: environmentVariables.payment.stripeSecretKey,
         stripeConnectedAccountOnboarding: {
             refreshUrl: 'https://integration.people-eat.com/chef-profile',
-            returnUrl: 'https://integration.people-eat.com/wallet-onboarding-successful',
+            returnUrl: 'https://integration.people-eat.com/chef-profile?update-wallet-status',
         },
     });
 
