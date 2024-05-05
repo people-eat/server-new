@@ -52,7 +52,7 @@ export async function acceptOneByUserId({ runtime, context, request }: AcceptOne
     const chatMessage: ChatMessage = {
         chatMessageId: createNanoId(),
         bookingRequestId,
-        message: 'Accepted the Booking Request',
+        message: `Kunde hat die Buchungsanfrage akzeptiert`,
         generated: true,
         createdBy: userId,
         createdAt: new Date(),

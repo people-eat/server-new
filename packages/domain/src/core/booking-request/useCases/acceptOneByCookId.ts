@@ -60,7 +60,7 @@ export async function acceptOneByCookId({ runtime, context, request }: AcceptOne
     const chatMessage: ChatMessage = {
         chatMessageId: createNanoId(),
         bookingRequestId,
-        message: 'Accepted the Booking Request',
+        message: `${cookUser.firstName} hat die Buchungsanfrage akzeptiert`,
         generated: true,
         createdBy: cookId,
         createdAt: new Date(),
