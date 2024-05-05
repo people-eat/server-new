@@ -165,6 +165,7 @@ export type GQLChatMessage = {
     chatMessageId: Scalars['String'];
     createdAt: Scalars['DateTime'];
     createdBy: Scalars['String'];
+    generated: Scalars['Boolean'];
     message: Scalars['String'];
 };
 
@@ -2924,6 +2925,7 @@ export type GQLChatMessageResolvers<
     chatMessageId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     createdBy?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    generated?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

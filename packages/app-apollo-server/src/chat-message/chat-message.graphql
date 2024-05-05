@@ -2,6 +2,7 @@ type ChatMessage {
     chatMessageId: String!
     bookingRequestId: String!
     message: String!
+    generated: Boolean!
     createdBy: String!
     createdAt: DateTime!
 }
