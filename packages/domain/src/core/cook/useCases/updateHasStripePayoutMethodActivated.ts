@@ -12,7 +12,7 @@ export interface UpdateCookMinimumPriceInput {
 }
 
 export async function updateHasStripePayoutMethodActivated({
-    runtime: { dataSourceAdapter, logger, paymentAdapter },
+    runtime: { dataSourceAdapter, logger, paymentAdapter, emailAdapter, notificationEmailAddresses },
     context,
     request,
 }: UpdateCookMinimumPriceInput): Promise<boolean> {
@@ -26,7 +26,18 @@ export async function updateHasStripePayoutMethodActivated({
 
     const [paymentMethod] = cook.payoutMethods ?? [];
 
-    if (!paymentMethod) return false;
+    if (!paymentMethod) {
+        emailAdapter
+            .sendToMany(
+                'PeopleEat Logs',
+                notificationEmailAddresses,
+                'updateHasStripePayoutMethodActivated error',
+                `Koch mit id ${cook.cookId} hat versucht payout Methode zu aktivieren, ohne payout Methoden zu haben`,
+            )
+            .then(() => undefined)
+            .catch(() => undefined);
+        return false;
+    }
 
     const hasStripePayoutMethodActivated: boolean = await paymentAdapter.STRIPE.isConnectedAccountEnabled({
         accountId: paymentMethod.stripeAccountId,
@@ -36,6 +47,18 @@ export async function updateHasStripePayoutMethodActivated({
         { cookId },
         { payoutMethods: [{ ...paymentMethod, active: hasStripePayoutMethodActivated }] },
     );
+
+    if (!success) {
+        emailAdapter
+            .sendToMany(
+                'PeopleEat Logs',
+                notificationEmailAddresses,
+                'updateHasStripePayoutMethodActivated error',
+                `Koch mit id ${cook.cookId} hat versucht payout Methode zu aktivieren, Fehler bei strip Anfrage`,
+            )
+            .then(() => undefined)
+            .catch(() => undefined);
+    }
 
     return success;
 }
