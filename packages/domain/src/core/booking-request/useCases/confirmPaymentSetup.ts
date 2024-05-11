@@ -137,5 +137,17 @@ export async function confirmPaymentSetup({ runtime, context, request }: Confirm
         if (!customerEmailSuccess) logger.info('sending email failed');
     }
 
+    const formattedDateTime: string = moment(dateTime).format('MMMM Do YYYY, h:mm a');
+
+    runtime.emailAdapter
+        .sendToMany(
+            'Menu / Cook Booking Request',
+            runtime.notificationEmailAddresses,
+            `from ${user.firstName} ${user.lastName}`,
+            `A new Booking Request was received from <b>${user.firstName} ${user.lastName}</b><br/><br/><b>When:</b> ${formattedDateTime}<br/><b>Where:</b> ${locationText}<br/><b>Occasion:</b> ${occasion}<br/><br/><b>Adults:</b> ${adultParticipants}<br/><b>Children:</b> ${children}<br/><br/><b>Budget:</b><br/><b>Message:</b><br/>${chatMessage}<br/><br/><br/><b>Contact:</b><br/>Email Address: ${user.emailAddress}<br/>Phone Number: ${user.phoneNumber}`,
+        )
+        .then(() => undefined)
+        .catch(() => undefined);
+
     return true;
 }
