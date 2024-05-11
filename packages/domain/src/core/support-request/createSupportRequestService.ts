@@ -13,12 +13,14 @@ export interface SupportRequestService {
     createOne(context: Authorization.Context, request: CreateOneSupportRequestRequest & { userId: NanoId }): Promise<boolean>;
 }
 
-export function createSupportRequestService({ dataSourceAdapter, logger }: Runtime): SupportRequestService {
+export function createSupportRequestService(runtime: Runtime): SupportRequestService {
+    const { dataSourceAdapter, logger } = runtime;
+
     return {
         findOne: (context: Authorization.Context, request: { supportRequestId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),
         findMany: (context: Authorization.Context, request: FindManyRequest) => findMany({ dataSourceAdapter, logger, context, request }),
         createOne: (context: Authorization.Context, request: CreateOneSupportRequestRequest & { userId: NanoId }) =>
-            createOne({ dataSourceAdapter, logger, context, request }),
+            createOne({ runtime, context, request }),
     };
 }
