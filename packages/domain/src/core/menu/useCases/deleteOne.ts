@@ -13,6 +13,12 @@ export async function deleteOne({ dataSourceAdapter, logger, context, request }:
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
+    // remove key meal option to solve foreign key violation
+    await dataSourceAdapter.menuRepository.updateOne(
+        { menuId, cookId },
+        { keyMealOptionCourseId: undefined, keyMealOptionIndex: undefined },
+    );
+
     const success: boolean = await dataSourceAdapter.menuRepository.deleteOne({ menuId, cookId });
 
     return success;
