@@ -32,7 +32,7 @@ async function bootstrap(): Promise<void> {
             databaseUser: environmentVariables.database.user,
         },
         logger,
-        reset: true,
+        reset: false,
     });
 
     const emailAdapter: Email.Adapter = createEmailAdapter({
@@ -57,8 +57,8 @@ async function bootstrap(): Promise<void> {
         logger,
         stripeSecretKey: environmentVariables.payment.stripeSecretKey,
         stripeConnectedAccountOnboarding: {
-            refreshUrl: 'https://integration.people-eat.com/chef-profile',
-            returnUrl: 'https://integration.people-eat.com/chef-profile?update-wallet-status',
+            refreshUrl: 'https://integration.people-eat.com/profile',
+            returnUrl: 'https://integration.people-eat.com/profile?update-wallet-status',
         },
     });
 
@@ -79,7 +79,7 @@ async function bootstrap(): Promise<void> {
             },
             asyncIterator: (key: string): AsyncIterator<unknown> => pubsub.asyncIterator([key]),
         },
-        notificationEmailAddresses: ['integration-bookings@people-eat.com', 'yilmaz.cem.2603@gmail.com'],
+        notificationEmailAddresses: ['contact@people-eat.com', 'yilmaz.cem.2603@gmail.com'],
     });
 
     logger.setService(service);

@@ -35,9 +35,9 @@ export function cookBookingRequestCookConfirmation({
     bookingRequest,
     chatMessage,
 }: CookBookingRequestCookConfirmationInput): string {
-    const cookProfileBookingRequestsUrl: string = webAppUrl + `/chef-profile/bookings/${bookingRequest.bookingRequestId}`;
+    const cookProfileBookingRequestsUrl: string = webAppUrl + `/profile/bookings/r/${bookingRequest.bookingRequestId}`;
 
-    const formatPrice = (amount: number, currencyCode: string): string => (amount / 100).toFixed(2) + ' ' + currencyCode;
+    const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
 
     return `
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
