@@ -1,4 +1,4 @@
-import { type DBGiftCardPromoCode, type DBMenu } from './entities';
+import { type DBGiftCardPromoCode, type DBMenu, type DBSession } from './entities';
 import { type DBAddress } from './entities/Address';
 import { type DBBookingRequest } from './entities/BookingRequest';
 import { type DBCook } from './entities/Cook';
@@ -20,6 +20,7 @@ import {
     type DBCourse,
     type DBCustomerFeeUpdate,
     type DBFavoriteCook,
+    type DBFeatureToggle,
     type DBGiftCard,
     type DBKitchen,
     type DBLanguage,
@@ -33,7 +34,6 @@ import {
     type DBNotificationConfiguration,
     type DBPrivacyPolicyUpdate,
     type DBSearchRequest,
-    type DBSession,
     type DBSupportRequest,
     type DBTermsUpdate,
     type DBTimeTriggeredTask,
@@ -63,6 +63,7 @@ export interface Adapter {
     cookSpecificFeeRepository: Repository<DBCookSpecificFee>;
     customerFeeUpdateRepository: Repository<DBCustomerFeeUpdate>;
     searchRequestRepository: Repository<DBSearchRequest>;
+    featureToggleRepository: Repository<DBFeatureToggle>;
 
     cookRepository: Repository<DBCook>;
     languageRepository: Repository<DBLanguage>;

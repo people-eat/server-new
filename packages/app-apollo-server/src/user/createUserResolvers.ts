@@ -1,10 +1,12 @@
 import { type Address, type Admin, type Authorization, type Cook, type Service } from '@people-eat/server-domain';
 import {
+    type GQLCreateOneUserResult,
     type GQLFollowing,
     type GQLUser,
     type GQLUserMutation,
     type GQLUserMutationAddressesArgs,
     type GQLUserMutationBookingRequestsArgs,
+    type GQLUserMutationCreateOneArgs,
     type GQLUserMutationCreateOneByEmailAddressArgs,
     type GQLUserMutationCreateOneByIdentityProviderArgs,
     type GQLUserMutationCreateOneByPhoneNumberArgs,
@@ -61,6 +63,16 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
                 context: Authorization.Context,
             ): Promise<boolean> =>
                 service.user.createOneByEmailAddress(context, {
+                    ...request,
+                    profilePicture: profilePicture && (await profilePicture).createReadStream(),
+                }),
+
+            createOne: async (
+                _parent: GQLUserMutation,
+                { request, profilePicture }: GQLUserMutationCreateOneArgs,
+                context: Authorization.Context,
+            ): Promise<GQLCreateOneUserResult> =>
+                service.user.createOne(context, {
                     ...request,
                     profilePicture: profilePicture && (await profilePicture).createReadStream(),
                 }),
@@ -122,13 +134,13 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
                 context: Authorization.Context,
             ): Promise<GQLUser | undefined> => service.user.findOneByUserId(context, { userId }) as any,
 
-            me: async (_parent: GQLUserQuery, _input: unknown, context: Authorization.Context): Promise<GQLUser | undefined> => {
-                const { userId } = context;
+            // me: async (_parent: GQLUserQuery, _input: unknown, context: Authorization.Context): Promise<GQLUser | undefined> => {
+            //     const { userId } = context;
 
-                if (!userId) return undefined;
+            //     if (!userId) return undefined;
 
-                return service.user.findOneByUserId(context, { userId }) as any;
-            },
+            //     return service.user.findOneByUserId(context, { userId }) as any;
+            // },
 
             phoneNumberUpdate: (_parent: GQLUserQuery, { userId }: GQLUserQueryPhoneNumberUpdateArgs) => ({ userId } as any),
             emailAddressUpdate: (_parent: GQLUserQuery, { userId }: GQLUserQueryEmailAddressUpdateArgs) => ({ userId } as any),

@@ -12,6 +12,7 @@ import { type CouponCodeService } from './coupon-code/createCouponCodeService';
 import { type CourseService } from './course/createCourseService';
 import { type EmailAddressUpdateService } from './email-address-update/createEmailAddressUpdateService';
 import { type FavoriteCookService } from './favorite-cook/createFavoriteCookService';
+import { type FeatureToggleService } from './feature-toggle/createFeatureToggleService';
 import { type GiftCardPromoCodeService } from './gift-card-promo-code/createGiftCardPromoCodeService';
 import { type GiftCardService } from './gift-card/createGiftCardService';
 import { type GlobalBookingRequestService } from './global-booking-request/createGlobalBookingRequestService';
@@ -23,6 +24,7 @@ import { type MealService } from './meal/createMealService';
 import { type MenuCategoryService } from './menu-category/createMenuCategoryService';
 import { type MenuVisitService } from './menu-visit/createMenuVisitService';
 import { type MenuService } from './menu/createMenuService';
+import { type MetricService } from './metric/metric';
 import { type NewsletterSubscriptionService } from './newsletter-subscription/createNewsletterSubscriptionService';
 import { type OneTimeAccessTokenService } from './one-time-access-token/createOneTimeAccessTokenService';
 import { type PhoneNumberUpdateService } from './phone-number-update/createPhoneNumberUpdateService';
@@ -81,4 +83,7 @@ export interface Service {
     newsletterSubscription: NewsletterSubscriptionService;
     menuVisitService: MenuVisitService;
     cookVisitService: CookVisitService;
+    featureToggle: FeatureToggleService;
+
+    adminMetricService: MetricService;
 }

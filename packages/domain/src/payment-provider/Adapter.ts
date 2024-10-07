@@ -1,16 +1,23 @@
+import { type User } from '../core';
 import { type CurrencyCode, type NanoId, type PaymentProvider, type Price } from '../core/shared';
+
+export interface CreateSetupIntentInput {
+    user: Pick<User, 'userId' | 'firstName' | 'lastName'>;
+}
 
 export interface CreatePaymentIntentInputFromSetupIntentInput {
     currencyCode: CurrencyCode;
     pullAmount: number;
     payoutAmount: number;
-    userId: NanoId;
     setupIntentId: string;
     destinationAccountId: string;
+    bookingRequestId: NanoId;
+    user: Pick<User, 'userId' | 'firstName' | 'lastName'>;
 }
 
 export interface CreateConnectedAccountInput {
     emailAddress: string;
+    cookId: NanoId;
 }
 
 export interface CreateConnectedAccountOnboardingUrlInput {
@@ -38,7 +45,9 @@ export interface CreatePaymentIntentInput {
 export type Adapter = Record<
     PaymentProvider,
     {
-        createSetupIntent: () => Promise<{ setupIntentId: string; clientSecret: string } | undefined>;
+        createSetupIntent: (
+            input: CreateSetupIntentInput,
+        ) => Promise<{ customerId: string; setupIntentId: string; clientSecret: string } | undefined>;
         createPaymentIntentFromSetupIntent: (input: CreatePaymentIntentInputFromSetupIntentInput) => Promise<boolean>;
         createConnectedAccount(input: CreateConnectedAccountInput): Promise<{ accountId: string } | undefined>;
         createConnectedAccountOnboardingUrl(input: CreateConnectedAccountOnboardingUrlInput): Promise<{ url: string } | undefined>;

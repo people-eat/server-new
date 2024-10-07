@@ -66,7 +66,7 @@ async function bootstrap(): Promise<void> {
         stripeConnectedAccountOnboarding: {
             refreshUrl: 'https://people-eat.com/profile',
             returnToProfileUrl: 'https://people-eat.com/profile?update-wallet-status',
-            returnToBookingUrl: 'https://people-eat.com/profile/bookings/:bookingRequestId?update-wallet-status',
+            returnToBookingUrl: 'https://people-eat.com/profile/bookings/r/:bookingRequestId?update-wallet-status',
         },
     });
 
@@ -106,6 +106,8 @@ async function bootstrap(): Promise<void> {
         service,
         stripePublishableKey: environmentVariables.payment.stripePublishableKey,
     });
+
+    console.log('called');
 
     logger.info(`🚀 Apollo server started at ${path}`);
 }

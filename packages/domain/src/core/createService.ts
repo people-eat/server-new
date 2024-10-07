@@ -14,6 +14,7 @@ import { createCouponCodeService } from './coupon-code/createCouponCodeService';
 import { createCourseService } from './course/createCourseService';
 import { createEmailAddressUpdateService } from './email-address-update/createEmailAddressUpdateService';
 import { createFavoriteCookService } from './favorite-cook/createFavoriteCookService';
+import { createFeatureToggleService } from './feature-toggle/createFeatureToggleService';
 import { createGiftCardPromoCodeService } from './gift-card-promo-code/createGiftCardPromoCodeService';
 import { createGiftCardService } from './gift-card/createGiftCardService';
 import { createGlobalBookingRequestService } from './global-booking-request/createGlobalBookingRequestService';
@@ -25,6 +26,7 @@ import { createMealService } from './meal/createMealService';
 import { createMenuCategoryService } from './menu-category/createMenuCategoryService';
 import { createMenuVisitService } from './menu-visit/createMenuVisitService';
 import { createMenuService } from './menu/createMenuService';
+import { createMetricService } from './metric/metric';
 import { createNewsletterSubscriptionService } from './newsletter-subscription/createNewsletterSubscriptionService';
 import { createOneTimeAccessTokenService } from './one-time-access-token/createOneTimeAccessTokenService';
 import { createPhoneNumberUpdateService } from './phone-number-update/createPhoneNumberUpdateService';
@@ -109,5 +111,7 @@ export function createService(runtime: Runtime): Service {
         newsletterSubscription: createNewsletterSubscriptionService(runtime),
         menuVisitService: createMenuVisitService(runtime),
         cookVisitService: createCookVisitService(runtime),
+        featureToggle: createFeatureToggleService(runtime),
+        adminMetricService: createMetricService(runtime),
     };
 }

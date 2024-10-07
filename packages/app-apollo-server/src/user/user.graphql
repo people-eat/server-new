@@ -44,7 +44,6 @@ type User {
 type UserQuery {
     findMany(request: FindManyRequest!): [User!]
     findOne(userId: String!): User
-    me: User
 }
 
 type Query {
@@ -52,7 +51,7 @@ type Query {
 }
 
 input CreateOneUserByEmailAddressRequest {
-    emailAddress: EmailAddress
+    emailAddress: EmailAddress!
     phoneNumber: PhoneNumber
     password: String
     firstName: String!
@@ -93,10 +92,41 @@ input CreateOneUserByIdentityProviderRequest {
     globalBookingRequest: CreateOneGlobalBookingRequestRequest
 }
 
+input CreateOneUserRequest {
+    emailAddress: EmailAddress!
+    phoneNumber: PhoneNumber!
+    password: String
+    firstName: String!
+    lastName: String!
+    language: UserLanguage!
+    gender: Gender!
+    birthDate: Date
+    profilePictureUrl: Url
+
+    addresses: [CreateOneAddressRequest!]
+    cook: CreateOneCookRequest
+    globalBookingRequest: CreateOneGlobalBookingRequestRequest
+}
+
+type CreateOneUserSuccessResult {
+    succeeded: Boolean!
+}
+
+type CreateOneUserFailedResult {
+    failed: Boolean!
+}
+
+type CreateOneUserFailedAlreadyExistsResult {
+    alreadyExists: Boolean!
+}
+
+union CreateOneUserResult = CreateOneUserSuccessResult | CreateOneUserFailedResult | CreateOneUserFailedAlreadyExistsResult
+
 type UserMutation {
     acceptLatestPrivacyPolicy: Boolean!
     acceptLatestTerms: Boolean!
 
+    createOne(request: CreateOneUserRequest!, profilePicture: Upload): CreateOneUserResult!
     createOneByEmailAddress(request: CreateOneUserByEmailAddressRequest!, profilePicture: Upload): Boolean!
     createOneByPhoneNumber(request: CreateOneUserByPhoneNumberRequest!): Boolean!
     createOneByIdentityProvider(request: CreateOneUserByIdentityProviderRequest!): Boolean!

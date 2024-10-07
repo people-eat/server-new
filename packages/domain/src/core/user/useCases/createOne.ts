@@ -9,15 +9,30 @@ import { createOne as createOneAddress } from '../../address/useCases/createOne'
 import { createOne as createOneCook } from '../../cook/useCases/createOne';
 import { createOne as createOneEmailAddressUpdate } from '../../email-address-update/useCases/createOne';
 import { createOneWithoutConfirmationEmail } from '../../email-address-update/useCases/createOneWithoutConfirmationEmail';
+import { createOne as createOnePhoneNumberUpdate } from '../../phone-number-update/useCases/createOne';
 import { routeBuilders } from '../../routeBuilder';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
-import { type CreateOneUserByEmailAddressRequest } from '../CreateOneUserRequest';
+import { type CreateOneUserRequest } from '../CreateOneUserRequest';
+
+interface CreateOneUserSuccessResult {
+    succeeded: true;
+}
+
+interface CreateOneUserFailedResult {
+    failed: true;
+}
+
+interface CreateOneUserFailedAlreadyExistsResult {
+    alreadyExists: true;
+}
+
+export type CreateOneUserResult = CreateOneUserSuccessResult | CreateOneUserFailedResult | CreateOneUserFailedAlreadyExistsResult;
 
 export interface CreateOneUserByEmailAddressInput {
     runtime: Runtime;
     context: Authorization.Context;
-    request: CreateOneUserByEmailAddressRequest;
+    request: CreateOneUserRequest;
 }
 
 const priceClassTitles: Record<GlobalBookingRequestPriceClassType, string> = Object.freeze({
@@ -27,10 +42,11 @@ const priceClassTitles: Record<GlobalBookingRequestPriceClassType, string> = Obj
 });
 
 // eslint-disable-next-line max-statements
-export async function createOneByEmailAddress({ runtime, context, request }: CreateOneUserByEmailAddressInput): Promise<boolean> {
-    const { dataSourceAdapter, emailAdapter, klaviyoEmailAdapter, logger, serverUrl, webAppUrl } = runtime;
+export async function createOne({ runtime, context, request }: CreateOneUserByEmailAddressInput): Promise<CreateOneUserResult> {
+    const { dataSourceAdapter, emailAdapter, klaviyoEmailAdapter, smsAdapter, logger, serverUrl, webAppUrl } = runtime;
     const {
         emailAddress,
+        phoneNumber,
         password,
         firstName,
         lastName,
@@ -55,8 +71,10 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
                 existingEmailAddressUpdate,
             })}`,
         );
-        return false;
+        return { alreadyExists: true };
     }
+
+    const userId: NanoId = createNanoId();
 
     // STEP - profile picture
     let profilePictureUrl: string | undefined;
@@ -65,17 +83,17 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
         // store different sizes right away
         const profilePictureId: NanoId = createNanoId();
         profilePictureUrl = serverUrl + '/profile-pictures/' + profilePictureId;
-        await new Promise<boolean>((resolve: (success: boolean) => void, reject: (success: boolean) => void) =>
-            profilePicture
-                .pipe(createWriteStream(join(process.cwd(), `images/profile-pictures/original/${profilePictureId}.png`)))
-                .on('finish', () => resolve(true))
-                .on('error', () => reject(false)),
+        const profilePictureSuccess: boolean = await new Promise<boolean>(
+            (resolve: (success: boolean) => void, reject: (success: boolean) => void) =>
+                profilePicture
+                    .pipe(createWriteStream(join(process.cwd(), `images/profile-pictures/original/${profilePictureId}.png`)))
+                    .on('finish', () => resolve(true))
+                    .on('error', () => reject(false)),
         );
+        if (!profilePictureSuccess) logger.info(`createOneUser - failed to persist profile picture for user ${userId}`);
     }
 
     // STEP - user
-    const userId: NanoId = createNanoId();
-
     const success: boolean = await dataSourceAdapter.userRepository.insertOne({
         userId,
         isLocked: false,
@@ -96,7 +114,7 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
 
     if (!success) {
         logger.warn('Persisting user did fail');
-        return false;
+        return { failed: true };
     }
 
     // STEP - set current request to signed in state
@@ -124,7 +142,7 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
 
         if (!emailSuccess) {
             logger.error('Could not create email address update');
-            return false;
+            return { failed: true };
         }
 
         confirmEmailAddressUrl = emailSuccess.confirmEmailAddressUrl;
@@ -135,12 +153,24 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
             request: { userId, emailAddress: emailAddress.trim() },
         });
 
-        // eslint-disable-next-line max-depth
         if (!emailSuccess) {
             logger.error('Could not create email address update');
-            return false;
+            return { failed: true };
         }
     }
+
+    // STEP - phone number
+    const smsSuccess: boolean = await createOnePhoneNumberUpdate({
+        dataSourceAdapter,
+        smsAdapter,
+        logger,
+        webAppUrl,
+        context,
+        request: { userId, phoneNumber: phoneNumber.trim() },
+    });
+
+    if (!smsSuccess) logger.error('Could not create phone number update');
+    // return { failed: true };
 
     // STEP - addresses
     if (addresses) for (const address of addresses) await createOneAddress({ runtime, context, request: { userId, ...address } });
@@ -168,7 +198,7 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
             createdAt: new Date(),
         });
 
-        if (!globalBookingRequestSuccess) return false;
+        if (!globalBookingRequestSuccess) return { failed: true };
 
         let kitchen: DBKitchen | undefined;
 
@@ -241,8 +271,8 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
             }<br/><br/>Allergies: ${allergyTitles.join(', ')}<br/><br/>Categories: ${categoryTitles.join(', ')}`,
         );
 
-        if (!globalBookingRequestEmailSuccess) return false;
+        if (!globalBookingRequestEmailSuccess) return { failed: true };
     }
 
-    return true;
+    return { succeeded: true };
 }
