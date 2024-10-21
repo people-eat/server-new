@@ -28,7 +28,7 @@ import {
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
 
-export function createUserResolvers(service: Service): Resolvers<'User' | 'UserMutation' | 'UserQuery'> {
+export function createUserResolvers(service: Service): Resolvers<'User' | 'UserMutation' | 'UserQuery' | 'CreateOneUserResult'> {
     return {
         User: {
             admin: ({ userId }: GQLUser, _input: unknown, context: Authorization.Context) =>
@@ -148,6 +148,16 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
             globalBookingRequests: (_parent: GQLUserQuery, { userId }: GQLUserQueryGlobalBookingRequestsArgs) => ({ userId } as any),
             bookingRequests: (_parent: GQLUserQuery, { userId }: GQLUserQueryBookingRequestsArgs) => ({ userId } as any),
             followings: (_parent: GQLUserQuery, { userId }: GQLUserQueryBookingRequestsArgs) => ({ userId } as any),
+        },
+        CreateOneUserResult: {
+            __resolveType: (
+                obj: GQLCreateOneUserResult,
+            ): 'CreateOneUserSuccessResult' | 'CreateOneUserFailedResult' | 'CreateOneUserFailedAlreadyExistsResult' => {
+                if ('failed' in obj) return 'CreateOneUserFailedResult';
+                if ('alreadyExists' in obj) return 'CreateOneUserFailedAlreadyExistsResult';
+                // 'succeeded'
+                return 'CreateOneUserSuccessResult';
+            },
         },
     };
 }
