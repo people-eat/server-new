@@ -98,6 +98,7 @@ export function createPaymentAdapter({
                         // consider using the value from the db
                         application_fee_amount: pullAmount - payoutAmount,
                         transfer_data: {
+                            amount: payoutAmount,
                             destination: destinationAccountId,
                         },
                         automatic_payment_methods: { enabled: true, allow_redirects: 'never' },
@@ -109,11 +110,11 @@ export function createPaymentAdapter({
                     // check payment intent status
                     // paymentIntent.amount
 
-                    await client.transfers.create({
-                        amount: payoutAmount,
-                        currency: 'eur',
-                        destination: destinationAccountId,
-                    });
+                    // await client.transfers.create({
+                    //     amount: payoutAmount,
+                    //     currency: 'eur',
+                    //     destination: destinationAccountId,
+                    // });
 
                     return paymentIntent.status === 'succeeded';
                 } catch (error) {
