@@ -38,7 +38,7 @@ export async function createOneForEmailAddress({
         'PeopleEat',
         emailAddress,
         'Passwort vergessen',
-        resetPassword({ webAppUrl, secret, user: { firstName: 'you' } }),
+        resetPassword({ webAppUrl, secret, user: { firstName: user.firstName } }),
     );
 
     if (!emailSendingSuccess) return false;
