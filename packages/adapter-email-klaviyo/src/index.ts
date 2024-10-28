@@ -81,7 +81,7 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
         sendBookingRequestWithMenuCreatedToCustomer: async ({
             recipient,
             data,
-        }: Klaviyo.KlaviyoAdapterSendBookingRequestWithMenuCreatedToCustomerRequest): Promise<void> => {
+        }: Klaviyo.KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest): Promise<void> => {
             await send({ recipient, metricId: 'booking-request-with-menu-created', data });
         },
         sendGiftCardPurchaseConfirmation: async ({
@@ -92,6 +92,12 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
         },
         sendResetPassword: async ({ recipient, data }: Klaviyo.KlaviyoAdapterSendResetPassword): Promise<void> => {
             await send({ recipient, metricId: 'reset-password', data });
+        },
+        sendNewChatMessageNotification: async ({
+            recipient,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendNewChatMessageNotification): Promise<void> => {
+            await send({ recipient, metricId: 'send-chat-message', data });
         },
     };
 }

@@ -27,7 +27,8 @@ export interface ChatMessageService {
     ): Promise<boolean>;
 }
 
-export function createChatMessageService({ dataSourceAdapter, logger, emailAdapter, webAppUrl, publisher }: Runtime): ChatMessageService {
+export function createChatMessageService(runtime: Runtime): ChatMessageService {
+    const { dataSourceAdapter, logger } = runtime;
     return {
         findManyByCookId: (context: Authorization.Context, request: FindManyRequest & { cookId: NanoId; bookingRequestId: NanoId }) =>
             findManyByCookId({ dataSourceAdapter, logger, context, request }),
@@ -37,10 +38,10 @@ export function createChatMessageService({ dataSourceAdapter, logger, emailAdapt
         createOneByCookId: (
             context: Authorization.Context,
             request: { cookId: NanoId; bookingRequestId: NanoId } & CreateOneChatMessageRequest,
-        ) => createOneByCookId({ dataSourceAdapter, logger, emailAdapter, webAppUrl, context, publisher, request }),
+        ) => createOneByCookId({ runtime, context, request }),
         createOneByUserId: (
             context: Authorization.Context,
             request: { userId: NanoId; bookingRequestId: NanoId } & CreateOneChatMessageRequest,
-        ) => createOneByUserId({ dataSourceAdapter, logger, emailAdapter, webAppUrl, context, publisher, request }),
+        ) => createOneByUserId({ runtime, context, request }),
     };
 }

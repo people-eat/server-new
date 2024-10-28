@@ -80,6 +80,20 @@ export interface KlaviyoAdapterSendResetPassword {
     };
 }
 
+export interface KlaviyoAdapterSendNewChatMessageNotification {
+    recipient: Recipient;
+    data: {
+        url: string;
+        message: string;
+        recipient: {
+            firstName: string;
+        };
+        sender: {
+            firstName: string;
+        };
+    };
+}
+
 export interface Adapter {
     send(request: KlaviyoAdapterSendRequest): Promise<boolean>;
     sendGlobalBookingRequestWithEmailConfirmation(
@@ -88,4 +102,5 @@ export interface Adapter {
     sendBookingRequestWithMenuCreatedToCustomer(request: KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest): Promise<void>;
     sendGiftCardPurchaseConfirmation(request: KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest): Promise<void>;
     sendResetPassword(request: KlaviyoAdapterSendResetPassword): Promise<void>;
+    sendNewChatMessageNotification(request: KlaviyoAdapterSendNewChatMessageNotification): Promise<void>;
 }

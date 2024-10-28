@@ -56,7 +56,7 @@ async function bootstrap(): Promise<void> {
     //         phoneNumber: undefined,
     //         emailAddress: 'merkel.1996@t-online.de',
     //     },
-    //     metricId: 'reset-password',
+    //     metricId: 'send-chat-message',
     //     data: {},
     // });
 

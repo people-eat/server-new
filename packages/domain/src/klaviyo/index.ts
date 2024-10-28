@@ -1,8 +1,9 @@
 export {
     Adapter,
-    type KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest as KlaviyoAdapterSendBookingRequestWithMenuCreatedToCustomerRequest,
+    type KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest,
     type KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest,
     type KlaviyoAdapterSendGlobalBookingRequestWithEmailConfirmationRequest,
+    type KlaviyoAdapterSendNewChatMessageNotification,
     type KlaviyoAdapterSendRequest,
     type KlaviyoAdapterSendResetPassword,
 } from './Adapter';
