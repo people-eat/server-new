@@ -99,5 +99,11 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
         }: Klaviyo.KlaviyoAdapterSendNewChatMessageNotification): Promise<void> => {
             await send({ recipient, metricId: 'send-chat-message', data });
         },
+        sendNewsletterSubscriptionConfirmation: async ({
+            recipient,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void> => {
+            await send({ recipient, metricId: 'newsletter-subscription', data });
+        },
     };
 }

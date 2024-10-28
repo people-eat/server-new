@@ -94,6 +94,13 @@ export interface KlaviyoAdapterSendNewChatMessageNotification {
     };
 }
 
+export interface KlaviyoAdapterSendNewsletterSubscriptionConfirmation {
+    recipient: Recipient;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    data: {};
+    // todo make send param data optional for no-payload emails
+}
+
 export interface Adapter {
     send(request: KlaviyoAdapterSendRequest): Promise<boolean>;
     sendGlobalBookingRequestWithEmailConfirmation(
@@ -103,4 +110,5 @@ export interface Adapter {
     sendGiftCardPurchaseConfirmation(request: KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest): Promise<void>;
     sendResetPassword(request: KlaviyoAdapterSendResetPassword): Promise<void>;
     sendNewChatMessageNotification(request: KlaviyoAdapterSendNewChatMessageNotification): Promise<void>;
+    sendNewsletterSubscriptionConfirmation(request: KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void>;
 }

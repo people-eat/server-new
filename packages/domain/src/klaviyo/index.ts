@@ -4,6 +4,7 @@ export {
     type KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest,
     type KlaviyoAdapterSendGlobalBookingRequestWithEmailConfirmationRequest,
     type KlaviyoAdapterSendNewChatMessageNotification,
+    type KlaviyoAdapterSendNewsletterSubscriptionConfirmation,
     type KlaviyoAdapterSendRequest,
     type KlaviyoAdapterSendResetPassword,
 } from './Adapter';
