@@ -1,23 +1,16 @@
-import { resetPassword } from '@people-eat/server-adapter-email-template';
 import { type DBUser } from '../../../data-source/index';
-import { type DataSource, type Email, type Logger } from '../../../index';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type CreateOneOneTimeAccessTokenForEmailAddressRequest } from '../CreateOneOneTimeAccessTokenForEmailAddressRequest';
 
 interface CreateOneOneTimeAccessTokenInput {
-    dataSourceAdapter: DataSource.Adapter;
-    emailAdapter: Email.Adapter;
-    logger: Logger.Adapter;
-    webAppUrl: string;
+    runtime: Runtime;
     request: CreateOneOneTimeAccessTokenForEmailAddressRequest;
 }
 
 export async function createOneForEmailAddress({
-    dataSourceAdapter,
-    emailAdapter,
-    logger: _logger,
-    webAppUrl,
+    runtime: { dataSourceAdapter, logger: _logger, webAppUrl, klaviyoEmailAdapter },
     request: { emailAddress },
 }: CreateOneOneTimeAccessTokenInput): Promise<boolean> {
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ emailAddress });
@@ -34,14 +27,16 @@ export async function createOneForEmailAddress({
 
     if (!persistingSuccess) return false;
 
-    const emailSendingSuccess: boolean = await emailAdapter.sendToOne(
-        'PeopleEat',
-        emailAddress,
-        'Passwort vergessen',
-        resetPassword({ webAppUrl, secret, user: { firstName: user.firstName } }),
-    );
-
-    if (!emailSendingSuccess) return false;
+    await klaviyoEmailAdapter.sendResetPassword({
+        recipient: {
+            userId: user.userId,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            emailAddress: user.emailAddress,
+            phoneNumber: user.phoneNumber,
+        },
+        data: { url: `${webAppUrl}/forgot-password/confirm/${secret}` },
+    });
 
     return true;
 }

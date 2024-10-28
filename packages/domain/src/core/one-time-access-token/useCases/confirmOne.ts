@@ -1,17 +1,16 @@
-import { type Authorization, type DataSource, type Logger } from '../../..';
+import { type Authorization } from '../../..';
 import { type DBOneTimeAccessToken } from '../../../data-source';
+import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
 interface CreateOneOneTimeAccessTokenInput {
-    dataSourceAdapter: DataSource.Adapter;
-    logger: Logger.Adapter;
+    runtime: Runtime;
     context: Authorization.Context & { userCreation?: boolean };
     request: { secret: NanoId };
 }
 
 export async function confirmOne({
-    dataSourceAdapter,
-    logger,
+    runtime: { dataSourceAdapter, logger },
     context,
     request: { secret },
 }: CreateOneOneTimeAccessTokenInput): Promise<boolean> {

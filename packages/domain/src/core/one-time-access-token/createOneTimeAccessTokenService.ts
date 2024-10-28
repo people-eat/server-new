@@ -10,16 +10,10 @@ export interface OneTimeAccessTokenService {
     confirmOne(context: Authorization.Context, request: { secret: NanoId }): Promise<boolean>;
 }
 
-export function createOneTimeAccessTokenService({
-    dataSourceAdapter,
-    emailAdapter,
-    logger,
-    webAppUrl,
-}: Runtime): OneTimeAccessTokenService {
+export function createOneTimeAccessTokenService(runtime: Runtime): OneTimeAccessTokenService {
     return {
         createOneForEmailAddress: (_context: Authorization.Context, request: CreateOneOneTimeAccessTokenForEmailAddressRequest) =>
-            createOneForEmailAddress({ dataSourceAdapter, emailAdapter, logger, webAppUrl, request }),
-        confirmOne: (context: Authorization.Context, request: { secret: NanoId }) =>
-            confirmOne({ dataSourceAdapter, logger, context, request }),
+            createOneForEmailAddress({ runtime, request }),
+        confirmOne: (context: Authorization.Context, request: { secret: NanoId }) => confirmOne({ runtime, context, request }),
     };
 }

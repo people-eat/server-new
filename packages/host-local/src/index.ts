@@ -50,13 +50,13 @@ async function bootstrap(): Promise<void> {
 
     // await klaviyoEmailAdapter.send({
     //     recipient: {
-    //         userId: 'HDkc79KUaYsVeB1vSfwS',
+    //         userId: '88c0fyYn5ZIYITHKfERz',
     //         firstName: 'Daniel (Test 0001)',
     //         lastName: 'Merkel',
     //         phoneNumber: undefined,
     //         emailAddress: 'merkel.1996@t-online.de',
     //     },
-    //     metricId: 'booking-request-with-menu-accepted-by-cook',
+    //     metricId: 'reset-password',
     //     data: {},
     // });
 

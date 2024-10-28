@@ -73,6 +73,13 @@ export interface KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest {
     };
 }
 
+export interface KlaviyoAdapterSendResetPassword {
+    recipient: Recipient;
+    data: {
+        url: string;
+    };
+}
+
 export interface Adapter {
     send(request: KlaviyoAdapterSendRequest): Promise<boolean>;
     sendGlobalBookingRequestWithEmailConfirmation(
@@ -80,4 +87,5 @@ export interface Adapter {
     ): Promise<void>;
     sendBookingRequestWithMenuCreatedToCustomer(request: KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest): Promise<void>;
     sendGiftCardPurchaseConfirmation(request: KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest): Promise<void>;
+    sendResetPassword(request: KlaviyoAdapterSendResetPassword): Promise<void>;
 }
