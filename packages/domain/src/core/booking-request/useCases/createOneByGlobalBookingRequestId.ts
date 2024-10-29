@@ -1,8 +1,7 @@
-import { globalBookingRequestCookConfirmation } from '@people-eat/server-adapter-email-template';
 import moment from 'moment';
 import { Authorization, type Course, type MealOption, type PublicMenu } from '../../..';
 import { type Context } from '../../../authorization';
-import { type DBGlobalBookingRequest, type DBUser } from '../../../data-source';
+import { type DBChatMessage, type DBGlobalBookingRequest, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { calculateMenuPrice } from '../../calculateMenuPrice';
 import { type ConfiguredMenuCourse, type CreateOneConfiguredMenuRequest } from '../../configured-menu';
@@ -128,7 +127,7 @@ export interface CreateOneBookingRequestInput {
 
 // eslint-disable-next-line max-statements
 export async function createOneByGlobalBookingRequestId({ runtime, context, request }: CreateOneBookingRequestInput): Promise<boolean> {
-    const { dataSourceAdapter, emailAdapter, webAppUrl, logger, klaviyoEmailAdapter } = runtime;
+    const { dataSourceAdapter, webAppUrl, logger, klaviyoEmailAdapter } = runtime;
     const { cookId, globalBookingRequestId, configuredMenu, price } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
@@ -211,7 +210,7 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
 
     if (!success) return false;
 
-    let priceResult: PriceResult | undefined;
+    // let priceResult: PriceResult | undefined;
     let configuredMenuTitle: string | undefined;
 
     if (configuredMenu) {
@@ -225,28 +224,34 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
             children,
             price,
         );
-        priceResult = result?.price;
+        // priceResult = result?.price;
         configuredMenuTitle = result?.menuTitle;
     }
 
-    const messageSuccess: boolean = await dataSourceAdapter.chatMessageRepository.insertMany([
-        {
-            chatMessageId: createNanoId(),
-            bookingRequestId,
-            message,
-            generated: false,
-            createdBy: userId,
-            createdAt: new Date(),
-        },
-        {
-            chatMessageId: createNanoId(),
-            bookingRequestId,
-            message: `Globale Buchungsanfrage wurde mit Koch ${cookUser.firstName} gematcht`,
-            generated: true,
-            createdBy: userId,
-            createdAt: new Date(),
-        },
-    ]);
+    const automatedMessage: DBChatMessage = {
+        chatMessageId: createNanoId(),
+        bookingRequestId,
+        message: `Globale Buchungsanfrage wurde mit Koch ${cookUser.firstName} gematcht`,
+        generated: true,
+        createdBy: userId,
+        createdAt: new Date(),
+    };
+
+    const messageSuccess: boolean = await dataSourceAdapter.chatMessageRepository.insertMany(
+        message
+            ? [
+                  {
+                      chatMessageId: createNanoId(),
+                      bookingRequestId,
+                      message,
+                      generated: false,
+                      createdBy: userId,
+                      createdAt: new Date(),
+                  },
+                  automatedMessage,
+              ]
+            : [automatedMessage],
+    );
 
     if (!messageSuccess) logger.info('persisting message for booking request failed');
 
@@ -281,69 +286,39 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
                 locationText: locationText,
             },
         });
-        // const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-        //     'PeopleEat',
-        //     user.emailAddress,
-        //     `${cookUser.firstName} hat Deine Anfrage akzeptiert`,
-        //     cookBookingRequestCustomerConfirmation({
-        //         webAppUrl,
-        //         customer: {
-        //             firstName: user.firstName,
-        //         },
-        //         cook: {
-        //             firstName: cookUser.firstName,
-        //             profilePictureUrl: cookUser.profilePictureUrl ?? '',
-        //         },
-        //         bookingRequest: {
-        //             bookingRequestId,
-        //             occasion,
-        //             children,
-        //             adults: adultParticipants,
-        //             location: locationText,
-        //             date: dateTime.toDateString(),
-        //             time: moment(dateTime).format('LT'),
-        //             price: {
-        //                 perPerson: priceResult?.pricePerPerson ?? 0,
-        //                 total: priceResult?.totalAmountUser ?? 0,
-        //                 currency: 'EUR',
-        //             },
-        //         },
-        //         chatMessage: message.trim(),
-        //     }),
-        // );
-
-        // if (!customerEmailSuccess) logger.info('sending email failed');
     }
 
     if (cookUser.emailAddress) {
-        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-            user.firstName,
-            cookUser.emailAddress,
-            'Du hast eine Buchungsanfrage akzeptiert',
-            globalBookingRequestCookConfirmation({
-                webAppUrl,
+        await klaviyoEmailAdapter.sendGlobalBookingMatchedForCookConfirmation({
+            recipient: {
+                userId: cookUser.userId,
+                emailAddress: cookUser.emailAddress,
+                phoneNumber: cookUser.phoneNumber,
+                firstName: cookUser.firstName,
+                lastName: cookUser.lastName,
+            },
+            data: {
+                bookingRequestId,
                 customer: {
-                    firstName: user.firstName,
-                },
-                globalBookingRequest: {
-                    globalBookingRequestId: bookingRequestId,
-                    occasion,
-                    adults: adultParticipants,
-                    children,
-                    location: locationText,
-                    date: dateTime.toDateString(),
-                    time: moment(dateTime).format('LT'),
-                    price: {
-                        perPerson: priceResult?.pricePerPerson ?? 0,
-                        total: priceResult?.totalAmountUser ?? 0,
-                        currency: 'EUR',
+                    user: {
+                        firstName: user.firstName,
                     },
                 },
-                chatMessage: message,
-            }),
-        );
-
-        if (!customerEmailSuccess) logger.info('sending email failed');
+                cook: {
+                    user: {
+                        firstName: cookUser.firstName,
+                    },
+                    url: webAppUrl + routeBuilders.cookProfileBookingRequest({ bookingRequestId }),
+                },
+                configuredMenu: {
+                    title: configuredMenuTitle,
+                },
+                occasion,
+                timeLabel: moment(dateTime).format('LT'),
+                dateLabel: dateTime.toDateString(),
+                locationText: locationText,
+            },
+        });
     }
 
     await dataSourceAdapter.globalBookingRequestRepository.deleteOne({ globalBookingRequestId });
