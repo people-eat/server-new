@@ -1,7 +1,8 @@
 export {
     Adapter,
+    type KlaviyoAdapterSendBookingRequestCreatedWithMenuForCookConfirmation,
+    type KlaviyoAdapterSendBookingRequestCreatedWithMenuForCustomerConfirmation,
     type KlaviyoAdapterSendBookingRequestPaymentAnnouncementForCustomer,
-    type KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest,
     type KlaviyoAdapterSendCookAcceptedBookingRequest,
     type KlaviyoAdapterSendCookDeclinedBookingRequest,
     type KlaviyoAdapterSendGiftCardDelivery,

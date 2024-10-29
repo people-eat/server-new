@@ -118,11 +118,17 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
         }: Klaviyo.KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCookRequest): Promise<void> => {
             await send({ recipient, metricId: 'global-booking-request-matched-for-cook', data });
         },
-        sendBookingRequestWithMenuCreatedToCustomer: async ({
+        sendBookingRequestCreatedWithMenuForCustomerConfirmation: async ({
             recipient,
             data,
-        }: Klaviyo.KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest): Promise<void> => {
-            await send({ recipient, metricId: 'booking-request-with-menu-created', data });
+        }: Klaviyo.KlaviyoAdapterSendBookingRequestCreatedWithMenuForCustomerConfirmation): Promise<void> => {
+            await send({ recipient, metricId: 'booking-request-created-with-menu-for-cook', data });
+        },
+        sendBookingRequestCreatedWithMenuForCookConfirmation: async ({
+            recipient,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendBookingRequestCreatedWithMenuForCookConfirmation): Promise<void> => {
+            await send({ recipient, metricId: 'booking-request-created-with-menu-for-cook', data });
         },
         sendGiftCardPurchaseConfirmation: async ({
             recipient,

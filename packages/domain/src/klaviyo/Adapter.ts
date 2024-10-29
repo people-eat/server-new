@@ -80,7 +80,42 @@ export interface KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCoo
     };
 }
 
-export interface KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest {
+export interface KlaviyoAdapterSendBookingRequestCreatedWithMenuForCustomerConfirmation {
+    recipient: Recipient;
+    data: {
+        bookingRequestId: NanoId;
+        user: {
+            firstName: string;
+            lastName: string;
+            formattedPrice: string;
+            url: string;
+        };
+        cook: {
+            user: {
+                firstName: string;
+                lastName: string;
+            };
+            formattedPrice: string;
+            url: string;
+        };
+        configuredMenu: {
+            title: string;
+        };
+
+        totalParticipants: number;
+        adults: number;
+        children: number;
+
+        timeLabel: string;
+        dateLabel: string;
+        locationText: string;
+        occasion: string;
+
+        message: string;
+    };
+}
+
+export interface KlaviyoAdapterSendBookingRequestCreatedWithMenuForCookConfirmation {
     recipient: Recipient;
     data: {
         bookingRequestId: NanoId;
@@ -229,7 +264,12 @@ export interface Adapter {
     sendGlobalBookingMatchedForCookConfirmation(
         request: KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCookRequest,
     ): Promise<void>;
-    sendBookingRequestWithMenuCreatedToCustomer(request: KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest): Promise<void>;
+    sendBookingRequestCreatedWithMenuForCustomerConfirmation(
+        request: KlaviyoAdapterSendBookingRequestCreatedWithMenuForCustomerConfirmation,
+    ): Promise<void>;
+    sendBookingRequestCreatedWithMenuForCookConfirmation(
+        request: KlaviyoAdapterSendBookingRequestCreatedWithMenuForCookConfirmation,
+    ): Promise<void>;
     sendGiftCardPurchaseConfirmation(request: KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest): Promise<void>;
     sendGiftCardDelivery(request: KlaviyoAdapterSendGiftCardDelivery): Promise<void>;
     sendResetPassword(request: KlaviyoAdapterSendResetPassword): Promise<void>;

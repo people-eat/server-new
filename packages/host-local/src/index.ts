@@ -56,7 +56,7 @@ async function bootstrap(): Promise<void> {
     //         phoneNumber: undefined,
     //         emailAddress: 'merkel.1996@t-online.de',
     //     },
-    //     metricId: 'global-booking-request-created-for-customer',
+    //     metricId: 'booking-request-created-with-menu-for-cook',
     //     data: {},
     // });
 

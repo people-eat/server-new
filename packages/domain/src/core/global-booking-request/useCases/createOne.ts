@@ -92,14 +92,13 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
 
     const categoryTitles: string[] = categories.map(({ title }: DBCategory) => title);
 
-    const formattedDateTime: string = moment(dateTime).format('MMMM Do YYYY, h:mm a');
     const emailSuccess: boolean = await emailAdapter.sendToMany(
         'Global Booking Request',
         runtime.notificationEmailAddresses,
         `from ${user.firstName} ${user.lastName}`,
         `A new Booking Request was received from <b>${user.firstName} ${
             user.lastName
-        }</b><br/><br/><b>When:</b> ${formattedDateTime}<br/><b>Where:</b> ${
+        }</b><br/><br/><b>When:</b> ${dateTime.toDateString()}, ${moment(dateTime).format('LT')}<br/><b>Where:</b> ${
             location.text
         }<br/><b>Occasion:</b> ${occasion}<br/><br/><b>Adults:</b> ${adultParticipants}<br/><b>Children:</b> ${children}<br/><br/><b>Budget:</b> ${priceClassType}<br/><br/><b>Message:</b><br/>${message}<br/><br/><br/><b>Contact:</b><br/>Email Address: ${
             user.emailAddress
@@ -133,8 +132,6 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
                 confirmEmailAddressUrl: webAppUrl + routeBuilders.profileGlobalBookingRequest({ globalBookingRequestId }),
             },
         });
-
-        // if (!customerEmailSuccess) logger.info('sending email failed');
     }
 
     return true;
