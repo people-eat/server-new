@@ -1,6 +1,4 @@
-import moment from 'moment';
 import { type Authorization } from '../../..';
-import { giftCardPurchaseConfirmation, giftCardReceived } from '../../../../../adapter-email-template/src';
 import { type DBGiftCard, type DBUser } from '../../../data-source';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
@@ -46,7 +44,7 @@ export async function confirmOne({ runtime, request }: ConfirmOneGiftCardInput):
         return false;
     }
 
-    const { redeemCode, initialBalanceAmount, occasion, message, userId, buyer, recipient, expiresAt, invoiceAddress } = giftCard;
+    const { initialBalanceAmount, userId, buyer, recipient, invoiceAddress } = giftCard;
 
     const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
     const formattedPrice: string = formatPrice(giftCard.initialBalanceAmount, '€');
@@ -71,33 +69,6 @@ export async function confirmOne({ runtime, request }: ConfirmOneGiftCardInput):
                 automaticDeliveryEnabledLabel: recipient.deliveryInformation ? 'Ja' : 'Nein',
             },
         });
-        // await emailAdapter.sendToOne(
-        //     'PeopleEat',
-        //     user.emailAddress,
-        //     'Bestellbestätigung Gutschein',
-        //     giftCardPurchaseConfirmation({
-        //         buyer: { firstName: user.firstName },
-        //         occasion,
-        //         message,
-        //         recipient,
-        //         balance: initialBalanceAmount,
-        //         automatedEmailDelivery: Boolean(recipient.deliveryInformation),
-        //     }),
-        // );
-        await emailAdapter.sendToOne(
-            'PeopleEat',
-            user.emailAddress,
-            'Der Gutschein wurde erfolgreich erstellt',
-            giftCardReceived({
-                buyer: { firstName: user.firstName, lastName: user.lastName },
-                occasion,
-                message,
-                recipient,
-                balance: initialBalanceAmount,
-                redeemCode,
-                formattedExpirationDate: moment(expiresAt).format('L'),
-            }),
-        );
         if (recipient.deliveryInformation) {
             await createOneTimeTriggeredTask(runtime, {
                 dueDate: new Date(recipient.deliveryInformation.date),
@@ -124,34 +95,23 @@ export async function confirmOne({ runtime, request }: ConfirmOneGiftCardInput):
     }
 
     if (buyer) {
-        await emailAdapter.sendToOne(
-            'PeopleEat',
-            buyer.emailAddress,
-            'Bestellbestätigung Gutschein',
-            giftCardPurchaseConfirmation({
-                buyer: { firstName: buyer.firstName },
-                occasion,
-                message,
-                recipient,
-                balance: initialBalanceAmount,
-                automatedEmailDelivery: Boolean(recipient.deliveryInformation),
-            }),
-        );
-
-        await emailAdapter.sendToOne(
-            'PeopleEat',
-            buyer.emailAddress,
-            'Der Gutschein wurde erfolgreich erstellt',
-            giftCardReceived({
-                buyer,
-                occasion,
-                message,
-                recipient,
-                balance: initialBalanceAmount,
-                redeemCode,
-                formattedExpirationDate: moment(expiresAt).format('L'),
-            }),
-        );
+        await klaviyoEmailAdapter.sendGiftCardPurchaseConfirmation({
+            recipient: {
+                userId: 'during-gift-card-purchase',
+                emailAddress: buyer.emailAddress,
+                phoneNumber: undefined,
+                firstName: buyer.firstName,
+                lastName: buyer.lastName,
+            },
+            data: {
+                occasion: giftCard.occasion,
+                recipient: {
+                    firstName: giftCard.recipient.firstName,
+                },
+                formattedPrice,
+                automaticDeliveryEnabledLabel: recipient.deliveryInformation ? 'Ja' : 'Nein',
+            },
+        });
         if (recipient.deliveryInformation) {
             await createOneTimeTriggeredTask(runtime, {
                 dueDate: new Date(recipient.deliveryInformation.date),

@@ -4,6 +4,7 @@ export {
     type KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest,
     type KlaviyoAdapterSendCookAcceptedBookingRequest,
     type KlaviyoAdapterSendCookDeclinedBookingRequest,
+    type KlaviyoAdapterSendGiftCardDelivery,
     type KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest,
     type KlaviyoAdapterSendGlobalBookingRequestWithEmailConfirmationRequest,
     type KlaviyoAdapterSendNewChatMessageNotification,

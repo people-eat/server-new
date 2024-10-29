@@ -121,9 +121,34 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
 
         const { redeemCode, userId, buyer, occasion, recipient, message, initialBalanceAmount, expiresAt } = giftCard;
 
+        const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
+        const formattedPrice: string = formatPrice(giftCard.initialBalanceAmount, '€');
+
         if (userId && recipient.deliveryInformation) {
             const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
             if (!user || !user.emailAddress) return;
+
+            await runtime.klaviyoEmailAdapter.sendGiftCardDelivery({
+                recipient: {
+                    userId,
+                    emailAddress: user.emailAddress,
+                    phoneNumber: user.phoneNumber,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                },
+                data: {
+                    recipient: {
+                        firstName: recipient.firstName,
+                    },
+                    buyer: {
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                    },
+                    message: message,
+                    formattedPrice,
+                    redeemCode,
+                },
+            });
 
             await emailAdapter.sendToOne(
                 'PeopleEat',
@@ -142,6 +167,28 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
         }
 
         if (buyer && recipient.deliveryInformation) {
+            await runtime.klaviyoEmailAdapter.sendGiftCardDelivery({
+                recipient: {
+                    userId: 'during-gift-card-purchase',
+                    emailAddress: buyer.emailAddress,
+                    phoneNumber: undefined,
+                    firstName: buyer.firstName,
+                    lastName: buyer.lastName,
+                },
+                data: {
+                    recipient: {
+                        firstName: recipient.firstName,
+                    },
+                    buyer: {
+                        firstName: buyer.firstName,
+                        lastName: buyer.lastName,
+                    },
+                    message: message,
+                    formattedPrice,
+                    redeemCode,
+                },
+            });
+
             await emailAdapter.sendToOne(
                 'PeopleEat',
                 recipient.deliveryInformation.emailAddress,

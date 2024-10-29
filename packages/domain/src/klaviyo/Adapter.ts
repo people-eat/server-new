@@ -73,6 +73,22 @@ export interface KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest {
     };
 }
 
+export interface KlaviyoAdapterSendGiftCardDelivery {
+    recipient: Recipient;
+    data: {
+        recipient: {
+            firstName: string;
+        };
+        buyer: {
+            firstName: string;
+            lastName: string;
+        };
+        message: string;
+        formattedPrice: string;
+        redeemCode: string;
+    };
+}
+
 export interface KlaviyoAdapterSendResetPassword {
     recipient: Recipient;
     data: {
@@ -155,6 +171,7 @@ export interface Adapter {
     ): Promise<void>;
     sendBookingRequestWithMenuCreatedToCustomer(request: KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest): Promise<void>;
     sendGiftCardPurchaseConfirmation(request: KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest): Promise<void>;
+    sendGiftCardDelivery(request: KlaviyoAdapterSendGiftCardDelivery): Promise<void>;
     sendResetPassword(request: KlaviyoAdapterSendResetPassword): Promise<void>;
     sendNewChatMessageNotification(request: KlaviyoAdapterSendNewChatMessageNotification): Promise<void>;
     sendNewsletterSubscriptionConfirmation(request: KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void>;
