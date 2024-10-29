@@ -19,7 +19,31 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
         const [existingProfile] = getResponseBody.data;
 
         if (!existingProfile) {
-            logger.info(`Requested Klaviyo user for PeopleEat user with id '${user.userId}' and did not receive one.`);
+            logger.info(`Requested Klaviyo profile for PeopleEat user with id '${user.userId}' and did not receive one.`);
+
+            const { body: getResponseBodyByEmail } = await profiles.getProfiles({ filter: `equals(email,"${user.emailAddress}")` });
+            const [existingProfileByEmail] = getResponseBodyByEmail.data;
+
+            if (existingProfileByEmail && existingProfileByEmail.id) {
+                logger.info(
+                    `Requested Klaviyo profile for PeopleEat user with email address '${
+                        user.emailAddress
+                    }' and did receive one:\n${JSON.stringify(existingProfileByEmail)}`,
+                );
+                await profiles.updateProfile(existingProfileByEmail.id, {
+                    data: {
+                        id: existingProfileByEmail.id,
+                        type: 'profile',
+                        attributes: {
+                            externalId: user.userId,
+                        },
+                    },
+                });
+                logger.info(
+                    `Updated external id of Klaviyo profile with email address '${user.emailAddress}' from ${existingProfileByEmail.id} to ${user.userId}}`,
+                );
+                return existingProfileByEmail.id;
+            }
 
             try {
                 const { body: createResponseBody } = await profiles.createProfile({
@@ -35,7 +59,9 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
                     },
                 });
 
-                logger.info(`Created Klaviyo user for PeopleEat user with id '${user.userId}'\n${JSON.stringify(createResponseBody.data)}`);
+                logger.info(
+                    `Created Klaviyo profile for PeopleEat user with id '${user.userId}'\n${JSON.stringify(createResponseBody.data)}`,
+                );
 
                 return createResponseBody.data.id ?? '';
             } catch (error) {
@@ -46,7 +72,9 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
         }
 
         logger.info(
-            `Requested Klaviyo user for PeopleEat user with id '${user.userId}' and did receive one:\n${JSON.stringify(existingProfile)}`,
+            `Requested Klaviyo profile for PeopleEat user with id '${user.userId}' and did receive one:\n${JSON.stringify(
+                existingProfile,
+            )}`,
         );
 
         return existingProfile.id ?? '';
