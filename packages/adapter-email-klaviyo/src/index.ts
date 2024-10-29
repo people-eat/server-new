@@ -78,6 +78,12 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
         }: Klaviyo.KlaviyoAdapterSendGlobalBookingRequestWithEmailConfirmationRequest): Promise<void> => {
             await send({ recipient, metricId: 'global-booking-request-with-sign-up', data });
         },
+        sendGlobalBookingMatchedConfirmation: async ({
+            recipient,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationRequest): Promise<void> => {
+            await send({ recipient, metricId: 'global-booking-request-matched', data });
+        },
         sendBookingRequestWithMenuCreatedToCustomer: async ({
             recipient,
             data,

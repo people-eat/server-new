@@ -10,7 +10,6 @@ export const routeBuilders = {
     },
     administration: (_: void) => '/administration',
     profile: (_: void) => '/profile',
-    profileBookingRequests: (_: void) => '/profile/bookings',
     userProfileBookingRequest: (params: { bookingRequestId: string }) => '/profile/bookings/s/' + params.bookingRequestId,
     cookProfileBookingRequest: (params: { bookingRequestId: string }) => '/profile/bookings/r/' + params.bookingRequestId,
     profileGlobalBookingRequest: (params: { globalBookingRequestId: string }) =>
