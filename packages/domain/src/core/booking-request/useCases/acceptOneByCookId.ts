@@ -1,4 +1,3 @@
-import { cookBookingRequestCookAcceptedNotification, customerPaymentAnnouncement } from '@people-eat/server-adapter-email-template';
 import moment, { type Moment } from 'moment';
 import { Authorization, type ChatMessage } from '../../..';
 import { type DBBookingRequest, type DBCook, type DBUser } from '../../../data-source';
@@ -15,7 +14,7 @@ export interface AcceptOneBookingRequestByCookIdInput {
 
 // eslint-disable-next-line max-statements
 export async function acceptOneByCookId({ runtime, context, request }: AcceptOneBookingRequestByCookIdInput): Promise<boolean> {
-    const { dataSourceAdapter, paymentAdapter, logger, emailAdapter, webAppUrl, publisher } = runtime;
+    const { dataSourceAdapter, paymentAdapter, logger, webAppUrl, publisher, klaviyoEmailAdapter } = runtime;
     const { cookId, bookingRequestId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
@@ -73,37 +72,29 @@ export async function acceptOneByCookId({ runtime, context, request }: AcceptOne
     });
 
     if (user.emailAddress) {
-        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-            'PeopleEat',
-            user.emailAddress,
-            'Bestätigung Deiner Buchungsanfrage',
-            cookBookingRequestCookAcceptedNotification({
-                webAppUrl,
-                customer: {
+        // todo: does not point directly to chat
+        const customerProfileGlobalBookingRequestsChatUrl: string = webAppUrl + `/profile/bookings/s/${bookingRequest.bookingRequestId}`;
+        const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
+        await klaviyoEmailAdapter.sendCookAcceptedBookingRequestNotification({
+            recipient: {
+                userId: user.userId,
+                emailAddress: user.emailAddress,
+                phoneNumber: user.phoneNumber,
+                firstName: user.firstName,
+                lastName: user.lastName,
+            },
+            data: {
+                bookingRequestId,
+                user: {
                     firstName: user.firstName,
+                    url: customerProfileGlobalBookingRequestsChatUrl,
+                    formattedPrice: formatPrice(bookingRequest.totalAmountUser, bookingRequest.currencyCode),
                 },
                 cook: {
                     firstName: cookUser.firstName,
-                    profilePictureUrl: cookUser.profilePictureUrl ?? '',
                 },
-                bookingRequest: {
-                    bookingRequestId,
-                    occasion: bookingRequest.occasion,
-                    children: bookingRequest.children,
-                    adults: bookingRequest.adultParticipants,
-                    location: bookingRequest.locationText,
-                    date: moment(bookingRequest.dateTime).format('L'),
-                    time: moment(bookingRequest.dateTime).format('LT'),
-                    price: {
-                        perPerson: bookingRequest.totalAmountUser / (bookingRequest.children + bookingRequest.adultParticipants),
-                        total: bookingRequest.totalAmountUser,
-                        currency: bookingRequest.currencyCode,
-                    },
-                },
-            }),
-        );
-
-        if (!customerEmailSuccess) logger.info('sending email failed');
+            },
+        });
     }
 
     // pub sub
@@ -130,30 +121,28 @@ export async function acceptOneByCookId({ runtime, context, request }: AcceptOne
 
     if (daysUntilEvent === 15) {
         const pullPaymentDate: Moment = moment(bookingRequest.dateTime).subtract(14, 'days');
-
+        const customerProfileGlobalBookingRequestsUrl: string = webAppUrl + `/profile/bookings/s/${bookingRequest.bookingRequestId}`;
+        const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
         if (user.emailAddress) {
-            await emailAdapter.sendToOne(
-                'PeopleEat',
-                user.emailAddress,
-                'Deine Zahlung steht bevor',
-                customerPaymentAnnouncement({
-                    customer: {
+            await klaviyoEmailAdapter.sendBookingRequestPaymentAnnouncementForCustomer({
+                recipient: {
+                    userId: user.userId,
+                    emailAddress: user.emailAddress,
+                    phoneNumber: user.phoneNumber,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                },
+                data: {
+                    bookingRequestId,
+                    user: {
                         firstName: user.firstName,
-                        profilePictureUrl: user.profilePictureUrl ?? '',
+                        url: customerProfileGlobalBookingRequestsUrl,
+                        formattedPrice: formatPrice(bookingRequest.totalAmountUser, bookingRequest.currencyCode),
                     },
-                    bookingRequest: {
-                        bookingRequestId: bookingRequest.bookingRequestId,
-                        occasion: bookingRequest.occasion,
-                        date: moment(bookingRequest.dateTime).format('L'),
-                        time: moment(bookingRequest.dateTime).format('LT'),
-                        price: {
-                            total: bookingRequest.totalAmountUser,
-                            currency: bookingRequest.currencyCode,
-                        },
-                    },
+                    occasion: bookingRequest.occasion,
                     pullPaymentDate: pullPaymentDate.format('L'),
-                }),
-            );
+                },
+            });
         }
         await createOneTimeTriggeredTask(runtime, {
             dueDate: pullPaymentDate.toDate(),

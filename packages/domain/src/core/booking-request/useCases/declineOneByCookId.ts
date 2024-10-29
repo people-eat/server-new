@@ -1,5 +1,3 @@
-import { cookBookingRequestCookDeclinedNotification } from '@people-eat/server-adapter-email-template';
-import moment from 'moment';
 import { Authorization, type ChatMessage } from '../../..';
 import { type DBBookingRequest, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
@@ -12,9 +10,8 @@ export interface FindManyBookingRequestInput {
     request: { cookId: NanoId; bookingRequestId: NanoId };
 }
 
-// eslint-disable-next-line max-statements
 export async function declineOneByCookId({ runtime, context, request }: FindManyBookingRequestInput): Promise<boolean> {
-    const { dataSourceAdapter, logger, webAppUrl, emailAdapter, publisher } = runtime;
+    const { dataSourceAdapter, logger, webAppUrl, publisher, klaviyoEmailAdapter } = runtime;
     const { cookId, bookingRequestId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
@@ -57,37 +54,28 @@ export async function declineOneByCookId({ runtime, context, request }: FindMany
     });
 
     if (user.emailAddress) {
-        const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
-            'PeopleEat',
-            user.emailAddress,
-            'Deine Buchungsanfrage wurde abgelehnt',
-            cookBookingRequestCookDeclinedNotification({
-                webAppUrl,
-                customer: {
+        const customerProfileGlobalBookingRequestsUrl: string = webAppUrl + `/profile/bookings/s/${bookingRequest.bookingRequestId}`;
+        const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
+        await klaviyoEmailAdapter.sendCookDeclinedBookingRequestNotification({
+            recipient: {
+                userId: user.userId,
+                emailAddress: user.emailAddress,
+                phoneNumber: user.phoneNumber,
+                firstName: user.firstName,
+                lastName: user.lastName,
+            },
+            data: {
+                bookingRequestId,
+                user: {
                     firstName: user.firstName,
+                    url: customerProfileGlobalBookingRequestsUrl,
+                    formattedPrice: formatPrice(bookingRequest.totalAmountUser, bookingRequest.currencyCode),
                 },
                 cook: {
                     firstName: cookUser.firstName,
-                    profilePictureUrl: cookUser.profilePictureUrl ?? '',
                 },
-                bookingRequest: {
-                    bookingRequestId,
-                    occasion: bookingRequest.occasion,
-                    children: bookingRequest.children,
-                    adults: bookingRequest.adultParticipants,
-                    location: bookingRequest.locationText,
-                    date: moment(bookingRequest.dateTime).format('L'),
-                    time: moment(bookingRequest.dateTime).format('LT'),
-                    price: {
-                        perPerson: bookingRequest.totalAmountUser / (bookingRequest.children + bookingRequest.adultParticipants),
-                        total: bookingRequest.totalAmountUser,
-                        currency: bookingRequest.currencyCode,
-                    },
-                },
-            }),
-        );
-
-        if (!customerEmailSuccess) logger.info('sending email failed');
+            },
+        });
     }
 
     return success;

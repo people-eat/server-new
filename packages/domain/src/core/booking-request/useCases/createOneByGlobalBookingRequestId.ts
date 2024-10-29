@@ -29,6 +29,7 @@ async function persistMenuBookingRequest(
     const travelExpensesAmount: number = 0;
     const { dataSourceAdapter, logger } = runtime;
 
+    // todo
     const publicMenu: PublicMenu | undefined = await findOnePublicMenu({
         dataSourceAdapter,
         logger,
@@ -146,7 +147,6 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
         userId,
         adultParticipants,
         children,
-        // priceClassType,
         dateTime,
         duration,
         occasion,

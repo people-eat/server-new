@@ -311,6 +311,15 @@ export async function startApolloServerApp({
         graphqlUploadExpress({ maxFileSize: undefined, maxFiles: 10 }),
         expressMiddleware(server, {
             context: async ({ req, res }: ExpressContextFunctionArgument): Promise<Authorization.Context> => {
+                // const isPeopleEatClient: string | undefined = req.cookies['is-people-eat-client'];
+
+                // if (!isPeopleEatClient) {
+                //     return {
+                //         ...req,
+                //         sessionId: 'session-id',
+                //     };
+                // }
+
                 const sessionId: string | undefined = req.cookies[sessionIdCookie.name];
                 const result: Authorization.AuthorizeSessionOutput | undefined = await Authorization.authorizeSession({
                     dataSourceAdapter,

@@ -48,17 +48,17 @@ async function bootstrap(): Promise<void> {
         apiKey: environmentVariables.klaviyo.apiKey,
     });
 
-    await klaviyoEmailAdapter.send({
-        recipient: {
-            userId: '88c0fyYn5ZIYITHKfERz',
-            firstName: 'Daniel (Test 0001)',
-            lastName: 'Merkel',
-            phoneNumber: undefined,
-            emailAddress: 'merkel.1996@t-online.de',
-        },
-        metricId: 'newsletter-subscription',
-        data: {},
-    });
+    // await klaviyoEmailAdapter.send({
+    //     recipient: {
+    //         userId: '88c0fyYn5ZIYITHKfERz',
+    //         firstName: 'Daniel (Test 0001)',
+    //         lastName: 'Merkel',
+    //         phoneNumber: undefined,
+    //         emailAddress: 'merkel.1996@t-online.de',
+    //     },
+    //     metricId: '',
+    //     data: {},
+    // });
 
     const smsAdapter: SMS.Adapter = createSMSAdapter({
         logger,

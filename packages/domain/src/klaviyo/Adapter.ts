@@ -101,6 +101,53 @@ export interface KlaviyoAdapterSendNewsletterSubscriptionConfirmation {
     // todo make send param data optional for no-payload emails
 }
 
+export interface KlaviyoAdapterSendCookAcceptedBookingRequest {
+    recipient: Recipient;
+    data: {
+        bookingRequestId: NanoId;
+        user: {
+            firstName: string;
+            /** to chat */
+            url: string;
+            formattedPrice: string;
+        };
+        cook: {
+            firstName: string;
+        };
+    };
+}
+
+export interface KlaviyoAdapterSendCookDeclinedBookingRequest {
+    recipient: Recipient;
+    data: {
+        bookingRequestId: NanoId;
+        user: {
+            firstName: string;
+            /** to request */
+            url: string;
+            formattedPrice: string;
+        };
+        cook: {
+            firstName: string;
+        };
+    };
+}
+
+export interface KlaviyoAdapterSendBookingRequestPaymentAnnouncementForCustomer {
+    recipient: Recipient;
+    data: {
+        bookingRequestId: NanoId;
+        user: {
+            firstName: string;
+            // /** to request */
+            url: string;
+            formattedPrice: string;
+        };
+        occasion: string;
+        pullPaymentDate: string;
+    };
+}
+
 export interface Adapter {
     send(request: KlaviyoAdapterSendRequest): Promise<boolean>;
     sendGlobalBookingRequestWithEmailConfirmation(
@@ -111,4 +158,9 @@ export interface Adapter {
     sendResetPassword(request: KlaviyoAdapterSendResetPassword): Promise<void>;
     sendNewChatMessageNotification(request: KlaviyoAdapterSendNewChatMessageNotification): Promise<void>;
     sendNewsletterSubscriptionConfirmation(request: KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void>;
+    sendCookAcceptedBookingRequestNotification(request: KlaviyoAdapterSendCookAcceptedBookingRequest): Promise<void>;
+    sendCookDeclinedBookingRequestNotification(request: KlaviyoAdapterSendCookDeclinedBookingRequest): Promise<void>;
+    sendBookingRequestPaymentAnnouncementForCustomer(
+        request: KlaviyoAdapterSendBookingRequestPaymentAnnouncementForCustomer,
+    ): Promise<void>;
 }

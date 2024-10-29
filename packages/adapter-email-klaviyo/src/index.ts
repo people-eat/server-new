@@ -105,5 +105,23 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
         }: Klaviyo.KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void> => {
             await send({ recipient, metricId: 'newsletter-subscription', data });
         },
+        sendCookAcceptedBookingRequestNotification: async ({
+            recipient,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void> => {
+            await send({ recipient, metricId: 'booking-request-cook-declined', data });
+        },
+        sendCookDeclinedBookingRequestNotification: async ({
+            recipient,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void> => {
+            await send({ recipient, metricId: 'booking-request-cook-accepted', data });
+        },
+        sendBookingRequestPaymentAnnouncementForCustomer: async ({
+            recipient,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendBookingRequestPaymentAnnouncementForCustomer): Promise<void> => {
+            await send({ recipient, metricId: 'booking-request-payment-announcement-for-customer', data });
+        },
     };
 }

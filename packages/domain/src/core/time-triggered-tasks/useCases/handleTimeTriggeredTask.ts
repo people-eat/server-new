@@ -1,4 +1,4 @@
-import { customerPaymentAnnouncement, giftCardReceived } from '@people-eat/server-adapter-email-template';
+import { giftCardReceived } from '@people-eat/server-adapter-email-template';
 import moment, { type Moment } from 'moment';
 import { type DBBookingRequest, type DBCook, type DBGiftCard, type DBUser } from '../../../data-source';
 import { type Runtime } from '../../Runtime';
@@ -86,32 +86,30 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
         if (!user || !user.emailAddress) return;
 
         const pullPaymentDate: Moment = moment(bookingRequest.dateTime).subtract(14, 'days');
-
-        const emailSuccess: boolean = await emailAdapter.sendToOne(
-            'PeopleEat',
-            user.emailAddress,
-            'Deine Zahlung steht bevor',
-            customerPaymentAnnouncement({
-                customer: {
+        const customerProfileGlobalBookingRequestsUrl: string =
+            runtime.webAppUrl + `/profile/bookings/s/${bookingRequest.bookingRequestId}`;
+        const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
+        if (user.emailAddress) {
+            await runtime.klaviyoEmailAdapter.sendBookingRequestPaymentAnnouncementForCustomer({
+                recipient: {
+                    userId: user.userId,
+                    emailAddress: user.emailAddress,
+                    phoneNumber: user.phoneNumber,
                     firstName: user.firstName,
-                    profilePictureUrl: user.profilePictureUrl ?? '',
+                    lastName: user.lastName,
                 },
-                bookingRequest: {
+                data: {
                     bookingRequestId: bookingRequest.bookingRequestId,
-                    occasion: bookingRequest.occasion,
-                    // todo: also pass the pull date
-                    date: moment(bookingRequest.dateTime).format('L'),
-                    time: moment(bookingRequest.dateTime).format('LT'),
-                    price: {
-                        total: bookingRequest.totalAmountUser,
-                        currency: bookingRequest.currencyCode,
+                    user: {
+                        firstName: user.firstName,
+                        url: customerProfileGlobalBookingRequestsUrl,
+                        formattedPrice: formatPrice(bookingRequest.totalAmountUser, bookingRequest.currencyCode),
                     },
+                    occasion: bookingRequest.occasion,
+                    pullPaymentDate: pullPaymentDate.format('L'),
                 },
-                pullPaymentDate: pullPaymentDate.format('L'),
-            }),
-        );
-
-        if (!emailSuccess) return;
+            });
+        }
 
         await dataSourceAdapter.timeTriggeredTaskRepository.deleteOne({ timeTriggeredTaskId: timeTriggeredTask.timeTriggeredTaskId });
     }
