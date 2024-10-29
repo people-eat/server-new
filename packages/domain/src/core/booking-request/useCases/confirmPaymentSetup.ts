@@ -101,7 +101,7 @@ export async function confirmPaymentSetup({ runtime, context, request }: Confirm
 
         await klaviyoEmailAdapter.sendBookingRequestCreatedWithMenuForCookConfirmation({
             recipient: {
-                userId,
+                userId: cookUser.userId,
                 firstName: cookUser.firstName,
                 lastName: cookUser.lastName,
                 emailAddress: cookUser.emailAddress,

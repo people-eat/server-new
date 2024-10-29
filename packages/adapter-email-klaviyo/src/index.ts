@@ -122,7 +122,7 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
             recipient,
             data,
         }: Klaviyo.KlaviyoAdapterSendBookingRequestCreatedWithMenuForCustomerConfirmation): Promise<void> => {
-            await send({ recipient, metricId: 'booking-request-created-with-menu-for-cook', data });
+            await send({ recipient, metricId: 'booking-request-created-with-menu-for-customer', data });
         },
         sendBookingRequestCreatedWithMenuForCookConfirmation: async ({
             recipient,
