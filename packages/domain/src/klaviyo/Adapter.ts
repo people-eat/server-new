@@ -9,7 +9,7 @@ export interface KlaviyoAdapterSendRequest {
     data: object;
 }
 
-export interface KlaviyoAdapterSendGlobalBookingRequestWithEmailConfirmationRequest {
+export interface KlaviyoAdapterSendGlobalBookingRequestCreatedForCustomerConfirmation {
     recipient: Recipient;
     data: {
         globalBookingRequestId: NanoId;
@@ -26,12 +26,15 @@ export interface KlaviyoAdapterSendGlobalBookingRequestWithEmailConfirmationRequ
     };
 }
 
-export interface KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationRequest {
+export interface KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCustomerRequest {
     recipient: Recipient;
     data: {
         bookingRequestId: NanoId;
-        user: {
-            firstName: string;
+        customer: {
+            user: {
+                firstName: string;
+            };
+            url: string;
         };
         cook: {
             user: {
@@ -47,8 +50,33 @@ export interface KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationReques
         timeLabel: string;
         dateLabel: string;
         locationText: string;
+    };
+}
 
-        url: string;
+export interface KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCookRequest {
+    recipient: Recipient;
+    data: {
+        bookingRequestId: NanoId;
+        customer: {
+            user: {
+                firstName: string;
+            };
+        };
+        cook: {
+            user: {
+                firstName: string;
+            };
+            url: string;
+        };
+
+        configuredMenu: {
+            title: string | undefined;
+        };
+        occasion: string;
+
+        timeLabel: string;
+        dateLabel: string;
+        locationText: string;
     };
 }
 
@@ -192,10 +220,15 @@ export interface KlaviyoAdapterSendBookingRequestPaymentAnnouncementForCustomer 
 
 export interface Adapter {
     send(request: KlaviyoAdapterSendRequest): Promise<boolean>;
-    sendGlobalBookingRequestWithEmailConfirmation(
-        request: KlaviyoAdapterSendGlobalBookingRequestWithEmailConfirmationRequest,
+    sendGlobalBookingRequestCreatedForCustomerConfirmation(
+        request: KlaviyoAdapterSendGlobalBookingRequestCreatedForCustomerConfirmation,
     ): Promise<void>;
-    sendGlobalBookingMatchedConfirmation(request: KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationRequest): Promise<void>;
+    sendGlobalBookingMatchedForCustomerConfirmation(
+        request: KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCustomerRequest,
+    ): Promise<void>;
+    sendGlobalBookingMatchedForCookConfirmation(
+        request: KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCookRequest,
+    ): Promise<void>;
     sendBookingRequestWithMenuCreatedToCustomer(request: KlaviyoAdapterSendBookingRequestWithMenuCreatedRequest): Promise<void>;
     sendGiftCardPurchaseConfirmation(request: KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest): Promise<void>;
     sendGiftCardDelivery(request: KlaviyoAdapterSendGiftCardDelivery): Promise<void>;

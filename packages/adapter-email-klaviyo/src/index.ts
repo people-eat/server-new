@@ -72,17 +72,23 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
 
     return {
         send,
-        sendGlobalBookingRequestWithEmailConfirmation: async ({
+        sendGlobalBookingRequestCreatedForCustomerConfirmation: async ({
             recipient,
             data,
-        }: Klaviyo.KlaviyoAdapterSendGlobalBookingRequestWithEmailConfirmationRequest): Promise<void> => {
-            await send({ recipient, metricId: 'global-booking-request-with-sign-up', data });
+        }: Klaviyo.KlaviyoAdapterSendGlobalBookingRequestCreatedForCustomerConfirmation): Promise<void> => {
+            await send({ recipient, metricId: 'global-booking-request-created-for-customer', data });
         },
-        sendGlobalBookingMatchedConfirmation: async ({
+        sendGlobalBookingMatchedForCustomerConfirmation: async ({
             recipient,
             data,
-        }: Klaviyo.KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationRequest): Promise<void> => {
-            await send({ recipient, metricId: 'global-booking-request-matched', data });
+        }: Klaviyo.KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCustomerRequest): Promise<void> => {
+            await send({ recipient, metricId: 'global-booking-request-matched-for-customer', data });
+        },
+        sendGlobalBookingMatchedForCookConfirmation: async ({
+            recipient,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCookRequest): Promise<void> => {
+            await send({ recipient, metricId: 'global-booking-request-matched-for-cook', data });
         },
         sendBookingRequestWithMenuCreatedToCustomer: async ({
             recipient,

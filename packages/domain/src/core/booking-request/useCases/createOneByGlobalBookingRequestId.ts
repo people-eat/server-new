@@ -251,7 +251,7 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
     if (!messageSuccess) logger.info('persisting message for booking request failed');
 
     if (user.emailAddress) {
-        await klaviyoEmailAdapter.sendGlobalBookingMatchedConfirmation({
+        await klaviyoEmailAdapter.sendGlobalBookingMatchedForCustomerConfirmation({
             recipient: {
                 userId: user.userId,
                 emailAddress: user.emailAddress,
@@ -261,8 +261,11 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
             },
             data: {
                 bookingRequestId,
-                user: {
-                    firstName: user.firstName,
+                customer: {
+                    user: {
+                        firstName: user.firstName,
+                    },
+                    url: webAppUrl + routeBuilders.userProfileBookingRequest({ bookingRequestId }),
                 },
                 cook: {
                     user: {
@@ -276,8 +279,6 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
                 timeLabel: moment(dateTime).format('LT'),
                 dateLabel: dateTime.toDateString(),
                 locationText: locationText,
-
-                url: webAppUrl + routeBuilders.userProfileBookingRequest({ bookingRequestId }),
             },
         });
         // const customerEmailSuccess: boolean = await emailAdapter.sendToOne(
