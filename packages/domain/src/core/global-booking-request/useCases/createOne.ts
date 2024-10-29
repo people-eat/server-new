@@ -111,7 +111,7 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
     if (!emailSuccess) logger.info('sending email failed');
 
     if (user.emailAddress) {
-        await klaviyoEmailAdapter.sendGlobalBookingRequestWithEmailConfirmation({
+        await klaviyoEmailAdapter.sendGlobalBookingRequestCreatedForCustomerConfirmation({
             recipient: {
                 userId,
                 firstName: user.firstName,

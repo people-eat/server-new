@@ -231,7 +231,7 @@ export async function createOne({ runtime, context, request }: CreateOneUserByEm
 
         const formattedDateTime: string = moment(globalBookingRequest.dateTime).format('MMMM Do YYYY, h:mm a');
 
-        await klaviyoEmailAdapter.sendGlobalBookingRequestWithEmailConfirmation({
+        await klaviyoEmailAdapter.sendGlobalBookingRequestCreatedForCustomerConfirmation({
             recipient: {
                 userId,
                 firstName,
