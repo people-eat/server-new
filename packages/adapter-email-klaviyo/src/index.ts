@@ -90,6 +90,9 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
         }: Klaviyo.KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest): Promise<void> => {
             await send({ recipient, metricId: 'gift-card-purchase', data });
         },
+        sendGiftCardDelivery: async ({ recipient, data }: Klaviyo.KlaviyoAdapterSendGiftCardDelivery): Promise<void> => {
+            await send({ recipient, metricId: 'gift-card-delivery', data });
+        },
         sendResetPassword: async ({ recipient, data }: Klaviyo.KlaviyoAdapterSendResetPassword): Promise<void> => {
             await send({ recipient, metricId: 'reset-password', data });
         },
