@@ -158,13 +158,13 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
             recipient,
             data,
         }: Klaviyo.KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void> => {
-            await send({ recipient, metricId: 'booking-request-cook-declined', data });
+            await send({ recipient, metricId: 'booking-request-cook-accepted', data });
         },
         sendCookDeclinedBookingRequestNotification: async ({
             recipient,
             data,
         }: Klaviyo.KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void> => {
-            await send({ recipient, metricId: 'booking-request-cook-accepted', data });
+            await send({ recipient, metricId: 'booking-request-cook-declined', data });
         },
         sendBookingRequestPaymentAnnouncementForCustomer: async ({
             recipient,
