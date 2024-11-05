@@ -86,6 +86,7 @@ async function persistMenuBookingRequest(
 
     logger.info(
         `In persistMenuBookingRequest: ${JSON.stringify({
+            bookingRequestId,
             inputs: {
                 adultParticipants,
                 children,
