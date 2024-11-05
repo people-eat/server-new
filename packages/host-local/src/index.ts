@@ -36,7 +36,11 @@ async function bootstrap(): Promise<void> {
         logger,
         reset: false,
     });
+    const giftCardPromoCode: any = await dataSourceAdapter.giftCardPromoCodeRepository.findOne({
+        giftCardPromoCodeId: undefined,
+    });
 
+    console.log(giftCardPromoCode);
     const emailAdapter: Email.Adapter = createEmailAdapter({
         logger,
         emailAddress: environmentVariables.email.emailAddress,

@@ -1,6 +1,7 @@
-import { type Klaviyo, type Logger, type User } from '@people-eat/server-domain';
+import { type Klaviyo, type Logger } from '@people-eat/server-domain';
 import { randomUUID } from 'crypto';
 import { ApiKeySession, EventsApi, ProfilesApi } from 'klaviyo-api';
+import { getKlaviyoProfileIdForUser } from './getKlaviyoProfileIdForUser';
 
 export interface CreateEmailAdapterInput {
     logger: Logger.Adapter;
@@ -12,76 +13,8 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
     const profiles: ProfilesApi = new ProfilesApi(session);
     const events: EventsApi = new EventsApi(session);
 
-    const getKlaviyoUserId = async (
-        user: Pick<User, 'userId' | 'firstName' | 'lastName' | 'emailAddress' | 'phoneNumber'>,
-    ): Promise<string> => {
-        const { body: getResponseBody } = await profiles.getProfiles({ filter: `equals(external_id,"${user.userId}")` });
-        const [existingProfile] = getResponseBody.data;
-
-        if (!existingProfile) {
-            logger.info(`Requested Klaviyo profile for PeopleEat user with id '${user.userId}' and did not receive one.`);
-
-            const { body: getResponseBodyByEmail } = await profiles.getProfiles({ filter: `equals(email,"${user.emailAddress}")` });
-            const [existingProfileByEmail] = getResponseBodyByEmail.data;
-
-            if (existingProfileByEmail && existingProfileByEmail.id) {
-                logger.info(
-                    `Requested Klaviyo profile for PeopleEat user with email address '${
-                        user.emailAddress
-                    }' and did receive one:\n${JSON.stringify(existingProfileByEmail)}`,
-                );
-                await profiles.updateProfile(existingProfileByEmail.id, {
-                    data: {
-                        id: existingProfileByEmail.id,
-                        type: 'profile',
-                        attributes: {
-                            externalId: user.userId,
-                        },
-                    },
-                });
-                logger.info(
-                    `Updated external id of Klaviyo profile with email address '${user.emailAddress}' from ${existingProfileByEmail.id} to ${user.userId}}`,
-                );
-                return existingProfileByEmail.id;
-            }
-
-            try {
-                const { body: createResponseBody } = await profiles.createProfile({
-                    data: {
-                        type: 'profile',
-                        attributes: {
-                            externalId: user.userId,
-                            email: user.emailAddress,
-                            // phoneNumber: user.phoneNumber,
-                            firstName: user.firstName,
-                            lastName: user.lastName,
-                        },
-                    },
-                });
-
-                logger.info(
-                    `Created Klaviyo profile for PeopleEat user with id '${user.userId}'\n${JSON.stringify(createResponseBody.data)}`,
-                );
-
-                return createResponseBody.data.id ?? '';
-            } catch (error) {
-                logger.error(error);
-                logger.error(`Could not create Klaviyo profile for user data \n${JSON.stringify(user)}`);
-                return '';
-            }
-        }
-
-        logger.info(
-            `Requested Klaviyo profile for PeopleEat user with id '${user.userId}' and did receive one:\n${JSON.stringify(
-                existingProfile,
-            )}`,
-        );
-
-        return existingProfile.id ?? '';
-    };
-
     const send = async ({ recipient, metricId, data }: Klaviyo.KlaviyoAdapterSendRequest): Promise<boolean> => {
-        const klaviyoUserId: string = await getKlaviyoUserId(recipient);
+        const klaviyoUserId: string = await getKlaviyoProfileIdForUser({ logger, profiles, user: recipient });
 
         await events.createEvent({
             data: {
