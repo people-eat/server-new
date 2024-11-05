@@ -1,3 +1,3 @@
 export { type Adapter } from './Adapter';
 export * from './entities';
-export { type Repository } from './Repository';
+export { type NonEmptyPartial, type Repository } from './Repository';

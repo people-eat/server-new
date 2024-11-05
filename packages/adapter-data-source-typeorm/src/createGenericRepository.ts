@@ -6,7 +6,7 @@ export default function createGenericRepository<Entity extends ObjectLiteral>(
     logger: Logger.Adapter,
 ): DataSource.Repository<Entity> {
     return {
-        findOne: async (criteria: Partial<Entity>): Promise<Entity | undefined> => {
+        findOne: async (criteria: DataSource.NonEmptyPartial<Entity>): Promise<Entity | undefined> => {
             try {
                 const entity: Entity | null = await genericRepository.findOne({ where: criteria });
                 if (!entity) return undefined;
@@ -16,7 +16,7 @@ export default function createGenericRepository<Entity extends ObjectLiteral>(
                 return undefined;
             }
         },
-        findMany: async (criteria: Partial<Entity>): Promise<Entity[] | undefined> => {
+        findMany: async (criteria: DataSource.NonEmptyPartial<Entity>): Promise<Entity[] | undefined> => {
             try {
                 const entities: Entity[] = await genericRepository.find({ where: criteria });
                 return entities;

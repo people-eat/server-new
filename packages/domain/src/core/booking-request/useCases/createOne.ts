@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { Authorization, type Course, type MealOption, type PublicMenu } from '../../..';
 import { type Context } from '../../../authorization';
-import { type DBBookingRequest, type DBGiftCardPromoCode, type DBUser } from '../../../data-source';
+import { type DBGiftCardPromoCode, type DBUser } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { calculateMenuPrice } from '../../calculateMenuPrice';
 import { type ConfiguredMenuCourse } from '../../configured-menu';
@@ -69,19 +69,25 @@ async function persistMenuBookingRequest(
         publicMenu.pricePerChild,
     );
 
-    const giftCardPromoCode: DBGiftCardPromoCode | undefined = await dataSourceAdapter.giftCardPromoCodeRepository.findOne({
-        giftCardPromoCodeId,
-    });
+    let giftCardPromoCode: DBGiftCardPromoCode | undefined;
 
-    const bookingRequestWithPromoCode: DBBookingRequest | undefined = await dataSourceAdapter.bookingRequestRepository.findOne({
-        userId,
-        giftCardPromoCodeId,
-    });
+    if (giftCardPromoCodeId) {
+        const found: DBGiftCardPromoCode | undefined = await dataSourceAdapter.giftCardPromoCodeRepository.findOne({
+            giftCardPromoCodeId,
+        });
 
-    const totalAmountUser: number =
-        giftCardPromoCode && !bookingRequestWithPromoCode
-            ? (menuPrice + menuPrice * 0.04 + travelExpensesAmount - giftCardPromoCode.amount + 25) / (1 - 0.015)
-            : (menuPrice + menuPrice * 0.04 + travelExpensesAmount + 25) / (1 - 0.015);
+        if (!found)
+            logger.info(`Booking request ${bookingRequestId}. Tried to apply promo code ${giftCardPromoCodeId}, but didn't find one in DB`);
+        else if (new Date(found.expiresAt) < new Date()) {
+            logger.info(
+                `Booking request ${bookingRequestId}. Tried to apply promo code ${giftCardPromoCodeId}, found ${found}, bit it is already expired`,
+            );
+        } else giftCardPromoCode = found;
+    }
+
+    const totalAmountUser: number = giftCardPromoCode
+        ? (menuPrice + menuPrice * 0.04 + travelExpensesAmount - giftCardPromoCode.amount + 25) / (1 - 0.015)
+        : (menuPrice + menuPrice * 0.04 + travelExpensesAmount + 25) / (1 - 0.015);
     const totalAmountCook: number = Math.round(menuPrice * ((100 - 18) / 100)) + travelExpensesAmount;
 
     logger.info(
@@ -123,7 +129,8 @@ async function persistMenuBookingRequest(
         fee: 22,
         occasion: occasion.trim(),
         createdAt: new Date(),
-        giftCardPromoCodeId,
+        // info: don't use the one right out of the request. It could reference one that has not been applied. i.e. already expired
+        giftCardPromoCodeId: giftCardPromoCode?.giftCardPromoCodeId,
         paymentData: { ...paymentData, provider: 'STRIPE', confirmed: false, unlocked: false },
         travelExpensesAmount,
         // costBreakdown: {
