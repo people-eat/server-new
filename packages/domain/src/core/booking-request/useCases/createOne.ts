@@ -88,6 +88,7 @@ async function persistMenuBookingRequest(
         `In persistMenuBookingRequest: ${JSON.stringify({
             giftCardPromoCodeIdInRequest: giftCardPromoCodeId,
             giftCardPromoCodeRetrievedFromDB: giftCardPromoCode,
+            dbQueryPayload: { giftCardPromoCodeId },
             bookingRequestId,
             inputs: {
                 adultParticipants,
