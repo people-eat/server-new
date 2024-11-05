@@ -20,7 +20,7 @@ export async function findManyByCookId({
     await Authorization.canQueryUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
     const globalBookingRequests: DataSource.DBGlobalBookingRequest[] | undefined =
-        await dataSourceAdapter.globalBookingRequestRepository.findMany({});
+        await dataSourceAdapter.globalBookingRequestRepository.findAll();
 
     // filter relevant ones for cook
 

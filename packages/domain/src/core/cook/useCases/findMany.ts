@@ -14,7 +14,7 @@ export async function findMany({ runtime, context }: FindManyCooksInput): Promis
     const { dataSourceAdapter, logger } = runtime;
     await Authorization.isAdmin({ dataSourceAdapter, logger, context });
 
-    const cooks: DataSource.DBCook[] | undefined = await dataSourceAdapter.cookRepository.findMany({});
+    const cooks: DataSource.DBCook[] | undefined = await dataSourceAdapter.cookRepository.findAll();
 
     if (!cooks) return;
 

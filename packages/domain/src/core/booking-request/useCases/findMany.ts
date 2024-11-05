@@ -16,7 +16,7 @@ export async function findMany({ runtime, context }: FindManyBookingRequestInput
     const { dataSourceAdapter, logger } = runtime;
     await Authorization.isAdmin({ dataSourceAdapter, logger, context });
 
-    const bookingRequests: DBBookingRequest[] | undefined = await dataSourceAdapter.bookingRequestRepository.findMany({});
+    const bookingRequests: DBBookingRequest[] | undefined = await dataSourceAdapter.bookingRequestRepository.findAll();
 
     if (!bookingRequests) return;
 

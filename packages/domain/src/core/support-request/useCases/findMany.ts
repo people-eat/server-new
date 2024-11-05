@@ -17,7 +17,7 @@ export async function findMany({
 }: FindManySupportRequestsInput): Promise<SupportRequest[] | undefined> {
     await Authorization.isAdmin({ context, dataSourceAdapter, logger });
 
-    const supportRequests: DBSupportRequest[] | undefined = await dataSourceAdapter.supportRequestRepository.findMany({});
+    const supportRequests: DBSupportRequest[] | undefined = await dataSourceAdapter.supportRequestRepository.findAll();
 
     if (!supportRequests) return;
 

@@ -25,6 +25,15 @@ export default function createGenericRepository<Entity extends ObjectLiteral>(
                 return undefined;
             }
         },
+        findAll: async (): Promise<Entity[] | undefined> => {
+            try {
+                const entities: Entity[] = await genericRepository.find();
+                return entities;
+            } catch (error) {
+                logger.error(error);
+                return undefined;
+            }
+        },
         insertOne: async (entity: Entity): Promise<boolean> => {
             try {
                 await genericRepository.save(entity);

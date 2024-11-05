@@ -12,7 +12,7 @@ export interface FindManyUsersInput {
 export async function findMany({ runtime: { dataSourceAdapter, logger }, context }: FindManyUsersInput): Promise<User[] | undefined> {
     await Authorization.isAdmin({ dataSourceAdapter, logger, context });
 
-    const users: DataSource.DBUser[] | undefined = await dataSourceAdapter.userRepository.findMany({});
+    const users: DataSource.DBUser[] | undefined = await dataSourceAdapter.userRepository.findAll();
 
     if (!users) return;
 

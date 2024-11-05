@@ -12,7 +12,7 @@ export interface FindManySearchRequestsInput {
 export async function findMany({ dataSourceAdapter, logger, context }: FindManySearchRequestsInput): Promise<SearchRequest[]> {
     await Authorization.isAdmin({ context, dataSourceAdapter, logger });
 
-    const searchRequests: DataSource.DBSearchRequest[] | undefined = await dataSourceAdapter.searchRequestRepository.findMany({});
+    const searchRequests: DataSource.DBSearchRequest[] | undefined = await dataSourceAdapter.searchRequestRepository.findAll();
 
     if (!searchRequests) return [];
 

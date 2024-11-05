@@ -22,7 +22,7 @@ export interface FindManyPublicMenusInput {
 
 // eslint-disable-next-line max-statements
 export async function findHeroGroups({ dataSourceAdapter }: FindManyPublicMenusInput): Promise<HeroMenuGroup[]> {
-    const menus: DataSource.DBMenu[] | undefined = await dataSourceAdapter.menuRepository.findMany({});
+    const menus: DataSource.DBMenu[] | undefined = await dataSourceAdapter.menuRepository.findAll();
 
     if (!menus) return [];
 

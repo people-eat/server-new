@@ -16,7 +16,7 @@ export async function findMany({
 }: FindManyGiftCardPromoCodesInput): Promise<GiftCard[] | undefined> {
     await Authorization.isAdmin({ context, dataSourceAdapter, logger });
 
-    const giftCardPromoCodes: DBGiftCardPromoCode[] | undefined = await dataSourceAdapter.giftCardPromoCodeRepository.findMany({});
+    const giftCardPromoCodes: DBGiftCardPromoCode[] | undefined = await dataSourceAdapter.giftCardPromoCodeRepository.findAll();
 
     if (!giftCardPromoCodes) return;
 

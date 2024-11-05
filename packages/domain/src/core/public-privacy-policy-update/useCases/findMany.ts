@@ -11,7 +11,7 @@ export interface FindManyAllergiesInput {
 
 export async function findMany({ dataSourceAdapter }: FindManyAllergiesInput): Promise<PublicPrivacyPolicyUpdate[] | undefined> {
     const privacyPolicyUpdates: DataSource.DBPrivacyPolicyUpdate[] | undefined =
-        await dataSourceAdapter.privacyPolicyUpdateRepository.findMany({});
+        await dataSourceAdapter.privacyPolicyUpdateRepository.findAll();
 
     if (!privacyPolicyUpdates) return;
 

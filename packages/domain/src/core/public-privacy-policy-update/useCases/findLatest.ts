@@ -9,7 +9,7 @@ export interface FindOneCategoryInput {
 
 export async function findLatest({ dataSourceAdapter }: FindOneCategoryInput): Promise<PublicPrivacyPolicyUpdate | undefined> {
     const privacyPolicyUpdates: DataSource.DBPrivacyPolicyUpdate[] | undefined =
-        await dataSourceAdapter.privacyPolicyUpdateRepository.findMany({});
+        await dataSourceAdapter.privacyPolicyUpdateRepository.findAll();
 
     if (!privacyPolicyUpdates?.length) return;
 

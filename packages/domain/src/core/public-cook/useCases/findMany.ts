@@ -13,7 +13,7 @@ export interface FindManyPublicCooksInput {
 }
 
 export async function findMany({ dataSourceAdapter, request }: FindManyPublicCooksInput): Promise<PublicCook[] | undefined> {
-    const cooks: DataSource.DBCook[] | undefined = await dataSourceAdapter.cookRepository.findMany({});
+    const cooks: DataSource.DBCook[] | undefined = await dataSourceAdapter.cookRepository.findAll();
 
     if (!cooks) return;
 

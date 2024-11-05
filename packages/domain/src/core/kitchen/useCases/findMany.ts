@@ -10,7 +10,7 @@ export interface FindManyAllergiesInput {
 }
 
 export async function findMany({ dataSourceAdapter }: FindManyAllergiesInput): Promise<Kitchen[] | undefined> {
-    const kitchens: DataSource.DBKitchen[] | undefined = await dataSourceAdapter.kitchenRepository.findMany({});
+    const kitchens: DataSource.DBKitchen[] | undefined = await dataSourceAdapter.kitchenRepository.findAll();
 
     if (!kitchens) return;
 

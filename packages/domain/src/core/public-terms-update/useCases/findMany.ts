@@ -10,7 +10,7 @@ export interface FindManyAllergiesInput {
 }
 
 export async function findMany({ dataSourceAdapter }: FindManyAllergiesInput): Promise<PublicTermsUpdate[] | undefined> {
-    const termsUpdates: DataSource.DBTermsUpdate[] | undefined = await dataSourceAdapter.termsUpdateRepository.findMany({});
+    const termsUpdates: DataSource.DBTermsUpdate[] | undefined = await dataSourceAdapter.termsUpdateRepository.findAll();
 
     if (!termsUpdates) return;
 

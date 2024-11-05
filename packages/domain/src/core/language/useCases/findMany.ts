@@ -10,7 +10,7 @@ export interface FindManyAllergiesInput {
 }
 
 export async function findMany({ dataSourceAdapter }: FindManyAllergiesInput): Promise<Language[] | undefined> {
-    const languages: DataSource.DBLanguage[] | undefined = await dataSourceAdapter.languageRepository.findMany({});
+    const languages: DataSource.DBLanguage[] | undefined = await dataSourceAdapter.languageRepository.findAll();
 
     if (!languages) return;
 

@@ -8,7 +8,7 @@ export interface FindManyAllergiesInput {
 }
 
 export async function findMany({ dataSourceAdapter }: FindManyAllergiesInput): Promise<Log[] | undefined> {
-    const logs: DataSource.DBLog[] | undefined = await dataSourceAdapter.logRepository.findMany({});
+    const logs: DataSource.DBLog[] | undefined = await dataSourceAdapter.logRepository.findAll();
 
     if (!logs) return;
 

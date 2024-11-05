@@ -17,7 +17,7 @@ export async function findMany({
 }: FindManyGlobalBookingRequestInput): Promise<GlobalBookingRequest[] | undefined> {
     await Authorization.isAdmin({ context, dataSourceAdapter, logger });
 
-    const globalBookingRequests: DBGlobalBookingRequest[] | undefined = await dataSourceAdapter.globalBookingRequestRepository.findMany({});
+    const globalBookingRequests: DBGlobalBookingRequest[] | undefined = await dataSourceAdapter.globalBookingRequestRepository.findAll();
 
     if (!globalBookingRequests) return;
 

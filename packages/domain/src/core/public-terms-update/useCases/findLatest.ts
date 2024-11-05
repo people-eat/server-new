@@ -8,7 +8,7 @@ export interface FindOneCategoryInput {
 }
 
 export async function findLatest({ dataSourceAdapter }: FindOneCategoryInput): Promise<PublicTermsUpdate | undefined> {
-    const termsUpdates: DataSource.DBTermsUpdate[] | undefined = await dataSourceAdapter.termsUpdateRepository.findMany({});
+    const termsUpdates: DataSource.DBTermsUpdate[] | undefined = await dataSourceAdapter.termsUpdateRepository.findAll();
 
     if (!termsUpdates?.length) return;
 
