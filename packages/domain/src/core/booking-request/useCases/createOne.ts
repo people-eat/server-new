@@ -84,6 +84,22 @@ async function persistMenuBookingRequest(
             : (menuPrice + menuPrice * 0.04 + travelExpensesAmount + 25) / (1 - 0.015);
     const totalAmountCook: number = Math.round(menuPrice * ((100 - 18) / 100)) + travelExpensesAmount;
 
+    logger.info(
+        `In persistMenuBookingRequest: ${JSON.stringify({
+            inputs: {
+                adultParticipants,
+                children,
+                publicMenu,
+                giftCardPromoCode,
+            },
+            results: {
+                menuPrice,
+                totalAmountUser,
+                totalAmountCook,
+            },
+        })}`,
+    );
+
     const success: boolean = await dataSourceAdapter.bookingRequestRepository.insertOne({
         bookingRequestId,
         userId,
