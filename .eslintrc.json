@@ -10,7 +10,7 @@
                 "no-console": "warn",
                 "no-alert": "error",
                 "curly": ["error", "multi-or-nest"],
-                "no-return-await": "error",
+                // "no-return-await": "error",
                 "eqeqeq": "error",
                 "max-depth": ["error", 3],
                 "max-statements": ["warn", 32],

@@ -57,8 +57,11 @@ export function createSessionResolvers(
             ): Promise<boolean> => service.session.updateCookieSettings(context, request),
         },
         UserSessionMutation: {
-            expireCurrent: async ({ userId }: GQLUserSessionMutation, _: unknown, context: Authorization.Context): Promise<boolean> =>
-                service.session.expireOne(context, { sessionId: context.sessionId, userId }),
+            expireCurrent: async ({ userId }: GQLUserSessionMutation, _: unknown, context: Authorization.Context): Promise<boolean> => {
+                if (!context.sessionId) return false;
+
+                return await service.session.expireOne(context, { sessionId: context.sessionId, userId });
+            },
         },
         UserSessionQuery: {},
     };

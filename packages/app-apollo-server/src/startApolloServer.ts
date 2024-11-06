@@ -266,6 +266,9 @@ export async function startApolloServerApp({
                 return {
                     sessionId: result.sessionId,
                     userId: result.userId,
+                    // here the request already has a sessionId and only clients with the people-eat-client-type header are able to get one assigned
+                    // cool would be to store the client type in the session and reuse it here
+                    requestingClientType: 'UNKNOWN',
                 };
             },
             schema,
@@ -311,16 +314,32 @@ export async function startApolloServerApp({
         graphqlUploadExpress({ maxFileSize: undefined, maxFiles: 10 }),
         expressMiddleware(server, {
             context: async ({ req, res }: ExpressContextFunctionArgument): Promise<Authorization.Context> => {
-                // const isPeopleEatClient: string | undefined = req.cookies['is-people-eat-client'];
-
-                // if (!isPeopleEatClient) {
-                //     return {
-                //         ...req,
-                //         sessionId: 'session-id',
-                //     };
-                // }
-
+                const peopleEatClientType: string | string[] | undefined = req.headers['people-eat-client-type'];
                 const sessionId: string | undefined = req.cookies[sessionIdCookie.name];
+
+                // todo: match peopleEatClientType with real enum or so
+
+                if (!peopleEatClientType) {
+                    return {
+                        ...req,
+                        sessionId: undefined,
+                        userId: undefined,
+                        requestingClientType: 'UNKNOWN',
+                    };
+                }
+
+                // request from ssr for a browser without session id -> first time visitor
+                if (!sessionId && peopleEatClientType === 'WEB_SSR') {
+                    return {
+                        ...req,
+                        sessionId: undefined,
+                        userId: undefined,
+                        requestingClientType: 'WEB_SSR',
+                    };
+                }
+
+                // EITHER a request from a web client with or without sessionId OR from ssr with a passed trough sessionId
+
                 const result: Authorization.AuthorizeSessionOutput | undefined = await Authorization.authorizeSession({
                     dataSourceAdapter,
                     logger,
@@ -341,6 +360,7 @@ export async function startApolloServerApp({
                     ...req,
                     sessionId: result.sessionId,
                     userId: result.userId,
+                    requestingClientType: 'WEB_BROWSER',
                 };
             },
         }),

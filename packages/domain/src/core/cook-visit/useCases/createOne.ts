@@ -24,6 +24,8 @@ export async function createOne({ runtime: { dataSourceAdapter }, context, reque
     const { cookId } = request;
     const { sessionId, userId } = context;
 
+    if (!sessionId) return false;
+
     if (ourUserIds.findIndex((ourUserId: string) => ourUserId === userId) !== -1) return true;
 
     const success: boolean = await dataSourceAdapter.cookVisitRepository.insertOne({
