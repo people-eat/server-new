@@ -200,7 +200,7 @@ export interface KlaviyoAdapterSendNewChatMessageNotification {
 }
 
 export interface KlaviyoAdapterSendNewsletterSubscriptionConfirmation {
-    recipient: Recipient;
+    email: string;
     // eslint-disable-next-line @typescript-eslint/ban-types
     data: {};
     // todo make send param data optional for no-payload emails
@@ -210,14 +210,16 @@ export interface KlaviyoAdapterSendCookAcceptedBookingRequest {
     recipient: Recipient;
     data: {
         bookingRequestId: NanoId;
+        formattedPrice: string;
         user: {
             firstName: string;
             /** to chat */
             url: string;
-            formattedPrice: string;
         };
         cook: {
             firstName: string;
+            /** to chat */
+            url: string;
         };
     };
 }
@@ -226,11 +228,9 @@ export interface KlaviyoAdapterSendCookDeclinedBookingRequest {
     recipient: Recipient;
     data: {
         bookingRequestId: NanoId;
+        formattedPrice: string;
         user: {
             firstName: string;
-            /** to request */
-            url: string;
-            formattedPrice: string;
         };
         cook: {
             firstName: string;
@@ -254,7 +254,7 @@ export interface KlaviyoAdapterSendBookingRequestPaymentAnnouncementForCustomer 
 }
 
 export interface Adapter {
-    send(request: KlaviyoAdapterSendRequest): Promise<boolean>;
+    newMetricKey(): Promise<void>;
     sendGlobalBookingRequestCreatedForCustomerConfirmation(
         request: KlaviyoAdapterSendGlobalBookingRequestCreatedForCustomerConfirmation,
     ): Promise<void>;
@@ -275,8 +275,10 @@ export interface Adapter {
     sendResetPassword(request: KlaviyoAdapterSendResetPassword): Promise<void>;
     sendNewChatMessageNotification(request: KlaviyoAdapterSendNewChatMessageNotification): Promise<void>;
     sendNewsletterSubscriptionConfirmation(request: KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void>;
-    sendCookAcceptedBookingRequestNotification(request: KlaviyoAdapterSendCookAcceptedBookingRequest): Promise<void>;
-    sendCookDeclinedBookingRequestNotification(request: KlaviyoAdapterSendCookDeclinedBookingRequest): Promise<void>;
+    sendCookAcceptedBookingRequestNotificationForCustomer(request: KlaviyoAdapterSendCookAcceptedBookingRequest): Promise<void>;
+    sendCookAcceptedBookingRequestNotificationForCook(request: KlaviyoAdapterSendCookAcceptedBookingRequest): Promise<void>;
+    sendCookDeclinedBookingRequestNotificationForCustomer(request: KlaviyoAdapterSendCookDeclinedBookingRequest): Promise<void>;
+    sendCookDeclinedBookingRequestNotificationForCook(request: KlaviyoAdapterSendCookDeclinedBookingRequest): Promise<void>;
     sendBookingRequestPaymentAnnouncementForCustomer(
         request: KlaviyoAdapterSendBookingRequestPaymentAnnouncementForCustomer,
     ): Promise<void>;

@@ -17,11 +17,7 @@ export async function getKlaviyoProfileIdForEmail({ logger, profiles, email }: G
                 data: {
                     type: 'profile',
                     attributes: {
-                        // externalId: '',
                         email,
-                        // phoneNumber: '',
-                        // firstName: '',
-                        // lastName: '',
                     },
                 },
             });

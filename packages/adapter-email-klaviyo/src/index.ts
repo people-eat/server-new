@@ -1,7 +1,7 @@
 import { type Klaviyo, type Logger } from '@people-eat/server-domain';
-import { randomUUID } from 'crypto';
 import { ApiKeySession, EventsApi, ProfilesApi } from 'klaviyo-api';
-import { getKlaviyoProfileIdForUser } from './getKlaviyoProfileIdForUser';
+import { sendToEmail } from './sendToEmail';
+import { sendToUser } from './sendToUser';
 
 export interface CreateEmailAdapterInput {
     logger: Logger.Adapter;
@@ -13,97 +13,122 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
     const profiles: ProfilesApi = new ProfilesApi(session);
     const events: EventsApi = new EventsApi(session);
 
-    const send = async ({ recipient, metricId, data }: Klaviyo.KlaviyoAdapterSendRequest): Promise<boolean> => {
-        const klaviyoUserId: string = await getKlaviyoProfileIdForUser({ logger, profiles, user: recipient });
-
-        await events.createEvent({
-            data: {
-                type: 'event',
-                attributes: {
-                    uniqueId: randomUUID(),
-                    properties: data,
-                    profile: { data: { type: 'profile', id: klaviyoUserId, attributes: {} } },
-                    metric: { data: { type: 'metric', attributes: { name: metricId } } },
-                },
-            },
-        });
-
-        return true;
-    };
-
     return {
-        send,
+        newMetricKey: async (): Promise<void> => {
+            // const metricId: string = 'booking-request-cook-declined-for-customer';
+            // await sendToUser({
+            //     logger,
+            //     profiles,
+            //     events,
+            //     recipient: {
+            //         userId: '88c0fyYn5ZIYITHKfERz',
+            //         firstName: 'Cem',
+            //         lastName: 'Yilmaz',
+            //         phoneNumber: undefined,
+            //         emailAddress: 'yilmaz.cem.2603@gmail.com',
+            //     },
+            //     metricId,
+            //     data: {},
+            // });
+        },
         sendGlobalBookingRequestCreatedForCustomerConfirmation: async ({
             recipient,
             data,
         }: Klaviyo.KlaviyoAdapterSendGlobalBookingRequestCreatedForCustomerConfirmation): Promise<void> => {
-            await send({ recipient, metricId: 'global-booking-request-created-for-customer', data });
+            const metricId: string = 'global-booking-request-created-for-customer';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
         sendGlobalBookingMatchedForCustomerConfirmation: async ({
             recipient,
             data,
         }: Klaviyo.KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCustomerRequest): Promise<void> => {
-            await send({ recipient, metricId: 'global-booking-request-matched-for-customer', data });
+            const metricId: string = 'global-booking-request-matched-for-customer';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
         sendGlobalBookingMatchedForCookConfirmation: async ({
             recipient,
             data,
         }: Klaviyo.KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCookRequest): Promise<void> => {
-            await send({ recipient, metricId: 'global-booking-request-matched-for-cook', data });
+            const metricId: string = 'global-booking-request-matched-for-cook';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
         sendBookingRequestCreatedWithMenuForCustomerConfirmation: async ({
             recipient,
             data,
         }: Klaviyo.KlaviyoAdapterSendBookingRequestCreatedWithMenuForCustomerConfirmation): Promise<void> => {
-            await send({ recipient, metricId: 'booking-request-created-with-menu-for-customer', data });
+            const metricId: string = 'booking-request-created-with-menu-for-customer';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
         sendBookingRequestCreatedWithMenuForCookConfirmation: async ({
             recipient,
             data,
         }: Klaviyo.KlaviyoAdapterSendBookingRequestCreatedWithMenuForCookConfirmation): Promise<void> => {
-            await send({ recipient, metricId: 'booking-request-created-with-menu-for-cook', data });
+            const metricId: string = 'booking-request-created-with-menu-for-cook';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
         sendGiftCardPurchaseConfirmation: async ({
             recipient,
             data,
         }: Klaviyo.KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest): Promise<void> => {
-            await send({ recipient, metricId: 'gift-card-purchase', data });
+            const metricId: string = 'gift-card-purchase';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
         sendGiftCardDelivery: async ({ recipient, data }: Klaviyo.KlaviyoAdapterSendGiftCardDelivery): Promise<void> => {
-            await send({ recipient, metricId: 'gift-card-delivery', data });
+            const metricId: string = 'gift-card-delivery';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
         sendResetPassword: async ({ recipient, data }: Klaviyo.KlaviyoAdapterSendResetPassword): Promise<void> => {
-            await send({ recipient, metricId: 'reset-password', data });
+            const metricId: string = 'reset-password';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
         sendNewChatMessageNotification: async ({
             recipient,
             data,
         }: Klaviyo.KlaviyoAdapterSendNewChatMessageNotification): Promise<void> => {
-            await send({ recipient, metricId: 'send-chat-message', data });
+            const metricId: string = 'send-chat-message';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
         sendNewsletterSubscriptionConfirmation: async ({
-            recipient,
+            email,
             data,
         }: Klaviyo.KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void> => {
-            await send({ recipient, metricId: 'newsletter-subscription', data });
+            const metricId: string = 'newsletter-subscription';
+            await sendToEmail({ logger, profiles, events, email, metricId, data });
         },
-        sendCookAcceptedBookingRequestNotification: async ({
+        sendCookAcceptedBookingRequestNotificationForCook: async ({
             recipient,
             data,
-        }: Klaviyo.KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void> => {
-            await send({ recipient, metricId: 'booking-request-cook-accepted', data });
+        }: Klaviyo.KlaviyoAdapterSendCookAcceptedBookingRequest): Promise<void> => {
+            const metricId: string = 'booking-request-cook-accepted-for-cook';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
-        sendCookDeclinedBookingRequestNotification: async ({
+        sendCookAcceptedBookingRequestNotificationForCustomer: async ({
             recipient,
             data,
-        }: Klaviyo.KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void> => {
-            await send({ recipient, metricId: 'booking-request-cook-declined', data });
+        }: Klaviyo.KlaviyoAdapterSendCookAcceptedBookingRequest): Promise<void> => {
+            const metricId: string = 'booking-request-cook-accepted-for-customer';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
+        },
+        sendCookDeclinedBookingRequestNotificationForCook: async ({
+            recipient,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendCookDeclinedBookingRequest): Promise<void> => {
+            const metricId: string = 'booking-request-cook-declined-for-cook';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
+        },
+        sendCookDeclinedBookingRequestNotificationForCustomer: async ({
+            recipient,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendCookDeclinedBookingRequest): Promise<void> => {
+            const metricId: string = 'booking-request-cook-declined-for-customer';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
         sendBookingRequestPaymentAnnouncementForCustomer: async ({
             recipient,
             data,
         }: Klaviyo.KlaviyoAdapterSendBookingRequestPaymentAnnouncementForCustomer): Promise<void> => {
-            await send({ recipient, metricId: 'booking-request-payment-announcement-for-customer', data });
+            const metricId: string = 'booking-request-payment-announcement-for-customer';
+            await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
     };
 }

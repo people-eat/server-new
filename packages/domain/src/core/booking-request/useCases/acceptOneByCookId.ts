@@ -1,6 +1,7 @@
 import moment, { type Moment } from 'moment';
 import { Authorization, type ChatMessage } from '../../..';
 import { type DBBookingRequest, type DBCook, type DBUser } from '../../../data-source';
+import { type KlaviyoAdapterSendCookAcceptedBookingRequest } from '../../../klaviyo';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
@@ -71,11 +72,25 @@ export async function acceptOneByCookId({ runtime, context, request }: AcceptOne
         bookingRequestChatMessageCreations: chatMessage,
     });
 
+    const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
+    const customerProfileGlobalBookingRequestsChatUrl: string = webAppUrl + `/profile/bookings/s/${bookingRequest.bookingRequestId}`;
+    const cookProfileGlobalBookingRequestsChatUrl: string = webAppUrl + `/profile/bookings/r/${bookingRequest.bookingRequestId}`;
+
+    const emailData: KlaviyoAdapterSendCookAcceptedBookingRequest['data'] = {
+        bookingRequestId,
+        formattedPrice: formatPrice(bookingRequest.totalAmountUser, bookingRequest.currencyCode),
+        user: {
+            firstName: user.firstName,
+            url: customerProfileGlobalBookingRequestsChatUrl,
+        },
+        cook: {
+            firstName: cookUser.firstName,
+            url: cookProfileGlobalBookingRequestsChatUrl,
+        },
+    };
+
     if (user.emailAddress) {
-        // todo: does not point directly to chat
-        const customerProfileGlobalBookingRequestsChatUrl: string = webAppUrl + `/profile/bookings/s/${bookingRequest.bookingRequestId}`;
-        const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
-        await klaviyoEmailAdapter.sendCookAcceptedBookingRequestNotification({
+        await klaviyoEmailAdapter.sendCookAcceptedBookingRequestNotificationForCustomer({
             recipient: {
                 userId: user.userId,
                 emailAddress: user.emailAddress,
@@ -83,17 +98,20 @@ export async function acceptOneByCookId({ runtime, context, request }: AcceptOne
                 firstName: user.firstName,
                 lastName: user.lastName,
             },
-            data: {
-                bookingRequestId,
-                user: {
-                    firstName: user.firstName,
-                    url: customerProfileGlobalBookingRequestsChatUrl,
-                    formattedPrice: formatPrice(bookingRequest.totalAmountUser, bookingRequest.currencyCode),
-                },
-                cook: {
-                    firstName: cookUser.firstName,
-                },
+            data: emailData,
+        });
+    }
+
+    if (cookUser.emailAddress) {
+        await klaviyoEmailAdapter.sendCookAcceptedBookingRequestNotificationForCook({
+            recipient: {
+                userId: cookUser.userId,
+                emailAddress: cookUser.emailAddress,
+                phoneNumber: cookUser.phoneNumber,
+                firstName: cookUser.firstName,
+                lastName: cookUser.lastName,
             },
+            data: emailData,
         });
     }
 
@@ -122,7 +140,6 @@ export async function acceptOneByCookId({ runtime, context, request }: AcceptOne
     if (daysUntilEvent === 15) {
         const pullPaymentDate: Moment = moment(bookingRequest.dateTime).subtract(14, 'days');
         const customerProfileGlobalBookingRequestsUrl: string = webAppUrl + `/profile/bookings/s/${bookingRequest.bookingRequestId}`;
-        const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
         if (user.emailAddress) {
             await klaviyoEmailAdapter.sendBookingRequestPaymentAnnouncementForCustomer({
                 recipient: {

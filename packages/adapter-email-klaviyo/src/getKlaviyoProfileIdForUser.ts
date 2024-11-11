@@ -29,6 +29,9 @@ export async function getKlaviyoProfileIdForUser({ logger, profiles, user }: Get
                     type: 'profile',
                     attributes: {
                         externalId: user.userId,
+                        // first name and last name important for the case that someone first signed up for a newsletter
+                        firstName: user.firstName,
+                        lastName: user.lastName,
                     },
                 },
             });
@@ -45,7 +48,6 @@ export async function getKlaviyoProfileIdForUser({ logger, profiles, user }: Get
                     attributes: {
                         externalId: user.userId,
                         email: user.emailAddress,
-                        // phoneNumber: user.phoneNumber,
                         firstName: user.firstName,
                         lastName: user.lastName,
                     },
