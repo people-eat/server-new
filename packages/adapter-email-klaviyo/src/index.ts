@@ -15,7 +15,7 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
 
     return {
         newMetricKey: async (): Promise<void> => {
-            // const metricId: string = 'booking-request-cook-declined-for-customer';
+            // const metricId: string = 'global-booking-request-created-for-admins';
             // await sendToUser({
             //     logger,
             //     profiles,
@@ -109,6 +109,13 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
             const metricId: string = 'booking-request-cook-accepted-for-customer';
             await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
+        sendCookAcceptedBookingRequestNotificationForAdmins: async ({
+            emailAddress,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendCookAcceptedBookingRequestForAdmins): Promise<void> => {
+            const metricId: string = 'booking-request-cook-accepted-for-admins';
+            await sendToEmail({ logger, profiles, events, email: emailAddress, metricId, data });
+        },
         sendCookDeclinedBookingRequestNotificationForCook: async ({
             recipient,
             data,
@@ -122,6 +129,13 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
         }: Klaviyo.KlaviyoAdapterSendCookDeclinedBookingRequest): Promise<void> => {
             const metricId: string = 'booking-request-cook-declined-for-customer';
             await sendToUser({ logger, profiles, events, recipient, metricId, data });
+        },
+        sendCookDeclinedBookingRequestNotificationForAdmins: async ({
+            emailAddress,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendCookDeclinedBookingRequestForAdmins): Promise<void> => {
+            const metricId: string = 'booking-request-cook-declined-for-admins';
+            await sendToEmail({ logger, profiles, events, email: emailAddress, metricId, data });
         },
         sendBookingRequestPaymentAnnouncementForCustomer: async ({
             recipient,

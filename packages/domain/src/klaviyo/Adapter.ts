@@ -206,36 +206,98 @@ export interface KlaviyoAdapterSendNewsletterSubscriptionConfirmation {
     // todo make send param data optional for no-payload emails
 }
 
+interface CookAcceptedBookingRequestEventPayload {
+    bookingRequestId: NanoId;
+    formattedPrice: string;
+    timeLabel: string;
+    dateLabel: string;
+    locationText: string;
+    occasion: string;
+
+    totalParticipants: number;
+    adults: number;
+    children: number;
+
+    firstMessage: string;
+
+    configuredMenu?: {
+        title: string;
+    };
+
+    customer: {
+        firstName: string;
+        lastName: string;
+        emailAddress: string;
+        phoneNumber: string;
+        /** to chat */
+        url: string;
+    };
+    cook: {
+        firstName: string;
+        lastName: string;
+        /** to chat */
+        url: string;
+    };
+    admins: {
+        url: string;
+    };
+}
+
 export interface KlaviyoAdapterSendCookAcceptedBookingRequest {
     recipient: Recipient;
-    data: {
-        bookingRequestId: NanoId;
-        formattedPrice: string;
-        user: {
-            firstName: string;
-            /** to chat */
-            url: string;
-        };
-        cook: {
-            firstName: string;
-            /** to chat */
-            url: string;
-        };
+    data: CookAcceptedBookingRequestEventPayload;
+}
+
+export interface KlaviyoAdapterSendCookAcceptedBookingRequestForAdmins {
+    emailAddress: string;
+    data: CookAcceptedBookingRequestEventPayload;
+}
+
+interface CookDeclinedBookingRequestEventPayload {
+    bookingRequestId: NanoId;
+    formattedPrice: string;
+    timeLabel: string;
+    dateLabel: string;
+    locationText: string;
+    occasion: string;
+
+    totalParticipants: number;
+    adults: number;
+    children: number;
+
+    firstMessage: string;
+
+    configuredMenu?: {
+        title: string;
+    };
+
+    customer: {
+        firstName: string;
+        lastName: string;
+        emailAddress: string;
+        phoneNumber: string;
+        /** to chat */
+        url: string;
+    };
+    cook: {
+        firstName: string;
+        lastName: string;
+        /** to chat */
+        url: string;
+    };
+    admins: {
+        url: string;
     };
 }
 
 export interface KlaviyoAdapterSendCookDeclinedBookingRequest {
     recipient: Recipient;
-    data: {
-        bookingRequestId: NanoId;
-        formattedPrice: string;
-        user: {
-            firstName: string;
-        };
-        cook: {
-            firstName: string;
-        };
-    };
+    data: CookDeclinedBookingRequestEventPayload;
+}
+
+export interface KlaviyoAdapterSendCookDeclinedBookingRequestForAdmins {
+    emailAddress: string;
+    data: CookDeclinedBookingRequestEventPayload;
 }
 
 export interface KlaviyoAdapterSendBookingRequestPaymentAnnouncementForCustomer {
@@ -277,8 +339,10 @@ export interface Adapter {
     sendNewsletterSubscriptionConfirmation(request: KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void>;
     sendCookAcceptedBookingRequestNotificationForCustomer(request: KlaviyoAdapterSendCookAcceptedBookingRequest): Promise<void>;
     sendCookAcceptedBookingRequestNotificationForCook(request: KlaviyoAdapterSendCookAcceptedBookingRequest): Promise<void>;
+    sendCookAcceptedBookingRequestNotificationForAdmins(request: KlaviyoAdapterSendCookAcceptedBookingRequestForAdmins): Promise<void>;
     sendCookDeclinedBookingRequestNotificationForCustomer(request: KlaviyoAdapterSendCookDeclinedBookingRequest): Promise<void>;
     sendCookDeclinedBookingRequestNotificationForCook(request: KlaviyoAdapterSendCookDeclinedBookingRequest): Promise<void>;
+    sendCookDeclinedBookingRequestNotificationForAdmins(request: KlaviyoAdapterSendCookDeclinedBookingRequestForAdmins): Promise<void>;
     sendBookingRequestPaymentAnnouncementForCustomer(
         request: KlaviyoAdapterSendBookingRequestPaymentAnnouncementForCustomer,
     ): Promise<void>;

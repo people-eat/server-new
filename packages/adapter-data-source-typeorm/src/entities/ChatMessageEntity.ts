@@ -13,6 +13,8 @@ export class ChatMessageEntity implements DataSource.DBChatMessage {
     @Column('text')
     message!: string;
 
+    // instead of generated add generationEvent: "BOOKING_REQUEST_COOK_ACCEPTED" | "BOOKING_REQUEST_COOK_DECLINED"
+    // and make message a parameter in a message template -> Cook has sent a counter suggestion of :message -> message: 5000.00€
     @Column('bool')
     generated!: boolean;
 

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Authorization, type ChatMessage } from '../../..';
 import { type DBBookingRequest, type DBUser } from '../../../data-source';
 import { type KlaviyoAdapterSendCookDeclinedBookingRequest } from '../../../klaviyo';
@@ -12,7 +13,7 @@ export interface FindManyBookingRequestInput {
 }
 
 export async function declineOneByCookId({ runtime, context, request }: FindManyBookingRequestInput): Promise<boolean> {
-    const { dataSourceAdapter, logger, publisher, klaviyoEmailAdapter } = runtime;
+    const { dataSourceAdapter, logger, publisher, klaviyoEmailAdapter, webAppUrl, notificationEmailAddresses } = runtime;
     const { cookId, bookingRequestId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
@@ -30,6 +31,8 @@ export async function declineOneByCookId({ runtime, context, request }: FindMany
         { cookId, bookingRequestId },
         { cookAccepted: false },
     );
+
+    // Notifications
 
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId });
 
@@ -55,14 +58,41 @@ export async function declineOneByCookId({ runtime, context, request }: FindMany
     });
 
     const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
+    const customerProfileBookingRequestsChatUrl: string = webAppUrl + `/profile/bookings/s/${bookingRequest.bookingRequestId}`;
+    const cookProfileBookingRequestsChatUrl: string = webAppUrl + `/profile/bookings/r/${bookingRequest.bookingRequestId}`;
+
     const emailData: KlaviyoAdapterSendCookDeclinedBookingRequest['data'] = {
         bookingRequestId,
         formattedPrice: formatPrice(bookingRequest.totalAmountUser, bookingRequest.currencyCode),
-        user: {
+        timeLabel: moment(bookingRequest.dateTime).format('LT'),
+        dateLabel: bookingRequest.dateTime.toDateString(),
+        locationText: bookingRequest.locationText,
+        occasion: bookingRequest.occasion,
+
+        totalParticipants: bookingRequest.adultParticipants + bookingRequest.children,
+        adults: bookingRequest.adultParticipants,
+        children: bookingRequest.children,
+
+        firstMessage: '(not supported yet)',
+
+        configuredMenu: {
+            title: '(not supported yet)',
+        },
+
+        customer: {
             firstName: user.firstName,
+            lastName: user.lastName,
+            emailAddress: user.emailAddress ?? 'maybe unconfirmed (not supported yet)',
+            phoneNumber: user.phoneNumber ?? 'maybe unconfirmed (not supported yet)',
+            url: customerProfileBookingRequestsChatUrl,
         },
         cook: {
             firstName: cookUser.firstName,
+            lastName: cookUser.lastName,
+            url: cookProfileBookingRequestsChatUrl,
+        },
+        admins: {
+            url: webAppUrl + '/administration/booking-requests',
         },
     };
 
@@ -88,6 +118,13 @@ export async function declineOneByCookId({ runtime, context, request }: FindMany
                 firstName: cookUser.firstName,
                 lastName: cookUser.lastName,
             },
+            data: emailData,
+        });
+    }
+
+    for (const notificationEmail of notificationEmailAddresses) {
+        await klaviyoEmailAdapter.sendCookDeclinedBookingRequestNotificationForAdmins({
+            emailAddress: notificationEmail,
             data: emailData,
         });
     }
