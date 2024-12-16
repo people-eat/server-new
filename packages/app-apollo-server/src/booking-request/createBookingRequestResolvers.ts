@@ -9,6 +9,7 @@ import {
     type GQLCookBookingRequestMutationChatMessagesArgs,
     type GQLCookBookingRequestMutationCreateOneArgs,
     type GQLCookBookingRequestMutationDeclineArgs,
+    type GQLCookBookingRequestMutationUpdateConfiguredMenuArgs,
     type GQLCookBookingRequestMutationUpdatePriceArgs,
     type GQLCookBookingRequestQuery,
     type GQLCookBookingRequestQueryChatMessagesArgs,
@@ -136,6 +137,11 @@ export function createBookingRequestResolvers(
                 { bookingRequestId, price }: GQLCookBookingRequestMutationUpdatePriceArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.bookingRequest.updatePriceByCookId(context, { cookId, bookingRequestId, price }),
+            updateConfiguredMenu: async (
+                _parent: GQLCookBookingRequestMutation,
+                { bookingRequestId, configuredMenu }: GQLCookBookingRequestMutationUpdateConfiguredMenuArgs,
+                context: Authorization.Context,
+            ): Promise<boolean> => service.configuredMenu.createOne(context, { bookingRequestId, configuredMenu }),
 
             chatMessages: (
                 { cookId }: GQLCookBookingRequestMutation,

@@ -334,6 +334,7 @@ export type GQLCookBookingRequestMutation = {
     cookId: Scalars['String'];
     createOne: Scalars['Boolean'];
     decline: Scalars['Boolean'];
+    updateConfiguredMenu: Scalars['Boolean'];
     updatePrice: Scalars['Boolean'];
 };
 
@@ -353,6 +354,11 @@ export type GQLCookBookingRequestMutationCreateOneArgs = {
 
 export type GQLCookBookingRequestMutationDeclineArgs = {
     bookingRequestId: Scalars['String'];
+};
+
+export type GQLCookBookingRequestMutationUpdateConfiguredMenuArgs = {
+    bookingRequestId: Scalars['String'];
+    configuredMenu: GQLCreateConfiguredMenuRequest;
 };
 
 export type GQLCookBookingRequestMutationUpdatePriceArgs = {
@@ -3629,6 +3635,12 @@ export type GQLCookBookingRequestMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLCookBookingRequestMutationDeclineArgs, 'bookingRequestId'>
+    >;
+    updateConfiguredMenu?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookBookingRequestMutationUpdateConfiguredMenuArgs, 'bookingRequestId' | 'configuredMenu'>
     >;
     updatePrice?: Resolver<
         GQLResolversTypes['Boolean'],

@@ -122,6 +122,7 @@ type CookBookingRequestMutation {
     accept(bookingRequestId: String!): Boolean!
     decline(bookingRequestId: String!): Boolean!
     updatePrice(bookingRequestId: String!, price: PriceInput!): Boolean!
+    updateConfiguredMenu(bookingRequestId: String!, configuredMenu: CreateConfiguredMenuRequest!): Boolean!
 }
 
 type CookMutation {

@@ -205,21 +205,33 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
 
     const daysUntilEventStart: number = moment(dateTime).diff(moment(), 'days');
 
-    if (daysUntilEventStart < 1) return { success: false, clientSecret: '', bookingRequestId };
+    if (daysUntilEventStart < 1) {
+        logger.info('Received booking request. Is in less than 1 day. Declined the request creation.');
+        return { success: false, clientSecret: '', bookingRequestId };
+    }
 
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
 
-    if (!user) return { success: false, clientSecret: '', bookingRequestId };
+    if (!user) {
+        logger.info('Received booking request. Could not find customer user. Declined the request creation.');
+        return { success: false, clientSecret: '', bookingRequestId };
+    }
 
     const cookUser: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cookId });
 
-    if (!cookUser) return { success: false, clientSecret: '', bookingRequestId };
+    if (!cookUser) {
+        logger.info('Received booking request. Could not find cook user. Declined the request creation.');
+        return { success: false, clientSecret: '', bookingRequestId };
+    }
 
     const paymentData: { setupIntentId: string; clientSecret: string } | undefined = await paymentAdapter.STRIPE.createSetupIntent({
         user,
     });
 
-    if (!paymentData) return { success: false, clientSecret: JSON.stringify(paymentData), bookingRequestId };
+    if (!paymentData) {
+        logger.info('Received booking request. Could not create payment data. Declined the request creation.');
+        return { success: false, clientSecret: JSON.stringify(paymentData), bookingRequestId };
+    }
 
     const { clientSecret } = paymentData;
 
@@ -250,7 +262,10 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
               paymentData: { ...paymentData, provider: 'STRIPE', confirmed: false, unlocked: false },
           });
 
-    if (!persistSuccess) return { success: false, clientSecret, bookingRequestId };
+    if (!persistSuccess) {
+        logger.info('Received booking request. Could not store booking request. Declined the request creation.');
+        return { success: false, clientSecret, bookingRequestId };
+    }
 
     const clearedMessage: string = message.trim();
 
