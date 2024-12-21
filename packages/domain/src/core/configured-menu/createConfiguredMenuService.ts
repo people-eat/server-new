@@ -9,7 +9,7 @@ export interface ConfiguredMenuService {
     findOne(context: Authorization.Context, request: { bookingRequestId: NanoId }): Promise<ConfiguredMenu | undefined>;
     createOne(
         context: Authorization.Context,
-        request: { bookingRequestId: NanoId; configuredMenu: CreateOneConfiguredMenuRequest },
+        request: { userId: NanoId; bookingRequestId: NanoId; configuredMenu: CreateOneConfiguredMenuRequest },
     ): Promise<boolean>;
 }
 
@@ -19,7 +19,7 @@ export function createConfiguredMenuService({ dataSourceAdapter, logger }: Runti
             findOne({ dataSourceAdapter, logger, context, request }),
         createOne: (
             context: Authorization.Context,
-            request: { bookingRequestId: NanoId; configuredMenu: CreateOneConfiguredMenuRequest },
+            request: { userId: NanoId; bookingRequestId: NanoId; configuredMenu: CreateOneConfiguredMenuRequest },
         ) => createOne({ dataSourceAdapter, logger, context, request }),
     };
 }

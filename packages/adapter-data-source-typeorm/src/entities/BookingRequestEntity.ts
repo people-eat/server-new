@@ -6,6 +6,7 @@ import { ConfiguredMenuEntity } from './ConfiguredMenuEntity';
 import { CookEntity } from './CookEntity';
 import { GiftCardPromoCodeEntity } from './GiftCardPromoCodeEntity';
 import { KitchenEntity } from './KitchenEntity';
+import { MenuEntity } from './MenuEntity';
 import { SupportRequestEntity } from './SupportRequestEntity';
 import { UserEntity } from './UserEntity';
 
@@ -77,6 +78,9 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
     @Column('char', { length: 20, nullable: true })
     globalBookingRequestId?: string;
 
+    @Column('char', { length: 20, nullable: true })
+    suggestedMenuId?: string;
+
     @Column('datetime')
     createdAt!: Date;
 
@@ -117,6 +121,10 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
     @ManyToOne(() => KitchenEntity, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     @JoinColumn({ name: 'kitchenId' })
     kitchen?: KitchenEntity;
+
+    @ManyToOne(() => MenuEntity, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+    @JoinColumn({ name: 'suggestedMenuId' })
+    suggestedMenu?: MenuEntity;
 
     @OneToMany(() => SupportRequestEntity, (supportRequest: SupportRequestEntity) => supportRequest.user)
     supportRequests?: SupportRequestEntity[];

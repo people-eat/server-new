@@ -30,9 +30,7 @@ export async function acceptOneByUserId({ runtime, context, request }: AcceptOne
 
     if (!user) return false;
 
-    const cook: DBCook | undefined = await dataSourceAdapter.cookRepository.findOne({
-        cookId: bookingRequest.cookId,
-    });
+    const cook: DBCook | undefined = await dataSourceAdapter.cookRepository.findOne({ cookId: bookingRequest.cookId });
 
     if (!cook) return false;
 

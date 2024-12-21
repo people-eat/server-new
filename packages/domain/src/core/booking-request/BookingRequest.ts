@@ -22,6 +22,7 @@ export interface BookingRequest {
     occasion: string;
     kitchenId?: NanoId;
     globalBookingRequestId?: NanoId;
+    suggestedMenuId?: NanoId;
     createdAt: Date;
 
     paymentData: {

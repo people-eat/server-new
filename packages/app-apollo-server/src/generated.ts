@@ -207,6 +207,8 @@ export type GQLBookingRequest = {
     publicCook: GQLPublicCook;
     publicUser: GQLPublicUser;
     status: GQLBookingRequestStatus;
+    suggestedMenu?: Maybe<GQLPublicMenu>;
+    suggestedMenuId?: Maybe<Scalars['String']>;
     totalPriceCook: GQLPrice;
     totalPriceCustomer: GQLPrice;
     travelExpenses: GQLPrice;
@@ -334,8 +336,8 @@ export type GQLCookBookingRequestMutation = {
     cookId: Scalars['String'];
     createOne: Scalars['Boolean'];
     decline: Scalars['Boolean'];
-    updateConfiguredMenu: Scalars['Boolean'];
     updatePrice: Scalars['Boolean'];
+    updateSuggestedMenu: Scalars['Boolean'];
 };
 
 export type GQLCookBookingRequestMutationAcceptArgs = {
@@ -356,14 +358,14 @@ export type GQLCookBookingRequestMutationDeclineArgs = {
     bookingRequestId: Scalars['String'];
 };
 
-export type GQLCookBookingRequestMutationUpdateConfiguredMenuArgs = {
-    bookingRequestId: Scalars['String'];
-    configuredMenu: GQLCreateConfiguredMenuRequest;
-};
-
 export type GQLCookBookingRequestMutationUpdatePriceArgs = {
     bookingRequestId: Scalars['String'];
     price: GQLPriceInput;
+};
+
+export type GQLCookBookingRequestMutationUpdateSuggestedMenuArgs = {
+    bookingRequestId: Scalars['String'];
+    suggestedMenuId: Scalars['String'];
 };
 
 export type GQLCookBookingRequestQuery = {
@@ -2170,6 +2172,7 @@ export type GQLUserBookingRequestMutation = {
     confirmPaymentSetup: Scalars['Boolean'];
     createOne: GQLUserCreateOneBookingRequestResponse;
     decline: Scalars['Boolean'];
+    updateConfiguredMenu: Scalars['Boolean'];
     updatePrice: Scalars['Boolean'];
     userId: Scalars['String'];
 };
@@ -2192,6 +2195,11 @@ export type GQLUserBookingRequestMutationCreateOneArgs = {
 
 export type GQLUserBookingRequestMutationDeclineArgs = {
     bookingRequestId: Scalars['String'];
+};
+
+export type GQLUserBookingRequestMutationUpdateConfiguredMenuArgs = {
+    bookingRequestId: Scalars['String'];
+    configuredMenu: GQLCreateConfiguredMenuRequest;
 };
 
 export type GQLUserBookingRequestMutationUpdatePriceArgs = {
@@ -3458,6 +3466,8 @@ export type GQLBookingRequestResolvers<
     publicCook?: Resolver<GQLResolversTypes['PublicCook'], ParentType, ContextType>;
     publicUser?: Resolver<GQLResolversTypes['PublicUser'], ParentType, ContextType>;
     status?: Resolver<GQLResolversTypes['BookingRequestStatus'], ParentType, ContextType>;
+    suggestedMenu?: Resolver<Maybe<GQLResolversTypes['PublicMenu']>, ParentType, ContextType>;
+    suggestedMenuId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
     totalPriceCook?: Resolver<GQLResolversTypes['Price'], ParentType, ContextType>;
     totalPriceCustomer?: Resolver<GQLResolversTypes['Price'], ParentType, ContextType>;
     travelExpenses?: Resolver<GQLResolversTypes['Price'], ParentType, ContextType>;
@@ -3636,17 +3646,17 @@ export type GQLCookBookingRequestMutationResolvers<
         ContextType,
         RequireFields<GQLCookBookingRequestMutationDeclineArgs, 'bookingRequestId'>
     >;
-    updateConfiguredMenu?: Resolver<
-        GQLResolversTypes['Boolean'],
-        ParentType,
-        ContextType,
-        RequireFields<GQLCookBookingRequestMutationUpdateConfiguredMenuArgs, 'bookingRequestId' | 'configuredMenu'>
-    >;
     updatePrice?: Resolver<
         GQLResolversTypes['Boolean'],
         ParentType,
         ContextType,
         RequireFields<GQLCookBookingRequestMutationUpdatePriceArgs, 'bookingRequestId' | 'price'>
+    >;
+    updateSuggestedMenu?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookBookingRequestMutationUpdateSuggestedMenuArgs, 'bookingRequestId' | 'suggestedMenuId'>
     >;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -5456,6 +5466,12 @@ export type GQLUserBookingRequestMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLUserBookingRequestMutationDeclineArgs, 'bookingRequestId'>
+    >;
+    updateConfiguredMenu?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserBookingRequestMutationUpdateConfiguredMenuArgs, 'bookingRequestId' | 'configuredMenu'>
     >;
     updatePrice?: Resolver<
         GQLResolversTypes['Boolean'],

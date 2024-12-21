@@ -9,18 +9,20 @@ import {
     type GQLCookBookingRequestMutationChatMessagesArgs,
     type GQLCookBookingRequestMutationCreateOneArgs,
     type GQLCookBookingRequestMutationDeclineArgs,
-    type GQLCookBookingRequestMutationUpdateConfiguredMenuArgs,
     type GQLCookBookingRequestMutationUpdatePriceArgs,
+    type GQLCookBookingRequestMutationUpdateSuggestedMenuArgs,
     type GQLCookBookingRequestQuery,
     type GQLCookBookingRequestQueryChatMessagesArgs,
     type GQLCookBookingRequestQueryFindOneArgs,
     type GQLPublicCook,
+    type GQLPublicMenu,
     type GQLPublicUser,
     type GQLUser,
     type GQLUserBookingRequestMutation,
     type GQLUserBookingRequestMutationAcceptArgs,
     type GQLUserBookingRequestMutationChatMessagesArgs,
     type GQLUserBookingRequestMutationCreateOneArgs,
+    type GQLUserBookingRequestMutationUpdateConfiguredMenuArgs,
     type GQLUserBookingRequestMutationUpdatePriceArgs,
     type GQLUserBookingRequestQuery,
     type GQLUserBookingRequestQueryChatMessagesArgs,
@@ -48,6 +50,14 @@ export function createBookingRequestResolvers(
                 service.user.findOneByUserId(context, { userId }) as any,
             cook: async ({ cookId }: GQLBookingRequest, _input: unknown, context: Authorization.Context): Promise<GQLCook> =>
                 service.cook.findOne(context, cookId) as any,
+            suggestedMenu: async (
+                { suggestedMenuId }: GQLBookingRequest,
+                _input: unknown,
+                context: Authorization.Context,
+            ): Promise<GQLPublicMenu | undefined> => {
+                // maybe don't restrict to public menus
+                return suggestedMenuId ? ((await service.publicMenu.findOne(context, suggestedMenuId)) as any) : undefined;
+            },
             configuredMenu: async (
                 { bookingRequestId }: GQLBookingRequest,
                 _input: unknown,
@@ -88,6 +98,11 @@ export function createBookingRequestResolvers(
                 { bookingRequestId }: GQLUserBookingRequestMutationChatMessagesArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.bookingRequest.confirmPaymentSetup(context, { userId, bookingRequestId }),
+            updateConfiguredMenu: async (
+                { userId }: GQLUserBookingRequestMutation,
+                { bookingRequestId, configuredMenu }: GQLUserBookingRequestMutationUpdateConfiguredMenuArgs,
+                context: Authorization.Context,
+            ): Promise<boolean> => service.configuredMenu.createOne(context, { userId, bookingRequestId, configuredMenu }),
 
             chatMessages: (
                 { userId }: GQLUserBookingRequestMutation,
@@ -137,11 +152,11 @@ export function createBookingRequestResolvers(
                 { bookingRequestId, price }: GQLCookBookingRequestMutationUpdatePriceArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.bookingRequest.updatePriceByCookId(context, { cookId, bookingRequestId, price }),
-            updateConfiguredMenu: async (
-                _parent: GQLCookBookingRequestMutation,
-                { bookingRequestId, configuredMenu }: GQLCookBookingRequestMutationUpdateConfiguredMenuArgs,
+            updateSuggestedMenu: async (
+                { cookId }: GQLCookBookingRequestMutation,
+                { bookingRequestId, suggestedMenuId }: GQLCookBookingRequestMutationUpdateSuggestedMenuArgs,
                 context: Authorization.Context,
-            ): Promise<boolean> => service.configuredMenu.createOne(context, { bookingRequestId, configuredMenu }),
+            ): Promise<boolean> => service.bookingRequest.updateSuggestedMenu(context, { cookId, bookingRequestId, suggestedMenuId }),
 
             chatMessages: (
                 { cookId }: GQLCookBookingRequestMutation,

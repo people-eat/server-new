@@ -20,6 +20,7 @@ import { findOneByUserId } from './useCases/findOneByUserId';
 import { unlockPayment } from './useCases/unlockPayment';
 import { updatePriceByCookId } from './useCases/updatePriceByCookId';
 import { updatePriceByUserId } from './useCases/updatePriceByUserId';
+import { updateSuggestedMenu } from './useCases/updateSuggestedMenu';
 
 export interface BookingRequestService {
     findOne(context: Authorization.Context, request: { bookingRequestId: NanoId }): Promise<BookingRequest | undefined>;
@@ -60,6 +61,10 @@ export interface BookingRequestService {
     ): Promise<boolean>;
     confirmPaymentSetup(context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }): Promise<boolean>;
     unlockPayment(context: Authorization.Context, request: { bookingRequestId: NanoId }): Promise<boolean>;
+    updateSuggestedMenu(
+        context: Authorization.Context,
+        request: { cookId: NanoId; bookingRequestId: NanoId; suggestedMenuId: NanoId },
+    ): Promise<boolean>;
 }
 
 export function createBookingRequestService(runtime: Runtime): BookingRequestService {
@@ -101,5 +106,9 @@ export function createBookingRequestService(runtime: Runtime): BookingRequestSer
             confirmPaymentSetup({ runtime, context, request }),
         unlockPayment: (context: Authorization.Context, request: { bookingRequestId: NanoId }) =>
             unlockPayment({ runtime, context, request }),
+        updateSuggestedMenu: (
+            context: Authorization.Context,
+            request: { cookId: NanoId; bookingRequestId: NanoId; suggestedMenuId: NanoId },
+        ) => updateSuggestedMenu({ runtime, context, request }),
     };
 }

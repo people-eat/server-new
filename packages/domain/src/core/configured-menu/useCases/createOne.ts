@@ -3,6 +3,7 @@ import { type NanoId } from '../../shared';
 import { type ConfiguredMenuCourse } from '../ConfiguredMenu';
 import { type CreateOneConfiguredMenuRequest } from '../CreateOneConfiguredMenuRequest';
 
+import { type DBBookingRequest } from '../../../data-source';
 import { findOne as findOneMenu } from '../../menu/useCases/findOne';
 import { findAllCourses } from '../../public-menu/useCases/findAllCourses';
 
@@ -10,23 +11,23 @@ export interface CreateOneConfiguredMenuInput {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
     context: Authorization.Context;
-    request: { bookingRequestId: NanoId; configuredMenu: CreateOneConfiguredMenuRequest };
+    request: { userId: NanoId; bookingRequestId: NanoId; configuredMenu: CreateOneConfiguredMenuRequest };
 }
 
 export async function createOne({ dataSourceAdapter, logger, request, context }: CreateOneConfiguredMenuInput): Promise<boolean> {
-    const { bookingRequestId, configuredMenu } = request;
+    const { userId, bookingRequestId, configuredMenu } = request;
 
-    const cookId: string | undefined = context.userId;
+    await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
 
-    if (!cookId) return false;
+    const bookingRequest: DBBookingRequest | undefined = await dataSourceAdapter.bookingRequestRepository.findOne({ bookingRequestId });
 
-    await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
+    if (!bookingRequest) return false;
 
     const menu: Menu | undefined = await findOneMenu({
         dataSourceAdapter,
         logger,
         context,
-        request: { cookId, menuId: configuredMenu.menuId },
+        request: { cookId: bookingRequest.cookId, menuId: configuredMenu.menuId },
     });
 
     const courses: Course[] | undefined = await findAllCourses({
