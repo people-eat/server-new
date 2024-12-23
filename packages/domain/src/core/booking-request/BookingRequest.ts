@@ -1,4 +1,4 @@
-import { type BookingRequestStatus, type Location, type NanoId, type PaymentProvider, type Price } from '../shared';
+import { type BookingRequestStatus, type Location, type NanoId, type Price } from '../shared';
 
 export interface BookingRequestConditions {
     location: Location;
@@ -9,8 +9,17 @@ export interface BookingRequestConditions {
     occasion: string;
 }
 
+export type BookingRequestPaymentData = {
+    provider: 'STRIPE';
+    setupIntentId: string;
+    clientSecret: string;
+    confirmed: boolean;
+    unlocked: boolean;
+};
+
 export interface BookingRequest {
     bookingRequestId: NanoId;
+    globalBookingRequestId?: NanoId;
     userId: NanoId;
     cookId: NanoId;
     status: BookingRequestStatus;
@@ -26,20 +35,9 @@ export interface BookingRequest {
     fee: number;
 
     kitchenId?: NanoId;
-    globalBookingRequestId?: NanoId;
-    suggestedMenuId?: NanoId;
-    createdAt: Date;
 
-    paymentData: {
-        provider: PaymentProvider;
-        setupIntentId: string;
-        clientSecret: string;
-        confirmed: boolean;
-        unlocked: boolean;
-    };
-
+    paymentData?: BookingRequestPaymentData;
     giftCardPromoCodeId?: string;
-
     appliedGiftCard?: {
         giftCardId: NanoId;
         usedAmount: number;
@@ -47,4 +45,7 @@ export interface BookingRequest {
         usedAmountPeopleEat: number;
         usedAmountStripe: number;
     };
+
+    suggestedMenuId?: NanoId;
+    createdAt: Date;
 }

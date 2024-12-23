@@ -37,6 +37,8 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
 
         if (!bookingRequest) return;
 
+        if (!bookingRequest.paymentData) return;
+
         const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId });
 
         if (!user) return;

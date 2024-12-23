@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { Authorization, type ChatMessage } from '../../..';
-import { type DBBookingRequest, type DBCook, type DBUser } from '../../../data-source';
+import { type DBBookingRequest } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
@@ -26,13 +26,13 @@ export async function acceptOneByUserId({ runtime, context, request }: AcceptOne
 
     if (!bookingRequest) return false;
 
-    const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId });
+    const [user, cookUser, cook] = await Promise.all([
+        dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId }),
+        dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.cookId }),
+        dataSourceAdapter.cookRepository.findOne({ cookId: bookingRequest.cookId }),
+    ]);
 
-    if (!user) return false;
-
-    const cook: DBCook | undefined = await dataSourceAdapter.cookRepository.findOne({ cookId: bookingRequest.cookId });
-
-    if (!cook) return false;
+    if (!user || !cookUser || !cook) return false;
 
     const [payoutMethod] = cook.payoutMethods ?? [];
 
@@ -102,7 +102,7 @@ export async function acceptOneByUserId({ runtime, context, request }: AcceptOne
         currencyCode: bookingRequest.currencyCode,
         pullAmount: bookingRequest.totalAmountUser,
         payoutAmount: bookingRequest.totalAmountCook,
-        setupIntentId: bookingRequest.paymentData.setupIntentId,
+        setupIntentId: bookingRequest.paymentData?.setupIntentId ?? '', // <- todo
         destinationAccountId: payoutMethod.stripeAccountId,
         bookingRequestId,
         user: {

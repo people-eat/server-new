@@ -994,7 +994,6 @@ export type GQLCreateCookBookingRequestRequest = {
     occasion: Scalars['String'];
     preparationTime: Scalars['UInt'];
     price: GQLPriceInput;
-    travelExpensesAmount: Scalars['UInt'];
 };
 
 export type GQLCreateMenuBookingRequestRequest = {
@@ -1009,7 +1008,6 @@ export type GQLCreateMenuBookingRequestRequest = {
     message: Scalars['String'];
     occasion: Scalars['String'];
     preparationTime: Scalars['UInt'];
-    travelExpensesAmount: Scalars['UInt'];
 };
 
 export type GQLCreateOneAddressRequest = {

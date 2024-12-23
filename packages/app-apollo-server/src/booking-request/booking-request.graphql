@@ -125,7 +125,6 @@ input CreateCookBookingRequestRequest {
     message: String!
     kitchenId: String
     occasion: String!
-    travelExpensesAmount: UInt!
 }
 
 input CreateMenuBookingRequestRequest {
@@ -138,7 +137,6 @@ input CreateMenuBookingRequestRequest {
     children: UInt!
     message: String!
     occasion: String!
-    travelExpensesAmount: UInt!
     configuredMenu: CreateConfiguredMenuRequest!
     giftCardPromoCodeId: String
 }

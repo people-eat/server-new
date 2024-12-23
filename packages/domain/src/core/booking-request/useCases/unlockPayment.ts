@@ -31,6 +31,11 @@ export async function unlockPayment({ runtime, context, request }: UnlockPayment
         return false;
     }
 
+    if (!bookingRequest.paymentData) {
+        logger.info(`Tried to unlock payment for booking request with id: ${bookingRequestId}, but payment data was not set`);
+        return false;
+    }
+
     if (bookingRequest.paymentData.unlocked === true) {
         logger.info(`Tried to unlock payment for booking request with id: ${bookingRequestId}, but payment has already been unlocked`);
         return false;

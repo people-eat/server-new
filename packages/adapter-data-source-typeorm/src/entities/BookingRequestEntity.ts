@@ -1,4 +1,4 @@
-import { Shared, type DataSource } from '@people-eat/server-domain';
+import { BookingRequestPaymentData, Shared, type DataSource } from '@people-eat/server-domain';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
 import { type NanoId } from '../../../domain/src/core/shared';
 import { ChatMessageEntity } from './ChatMessageEntity';
@@ -85,13 +85,7 @@ export class BookingRequestEntity implements DataSource.DBBookingRequest {
     createdAt!: Date;
 
     @Column('json')
-    paymentData!: {
-        provider: Shared.PaymentProvider;
-        setupIntentId: string;
-        clientSecret: string;
-        confirmed: boolean;
-        unlocked: boolean;
-    };
+    paymentData?: BookingRequestPaymentData;
 
     @Column('char', { length: 20, nullable: true })
     giftCardPromoCodeId?: NanoId;

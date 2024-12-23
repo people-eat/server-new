@@ -1,8 +1,9 @@
 import moment from 'moment';
 import { Authorization, type Course, type MealOption, type PublicMenu } from '../../..';
 import { type Context } from '../../../authorization';
-import { type DBGiftCardPromoCode, type DBUser } from '../../../data-source';
+import { type DBGiftCardPromoCode } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
+import { geoDistance } from '../../../utils/geoDistance';
 import { calculateMenuPrice } from '../../calculateMenuPrice';
 import { type ConfiguredMenuCourse } from '../../configured-menu';
 import { findAllCourses } from '../../public-menu/useCases/findAllCourses';
@@ -27,7 +28,7 @@ async function persistMenuBookingRequest(
     context: Context,
     bookingRequestId: NanoId,
     menuBookingRequest: CreateOneMenuBookingRequestRequest & { userId: NanoId },
-    paymentData: { setupIntentId: string; clientSecret: string },
+    travelExpensesAmount: number,
 ): Promise<boolean> {
     const { dataSourceAdapter, logger } = runtime;
     const {
@@ -40,7 +41,6 @@ async function persistMenuBookingRequest(
         adultParticipants,
         children,
         occasion,
-        travelExpensesAmount,
         configuredMenu,
         giftCardPromoCodeId,
     } = menuBookingRequest;
@@ -91,25 +91,6 @@ async function persistMenuBookingRequest(
         : (menuPrice + menuPrice * 0.04 + travelExpensesAmount + 25) / (1 - 0.015);
     const totalAmountCook: number = Math.round(menuPrice * ((100 - 18) / 100)) + travelExpensesAmount;
 
-    logger.info(
-        `In persistMenuBookingRequest: ${JSON.stringify({
-            giftCardPromoCodeIdInRequest: giftCardPromoCodeId,
-            giftCardPromoCodeRetrievedFromDB: giftCardPromoCode,
-            dbQueryPayload: { giftCardPromoCodeId },
-            bookingRequestId,
-            inputs: {
-                adultParticipants,
-                children,
-                publicMenu,
-            },
-            results: {
-                menuPrice,
-                totalAmountUser,
-                totalAmountCook,
-            },
-        })}`,
-    );
-
     const success: boolean = await dataSourceAdapter.bookingRequestRepository.insertOne({
         bookingRequestId,
         userId,
@@ -132,16 +113,8 @@ async function persistMenuBookingRequest(
         createdAt: new Date(),
         // info: don't use the one right out of the request. It could reference one that has not been applied. i.e. already expired
         giftCardPromoCodeId: giftCardPromoCode?.giftCardPromoCodeId,
-        paymentData: { ...paymentData, provider: 'STRIPE', confirmed: false, unlocked: false },
+        paymentData: undefined,
         travelExpensesAmount,
-        // costBreakdown: {
-        //     lineItems: [
-        //         { type: 'MENU_PRICE', title: 'Menüpreis', price: { amount: menuPrice, currencyCode: 'EUR' } },
-        //         { type: 'TRAVEL_EXPENSES', title: 'Reisekosten', price: { amount: travelExpensesAmount, currencyCode: 'EUR' } },
-        //     ],
-        //     totalPriceCook: { amount: totalAmountCook, currencyCode: 'EUR' },
-        //     totalPriceUser: { amount: totalAmountUser, currencyCode: 'EUR' },
-        // },
     });
 
     if (!success) return false;
@@ -194,7 +167,7 @@ async function persistMenuBookingRequest(
 // eslint-disable-next-line max-statements
 export async function createOne({ runtime, context, request }: CreateOneBookingRequestInput): Promise<UserCreateOneBookingRequestResponse> {
     const fee: number = 22;
-    const { dataSourceAdapter, paymentAdapter, logger, publisher } = runtime;
+    const { dataSourceAdapter, logger, publisher } = runtime;
     const bookingRequestId: NanoId = createNanoId();
     const { userId, cookId, location, dateTime, preparationTime, duration, adultParticipants, children, occasion, message } = request;
 
@@ -204,42 +177,33 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
 
     if (daysUntilEventStart < 1) {
         logger.info('Received booking request. Is in less than 1 day. Declined the request creation.');
-        return {
-            reason: 'Received booking request. Is in less than 1 day. Declined the request creation.',
-        };
+        return { reason: 'Received booking request. Is in less than 1 day. Declined the request creation.' };
     }
 
-    const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
+    const [user, cookUser, cook] = await Promise.all([
+        dataSourceAdapter.userRepository.findOne({ userId: userId }),
+        dataSourceAdapter.userRepository.findOne({ userId: cookId }),
+        dataSourceAdapter.cookRepository.findOne({ cookId }),
+    ]);
 
     if (!user) {
         logger.info('Received booking request. Could not find customer user. Declined the request creation.');
-        return {
-            reason: 'Received booking request. Could not find customer user. Declined the request creation.',
-        };
+        return { reason: 'Received booking request. Could not find customer user. Declined the request creation.' };
     }
-
-    const cookUser: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cookId });
-
-    if (!cookUser) {
+    if (!cookUser || !cook) {
         logger.info('Received booking request. Could not find cook user. Declined the request creation.');
-        return {
-            reason: 'Received booking request. Could not find cook user. Declined the request creation.',
-        };
+        return { reason: 'Received booking request. Could not find cook user. Declined the request creation.' };
     }
 
-    const paymentData: { setupIntentId: string; clientSecret: string } | undefined = await paymentAdapter.STRIPE.createSetupIntent({
-        user,
-    });
-
-    if (!paymentData) {
-        logger.info('Received booking request. Could not create payment data. Declined the request creation.');
-        return {
-            reason: 'Received booking request. Could not create payment data. Declined the request creation.',
-        };
-    }
+    const travelExpensesAmount: number =
+        cook.travelExpenses *
+        geoDistance({
+            location1: { latitude: cook.latitude, longitude: cook.longitude },
+            location2: { latitude: location.latitude, longitude: location.longitude },
+        });
 
     const persistSuccess: boolean = isCreateOneMenuBookingRequestRequest(request)
-        ? await persistMenuBookingRequest(runtime, context, bookingRequestId, request, paymentData)
+        ? await persistMenuBookingRequest(runtime, context, bookingRequestId, request, travelExpensesAmount)
         : await dataSourceAdapter.bookingRequestRepository.insertOne({
               bookingRequestId,
               userId,
@@ -254,14 +218,19 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
               duration,
               adultParticipants,
               children,
-              totalAmountUser: request.price.amount + request.travelExpensesAmount,
-              totalAmountCook: Math.round((request.price.amount * (100 - fee)) / 100) + request.travelExpensesAmount,
-              travelExpensesAmount: request.travelExpensesAmount,
+
+              totalAmountUser: request.price.amount + travelExpensesAmount,
+              totalAmountCook: Math.round((request.price.amount * (100 - fee)) / 100) + travelExpensesAmount,
+              travelExpensesAmount,
               currencyCode: 'EUR',
               fee: 22,
+
+              appliedGiftCard: undefined,
+              giftCardPromoCodeId: undefined,
+
               occasion: occasion.trim(),
               kitchenId: request.kitchenId,
-              paymentData: { ...paymentData, provider: 'STRIPE', confirmed: false, unlocked: false },
+              paymentData: undefined,
               createdAt: new Date(),
           });
 

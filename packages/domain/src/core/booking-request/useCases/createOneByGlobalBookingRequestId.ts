@@ -1,8 +1,9 @@
 import moment from 'moment';
 import { Authorization, type Course, type MealOption, type PublicMenu } from '../../..';
 import { type Context } from '../../../authorization';
-import { type DBChatMessage, type DBGlobalBookingRequest, type DBUser } from '../../../data-source';
+import { type DBChatMessage, type DBGlobalBookingRequest } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
+import { geoDistance } from '../../../utils/geoDistance';
 import { calculateMenuPrice } from '../../calculateMenuPrice';
 import { type ConfiguredMenuCourse, type CreateOneConfiguredMenuRequest } from '../../configured-menu';
 import { findAllCourses } from '../../public-menu/useCases/findAllCourses';
@@ -147,24 +148,25 @@ export async function createOneByGlobalBookingRequestId({
         };
     }
 
-    const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: globalBookingRequest.userId });
+    const [user, cookUser, cook] = await Promise.all([
+        dataSourceAdapter.userRepository.findOne({ userId: globalBookingRequest.userId }),
+        dataSourceAdapter.userRepository.findOne({ userId: cookId }),
+        dataSourceAdapter.cookRepository.findOne({ cookId }),
+    ]);
 
-    if (!user) {
-        return {
-            reason: 'No user found',
-        };
-    }
+    if (!user) return { reason: 'No user found' };
 
-    const cookUser: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cookId });
-
-    if (!cookUser) {
-        return {
-            reason: 'No cook user found',
-        };
-    }
+    if (!cookUser || !cook) return { reason: 'No cook user found' };
 
     const { userId, adultParticipants, children, dateTime, duration, occasion, message, latitude, longitude, locationText } =
         globalBookingRequest;
+
+    const travelExpensesAmount: number =
+        cook.travelExpenses *
+        geoDistance({
+            location1: { latitude: cook.latitude, longitude: cook.longitude },
+            location2: { latitude: globalBookingRequest.latitude, longitude: globalBookingRequest.longitude },
+        });
 
     const bookingRequestId: NanoId = createNanoId();
 
@@ -188,16 +190,9 @@ export async function createOneByGlobalBookingRequestId({
         fee: 18,
         occasion,
         globalBookingRequestId,
-        // @todo
-        travelExpensesAmount: 0,
+        travelExpensesAmount,
+        paymentData: undefined,
         createdAt: new Date(),
-        paymentData: {
-            provider: 'STRIPE',
-            setupIntentId: '',
-            clientSecret: '',
-            confirmed: false,
-            unlocked: false,
-        },
     });
 
     if (!success) {

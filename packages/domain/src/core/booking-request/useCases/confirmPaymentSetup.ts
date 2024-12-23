@@ -27,6 +27,9 @@ export async function confirmPaymentSetup({ runtime, context, request }: Confirm
 
     const { dateTime, adultParticipants, children, occasion, totalAmountUser, locationText, paymentData } = bookingRequest;
 
+    // new and needs to be removed
+    if (!paymentData) return false;
+
     // stripe fetch status
 
     const success: boolean = await dataSourceAdapter.bookingRequestRepository.updateOne(

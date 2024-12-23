@@ -11,7 +11,6 @@ export interface CreateOneBookingRequestBaseRequest {
     children: number;
     occasion: string;
     message: string;
-    travelExpensesAmount: number;
 }
 
 export interface CreateOneCookBookingRequestRequest extends CreateOneBookingRequestBaseRequest {

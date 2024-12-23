@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { Authorization, type ChatMessage } from '../../..';
-import { type DBBookingRequest, type DBUser } from '../../../data-source';
+import { type DBBookingRequest } from '../../../data-source';
 import { type KlaviyoAdapterSendCookDeclinedBookingRequest } from '../../../klaviyo';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type Runtime } from '../../Runtime';
@@ -38,13 +38,12 @@ export async function declineOneByCookId({ runtime, context, request }: FindMany
 
     // Notifications
 
-    const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId });
+    const [user, cookUser] = await Promise.all([
+        dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId }),
+        dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.cookId }),
+    ]);
 
-    if (!user) return false;
-
-    const cookUser: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.cookId });
-
-    if (!cookUser) return false;
+    if (!user || !cookUser) return false;
 
     const chatMessage: ChatMessage = {
         chatMessageId: createNanoId(),

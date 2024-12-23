@@ -1,8 +1,8 @@
 export { Address } from './address/Address';
 export { Admin } from './admin/Admin';
 export { Allergy } from './allergy/Allergy';
+export { BookingRequest, BookingRequestConditions, BookingRequestPaymentData } from './booking-request';
 export { BookingRequestAllergy } from './booking-request-allergy/BookingRequestAllergy';
-export { BookingRequest } from './booking-request/BookingRequest';
 export { Category } from './category/Category';
 export { ChatMessage } from './chat-message/ChatMessage';
 export { ConfiguredMenu } from './configured-menu/ConfiguredMenu';
