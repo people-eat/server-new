@@ -9,6 +9,8 @@ export interface GlobalBookingRequestPriceClass {
     currencyCode: string;
 }
 
+export type GlobalBookingRequestStatus = 'OPEN' | 'EXPIRED' | 'OFFERS_MADE' | 'MATCHED';
+
 export interface GlobalBookingRequestConditions {
     location: Location;
     dateTime: Date;
@@ -24,6 +26,7 @@ export interface GlobalBookingRequest {
     userId: NanoId;
     message: string;
     conditions: GlobalBookingRequestConditions;
+    status: GlobalBookingRequestStatus;
     expiresAt: Date;
     createdAt: Date;
 }

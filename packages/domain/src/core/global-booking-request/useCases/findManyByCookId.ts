@@ -1,8 +1,10 @@
-import { Authorization } from '../../..';
-import { type DBGlobalBookingRequest } from '../../../data-source';
+import { type Authorization } from '../../..';
+import { type DBCook, type DBGlobalBookingRequest } from '../../../data-source';
+import { geoDistance } from '../../../utils/geoDistance';
 import { type Runtime } from '../../Runtime';
 import { type FindManyRequest, type NanoId } from '../../shared';
 import { type GlobalBookingRequest } from '../GlobalBookingRequest';
+import { toGlobalBookingRequestStatus } from '../toGlobalBookingRequestStatus';
 
 export interface FindManyGlobalBookingRequestInput {
     runtime: Runtime;
@@ -11,38 +13,56 @@ export interface FindManyGlobalBookingRequestInput {
 }
 
 export async function findManyByCookId({
-    runtime: { dataSourceAdapter, logger },
-    context,
-    request,
+    runtime: { dataSourceAdapter },
+    request: { cookId },
 }: FindManyGlobalBookingRequestInput): Promise<GlobalBookingRequest[] | undefined> {
-    const { cookId } = request;
+    const cook: DBCook | undefined = await dataSourceAdapter.cookRepository.findOne({ cookId });
 
-    await Authorization.canQueryUserData({ context, dataSourceAdapter, logger, userId: cookId });
+    if (!cook) return;
 
     const globalBookingRequests: DBGlobalBookingRequest[] | undefined = await dataSourceAdapter.globalBookingRequestRepository.findAll();
 
-    // filter relevant ones for cook
-
     if (!globalBookingRequests) return;
 
-    return globalBookingRequests.map((bookingRequest: DBGlobalBookingRequest) => ({
-        globalBookingRequestId: bookingRequest.globalBookingRequestId,
-        userId: bookingRequest.userId,
-        message: bookingRequest.message,
-        conditions: {
-            location: {
-                text: bookingRequest.locationText,
-                latitude: bookingRequest.latitude,
-                longitude: bookingRequest.longitude,
+    return globalBookingRequests
+        .filter((globalBookingRequest: DBGlobalBookingRequest) => {
+            // should not be able to see his own global booking request
+            if (globalBookingRequest.userId === cookId) return false;
+
+            // should not be able to see expired requests
+            if (globalBookingRequest.expiresAt < new Date()) return false;
+
+            // should not be able to see request out of his travel range
+            if (cook.maximumTravelDistance) {
+                const distance: number = geoDistance({
+                    location1: { latitude: cook.latitude, longitude: cook.longitude },
+                    location2: { latitude: globalBookingRequest.latitude, longitude: globalBookingRequest.longitude },
+                });
+                return cook.maximumTravelDistance > distance;
+            }
+
+            return true;
+        })
+        .map((globalBookingRequest: DBGlobalBookingRequest) => ({
+            globalBookingRequestId: globalBookingRequest.globalBookingRequestId,
+            userId: globalBookingRequest.userId,
+            message: globalBookingRequest.message,
+            conditions: {
+                location: {
+                    text: globalBookingRequest.locationText,
+                    latitude: globalBookingRequest.latitude,
+                    longitude: globalBookingRequest.longitude,
+                },
+                dateTime: globalBookingRequest.dateTime,
+                duration: globalBookingRequest.duration,
+                adultParticipants: globalBookingRequest.adultParticipants,
+                children: globalBookingRequest.children,
+                occasion: globalBookingRequest.occasion,
+                priceClassType: globalBookingRequest.priceClassType,
             },
-            dateTime: bookingRequest.dateTime,
-            duration: bookingRequest.duration,
-            adultParticipants: bookingRequest.adultParticipants,
-            children: bookingRequest.children,
-            occasion: bookingRequest.occasion,
-            priceClassType: bookingRequest.priceClassType,
-        },
-        expiresAt: bookingRequest.expiresAt,
-        createdAt: bookingRequest.createdAt,
-    }));
+            // actually not relevant for coo global booking request. Remove after split
+            status: toGlobalBookingRequestStatus(dataSourceAdapter, globalBookingRequest),
+            expiresAt: globalBookingRequest.expiresAt,
+            createdAt: globalBookingRequest.createdAt,
+        }));
 }

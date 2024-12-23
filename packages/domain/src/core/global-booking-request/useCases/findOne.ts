@@ -2,6 +2,7 @@ import { Authorization, type DataSource } from '../../..';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 import { type GlobalBookingRequest } from '../GlobalBookingRequest';
+import { toGlobalBookingRequestStatus } from '../toGlobalBookingRequestStatus';
 
 export interface FindOneGlobalBookingRequestInput {
     runtime: Runtime;
@@ -40,6 +41,7 @@ export async function findOne({
             occasion: globalBookingRequest.occasion,
             priceClassType: globalBookingRequest.priceClassType,
         },
+        status: toGlobalBookingRequestStatus(dataSourceAdapter, globalBookingRequest),
         expiresAt: globalBookingRequest.expiresAt,
         createdAt: globalBookingRequest.createdAt,
     };

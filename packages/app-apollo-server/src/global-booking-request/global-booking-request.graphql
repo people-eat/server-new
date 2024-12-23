@@ -1,3 +1,10 @@
+enum GlobalBookingRequestStatus {
+    OPEN
+    EXPIRED
+    OFFERS_MADE
+    MATCHED
+}
+
 enum GlobalBookingRequestPriceClassType {
     SIMPLE
     FINE
@@ -41,6 +48,7 @@ type GlobalBookingRequest {
     createdAt: DateTime!
 
     user: User!
+    status: GlobalBookingRequestStatus!
 }
 
 input CreateOneGlobalBookingRequestRequest {

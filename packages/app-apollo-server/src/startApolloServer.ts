@@ -328,14 +328,14 @@ export async function startApolloServerApp({
 
                 // todo: match peopleEatClientType with real enum or so
 
-                if (!peopleEatClientType) {
-                    return {
-                        ...req,
-                        sessionId: undefined,
-                        userId: undefined,
-                        requestingClientType: 'UNKNOWN',
-                    };
-                }
+                // if (!peopleEatClientType) {
+                //     return {
+                //         ...req,
+                //         sessionId: undefined,
+                //         userId: undefined,
+                //         requestingClientType: 'UNKNOWN',
+                //     };
+                // }
 
                 // request from ssr for a browser without session id -> first time visitor
                 if (!sessionId && peopleEatClientType === 'WEB_SSR') {
