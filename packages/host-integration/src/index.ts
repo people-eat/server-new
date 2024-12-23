@@ -86,6 +86,9 @@ async function bootstrap(): Promise<void> {
             publish: async (key: string, payload: unknown) => {
                 await pubsub.publish(key, payload);
             },
+            publishMultiple: async (keys: string[], payload: any) => {
+                await Promise.all(keys.map((key: string) => pubsub.publish(key, payload)));
+            },
             asyncIterator: (key: string): AsyncIterator<unknown> => pubsub.asyncIterator([key]),
         },
         notificationEmailAddresses: ['contact@people-eat.com', 'yilmaz.cem.2603@gmail.com'],
