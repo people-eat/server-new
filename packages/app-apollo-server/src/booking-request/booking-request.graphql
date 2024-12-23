@@ -1,17 +1,3 @@
-# type BookingRequestConditions {
-#     location: Location!
-#     dateTime: DateTime!
-#     preparationTime: UInt!
-#     duration: UInt!
-#     adultParticipants: UInt!
-#     children: UInt!
-#     occasion: String!
-
-#     suggestedMenuId: String
-#     suggestedMenu: PublicMenu
-#     configuredMenu: ConfiguredMenu
-# }
-
 # type BookingRequestPaymentData {
 #     totalPriceCustomer: Price!
 #     totalPriceCook: Price!
@@ -21,25 +7,6 @@
 
 #     giftCardPromoCode: GiftCardPromoCode
 #     giftCard: GiftCard
-# }
-
-# type BookingRequest {
-#     bookingRequestId: String!
-#     globalBookingRequestId: String
-#     userId: String!
-#     cookId: String!
-#     status: BookingRequestStatus!
-#     userAccepted: Boolean
-#     cookAccepted: Boolean
-#     createdAt: DateTime!
-
-#     publicUser: PublicUser!
-#     publicCook: PublicCook!
-
-#     user: User!
-#     cook: Cook!
-
-#     allergies: [Allergy!]!
 # }
 
 type BookingRequestConditions {
@@ -152,8 +119,20 @@ type UserBookingRequestMutation {
     accept(bookingRequestId: String!): Boolean!
     decline(bookingRequestId: String!): Boolean!
     updatePrice(bookingRequestId: String!, price: PriceInput!): Boolean!
+    createPaymentSetup(bookingRequestId: String!): UserBookingRequestCreatePaymentSetupResponse!
     confirmPaymentSetup(bookingRequestId: String!): Boolean!
     updateConfiguredMenu(bookingRequestId: String!, configuredMenu: CreateConfiguredMenuRequest!): Boolean!
+}
+
+union UserBookingRequestCreatePaymentSetupResponse =
+      UserBookingRequestCreatePaymentSetupSuccessResponse
+    | UserBookingRequestCreatePaymentSetupFailedResponse
+
+type UserBookingRequestCreatePaymentSetupSuccessResponse {
+    stripeClientSecret: String!
+}
+type UserBookingRequestCreatePaymentSetupFailedResponse {
+    reason: String!
 }
 
 union UserCreateOneBookingRequestResponse = UserCreateOneBookingRequestSuccessResponse | UserCreateOneBookingRequestFailedResponse

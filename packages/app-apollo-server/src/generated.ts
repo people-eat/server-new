@@ -2219,12 +2219,27 @@ export type GQLUserBookingRequestChatMessageQueryFindManyArgs = {
     request?: InputMaybe<GQLFindManyRequest>;
 };
 
+export type GQLUserBookingRequestCreatePaymentSetupFailedResponse = {
+    __typename?: 'UserBookingRequestCreatePaymentSetupFailedResponse';
+    reason: Scalars['String'];
+};
+
+export type GQLUserBookingRequestCreatePaymentSetupResponse =
+    | GQLUserBookingRequestCreatePaymentSetupFailedResponse
+    | GQLUserBookingRequestCreatePaymentSetupSuccessResponse;
+
+export type GQLUserBookingRequestCreatePaymentSetupSuccessResponse = {
+    __typename?: 'UserBookingRequestCreatePaymentSetupSuccessResponse';
+    stripeClientSecret: Scalars['String'];
+};
+
 export type GQLUserBookingRequestMutation = {
     __typename?: 'UserBookingRequestMutation';
     accept: Scalars['Boolean'];
     chatMessages: GQLUserBookingRequestChatMessageMutation;
     confirmPaymentSetup: Scalars['Boolean'];
     createOne: GQLUserCreateOneBookingRequestResponse;
+    createPaymentSetup: GQLUserBookingRequestCreatePaymentSetupResponse;
     decline: Scalars['Boolean'];
     updateConfiguredMenu: Scalars['Boolean'];
     updatePrice: Scalars['Boolean'];
@@ -2245,6 +2260,10 @@ export type GQLUserBookingRequestMutationConfirmPaymentSetupArgs = {
 
 export type GQLUserBookingRequestMutationCreateOneArgs = {
     request: GQLCreateBookingRequestRequest;
+};
+
+export type GQLUserBookingRequestMutationCreatePaymentSetupArgs = {
+    bookingRequestId: Scalars['String'];
 };
 
 export type GQLUserBookingRequestMutationDeclineArgs = {
@@ -2830,6 +2849,9 @@ export type GQLResolversUnionTypes = {
     CreateOneGiftCardResponse: GQLCreateOneGiftCardFailedResponse | GQLCreateOneGiftCardSuccessResponse;
     CreateOneUserResult: GQLCreateOneUserFailedAlreadyExistsResult | GQLCreateOneUserFailedResult | GQLCreateOneUserSuccessResult;
     DeleteMealResult: GQLDeleteMealErrorResult | GQLDeleteMealRequiredForMenuResult | GQLDeleteMealSuccessResult;
+    UserBookingRequestCreatePaymentSetupResponse:
+        | GQLUserBookingRequestCreatePaymentSetupFailedResponse
+        | GQLUserBookingRequestCreatePaymentSetupSuccessResponse;
     UserCreateOneBookingRequestResponse: GQLUserCreateOneBookingRequestFailedResponse | GQLUserCreateOneBookingRequestSuccessResponse;
     UserEmailAddressUpdateMutationConfirmationResult:
         | GQLUserEmailAddressUpdateMutationConfirmationFailedResult
@@ -2842,6 +2864,9 @@ export type GQLResolversUnionParentTypes = {
     CreateOneGiftCardResponse: GQLCreateOneGiftCardFailedResponse | GQLCreateOneGiftCardSuccessResponse;
     CreateOneUserResult: GQLCreateOneUserFailedAlreadyExistsResult | GQLCreateOneUserFailedResult | GQLCreateOneUserSuccessResult;
     DeleteMealResult: GQLDeleteMealErrorResult | GQLDeleteMealRequiredForMenuResult | GQLDeleteMealSuccessResult;
+    UserBookingRequestCreatePaymentSetupResponse:
+        | GQLUserBookingRequestCreatePaymentSetupFailedResponse
+        | GQLUserBookingRequestCreatePaymentSetupSuccessResponse;
     UserCreateOneBookingRequestResponse: GQLUserCreateOneBookingRequestFailedResponse | GQLUserCreateOneBookingRequestSuccessResponse;
     UserEmailAddressUpdateMutationConfirmationResult:
         | GQLUserEmailAddressUpdateMutationConfirmationFailedResult
@@ -3062,8 +3087,16 @@ export type GQLResolversTypes = {
     UserAddressQuery: ResolverTypeWrapper<GQLUserAddressQuery>;
     UserBookingRequestChatMessageMutation: ResolverTypeWrapper<GQLUserBookingRequestChatMessageMutation>;
     UserBookingRequestChatMessageQuery: ResolverTypeWrapper<GQLUserBookingRequestChatMessageQuery>;
+    UserBookingRequestCreatePaymentSetupFailedResponse: ResolverTypeWrapper<GQLUserBookingRequestCreatePaymentSetupFailedResponse>;
+    UserBookingRequestCreatePaymentSetupResponse: ResolverTypeWrapper<
+        GQLResolversUnionTypes['UserBookingRequestCreatePaymentSetupResponse']
+    >;
+    UserBookingRequestCreatePaymentSetupSuccessResponse: ResolverTypeWrapper<GQLUserBookingRequestCreatePaymentSetupSuccessResponse>;
     UserBookingRequestMutation: ResolverTypeWrapper<
-        Omit<GQLUserBookingRequestMutation, 'createOne'> & { createOne: GQLResolversTypes['UserCreateOneBookingRequestResponse'] }
+        Omit<GQLUserBookingRequestMutation, 'createOne' | 'createPaymentSetup'> & {
+            createOne: GQLResolversTypes['UserCreateOneBookingRequestResponse'];
+            createPaymentSetup: GQLResolversTypes['UserBookingRequestCreatePaymentSetupResponse'];
+        }
     >;
     UserBookingRequestQuery: ResolverTypeWrapper<GQLUserBookingRequestQuery>;
     UserCookRatingQuery: ResolverTypeWrapper<GQLUserCookRatingQuery>;
@@ -3302,8 +3335,12 @@ export type GQLResolversParentTypes = {
     UserAddressQuery: GQLUserAddressQuery;
     UserBookingRequestChatMessageMutation: GQLUserBookingRequestChatMessageMutation;
     UserBookingRequestChatMessageQuery: GQLUserBookingRequestChatMessageQuery;
-    UserBookingRequestMutation: Omit<GQLUserBookingRequestMutation, 'createOne'> & {
+    UserBookingRequestCreatePaymentSetupFailedResponse: GQLUserBookingRequestCreatePaymentSetupFailedResponse;
+    UserBookingRequestCreatePaymentSetupResponse: GQLResolversUnionParentTypes['UserBookingRequestCreatePaymentSetupResponse'];
+    UserBookingRequestCreatePaymentSetupSuccessResponse: GQLUserBookingRequestCreatePaymentSetupSuccessResponse;
+    UserBookingRequestMutation: Omit<GQLUserBookingRequestMutation, 'createOne' | 'createPaymentSetup'> & {
         createOne: GQLResolversParentTypes['UserCreateOneBookingRequestResponse'];
+        createPaymentSetup: GQLResolversParentTypes['UserBookingRequestCreatePaymentSetupResponse'];
     };
     UserBookingRequestQuery: GQLUserBookingRequestQuery;
     UserCookRatingQuery: GQLUserCookRatingQuery;
@@ -5592,6 +5629,33 @@ export type GQLUserBookingRequestChatMessageQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLUserBookingRequestCreatePaymentSetupFailedResponseResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserBookingRequestCreatePaymentSetupFailedResponse'] = GQLResolversParentTypes['UserBookingRequestCreatePaymentSetupFailedResponse'],
+> = {
+    reason?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUserBookingRequestCreatePaymentSetupResponseResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserBookingRequestCreatePaymentSetupResponse'] = GQLResolversParentTypes['UserBookingRequestCreatePaymentSetupResponse'],
+> = {
+    __resolveType: TypeResolveFn<
+        'UserBookingRequestCreatePaymentSetupFailedResponse' | 'UserBookingRequestCreatePaymentSetupSuccessResponse',
+        ParentType,
+        ContextType
+    >;
+};
+
+export type GQLUserBookingRequestCreatePaymentSetupSuccessResponseResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserBookingRequestCreatePaymentSetupSuccessResponse'] = GQLResolversParentTypes['UserBookingRequestCreatePaymentSetupSuccessResponse'],
+> = {
+    stripeClientSecret?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLUserBookingRequestMutationResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['UserBookingRequestMutation'] = GQLResolversParentTypes['UserBookingRequestMutation'],
@@ -5619,6 +5683,12 @@ export type GQLUserBookingRequestMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLUserBookingRequestMutationCreateOneArgs, 'request'>
+    >;
+    createPaymentSetup?: Resolver<
+        GQLResolversTypes['UserBookingRequestCreatePaymentSetupResponse'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserBookingRequestMutationCreatePaymentSetupArgs, 'bookingRequestId'>
     >;
     decline?: Resolver<
         GQLResolversTypes['Boolean'],
@@ -6399,6 +6469,9 @@ export type GQLResolvers<ContextType = any> = {
     UserAddressQuery?: GQLUserAddressQueryResolvers<ContextType>;
     UserBookingRequestChatMessageMutation?: GQLUserBookingRequestChatMessageMutationResolvers<ContextType>;
     UserBookingRequestChatMessageQuery?: GQLUserBookingRequestChatMessageQueryResolvers<ContextType>;
+    UserBookingRequestCreatePaymentSetupFailedResponse?: GQLUserBookingRequestCreatePaymentSetupFailedResponseResolvers<ContextType>;
+    UserBookingRequestCreatePaymentSetupResponse?: GQLUserBookingRequestCreatePaymentSetupResponseResolvers<ContextType>;
+    UserBookingRequestCreatePaymentSetupSuccessResponse?: GQLUserBookingRequestCreatePaymentSetupSuccessResponseResolvers<ContextType>;
     UserBookingRequestMutation?: GQLUserBookingRequestMutationResolvers<ContextType>;
     UserBookingRequestQuery?: GQLUserBookingRequestQueryResolvers<ContextType>;
     UserCookRatingQuery?: GQLUserCookRatingQueryResolvers<ContextType>;

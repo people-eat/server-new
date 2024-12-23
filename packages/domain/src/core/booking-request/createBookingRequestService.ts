@@ -9,6 +9,7 @@ import { acceptOneByUserId } from './useCases/acceptOneByUserId';
 import { confirmPaymentSetup } from './useCases/confirmPaymentSetup';
 import { createOne } from './useCases/createOne';
 import { createOneByGlobalBookingRequestId } from './useCases/createOneByGlobalBookingRequestId';
+import { createPaymentSetup, type UserBookingRequestCreatePaymentSetupResponse } from './useCases/createPaymentSetup';
 import { declineOneByCookId } from './useCases/declineOneByCookId';
 import { declineOneByUserId } from './useCases/declineOneByUserId';
 import { findMany } from './useCases/findMany';
@@ -56,6 +57,10 @@ export interface BookingRequestService {
         request: { userId: NanoId; bookingRequestId: NanoId; price: Price },
     ): Promise<boolean>;
     confirmPaymentSetup(context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }): Promise<boolean>;
+    createPaymentSetup(
+        context: Authorization.Context,
+        request: { userId: NanoId; bookingRequestId: NanoId },
+    ): Promise<UserBookingRequestCreatePaymentSetupResponse>;
     unlockPayment(context: Authorization.Context, request: { bookingRequestId: NanoId }): Promise<boolean>;
     updateSuggestedMenu(
         context: Authorization.Context,
@@ -95,6 +100,8 @@ export function createBookingRequestService(runtime: Runtime): BookingRequestSer
             updatePriceByUserId({ runtime, context, request }),
         confirmPaymentSetup: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
             confirmPaymentSetup({ runtime, context, request }),
+        createPaymentSetup: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
+            createPaymentSetup({ runtime, context, request }),
         unlockPayment: (context: Authorization.Context, request: { bookingRequestId: NanoId }) =>
             unlockPayment({ runtime, context, request }),
         updateSuggestedMenu: (

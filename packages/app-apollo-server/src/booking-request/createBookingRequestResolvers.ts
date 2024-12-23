@@ -19,10 +19,13 @@ import {
     type GQLPublicMenu,
     type GQLPublicUser,
     type GQLUser,
+    type GQLUserBookingRequestCreatePaymentSetupResponse,
     type GQLUserBookingRequestMutation,
     type GQLUserBookingRequestMutationAcceptArgs,
     type GQLUserBookingRequestMutationChatMessagesArgs,
+    type GQLUserBookingRequestMutationConfirmPaymentSetupArgs,
     type GQLUserBookingRequestMutationCreateOneArgs,
+    type GQLUserBookingRequestMutationCreatePaymentSetupArgs,
     type GQLUserBookingRequestMutationUpdateConfiguredMenuArgs,
     type GQLUserBookingRequestMutationUpdatePriceArgs,
     type GQLUserBookingRequestQuery,
@@ -42,6 +45,7 @@ export function createBookingRequestResolvers(
     | 'CookBookingRequestQuery'
     | 'BookingRequestQuery'
     | 'UserCreateOneBookingRequestResponse'
+    | 'UserBookingRequestCreatePaymentSetupResponse'
 > {
     return {
         BookingRequest: {
@@ -96,9 +100,15 @@ export function createBookingRequestResolvers(
             ): Promise<boolean> => service.bookingRequest.updatePriceByUserId(context, { userId, bookingRequestId, price }),
             confirmPaymentSetup: (
                 { userId }: GQLUserBookingRequestMutation,
-                { bookingRequestId }: GQLUserBookingRequestMutationChatMessagesArgs,
+                { bookingRequestId }: GQLUserBookingRequestMutationConfirmPaymentSetupArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.bookingRequest.confirmPaymentSetup(context, { userId, bookingRequestId }),
+            createPaymentSetup: (
+                { userId }: GQLUserBookingRequestMutation,
+                { bookingRequestId }: GQLUserBookingRequestMutationCreatePaymentSetupArgs,
+                context: Authorization.Context,
+            ): Promise<GQLUserBookingRequestCreatePaymentSetupResponse> =>
+                service.bookingRequest.createPaymentSetup(context, { userId, bookingRequestId }),
             updateConfiguredMenu: async (
                 { userId }: GQLUserBookingRequestMutation,
                 { bookingRequestId, configuredMenu }: GQLUserBookingRequestMutationUpdateConfiguredMenuArgs,
@@ -199,6 +209,14 @@ export function createBookingRequestResolvers(
             ): 'UserCreateOneBookingRequestSuccessResponse' | 'UserCreateOneBookingRequestFailedResponse' => {
                 if ('bookingRequestId' in obj) return 'UserCreateOneBookingRequestSuccessResponse';
                 return 'UserCreateOneBookingRequestFailedResponse';
+            },
+        },
+        UserBookingRequestCreatePaymentSetupResponse: {
+            __resolveType: (
+                obj: GQLUserBookingRequestCreatePaymentSetupResponse,
+            ): 'UserBookingRequestCreatePaymentSetupSuccessResponse' | 'UserBookingRequestCreatePaymentSetupFailedResponse' => {
+                if ('stripeClientSecret' in obj) return 'UserBookingRequestCreatePaymentSetupSuccessResponse';
+                return 'UserBookingRequestCreatePaymentSetupFailedResponse';
             },
         },
     };
