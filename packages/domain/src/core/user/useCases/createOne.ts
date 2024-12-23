@@ -190,7 +190,6 @@ export async function createOne({ runtime, context, request }: CreateOneUserByEm
             duration: globalBookingRequest.duration,
             occasion: globalBookingRequest.occasion.trim(),
             message: globalBookingRequest.message.trim(),
-            kitchenId: globalBookingRequest.kitchenId,
             latitude: globalBookingRequest.location.latitude,
             longitude: globalBookingRequest.location.longitude,
             locationText: globalBookingRequest.location.text ?? '',

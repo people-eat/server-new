@@ -52,7 +52,6 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
         duration,
         occasion: occasion.trim(),
         message: message.trim(),
-        kitchenId,
         latitude: location.latitude,
         longitude: location.longitude,
         locationText: location.text ?? '',

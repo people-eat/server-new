@@ -11,23 +11,36 @@ type GlobalBookingRequestPriceClass {
     currencyCode: CurrencyCode!
 }
 
-type GlobalBookingRequest {
-    globalBookingRequestId: String!
-    userId: String!
+type GlobalBookingRequestConditions {
     location: Location!
     dateTime: DateTime!
     duration: UInt
     adultParticipants: UInt!
     children: UInt!
-    priceClassType: GlobalBookingRequestPriceClassType!
     occasion: String!
+    priceClassType: GlobalBookingRequestPriceClassType!
+
+    priceClass: GlobalBookingRequestPriceClass!
+}
+
+type CookGlobalBookingRequest {
+    globalBookingRequestId: String!
+    userId: String!
     message: String!
+    conditions: GlobalBookingRequestConditions!
     createdAt: DateTime!
 
     publicUser: PublicUser!
+}
+
+type GlobalBookingRequest {
+    globalBookingRequestId: String!
+    userId: String!
+    message: String!
+    conditions: GlobalBookingRequestConditions!
+    createdAt: DateTime!
+
     user: User!
-    allergies: [Allergy!]!
-    priceClass: GlobalBookingRequestPriceClass!
 }
 
 input CreateOneGlobalBookingRequestRequest {

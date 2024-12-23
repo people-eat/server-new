@@ -1,6 +1,5 @@
 import { Authorization } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
-import packLocation from '../../packLocation';
 import { type Runtime } from '../../Runtime';
 import { type FindManyRequest } from '../../shared';
 import { type BookingRequest } from '../BookingRequest';
@@ -22,15 +21,40 @@ export async function findMany({ runtime, context }: FindManyBookingRequestInput
 
     bookingRequests.sort((a: DBBookingRequest, b: DBBookingRequest) => b.createdAt.getTime() - a.createdAt.getTime());
 
-    return bookingRequests
-        .map((bookingRequest: DBBookingRequest) => ({
-            ...bookingRequest,
-            status: toBookingRequestStatus(bookingRequest),
-            price: { amount: bookingRequest.totalAmountUser, currencyCode: bookingRequest.currencyCode },
-            travelExpenses: { amount: bookingRequest.travelExpensesAmount, currencyCode: bookingRequest.currencyCode },
-            totalPriceCustomer: { amount: bookingRequest.totalAmountUser, currencyCode: bookingRequest.currencyCode },
-            totalPriceCook: { amount: bookingRequest.totalAmountCook, currencyCode: bookingRequest.currencyCode },
-        }))
-        .map(packLocation);
+    return bookingRequests.map((bookingRequest: DBBookingRequest) => ({
+        bookingRequestId: bookingRequest.bookingRequestId,
+        userId: bookingRequest.userId,
+        cookId: bookingRequest.cookId,
+        status: toBookingRequestStatus(bookingRequest),
+        userAccepted: bookingRequest.cookAccepted,
+        cookAccepted: bookingRequest.userAccepted,
+
+        conditions: {
+            location: {
+                text: bookingRequest.locationText,
+                latitude: bookingRequest.latitude,
+                longitude: bookingRequest.longitude,
+            },
+            dateTime: bookingRequest.dateTime,
+            duration: bookingRequest.duration,
+            adultParticipants: bookingRequest.adultParticipants,
+            children: bookingRequest.children,
+            occasion: bookingRequest.occasion,
+        },
+        preparationTime: bookingRequest.preparationTime,
+
+        travelExpenses: { amount: bookingRequest.travelExpensesAmount, currencyCode: bookingRequest.currencyCode },
+        totalPriceCustomer: { amount: bookingRequest.totalAmountUser, currencyCode: bookingRequest.currencyCode },
+        totalPriceCook: { amount: bookingRequest.totalAmountCook, currencyCode: bookingRequest.currencyCode },
+
+        fee: bookingRequest.fee,
+
+        globalBookingRequestId: bookingRequest.globalBookingRequestId,
+        suggestedMenuId: bookingRequest.suggestedMenuId,
+        createdAt: bookingRequest.createdAt,
+
+        paymentData: bookingRequest.paymentData,
+        giftCardPromoCodeId: bookingRequest.giftCardPromoCodeId,
+        appliedGiftCard: bookingRequest.appliedGiftCard,
+    }));
 }
-// amount: bookingRequest.totalAmountUser, currencyCode: bookingRequest.currencyCode

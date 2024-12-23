@@ -185,24 +185,19 @@ export type GQLAnonymousUser = {
 
 export type GQLBookingRequest = {
     __typename?: 'BookingRequest';
-    adultParticipants: Scalars['UInt'];
     allergies: Array<GQLAllergy>;
     bookingRequestId: Scalars['String'];
-    children: Scalars['UInt'];
+    conditions: GQLBookingRequestConditions;
     configuredMenu?: Maybe<GQLConfiguredMenu>;
     cook: GQLCook;
     cookAccepted?: Maybe<Scalars['Boolean']>;
     cookId: Scalars['String'];
     createdAt: Scalars['DateTime'];
-    dateTime: Scalars['DateTime'];
-    duration: Scalars['UInt'];
     giftCard?: Maybe<GQLGiftCard>;
     giftCardPromoCode?: Maybe<GQLGiftCardPromoCode>;
     globalBookingRequestId?: Maybe<Scalars['String']>;
     kitchenId?: Maybe<Scalars['String']>;
-    location: GQLLocation;
     message: Scalars['String'];
-    occasion: Scalars['String'];
     preparationTime: Scalars['UInt'];
     publicCook: GQLPublicCook;
     publicUser: GQLPublicUser;
@@ -215,6 +210,16 @@ export type GQLBookingRequest = {
     user: GQLUser;
     userAccepted?: Maybe<Scalars['Boolean']>;
     userId: Scalars['String'];
+};
+
+export type GQLBookingRequestConditions = {
+    __typename?: 'BookingRequestConditions';
+    adultParticipants: Scalars['UInt'];
+    children: Scalars['UInt'];
+    dateTime: Scalars['DateTime'];
+    duration?: Maybe<Scalars['UInt']>;
+    location: GQLLocation;
+    occasion: Scalars['String'];
 };
 
 export type GQLBookingRequestQuery = {
@@ -412,6 +417,16 @@ export type GQLCookCookVisitQueryFindManyArgs = {
 export type GQLCookFollowingQuery = {
     __typename?: 'CookFollowingQuery';
     findAll: Array<GQLFollowing>;
+};
+
+export type GQLCookGlobalBookingRequest = {
+    __typename?: 'CookGlobalBookingRequest';
+    conditions: GQLGlobalBookingRequestConditions;
+    createdAt: Scalars['DateTime'];
+    globalBookingRequestId: Scalars['String'];
+    message: Scalars['String'];
+    publicUser: GQLPublicUser;
+    userId: Scalars['String'];
 };
 
 export type GQLCookGlobalBookingRequestQuery = {
@@ -1420,21 +1435,24 @@ export type GQLGiftCardStatus = 'CREATED' | 'PAYED';
 
 export type GQLGlobalBookingRequest = {
     __typename?: 'GlobalBookingRequest';
-    adultParticipants: Scalars['UInt'];
-    allergies: Array<GQLAllergy>;
-    children: Scalars['UInt'];
+    conditions: GQLGlobalBookingRequestConditions;
     createdAt: Scalars['DateTime'];
+    globalBookingRequestId: Scalars['String'];
+    message: Scalars['String'];
+    user: GQLUser;
+    userId: Scalars['String'];
+};
+
+export type GQLGlobalBookingRequestConditions = {
+    __typename?: 'GlobalBookingRequestConditions';
+    adultParticipants: Scalars['UInt'];
+    children: Scalars['UInt'];
     dateTime: Scalars['DateTime'];
     duration?: Maybe<Scalars['UInt']>;
-    globalBookingRequestId: Scalars['String'];
     location: GQLLocation;
-    message: Scalars['String'];
     occasion: Scalars['String'];
     priceClass: GQLGlobalBookingRequestPriceClass;
     priceClassType: GQLGlobalBookingRequestPriceClassType;
-    publicUser: GQLPublicUser;
-    user: GQLUser;
-    userId: Scalars['String'];
 };
 
 export type GQLGlobalBookingRequestPriceClass = {
@@ -2838,6 +2856,7 @@ export type GQLResolversTypes = {
     AnonymousSession: ResolverTypeWrapper<GQLAnonymousSession>;
     AnonymousUser: ResolverTypeWrapper<GQLAnonymousUser>;
     BookingRequest: ResolverTypeWrapper<GQLBookingRequest>;
+    BookingRequestConditions: ResolverTypeWrapper<GQLBookingRequestConditions>;
     BookingRequestQuery: ResolverTypeWrapper<GQLBookingRequestQuery>;
     BookingRequestStatus: GQLBookingRequestStatus;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -2855,6 +2874,7 @@ export type GQLResolversTypes = {
     CookCookRatingQuery: ResolverTypeWrapper<GQLCookCookRatingQuery>;
     CookCookVisitQuery: ResolverTypeWrapper<GQLCookCookVisitQuery>;
     CookFollowingQuery: ResolverTypeWrapper<GQLCookFollowingQuery>;
+    CookGlobalBookingRequest: ResolverTypeWrapper<GQLCookGlobalBookingRequest>;
     CookGlobalBookingRequestQuery: ResolverTypeWrapper<GQLCookGlobalBookingRequestQuery>;
     CookMealMutation: ResolverTypeWrapper<Omit<GQLCookMealMutation, 'deleteOne'> & { deleteOne: GQLResolversTypes['DeleteMealResult'] }>;
     CookMealQuery: ResolverTypeWrapper<GQLCookMealQuery>;
@@ -2946,6 +2966,7 @@ export type GQLResolversTypes = {
     GiftCardRecipientDeliveryInformation: GQLGiftCardRecipientDeliveryInformation;
     GiftCardStatus: GQLGiftCardStatus;
     GlobalBookingRequest: ResolverTypeWrapper<GQLGlobalBookingRequest>;
+    GlobalBookingRequestConditions: ResolverTypeWrapper<GQLGlobalBookingRequestConditions>;
     GlobalBookingRequestPriceClass: ResolverTypeWrapper<GQLGlobalBookingRequestPriceClass>;
     GlobalBookingRequestPriceClassType: GQLGlobalBookingRequestPriceClassType;
     GlobalBookingRequestQuery: ResolverTypeWrapper<GQLGlobalBookingRequestQuery>;
@@ -3083,6 +3104,7 @@ export type GQLResolversParentTypes = {
     AnonymousSession: GQLAnonymousSession;
     AnonymousUser: GQLAnonymousUser;
     BookingRequest: GQLBookingRequest;
+    BookingRequestConditions: GQLBookingRequestConditions;
     BookingRequestQuery: GQLBookingRequestQuery;
     Boolean: Scalars['Boolean'];
     Category: GQLCategory;
@@ -3099,6 +3121,7 @@ export type GQLResolversParentTypes = {
     CookCookRatingQuery: GQLCookCookRatingQuery;
     CookCookVisitQuery: GQLCookCookVisitQuery;
     CookFollowingQuery: GQLCookFollowingQuery;
+    CookGlobalBookingRequest: GQLCookGlobalBookingRequest;
     CookGlobalBookingRequestQuery: GQLCookGlobalBookingRequestQuery;
     CookMealMutation: Omit<GQLCookMealMutation, 'deleteOne'> & { deleteOne: GQLResolversParentTypes['DeleteMealResult'] };
     CookMealQuery: GQLCookMealQuery;
@@ -3184,6 +3207,7 @@ export type GQLResolversParentTypes = {
     GiftCardRecipient: GQLGiftCardRecipient;
     GiftCardRecipientDeliveryInformation: GQLGiftCardRecipientDeliveryInformation;
     GlobalBookingRequest: GQLGlobalBookingRequest;
+    GlobalBookingRequestConditions: GQLGlobalBookingRequestConditions;
     GlobalBookingRequestPriceClass: GQLGlobalBookingRequestPriceClass;
     GlobalBookingRequestQuery: GQLGlobalBookingRequestQuery;
     HeroCookGroup: GQLHeroCookGroup;
@@ -3483,24 +3507,19 @@ export type GQLBookingRequestResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['BookingRequest'] = GQLResolversParentTypes['BookingRequest'],
 > = {
-    adultParticipants?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     allergies?: Resolver<Array<GQLResolversTypes['Allergy']>, ParentType, ContextType>;
     bookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-    children?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    conditions?: Resolver<GQLResolversTypes['BookingRequestConditions'], ParentType, ContextType>;
     configuredMenu?: Resolver<Maybe<GQLResolversTypes['ConfiguredMenu']>, ParentType, ContextType>;
     cook?: Resolver<GQLResolversTypes['Cook'], ParentType, ContextType>;
     cookAccepted?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
     cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
-    dateTime?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
-    duration?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     giftCard?: Resolver<Maybe<GQLResolversTypes['GiftCard']>, ParentType, ContextType>;
     giftCardPromoCode?: Resolver<Maybe<GQLResolversTypes['GiftCardPromoCode']>, ParentType, ContextType>;
     globalBookingRequestId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
     kitchenId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-    location?: Resolver<GQLResolversTypes['Location'], ParentType, ContextType>;
     message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-    occasion?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     preparationTime?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     publicCook?: Resolver<GQLResolversTypes['PublicCook'], ParentType, ContextType>;
     publicUser?: Resolver<GQLResolversTypes['PublicUser'], ParentType, ContextType>;
@@ -3513,6 +3532,19 @@ export type GQLBookingRequestResolvers<
     user?: Resolver<GQLResolversTypes['User'], ParentType, ContextType>;
     userAccepted?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLBookingRequestConditionsResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['BookingRequestConditions'] = GQLResolversParentTypes['BookingRequestConditions'],
+> = {
+    adultParticipants?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    children?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    dateTime?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    duration?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
+    location?: Resolver<GQLResolversTypes['Location'], ParentType, ContextType>;
+    occasion?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3755,6 +3787,19 @@ export type GQLCookFollowingQueryResolvers<
     ParentType extends GQLResolversParentTypes['CookFollowingQuery'] = GQLResolversParentTypes['CookFollowingQuery'],
 > = {
     findAll?: Resolver<Array<GQLResolversTypes['Following']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLCookGlobalBookingRequestResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CookGlobalBookingRequest'] = GQLResolversParentTypes['CookGlobalBookingRequest'],
+> = {
+    conditions?: Resolver<GQLResolversTypes['GlobalBookingRequestConditions'], ParentType, ContextType>;
+    createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    globalBookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    publicUser?: Resolver<GQLResolversTypes['PublicUser'], ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4552,21 +4597,27 @@ export type GQLGlobalBookingRequestResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['GlobalBookingRequest'] = GQLResolversParentTypes['GlobalBookingRequest'],
 > = {
-    adultParticipants?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
-    allergies?: Resolver<Array<GQLResolversTypes['Allergy']>, ParentType, ContextType>;
-    children?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    conditions?: Resolver<GQLResolversTypes['GlobalBookingRequestConditions'], ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
+    globalBookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    user?: Resolver<GQLResolversTypes['User'], ParentType, ContextType>;
+    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLGlobalBookingRequestConditionsResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['GlobalBookingRequestConditions'] = GQLResolversParentTypes['GlobalBookingRequestConditions'],
+> = {
+    adultParticipants?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
+    children?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     dateTime?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     duration?: Resolver<Maybe<GQLResolversTypes['UInt']>, ParentType, ContextType>;
-    globalBookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     location?: Resolver<GQLResolversTypes['Location'], ParentType, ContextType>;
-    message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     occasion?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     priceClass?: Resolver<GQLResolversTypes['GlobalBookingRequestPriceClass'], ParentType, ContextType>;
     priceClassType?: Resolver<GQLResolversTypes['GlobalBookingRequestPriceClassType'], ParentType, ContextType>;
-    publicUser?: Resolver<GQLResolversTypes['PublicUser'], ParentType, ContextType>;
-    user?: Resolver<GQLResolversTypes['User'], ParentType, ContextType>;
-    userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6171,6 +6222,7 @@ export type GQLResolvers<ContextType = any> = {
     AnonymousSession?: GQLAnonymousSessionResolvers<ContextType>;
     AnonymousUser?: GQLAnonymousUserResolvers<ContextType>;
     BookingRequest?: GQLBookingRequestResolvers<ContextType>;
+    BookingRequestConditions?: GQLBookingRequestConditionsResolvers<ContextType>;
     BookingRequestQuery?: GQLBookingRequestQueryResolvers<ContextType>;
     Category?: GQLCategoryResolvers<ContextType>;
     CategoryMutation?: GQLCategoryMutationResolvers<ContextType>;
@@ -6186,6 +6238,7 @@ export type GQLResolvers<ContextType = any> = {
     CookCookRatingQuery?: GQLCookCookRatingQueryResolvers<ContextType>;
     CookCookVisitQuery?: GQLCookCookVisitQueryResolvers<ContextType>;
     CookFollowingQuery?: GQLCookFollowingQueryResolvers<ContextType>;
+    CookGlobalBookingRequest?: GQLCookGlobalBookingRequestResolvers<ContextType>;
     CookGlobalBookingRequestQuery?: GQLCookGlobalBookingRequestQueryResolvers<ContextType>;
     CookMealMutation?: GQLCookMealMutationResolvers<ContextType>;
     CookMealQuery?: GQLCookMealQueryResolvers<ContextType>;
@@ -6234,6 +6287,7 @@ export type GQLResolvers<ContextType = any> = {
     GiftCardPromoCode?: GQLGiftCardPromoCodeResolvers<ContextType>;
     GiftCardQuery?: GQLGiftCardQueryResolvers<ContextType>;
     GlobalBookingRequest?: GQLGlobalBookingRequestResolvers<ContextType>;
+    GlobalBookingRequestConditions?: GQLGlobalBookingRequestConditionsResolvers<ContextType>;
     GlobalBookingRequestPriceClass?: GQLGlobalBookingRequestPriceClassResolvers<ContextType>;
     GlobalBookingRequestQuery?: GQLGlobalBookingRequestQueryResolvers<ContextType>;
     HeroCookGroup?: GQLHeroCookGroupResolvers<ContextType>;

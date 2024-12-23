@@ -1,6 +1,5 @@
 import { Authorization } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
-import packLocation from '../../packLocation';
 import { type Runtime } from '../../Runtime';
 import { type FindManyRequest, type NanoId } from '../../shared';
 import { type BookingRequest } from '../BookingRequest';
@@ -24,21 +23,40 @@ export async function findManyByCookId({ runtime, context, request }: FindManyBo
 
     bookingRequests.sort((a: DBBookingRequest, b: DBBookingRequest) => b.createdAt.getTime() - a.createdAt.getTime());
 
-    return (
-        bookingRequests
-            .map((bookingRequest: DBBookingRequest) => ({
-                ...bookingRequest,
-                status: toBookingRequestStatus(bookingRequest),
-                travelExpenses: { amount: bookingRequest.travelExpensesAmount, currencyCode: bookingRequest.currencyCode },
-                totalPriceCustomer: { amount: bookingRequest.totalAmountUser, currencyCode: bookingRequest.currencyCode },
-                totalPriceCook: { amount: bookingRequest.totalAmountCook, currencyCode: bookingRequest.currencyCode },
-            }))
-            // context: global booking requests matched in the administration don't have a setupIntentId, yet we want them to be displayed to
-            // the customers in their bookings, so it is okay that confirmed is not true yet
-            .filter(
-                (bookingRequest: any) => bookingRequest.paymentData.confirmed || bookingRequest.paymentData.setupIntentId === '',
-                // bookingRequest.paymentData.confirmed,
-            )
-            .map(packLocation)
-    );
+    return bookingRequests.map((bookingRequest: DBBookingRequest) => ({
+        bookingRequestId: bookingRequest.bookingRequestId,
+        userId: bookingRequest.userId,
+        cookId: bookingRequest.cookId,
+        status: toBookingRequestStatus(bookingRequest),
+        userAccepted: bookingRequest.cookAccepted,
+        cookAccepted: bookingRequest.userAccepted,
+
+        conditions: {
+            location: {
+                text: bookingRequest.locationText,
+                latitude: bookingRequest.latitude,
+                longitude: bookingRequest.longitude,
+            },
+            dateTime: bookingRequest.dateTime,
+            duration: bookingRequest.duration,
+            adultParticipants: bookingRequest.adultParticipants,
+            children: bookingRequest.children,
+            occasion: bookingRequest.occasion,
+        },
+        preparationTime: bookingRequest.preparationTime,
+
+        travelExpenses: { amount: bookingRequest.travelExpensesAmount, currencyCode: bookingRequest.currencyCode },
+        totalPriceCustomer: { amount: bookingRequest.totalAmountUser, currencyCode: bookingRequest.currencyCode },
+        totalPriceCook: { amount: bookingRequest.totalAmountCook, currencyCode: bookingRequest.currencyCode },
+
+        fee: bookingRequest.fee,
+
+        globalBookingRequestId: bookingRequest.globalBookingRequestId,
+        suggestedMenuId: bookingRequest.suggestedMenuId,
+        createdAt: bookingRequest.createdAt,
+
+        paymentData: bookingRequest.paymentData,
+        giftCardPromoCodeId: bookingRequest.giftCardPromoCodeId,
+        appliedGiftCard: bookingRequest.appliedGiftCard,
+    }));
 }

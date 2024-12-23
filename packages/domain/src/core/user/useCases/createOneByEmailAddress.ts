@@ -160,7 +160,6 @@ export async function createOneByEmailAddress({ runtime, context, request }: Cre
             duration: globalBookingRequest.duration,
             occasion: globalBookingRequest.occasion.trim(),
             message: globalBookingRequest.message.trim(),
-            kitchenId: globalBookingRequest.kitchenId,
             latitude: globalBookingRequest.location.latitude,
             longitude: globalBookingRequest.location.longitude,
             locationText: globalBookingRequest.location.text ?? '',

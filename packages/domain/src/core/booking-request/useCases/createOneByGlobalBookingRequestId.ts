@@ -146,21 +146,8 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
 
     if (!cookUser) return false;
 
-    const {
-        userId,
-        adultParticipants,
-        children,
-        dateTime,
-        duration,
-        occasion,
-        message,
-        kitchenId,
-        latitude,
-        longitude,
-        locationText,
-        // expiresAt,
-        // createdAt,
-    } = globalBookingRequest;
+    const { userId, adultParticipants, children, dateTime, duration, occasion, message, latitude, longitude, locationText } =
+        globalBookingRequest;
 
     const bookingRequestId: NanoId = createNanoId();
 
@@ -183,7 +170,6 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
         currencyCode: 'EUR',
         fee: 18,
         occasion,
-        kitchenId,
         globalBookingRequestId,
         // @todo
         travelExpensesAmount: 0,

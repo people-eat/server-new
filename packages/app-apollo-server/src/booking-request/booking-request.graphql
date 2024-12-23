@@ -1,3 +1,56 @@
+# type BookingRequestConditions {
+#     location: Location!
+#     dateTime: DateTime!
+#     preparationTime: UInt!
+#     duration: UInt!
+#     adultParticipants: UInt!
+#     children: UInt!
+#     occasion: String!
+
+#     suggestedMenuId: String
+#     suggestedMenu: PublicMenu
+#     configuredMenu: ConfiguredMenu
+# }
+
+# type BookingRequestPaymentData {
+#     totalPriceCustomer: Price!
+#     totalPriceCook: Price!
+#     travelExpenses: Price!
+
+#     stripeClientSecret: String!
+
+#     giftCardPromoCode: GiftCardPromoCode
+#     giftCard: GiftCard
+# }
+
+# type BookingRequest {
+#     bookingRequestId: String!
+#     globalBookingRequestId: String
+#     userId: String!
+#     cookId: String!
+#     status: BookingRequestStatus!
+#     userAccepted: Boolean
+#     cookAccepted: Boolean
+#     createdAt: DateTime!
+
+#     publicUser: PublicUser!
+#     publicCook: PublicCook!
+
+#     user: User!
+#     cook: Cook!
+
+#     allergies: [Allergy!]!
+# }
+
+type BookingRequestConditions {
+    location: Location!
+    dateTime: DateTime!
+    duration: UInt
+    adultParticipants: UInt!
+    children: UInt!
+    occasion: String!
+}
+
 type BookingRequest {
     bookingRequestId: String!
     globalBookingRequestId: String
@@ -6,13 +59,9 @@ type BookingRequest {
     status: BookingRequestStatus!
     userAccepted: Boolean
     cookAccepted: Boolean
-    location: Location!
-    dateTime: DateTime!
+
+    conditions: BookingRequestConditions!
     preparationTime: UInt!
-    duration: UInt!
-    adultParticipants: UInt!
-    children: UInt!
-    occasion: String!
     message: String!
     kitchenId: String
     createdAt: DateTime!

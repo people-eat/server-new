@@ -9,19 +9,21 @@ export interface GlobalBookingRequestPriceClass {
     currencyCode: string;
 }
 
+export interface GlobalBookingRequestConditions {
+    location: Location;
+    dateTime: Date;
+    duration: number;
+    adultParticipants: number;
+    children: number;
+    occasion: string;
+    priceClassType: GlobalBookingRequestPriceClassType;
+}
+
 export interface GlobalBookingRequest {
     globalBookingRequestId: NanoId;
     userId: NanoId;
-    adultParticipants: number;
-    children: number;
-    priceClassType: GlobalBookingRequestPriceClassType;
-    dateTime: Date;
-    duration: number;
-    occasion: string;
     message: string;
-    kitchenId?: string;
-    location: Location;
+    conditions: GlobalBookingRequestConditions;
     expiresAt: Date;
-    // matchedAt: Date;
     createdAt: Date;
 }
