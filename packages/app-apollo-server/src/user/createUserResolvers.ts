@@ -1,8 +1,12 @@
 import { type Address, type Admin, type Authorization, type Cook, type Service } from '@people-eat/server-domain';
 import {
+    type GQLBookingRequest,
     type GQLCreateOneUserResult,
     type GQLFollowing,
+    type GQLGlobalBookingRequest,
     type GQLUser,
+    type GQLUserBookingRequestArgs,
+    type GQLUserGlobalBookingRequestArgs,
     type GQLUserMutation,
     type GQLUserMutationAddressesArgs,
     type GQLUserMutationBookingRequestsArgs,
@@ -55,6 +59,26 @@ export function createUserResolvers(service: Service): Resolvers<'User' | 'UserM
 
             followings: ({ userId }: GQLUser, _input: unknown, context: Authorization.Context) =>
                 service.favoriteCook.findManyByUserId(context, { userId }) as unknown as GQLFollowing[],
+
+            globalBookingRequests: async (
+                { userId }: GQLUser,
+                _input: unknown,
+                context: Authorization.Context,
+            ): Promise<GQLGlobalBookingRequest[]> => service.globalBookingRequest.findManyByUserId(context, { userId }) as any,
+            globalBookingRequest: async (
+                _parent: GQLUser,
+                { globalBookingRequestId }: GQLUserGlobalBookingRequestArgs,
+                context: Authorization.Context,
+            ): Promise<GQLGlobalBookingRequest | undefined> =>
+                service.globalBookingRequest.findOne(context, { globalBookingRequestId }) as any,
+            bookingRequests: async ({ userId }: GQLUser, _input: unknown, context: Authorization.Context): Promise<GQLBookingRequest[]> =>
+                service.bookingRequest.findManyByUserId(context, { userId }) as any,
+            bookingRequest: async (
+                { userId }: GQLUser,
+                { bookingRequestId }: GQLUserBookingRequestArgs,
+                context: Authorization.Context,
+            ): Promise<GQLBookingRequest | undefined> =>
+                service.bookingRequest.findOneByUserId(context, { userId, bookingRequestId }) as any,
         },
         UserMutation: {
             createOneByEmailAddress: async (

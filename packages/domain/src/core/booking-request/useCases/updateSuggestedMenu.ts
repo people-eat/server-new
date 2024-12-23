@@ -1,5 +1,5 @@
-import { Authorization } from '../../..';
-import { type DBBookingRequest, type DBCook, type DBUser } from '../../../data-source';
+import { Authorization, type ChatMessage } from '../../..';
+import { createNanoId } from '../../../utils/createNanoId';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
 
@@ -9,29 +9,12 @@ export interface UpdateSuggestedMenuInput {
     request: { cookId: NanoId; bookingRequestId: NanoId; suggestedMenuId: NanoId };
 }
 
-// eslint-disable-next-line max-statements
-export async function updateSuggestedMenu({ runtime, context, request }: UpdateSuggestedMenuInput): Promise<boolean> {
-    const { dataSourceAdapter, logger } = runtime;
-    const { cookId, bookingRequestId, suggestedMenuId } = request;
-
+export async function updateSuggestedMenu({
+    runtime: { dataSourceAdapter, logger, publisher },
+    context,
+    request: { cookId, bookingRequestId, suggestedMenuId },
+}: UpdateSuggestedMenuInput): Promise<boolean> {
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
-
-    const bookingRequest: DBBookingRequest | undefined = await dataSourceAdapter.bookingRequestRepository.findOne({
-        cookId,
-        bookingRequestId,
-    });
-
-    if (!bookingRequest) return false;
-
-    const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId });
-
-    if (!user) return false;
-
-    const cook: DBCook | undefined = await dataSourceAdapter.cookRepository.findOne({ cookId: bookingRequest.cookId });
-
-    if (!cook) return false;
-
-    // maybe everything above can be removed - depends on notifications
 
     const updateSuccess: boolean = await dataSourceAdapter.bookingRequestRepository.updateOne(
         { bookingRequestId, cookId },
@@ -39,6 +22,27 @@ export async function updateSuggestedMenu({ runtime, context, request }: UpdateS
     );
 
     if (!updateSuccess) return false;
+
+    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+
+    // Notifications
+
+    const chatMessage: ChatMessage = {
+        chatMessageId: createNanoId(),
+        bookingRequestId,
+        // cool would be a link
+        message: `Es wurde eine Menü vorgeschlagen`,
+        generated: true,
+        createdBy: cookId,
+        createdAt: new Date(),
+    };
+
+    await Promise.all([
+        dataSourceAdapter.chatMessageRepository.insertOne(chatMessage),
+        publisher.publish(`booking-request-chat-message-creations-${bookingRequestId}`, {
+            bookingRequestChatMessageCreations: chatMessage,
+        }),
+    ]);
 
     return true;
 }

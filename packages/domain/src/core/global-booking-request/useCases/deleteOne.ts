@@ -9,7 +9,7 @@ export interface DeleteOneGlobalBookingRequestInput {
 }
 
 export async function deleteOne({
-    runtime: { dataSourceAdapter, logger },
+    runtime: { dataSourceAdapter, logger, publisher },
     context,
     request,
 }: DeleteOneGlobalBookingRequestInput): Promise<boolean> {
@@ -18,6 +18,10 @@ export async function deleteOne({
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
 
     const success: boolean = await dataSourceAdapter.globalBookingRequestRepository.deleteOne({ userId, globalBookingRequestId });
+
+    if (!success) return false;
+
+    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

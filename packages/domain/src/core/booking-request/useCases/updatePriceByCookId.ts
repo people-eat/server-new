@@ -11,7 +11,7 @@ export interface UpdateBookingRequestPriceByCookIdInput {
 }
 
 export async function updatePriceByCookId({ runtime, context, request }: UpdateBookingRequestPriceByCookIdInput): Promise<boolean> {
-    const { dataSourceAdapter, logger } = runtime;
+    const { dataSourceAdapter, logger, publisher } = runtime;
     const { cookId, bookingRequestId, price } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
@@ -29,6 +29,10 @@ export async function updatePriceByCookId({ runtime, context, request }: UpdateB
         { cookId, bookingRequestId },
         { cookAccepted: true, userAccepted: undefined, ...price },
     );
+
+    if (!success) return false;
+
+    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     await dataSourceAdapter.chatMessageRepository.insertOne({
         chatMessageId: createNanoId(),

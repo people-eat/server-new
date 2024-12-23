@@ -10,7 +10,11 @@ export interface CreateOneAddressInput {
     request: CreateOneAddressRequest & { userId: NanoId };
 }
 
-export async function createOne({ runtime: { dataSourceAdapter, logger }, context, request }: CreateOneAddressInput): Promise<boolean> {
+export async function createOne({
+    runtime: { dataSourceAdapter, logger, publisher },
+    context,
+    request,
+}: CreateOneAddressInput): Promise<boolean> {
     const { title, country, city, postCode, street, houseNumber, location, userId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
@@ -30,6 +34,8 @@ export async function createOne({ runtime: { dataSourceAdapter, logger }, contex
         longitude: location.longitude,
         createdAt: new Date(),
     });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

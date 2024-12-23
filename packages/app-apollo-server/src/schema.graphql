@@ -19,6 +19,7 @@ type Subscription {
     bookingRequestChatMessageCreations(bookingRequestId: String!): ChatMessage!
     bookingRequestUpdatesByUserId(bookingRequestId: String!): BookingRequest!
     bookingRequestUpdatesByCookId(bookingRequestId: String!): BookingRequest!
+    sessionUpdates: Session!
 }
 
 enum Gender {

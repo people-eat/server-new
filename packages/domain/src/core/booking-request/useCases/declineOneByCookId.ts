@@ -32,6 +32,10 @@ export async function declineOneByCookId({ runtime, context, request }: FindMany
         { cookAccepted: false },
     );
 
+    if (!success) return false;
+
+    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+
     // Notifications
 
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId });
@@ -51,11 +55,12 @@ export async function declineOneByCookId({ runtime, context, request }: FindMany
         createdAt: new Date(),
     };
 
-    await dataSourceAdapter.chatMessageRepository.insertOne(chatMessage);
-
-    await publisher.publish(`booking-request-chat-message-creations-${bookingRequestId}`, {
-        bookingRequestChatMessageCreations: chatMessage,
-    });
+    await Promise.all([
+        dataSourceAdapter.chatMessageRepository.insertOne(chatMessage),
+        publisher.publish(`booking-request-chat-message-creations-${bookingRequestId}`, {
+            bookingRequestChatMessageCreations: chatMessage,
+        }),
+    ]);
 
     const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
     const customerProfileBookingRequestsChatUrl: string = webAppUrl + `/profile/bookings/s/${bookingRequest.bookingRequestId}`;

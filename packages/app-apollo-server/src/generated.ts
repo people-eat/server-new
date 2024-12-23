@@ -279,6 +279,7 @@ export type GQLConfiguredMenuCourse = {
 export type GQLCook = {
     __typename?: 'Cook';
     biography: Scalars['String'];
+    bookingRequest?: Maybe<GQLBookingRequest>;
     bookingRequests: Array<GQLBookingRequest>;
     city: Scalars['String'];
     cookId: Scalars['String'];
@@ -305,6 +306,10 @@ export type GQLCook = {
     travelExpenses: Scalars['UInt'];
     user: GQLUser;
     visitStatistics: GQLCookVisitStatistics;
+};
+
+export type GQLCookBookingRequestArgs = {
+    bookingRequestId: Scalars['String'];
 };
 
 export type GQLCookBookingRequestChatMessageMutation = {
@@ -2001,6 +2006,7 @@ export type GQLSubscription = {
     bookingRequestChatMessageCreations: GQLChatMessage;
     bookingRequestUpdatesByCookId: GQLBookingRequest;
     bookingRequestUpdatesByUserId: GQLBookingRequest;
+    sessionUpdates: GQLSession;
 };
 
 export type GQLSubscriptionBookingRequestChatMessageCreationsArgs = {
@@ -2087,6 +2093,7 @@ export type GQLUser = {
     addresses: Array<GQLAddress>;
     admin?: Maybe<GQLAdmin>;
     birthDate?: Maybe<Scalars['Date']>;
+    bookingRequest?: Maybe<GQLBookingRequest>;
     bookingRequests: Array<GQLBookingRequest>;
     cook?: Maybe<GQLCook>;
     createdAt: Scalars['DateTime'];
@@ -2096,6 +2103,8 @@ export type GQLUser = {
     followingCount: Scalars['UInt'];
     followings: Array<GQLFollowing>;
     gender: GQLGender;
+    globalBookingRequest?: Maybe<GQLGlobalBookingRequest>;
+    globalBookingRequests: Array<GQLGlobalBookingRequest>;
     hasPasswordSetUp: Scalars['Boolean'];
     isAdmin: Scalars['Boolean'];
     isCook: Scalars['Boolean'];
@@ -2110,6 +2119,14 @@ export type GQLUser = {
     profilePictureUrl?: Maybe<Scalars['Url']>;
     unreadNotificationCount: Scalars['UInt'];
     userId: Scalars['String'];
+};
+
+export type GQLUserBookingRequestArgs = {
+    bookingRequestId: Scalars['String'];
+};
+
+export type GQLUserGlobalBookingRequestArgs = {
+    globalBookingRequestId: Scalars['String'];
 };
 
 export type GQLUserAddressMutation = {
@@ -3558,6 +3575,12 @@ export type GQLConfiguredMenuCourseResolvers<
 
 export type GQLCookResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Cook'] = GQLResolversParentTypes['Cook']> = {
     biography?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    bookingRequest?: Resolver<
+        Maybe<GQLResolversTypes['BookingRequest']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookBookingRequestArgs, 'bookingRequestId'>
+    >;
     bookingRequests?: Resolver<Array<GQLResolversTypes['BookingRequest']>, ParentType, ContextType>;
     city?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -5241,6 +5264,7 @@ export type GQLSubscriptionResolvers<
         ContextType,
         RequireFields<GQLSubscriptionBookingRequestUpdatesByUserIdArgs, 'bookingRequestId'>
     >;
+    sessionUpdates?: SubscriptionResolver<GQLResolversTypes['Session'], 'sessionUpdates', ParentType, ContextType>;
 };
 
 export type GQLSupportRequestResolvers<
@@ -5342,6 +5366,12 @@ export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversP
     addresses?: Resolver<Array<GQLResolversTypes['Address']>, ParentType, ContextType>;
     admin?: Resolver<Maybe<GQLResolversTypes['Admin']>, ParentType, ContextType>;
     birthDate?: Resolver<Maybe<GQLResolversTypes['Date']>, ParentType, ContextType>;
+    bookingRequest?: Resolver<
+        Maybe<GQLResolversTypes['BookingRequest']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserBookingRequestArgs, 'bookingRequestId'>
+    >;
     bookingRequests?: Resolver<Array<GQLResolversTypes['BookingRequest']>, ParentType, ContextType>;
     cook?: Resolver<Maybe<GQLResolversTypes['Cook']>, ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
@@ -5351,6 +5381,13 @@ export type GQLUserResolvers<ContextType = any, ParentType extends GQLResolversP
     followingCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     followings?: Resolver<Array<GQLResolversTypes['Following']>, ParentType, ContextType>;
     gender?: Resolver<GQLResolversTypes['Gender'], ParentType, ContextType>;
+    globalBookingRequest?: Resolver<
+        Maybe<GQLResolversTypes['GlobalBookingRequest']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserGlobalBookingRequestArgs, 'globalBookingRequestId'>
+    >;
+    globalBookingRequests?: Resolver<Array<GQLResolversTypes['GlobalBookingRequest']>, ParentType, ContextType>;
     hasPasswordSetUp?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     isAdmin?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     isCook?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;

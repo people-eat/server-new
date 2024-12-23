@@ -15,7 +15,7 @@ export interface UpdateCookIsVisibleInput {
 }
 
 export async function updateProfilePicture({
-    runtime: { dataSourceAdapter, logger, serverUrl },
+    runtime: { dataSourceAdapter, logger, serverUrl, publisher },
     context,
     request,
 }: UpdateCookIsVisibleInput): Promise<boolean> {
@@ -38,6 +38,8 @@ export async function updateProfilePicture({
     }
 
     const success: boolean = await dataSourceAdapter.userRepository.updateOne({ userId }, { profilePictureUrl });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

@@ -12,12 +12,14 @@ export interface UpdateCookIsLockedInput {
 }
 
 export async function updateIsLocked({ runtime, context, request }: UpdateCookIsLockedInput): Promise<boolean> {
-    const { dataSourceAdapter, logger } = runtime;
+    const { dataSourceAdapter, logger, publisher } = runtime;
     const { cookId, isLocked } = request;
 
     await Authorization.isAdmin({ context, dataSourceAdapter, logger });
 
     const success: boolean = await dataSourceAdapter.cookRepository.updateOne({ cookId }, { isLocked });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

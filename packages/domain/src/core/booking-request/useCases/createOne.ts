@@ -197,7 +197,7 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
     bookingRequestId: string;
 }> {
     const fee: number = 22;
-    const { dataSourceAdapter, paymentAdapter, logger } = runtime;
+    const { dataSourceAdapter, paymentAdapter, logger, publisher } = runtime;
     const bookingRequestId: NanoId = createNanoId();
     const { userId, cookId, location, dateTime, preparationTime, duration, adultParticipants, children, occasion, message } = request;
 
@@ -266,6 +266,8 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
         logger.info('Received booking request. Could not store booking request. Declined the request creation.');
         return { success: false, clientSecret, bookingRequestId };
     }
+
+    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     const clearedMessage: string = message.trim();
 

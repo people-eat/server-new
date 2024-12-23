@@ -12,7 +12,7 @@ export interface UpdateCookMinimumPriceInput {
 }
 
 export async function updateMinimumPrice({
-    runtime: { dataSourceAdapter, logger },
+    runtime: { dataSourceAdapter, logger, publisher },
     context,
     request,
 }: UpdateCookMinimumPriceInput): Promise<boolean> {
@@ -21,6 +21,8 @@ export async function updateMinimumPrice({
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
     const success: boolean = await dataSourceAdapter.cookRepository.updateOne({ cookId }, { minimumPrice });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

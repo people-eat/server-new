@@ -33,6 +33,7 @@ type Cook {
     menuCount: UInt!
 
     bookingRequests: [BookingRequest!]!
+    bookingRequest(bookingRequestId: String!): BookingRequest
 
     ratingAverage: UInt!
     ratingCount: UInt!

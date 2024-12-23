@@ -21,7 +21,7 @@ export interface CreateOneGlobalBookingRequestInput {
 
 // eslint-disable-next-line max-statements
 export async function createOne({ runtime, context, request }: CreateOneGlobalBookingRequestInput): Promise<boolean> {
-    const { dataSourceAdapter, emailAdapter, webAppUrl, logger, klaviyoEmailAdapter } = runtime;
+    const { dataSourceAdapter, emailAdapter, webAppUrl, logger, klaviyoEmailAdapter, publisher } = runtime;
     const {
         adultParticipants,
         children,
@@ -61,6 +61,8 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
     });
 
     if (!success) return false;
+
+    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
 

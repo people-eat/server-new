@@ -12,7 +12,7 @@ export interface UpdateCookMinimumPriceInput {
 }
 
 export async function updateHasStripePayoutMethodActivated({
-    runtime: { dataSourceAdapter, logger, paymentAdapter, emailAdapter, notificationEmailAddresses },
+    runtime: { dataSourceAdapter, logger, paymentAdapter, emailAdapter, notificationEmailAddresses, publisher },
     context,
     request,
 }: UpdateCookMinimumPriceInput): Promise<boolean> {
@@ -54,11 +54,13 @@ export async function updateHasStripePayoutMethodActivated({
                 'PeopleEat Logs',
                 notificationEmailAddresses,
                 'updateHasStripePayoutMethodActivated error',
-                `Koch mit id ${cook.cookId} hat versucht payout Methode zu aktivieren, Fehler bei strip Anfrage`,
+                `Koch mit id ${cook.cookId} hat versucht payout Methode zu aktivieren, Fehler bei stripe Anfrage`,
             )
             .then(() => undefined)
             .catch(() => undefined);
     }
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

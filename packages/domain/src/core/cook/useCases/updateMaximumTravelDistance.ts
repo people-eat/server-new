@@ -12,7 +12,7 @@ export interface UpdateCookMaximumTravelDistanceInput {
 }
 
 export async function updateMaximumTravelDistance({
-    runtime: { dataSourceAdapter, logger },
+    runtime: { dataSourceAdapter, logger, publisher },
     context,
     request,
 }: UpdateCookMaximumTravelDistanceInput): Promise<boolean> {
@@ -21,6 +21,8 @@ export async function updateMaximumTravelDistance({
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
     const success: boolean = await dataSourceAdapter.cookRepository.updateOne({ cookId }, { maximumTravelDistance });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

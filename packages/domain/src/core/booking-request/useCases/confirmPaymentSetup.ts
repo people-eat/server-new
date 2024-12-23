@@ -13,7 +13,7 @@ export interface ConfirmPaymentSetupInput {
 
 // eslint-disable-next-line max-statements
 export async function confirmPaymentSetup({ runtime, context, request }: ConfirmPaymentSetupInput): Promise<boolean> {
-    const { dataSourceAdapter, logger, webAppUrl, klaviyoEmailAdapter } = runtime;
+    const { dataSourceAdapter, logger, webAppUrl, klaviyoEmailAdapter, publisher } = runtime;
     const { userId, bookingRequestId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
@@ -35,6 +35,8 @@ export async function confirmPaymentSetup({ runtime, context, request }: Confirm
     );
 
     if (!success) return false;
+
+    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId });
 

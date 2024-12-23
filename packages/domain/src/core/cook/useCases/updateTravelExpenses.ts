@@ -12,7 +12,7 @@ export interface UpdateCookTravelExpensesInput {
 }
 
 export async function updateTravelExpenses({
-    runtime: { dataSourceAdapter, logger },
+    runtime: { dataSourceAdapter, logger, publisher },
     context,
     request,
 }: UpdateCookTravelExpensesInput): Promise<boolean> {
@@ -21,6 +21,8 @@ export async function updateTravelExpenses({
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
     const success: boolean = await dataSourceAdapter.cookRepository.updateOne({ cookId }, { travelExpenses });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

@@ -30,6 +30,10 @@ export async function declineOneByUserId({ runtime, context, request }: FindMany
         { userAccepted: false },
     );
 
+    if (!success) return false;
+
+    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
 
     if (!user) return true;
@@ -43,11 +47,12 @@ export async function declineOneByUserId({ runtime, context, request }: FindMany
         createdAt: new Date(),
     };
 
-    await dataSourceAdapter.chatMessageRepository.insertOne(chatMessage);
-
-    await publisher.publish(`booking-request-chat-message-creations-${bookingRequestId}`, {
-        bookingRequestChatMessageCreations: chatMessage,
-    });
+    await Promise.all([
+        dataSourceAdapter.chatMessageRepository.insertOne(chatMessage),
+        publisher.publish(`booking-request-chat-message-creations-${bookingRequestId}`, {
+            bookingRequestChatMessageCreations: chatMessage,
+        }),
+    ]);
 
     return success;
 }

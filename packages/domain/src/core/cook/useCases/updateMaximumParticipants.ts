@@ -12,12 +12,14 @@ export interface UpdateCookMaximumParticipantsInput {
 }
 
 export async function updateMaximumParticipants({ runtime, context, request }: UpdateCookMaximumParticipantsInput): Promise<boolean> {
-    const { dataSourceAdapter, logger } = runtime;
+    const { dataSourceAdapter, logger, publisher } = runtime;
     const { cookId, maximumParticipants } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
     const success: boolean = await dataSourceAdapter.cookRepository.updateOne({ cookId }, { maximumParticipants });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

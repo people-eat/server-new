@@ -40,6 +40,7 @@ import { type UserService } from './user/createUserService';
 
 export interface Publisher {
     publish: (key: string, payload: any) => Promise<void>;
+    publishMultiple: (keys: string[], payload: any) => Promise<void>;
     asyncIterator: (key: string) => AsyncIterator<any>;
 }
 

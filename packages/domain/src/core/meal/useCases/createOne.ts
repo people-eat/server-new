@@ -2,18 +2,27 @@ import { createWriteStream, type ReadStream } from 'fs';
 import { join } from 'path';
 import { Authorization, type DataSource, type Logger } from '../../..';
 import { createNanoId } from '../../../utils/createNanoId';
+import { type Publisher } from '../../Service';
 import { type NanoId } from '../../shared';
 import { type CreateOneMealRequest } from '../CreateOneMealRequest';
 
 export interface CreateOneMealInput {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
+    publisher: Publisher;
     serverUrl: string;
     context: Authorization.Context;
     request: { cookId: NanoId; meal: CreateOneMealRequest } & { image?: ReadStream };
 }
 
-export async function createOne({ dataSourceAdapter, logger, serverUrl, context, request }: CreateOneMealInput): Promise<boolean> {
+export async function createOne({
+    dataSourceAdapter,
+    logger,
+    publisher,
+    serverUrl,
+    context,
+    request,
+}: CreateOneMealInput): Promise<boolean> {
     const { cookId, meal, image } = request;
     const { title, description, type } = meal;
 
@@ -44,6 +53,8 @@ export async function createOne({ dataSourceAdapter, logger, serverUrl, context,
         imageUrl,
         createdAt: new Date(),
     });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

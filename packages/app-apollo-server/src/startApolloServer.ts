@@ -173,6 +173,12 @@ export async function startApolloServerApp({
                     [Symbol.asyncIterator]: () => service.publisher.asyncIterator(`booking-request-updates-by-cook-id-${bookingRequestId}`),
                 }),
             },
+            sessionUpdates: {
+                subscribe: (_parent: any, _args: any, context: Authorization.Context) => ({
+                    [Symbol.asyncIterator]: (): AsyncIterator<any> =>
+                        service.publisher.asyncIterator(`session-update-${context.sessionId}`),
+                }),
+            },
         },
         ...createLanguageResolvers(service),
         ...createCategoryResolvers(service),

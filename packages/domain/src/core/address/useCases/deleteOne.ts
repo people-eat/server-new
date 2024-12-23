@@ -8,12 +8,18 @@ export interface DeleteOneAddressInput {
     request: { userId: NanoId; addressId: NanoId };
 }
 
-export async function deleteOne({ runtime: { dataSourceAdapter, logger }, context, request }: DeleteOneAddressInput): Promise<boolean> {
+export async function deleteOne({
+    runtime: { dataSourceAdapter, logger, publisher },
+    context,
+    request,
+}: DeleteOneAddressInput): Promise<boolean> {
     const { userId, addressId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
 
     const success: boolean = await dataSourceAdapter.addressRepository.deleteOne({ userId, addressId });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

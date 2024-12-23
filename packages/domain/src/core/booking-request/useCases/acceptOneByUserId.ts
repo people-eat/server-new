@@ -50,6 +50,8 @@ export async function acceptOneByUserId({ runtime, context, request }: AcceptOne
 
     if (!success) return false;
 
+    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+
     // Notifications
     const chatMessage: ChatMessage = {
         chatMessageId: createNanoId(),
@@ -60,11 +62,12 @@ export async function acceptOneByUserId({ runtime, context, request }: AcceptOne
         createdAt: new Date(),
     };
 
-    await dataSourceAdapter.chatMessageRepository.insertOne(chatMessage);
-
-    await publisher.publish(`booking-request-chat-message-creations-${bookingRequestId}`, {
-        bookingRequestChatMessageCreations: chatMessage,
-    });
+    await Promise.all([
+        dataSourceAdapter.chatMessageRepository.insertOne(chatMessage),
+        publisher.publish(`booking-request-chat-message-creations-${bookingRequestId}`, {
+            bookingRequestChatMessageCreations: chatMessage,
+        }),
+    ]);
 
     if (!bookingRequest.cookAccepted) return true;
 

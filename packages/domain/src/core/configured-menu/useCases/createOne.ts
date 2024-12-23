@@ -1,20 +1,29 @@
-import { Authorization, type Course, type DataSource, type Logger, type MealOption, type Menu } from '../../..';
+import { Authorization, type ChatMessage, type Course, type DataSource, type Logger, type MealOption, type Menu } from '../../..';
 import { type NanoId } from '../../shared';
 import { type ConfiguredMenuCourse } from '../ConfiguredMenu';
 import { type CreateOneConfiguredMenuRequest } from '../CreateOneConfiguredMenuRequest';
 
 import { type DBBookingRequest } from '../../../data-source';
+import { createNanoId } from '../../../utils/createNanoId';
 import { findOne as findOneMenu } from '../../menu/useCases/findOne';
 import { findAllCourses } from '../../public-menu/useCases/findAllCourses';
+import { type Publisher } from '../../Service';
 
 export interface CreateOneConfiguredMenuInput {
     dataSourceAdapter: DataSource.Adapter;
     logger: Logger.Adapter;
+    publisher: Publisher;
     context: Authorization.Context;
     request: { userId: NanoId; bookingRequestId: NanoId; configuredMenu: CreateOneConfiguredMenuRequest };
 }
 
-export async function createOne({ dataSourceAdapter, logger, request, context }: CreateOneConfiguredMenuInput): Promise<boolean> {
+export async function createOne({
+    dataSourceAdapter,
+    logger,
+    publisher,
+    request,
+    context,
+}: CreateOneConfiguredMenuInput): Promise<boolean> {
     const { userId, bookingRequestId, configuredMenu } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
@@ -78,6 +87,23 @@ export async function createOne({ dataSourceAdapter, logger, request, context }:
         // kitchenId: menu.kitchen?.kitchenId,
         courses: configuredMenuCourses,
     });
+
+    const chatMessage: ChatMessage = {
+        chatMessageId: createNanoId(),
+        bookingRequestId,
+        // cool would be a link
+        message: `Das vorgschlagene Menü wurde konfiguriert`,
+        generated: true,
+        createdBy: userId,
+        createdAt: new Date(),
+    };
+
+    await Promise.all([
+        dataSourceAdapter.chatMessageRepository.insertOne(chatMessage),
+        publisher.publish(`booking-request-chat-message-creations-${bookingRequestId}`, {
+            bookingRequestChatMessageCreations: chatMessage,
+        }),
+    ]);
 
     return saveConfiguredMenuSuccess;
 }

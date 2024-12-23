@@ -1,7 +1,9 @@
 import { type Authorization, type Meal, type Menu, type Service } from '@people-eat/server-domain';
 import { type CookVisitStatistics } from '../../../domain/src/core/cook-visit/CookVisitStatistics';
 import {
+    type GQLBookingRequest,
     type GQLCook,
+    type GQLCookBookingRequestArgs,
     type GQLCookMutation,
     type GQLCookMutationAddOneLanguageArgs,
     type GQLCookMutationBookingRequestsArgs,
@@ -67,6 +69,14 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
                 const stats: CookVisitStatistics = await service.cookVisitService.findStatistics(context, { cookId });
                 return stats as any;
             },
+            bookingRequests: async ({ cookId }: GQLCook, _input: unknown, context: Authorization.Context): Promise<GQLBookingRequest[]> =>
+                service.bookingRequest.findManyByCookId(context, { cookId }) as any,
+            bookingRequest: async (
+                { cookId }: GQLCook,
+                { bookingRequestId }: GQLCookBookingRequestArgs,
+                context: Authorization.Context,
+            ): Promise<GQLBookingRequest | undefined> =>
+                service.bookingRequest.findOneByCookId(context, { cookId, bookingRequestId }) as any,
         },
         CookMutation: {
             createOne: async (

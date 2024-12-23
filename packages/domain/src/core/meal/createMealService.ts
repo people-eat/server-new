@@ -28,14 +28,14 @@ export interface MealService {
     updateType(context: Authorization.Context, request: { cookId: NanoId; mealId: NanoId; type: MealType }): Promise<boolean>;
 }
 
-export function createMealService({ dataSourceAdapter, logger, serverUrl }: Runtime): MealService {
+export function createMealService({ dataSourceAdapter, logger, serverUrl, publisher }: Runtime): MealService {
     return {
         findOne: (context: Authorization.Context, request: { cookId: NanoId; mealId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),
         findMany: (context: Authorization.Context, request: FindManyRequest & { cookId: NanoId }) =>
             findMany({ dataSourceAdapter, logger, context, request }),
         createOne: (context: Authorization.Context, request: { cookId: NanoId; meal: CreateOneMealRequest } & { image?: ReadStream }) =>
-            createOne({ dataSourceAdapter, logger, serverUrl, context, request }),
+            createOne({ dataSourceAdapter, logger, serverUrl, publisher, context, request }),
         deleteOne: (context: Authorization.Context, request: { cookId: NanoId; mealId: NanoId }) =>
             deleteOne({ dataSourceAdapter, logger, context, request }),
         updateTitle: (context: Authorization.Context, request: { cookId: NanoId; mealId: NanoId; title: string }) =>

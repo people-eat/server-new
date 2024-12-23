@@ -12,7 +12,7 @@ export interface UpdateCookMinimumParticipantsInput {
 }
 
 export async function updateMinimumParticipants({
-    runtime: { dataSourceAdapter, logger },
+    runtime: { dataSourceAdapter, logger, publisher },
     context,
     request,
 }: UpdateCookMinimumParticipantsInput): Promise<boolean> {
@@ -21,6 +21,8 @@ export async function updateMinimumParticipants({
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
     const success: boolean = await dataSourceAdapter.cookRepository.updateOne({ cookId }, { minimumParticipants });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

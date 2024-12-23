@@ -127,7 +127,7 @@ export interface CreateOneBookingRequestInput {
 
 // eslint-disable-next-line max-statements
 export async function createOneByGlobalBookingRequestId({ runtime, context, request }: CreateOneBookingRequestInput): Promise<boolean> {
-    const { dataSourceAdapter, webAppUrl, logger, klaviyoEmailAdapter } = runtime;
+    const { dataSourceAdapter, webAppUrl, logger, klaviyoEmailAdapter, publisher } = runtime;
     const { cookId, globalBookingRequestId, configuredMenu, price } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
@@ -195,22 +195,10 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
             confirmed: false,
             unlocked: false,
         },
-        // costBreakdown: {
-        //     lineItems: [],
-        //     totalPriceCook: {
-        //         amount: price?.amount ?? 0,
-        //         currencyCode: 'EUR',
-        //     },
-        //     totalPriceUser: {
-        //         amount: price?.amount ?? 0,
-        //         currencyCode: 'EUR',
-        //     },
-        // },
     });
 
     if (!success) return false;
 
-    // let priceResult: PriceResult | undefined;
     let configuredMenuTitle: string | undefined;
 
     if (configuredMenu) {
@@ -227,6 +215,8 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
         // priceResult = result?.price;
         configuredMenuTitle = result?.menuTitle;
     }
+
+    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     const automatedMessage: DBChatMessage = {
         chatMessageId: createNanoId(),

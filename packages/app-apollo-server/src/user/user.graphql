@@ -32,7 +32,10 @@ type User {
     emailAddressUpdate: EmailAddressUpdate
     oneTimeAccessToken: OneTimeAccessToken
 
+    globalBookingRequests: [GlobalBookingRequest!]!
+    globalBookingRequest(globalBookingRequestId: String!): GlobalBookingRequest
     bookingRequests: [BookingRequest!]!
+    bookingRequest(bookingRequestId: String!): BookingRequest
 
     followings: [Following!]!
     followingCount: UInt!

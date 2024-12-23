@@ -13,13 +13,13 @@ export interface ConfiguredMenuService {
     ): Promise<boolean>;
 }
 
-export function createConfiguredMenuService({ dataSourceAdapter, logger }: Runtime): ConfiguredMenuService {
+export function createConfiguredMenuService({ dataSourceAdapter, logger, publisher }: Runtime): ConfiguredMenuService {
     return {
         findOne: (context: Authorization.Context, request: { bookingRequestId: NanoId }) =>
             findOne({ dataSourceAdapter, logger, context, request }),
         createOne: (
             context: Authorization.Context,
             request: { userId: NanoId; bookingRequestId: NanoId; configuredMenu: CreateOneConfiguredMenuRequest },
-        ) => createOne({ dataSourceAdapter, logger, context, request }),
+        ) => createOne({ dataSourceAdapter, logger, publisher, context, request }),
     };
 }

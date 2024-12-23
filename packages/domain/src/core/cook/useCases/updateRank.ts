@@ -11,12 +11,18 @@ export interface UpdateCookRankInput {
     };
 }
 
-export async function updateRank({ runtime: { dataSourceAdapter, logger }, context, request }: UpdateCookRankInput): Promise<boolean> {
+export async function updateRank({
+    runtime: { dataSourceAdapter, logger, publisher },
+    context,
+    request,
+}: UpdateCookRankInput): Promise<boolean> {
     const { cookId, rank } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
     const success: boolean = await dataSourceAdapter.cookRepository.updateOne({ cookId }, { rank });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

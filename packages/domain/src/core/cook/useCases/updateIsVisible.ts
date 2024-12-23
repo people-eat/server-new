@@ -12,12 +12,14 @@ export interface UpdateCookIsVisibleInput {
 }
 
 export async function updateIsVisible({ runtime, context, request }: UpdateCookIsVisibleInput): Promise<boolean> {
-    const { dataSourceAdapter, logger } = runtime;
+    const { dataSourceAdapter, logger, publisher } = runtime;
     const { cookId, isVisible } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
     const success: boolean = await dataSourceAdapter.cookRepository.updateOne({ cookId }, { isVisible });
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }

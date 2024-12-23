@@ -9,7 +9,11 @@ export interface UpdateAddressInput {
     request: { userId: NanoId; addressId: NanoId } & CreateOneAddressRequest;
 }
 
-export async function update({ runtime: { dataSourceAdapter, logger }, context, request }: UpdateAddressInput): Promise<boolean> {
+export async function update({
+    runtime: { dataSourceAdapter, logger, publisher },
+    context,
+    request,
+}: UpdateAddressInput): Promise<boolean> {
     const { title, country, city, postCode, street, houseNumber, location, addressId, userId } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
@@ -27,6 +31,8 @@ export async function update({ runtime: { dataSourceAdapter, logger }, context, 
             longitude: location.longitude,
         },
     );
+
+    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
 
     return success;
 }
