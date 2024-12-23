@@ -1516,6 +1516,23 @@ export type GQLLocationInput = {
     text?: InputMaybe<Scalars['String']>;
 };
 
+export type GQLLocationQuery = {
+    __typename?: 'LocationQuery';
+    find: Array<GQLLocationSuggestion>;
+};
+
+export type GQLLocationQueryFindArgs = {
+    searchText: Scalars['String'];
+};
+
+export type GQLLocationSuggestion = {
+    __typename?: 'LocationSuggestion';
+    id: Scalars['String'];
+    latitude: Scalars['Latitude'];
+    longitude: Scalars['Longitude'];
+    title: Scalars['String'];
+};
+
 export type GQLMeal = {
     __typename?: 'Meal';
     cookId: Scalars['String'];
@@ -1900,6 +1917,7 @@ export type GQLQuery = {
     globalBookingRequests: GQLGlobalBookingRequestQuery;
     kitchens: GQLKitchenQuery;
     languages: GQLLanguageQuery;
+    locations?: Maybe<GQLLocationQuery>;
     privacyPolicyUpdates: GQLPrivacyPolicyUpdateQuery;
     publicCooks: GQLPublicCookQuery;
     publicMenus: GQLPublicMenuQuery;
@@ -2943,6 +2961,8 @@ export type GQLResolversTypes = {
     Latitude: ResolverTypeWrapper<Scalars['Latitude']>;
     Location: ResolverTypeWrapper<GQLLocation>;
     LocationInput: GQLLocationInput;
+    LocationQuery: ResolverTypeWrapper<GQLLocationQuery>;
+    LocationSuggestion: ResolverTypeWrapper<GQLLocationSuggestion>;
     Longitude: ResolverTypeWrapper<Scalars['Longitude']>;
     Meal: ResolverTypeWrapper<GQLMeal>;
     MealOption: ResolverTypeWrapper<GQLMealOption>;
@@ -3177,6 +3197,8 @@ export type GQLResolversParentTypes = {
     Latitude: Scalars['Latitude'];
     Location: GQLLocation;
     LocationInput: GQLLocationInput;
+    LocationQuery: GQLLocationQuery;
+    LocationSuggestion: GQLLocationSuggestion;
     Longitude: Scalars['Longitude'];
     Meal: GQLMeal;
     MealOption: GQLMealOption;
@@ -4655,6 +4677,30 @@ export type GQLLocationResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLLocationQueryResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['LocationQuery'] = GQLResolversParentTypes['LocationQuery'],
+> = {
+    find?: Resolver<
+        Array<GQLResolversTypes['LocationSuggestion']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLLocationQueryFindArgs, 'searchText'>
+    >;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLLocationSuggestionResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['LocationSuggestion'] = GQLResolversParentTypes['LocationSuggestion'],
+> = {
+    id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    latitude?: Resolver<GQLResolversTypes['Latitude'], ParentType, ContextType>;
+    longitude?: Resolver<GQLResolversTypes['Longitude'], ParentType, ContextType>;
+    title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface GQLLongitudeScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['Longitude'], any> {
     name: 'Longitude';
 }
@@ -5124,6 +5170,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     globalBookingRequests?: Resolver<GQLResolversTypes['GlobalBookingRequestQuery'], ParentType, ContextType>;
     kitchens?: Resolver<GQLResolversTypes['KitchenQuery'], ParentType, ContextType>;
     languages?: Resolver<GQLResolversTypes['LanguageQuery'], ParentType, ContextType>;
+    locations?: Resolver<Maybe<GQLResolversTypes['LocationQuery']>, ParentType, ContextType>;
     privacyPolicyUpdates?: Resolver<GQLResolversTypes['PrivacyPolicyUpdateQuery'], ParentType, ContextType>;
     publicCooks?: Resolver<GQLResolversTypes['PublicCookQuery'], ParentType, ContextType>;
     publicMenus?: Resolver<GQLResolversTypes['PublicMenuQuery'], ParentType, ContextType>;
@@ -6199,6 +6246,8 @@ export type GQLResolvers<ContextType = any> = {
     LanguageQuery?: GQLLanguageQueryResolvers<ContextType>;
     Latitude?: GraphQLScalarType;
     Location?: GQLLocationResolvers<ContextType>;
+    LocationQuery?: GQLLocationQueryResolvers<ContextType>;
+    LocationSuggestion?: GQLLocationSuggestionResolvers<ContextType>;
     Longitude?: GraphQLScalarType;
     Meal?: GQLMealResolvers<ContextType>;
     MealOption?: GQLMealOptionResolvers<ContextType>;

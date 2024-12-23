@@ -60,6 +60,7 @@ import { createGiftCardResolvers } from './gift-card/createGiftCardResolvers';
 import { createGlobalBookingRequestResolvers } from './global-booking-request/createGlobalBookingRequestResolvers';
 import { createKitchenResolvers } from './kitchen/createKitchenResolvers';
 import { createLanguageResolvers } from './language/createLanguageResolvers';
+import { createLocationResolvers } from './location/createLocationResolvers';
 import { createMealOptionResolvers } from './meal-option/createMealOptionResolvers';
 import { createMealResolvers } from './meal/createMealResolvers';
 import { createMenuConfigurationResolvers } from './menu-configuration/createMenuConfigurationResolvers';
@@ -121,6 +122,7 @@ export async function startApolloServerApp({
         Url: URLResolver,
         Upload: GraphQLUpload,
         Query: {
+            locations: () => ({} as any),
             languages: () => ({} as any),
             categories: () => ({} as any),
             kitchens: () => ({} as any),
@@ -180,6 +182,7 @@ export async function startApolloServerApp({
                 }),
             },
         },
+        ...createLocationResolvers(service),
         ...createLanguageResolvers(service),
         ...createCategoryResolvers(service),
         ...createKitchenResolvers(service),

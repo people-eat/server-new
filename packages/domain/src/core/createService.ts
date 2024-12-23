@@ -20,6 +20,7 @@ import { createGiftCardService } from './gift-card/createGiftCardService';
 import { createGlobalBookingRequestService } from './global-booking-request/createGlobalBookingRequestService';
 import { createKitchenService } from './kitchen/createKitchenService';
 import { createLanguageService } from './language/createLanguageService';
+import { createLocationService } from './location';
 import { createLogService } from './log/createLogService';
 import { createMealOptionService } from './meal-option/createMealOptionService';
 import { createMealService } from './meal/createMealService';
@@ -75,6 +76,7 @@ export function createService(runtime: Runtime): Service {
         log: createLogService(runtime),
         publisher: runtime.publisher,
 
+        location: createLocationService(runtime),
         language: createLanguageService(runtime),
         category: createCategoryService(runtime),
         kitchen: createKitchenService(runtime),

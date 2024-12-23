@@ -1,0 +1,14 @@
+type LocationSuggestion {
+    id: String!
+    title: String!
+    latitude: Latitude!
+    longitude: Longitude!
+}
+
+type LocationQuery {
+    find(searchText: String!): [LocationSuggestion!]!
+}
+
+type Query {
+    locations: LocationQuery
+}

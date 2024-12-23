@@ -18,6 +18,7 @@ import { type GiftCardService } from './gift-card/createGiftCardService';
 import { type GlobalBookingRequestService } from './global-booking-request/createGlobalBookingRequestService';
 import { type KitchenService } from './kitchen/createKitchenService';
 import { type LanguageService } from './language/createLanguageService';
+import { type LocationService } from './location';
 import { type LogService } from './log/createLogService';
 import { type MealOptionService } from './meal-option/createMealOptionService';
 import { type MealService } from './meal/createMealService';
@@ -48,6 +49,7 @@ export interface Service {
     log: LogService;
     publisher: Publisher;
 
+    location: LocationService;
     language: LanguageService;
     category: CategoryService;
     kitchen: KitchenService;
