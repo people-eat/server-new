@@ -158,10 +158,14 @@ type UserBookingRequestMutation {
     updateConfiguredMenu(bookingRequestId: String!, configuredMenu: CreateConfiguredMenuRequest!): Boolean!
 }
 
-type UserCreateOneBookingRequestResponse {
-    success: Boolean!
-    clientSecret: String!
+union UserCreateOneBookingRequestResponse = UserCreateOneBookingRequestSuccessResponse | UserCreateOneBookingRequestFailedResponse
+
+type UserCreateOneBookingRequestSuccessResponse {
     bookingRequestId: String!
+}
+
+type UserCreateOneBookingRequestFailedResponse {
+    reason: String!
 }
 
 type UserMutation {
@@ -170,7 +174,11 @@ type UserMutation {
 
 type CookBookingRequestMutation {
     cookId: String!
-    createOne(globalBookingRequestId: String!, configuredMenu: CreateConfiguredMenuRequest, price: PriceInput): Boolean!
+    createOne(
+        globalBookingRequestId: String!
+        configuredMenu: CreateConfiguredMenuRequest
+        price: PriceInput
+    ): UserCreateOneBookingRequestResponse!
     accept(bookingRequestId: String!): Boolean!
     decline(bookingRequestId: String!): Boolean!
     updatePrice(bookingRequestId: String!, price: PriceInput!): Boolean!

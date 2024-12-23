@@ -344,7 +344,7 @@ export type GQLCookBookingRequestMutation = {
     accept: Scalars['Boolean'];
     chatMessages: GQLCookBookingRequestChatMessageMutation;
     cookId: Scalars['String'];
-    createOne: Scalars['Boolean'];
+    createOne: GQLUserCreateOneBookingRequestResponse;
     decline: Scalars['Boolean'];
     updatePrice: Scalars['Boolean'];
     updateSuggestedMenu: Scalars['Boolean'];
@@ -1439,6 +1439,7 @@ export type GQLGlobalBookingRequest = {
     createdAt: Scalars['DateTime'];
     globalBookingRequestId: Scalars['String'];
     message: Scalars['String'];
+    status: GQLGlobalBookingRequestStatus;
     user: GQLUser;
     userId: Scalars['String'];
 };
@@ -1474,6 +1475,8 @@ export type GQLGlobalBookingRequestQuery = {
 export type GQLGlobalBookingRequestQueryFindOneArgs = {
     globalBookingRequestId: Scalars['String'];
 };
+
+export type GQLGlobalBookingRequestStatus = 'EXPIRED' | 'MATCHED' | 'OFFERS_MADE' | 'OPEN';
 
 export type GQLHeroCookGroup = {
     __typename?: 'HeroCookGroup';
@@ -2296,11 +2299,18 @@ export type GQLUserCookVisitQueryFindManyArgs = {
     request?: InputMaybe<GQLFindManyRequest>;
 };
 
-export type GQLUserCreateOneBookingRequestResponse = {
-    __typename?: 'UserCreateOneBookingRequestResponse';
+export type GQLUserCreateOneBookingRequestFailedResponse = {
+    __typename?: 'UserCreateOneBookingRequestFailedResponse';
+    reason: Scalars['String'];
+};
+
+export type GQLUserCreateOneBookingRequestResponse =
+    | GQLUserCreateOneBookingRequestFailedResponse
+    | GQLUserCreateOneBookingRequestSuccessResponse;
+
+export type GQLUserCreateOneBookingRequestSuccessResponse = {
+    __typename?: 'UserCreateOneBookingRequestSuccessResponse';
     bookingRequestId: Scalars['String'];
-    clientSecret: Scalars['String'];
-    success: Scalars['Boolean'];
 };
 
 export type GQLUserEmailAddressUpdateMutation = {
@@ -2822,6 +2832,7 @@ export type GQLResolversUnionTypes = {
     CreateOneGiftCardResponse: GQLCreateOneGiftCardFailedResponse | GQLCreateOneGiftCardSuccessResponse;
     CreateOneUserResult: GQLCreateOneUserFailedAlreadyExistsResult | GQLCreateOneUserFailedResult | GQLCreateOneUserSuccessResult;
     DeleteMealResult: GQLDeleteMealErrorResult | GQLDeleteMealRequiredForMenuResult | GQLDeleteMealSuccessResult;
+    UserCreateOneBookingRequestResponse: GQLUserCreateOneBookingRequestFailedResponse | GQLUserCreateOneBookingRequestSuccessResponse;
     UserEmailAddressUpdateMutationConfirmationResult:
         | GQLUserEmailAddressUpdateMutationConfirmationFailedResult
         | GQLUserEmailAddressUpdateMutationConfirmationSuccessResult;
@@ -2833,6 +2844,7 @@ export type GQLResolversUnionParentTypes = {
     CreateOneGiftCardResponse: GQLCreateOneGiftCardFailedResponse | GQLCreateOneGiftCardSuccessResponse;
     CreateOneUserResult: GQLCreateOneUserFailedAlreadyExistsResult | GQLCreateOneUserFailedResult | GQLCreateOneUserSuccessResult;
     DeleteMealResult: GQLDeleteMealErrorResult | GQLDeleteMealRequiredForMenuResult | GQLDeleteMealSuccessResult;
+    UserCreateOneBookingRequestResponse: GQLUserCreateOneBookingRequestFailedResponse | GQLUserCreateOneBookingRequestSuccessResponse;
     UserEmailAddressUpdateMutationConfirmationResult:
         | GQLUserEmailAddressUpdateMutationConfirmationFailedResult
         | GQLUserEmailAddressUpdateMutationConfirmationSuccessResult;
@@ -2869,7 +2881,9 @@ export type GQLResolversTypes = {
     Cook: ResolverTypeWrapper<GQLCook>;
     CookBookingRequestChatMessageMutation: ResolverTypeWrapper<GQLCookBookingRequestChatMessageMutation>;
     CookBookingRequestChatMessageQuery: ResolverTypeWrapper<GQLCookBookingRequestChatMessageQuery>;
-    CookBookingRequestMutation: ResolverTypeWrapper<GQLCookBookingRequestMutation>;
+    CookBookingRequestMutation: ResolverTypeWrapper<
+        Omit<GQLCookBookingRequestMutation, 'createOne'> & { createOne: GQLResolversTypes['UserCreateOneBookingRequestResponse'] }
+    >;
     CookBookingRequestQuery: ResolverTypeWrapper<GQLCookBookingRequestQuery>;
     CookCookRatingQuery: ResolverTypeWrapper<GQLCookCookRatingQuery>;
     CookCookVisitQuery: ResolverTypeWrapper<GQLCookCookVisitQuery>;
@@ -2970,6 +2984,7 @@ export type GQLResolversTypes = {
     GlobalBookingRequestPriceClass: ResolverTypeWrapper<GQLGlobalBookingRequestPriceClass>;
     GlobalBookingRequestPriceClassType: GQLGlobalBookingRequestPriceClassType;
     GlobalBookingRequestQuery: ResolverTypeWrapper<GQLGlobalBookingRequestQuery>;
+    GlobalBookingRequestStatus: GQLGlobalBookingRequestStatus;
     HeroCookGroup: ResolverTypeWrapper<GQLHeroCookGroup>;
     HeroMenuGroup: ResolverTypeWrapper<GQLHeroMenuGroup>;
     IdentityProvider: GQLIdentityProvider;
@@ -3049,11 +3064,15 @@ export type GQLResolversTypes = {
     UserAddressQuery: ResolverTypeWrapper<GQLUserAddressQuery>;
     UserBookingRequestChatMessageMutation: ResolverTypeWrapper<GQLUserBookingRequestChatMessageMutation>;
     UserBookingRequestChatMessageQuery: ResolverTypeWrapper<GQLUserBookingRequestChatMessageQuery>;
-    UserBookingRequestMutation: ResolverTypeWrapper<GQLUserBookingRequestMutation>;
+    UserBookingRequestMutation: ResolverTypeWrapper<
+        Omit<GQLUserBookingRequestMutation, 'createOne'> & { createOne: GQLResolversTypes['UserCreateOneBookingRequestResponse'] }
+    >;
     UserBookingRequestQuery: ResolverTypeWrapper<GQLUserBookingRequestQuery>;
     UserCookRatingQuery: ResolverTypeWrapper<GQLUserCookRatingQuery>;
     UserCookVisitQuery: ResolverTypeWrapper<GQLUserCookVisitQuery>;
-    UserCreateOneBookingRequestResponse: ResolverTypeWrapper<GQLUserCreateOneBookingRequestResponse>;
+    UserCreateOneBookingRequestFailedResponse: ResolverTypeWrapper<GQLUserCreateOneBookingRequestFailedResponse>;
+    UserCreateOneBookingRequestResponse: ResolverTypeWrapper<GQLResolversUnionTypes['UserCreateOneBookingRequestResponse']>;
+    UserCreateOneBookingRequestSuccessResponse: ResolverTypeWrapper<GQLUserCreateOneBookingRequestSuccessResponse>;
     UserEmailAddressUpdateMutation: ResolverTypeWrapper<
         Omit<GQLUserEmailAddressUpdateMutation, 'confirm'> & {
             confirm: GQLResolversTypes['UserEmailAddressUpdateMutationConfirmationResult'];
@@ -3116,7 +3135,9 @@ export type GQLResolversParentTypes = {
     Cook: GQLCook;
     CookBookingRequestChatMessageMutation: GQLCookBookingRequestChatMessageMutation;
     CookBookingRequestChatMessageQuery: GQLCookBookingRequestChatMessageQuery;
-    CookBookingRequestMutation: GQLCookBookingRequestMutation;
+    CookBookingRequestMutation: Omit<GQLCookBookingRequestMutation, 'createOne'> & {
+        createOne: GQLResolversParentTypes['UserCreateOneBookingRequestResponse'];
+    };
     CookBookingRequestQuery: GQLCookBookingRequestQuery;
     CookCookRatingQuery: GQLCookCookRatingQuery;
     CookCookVisitQuery: GQLCookCookVisitQuery;
@@ -3283,11 +3304,15 @@ export type GQLResolversParentTypes = {
     UserAddressQuery: GQLUserAddressQuery;
     UserBookingRequestChatMessageMutation: GQLUserBookingRequestChatMessageMutation;
     UserBookingRequestChatMessageQuery: GQLUserBookingRequestChatMessageQuery;
-    UserBookingRequestMutation: GQLUserBookingRequestMutation;
+    UserBookingRequestMutation: Omit<GQLUserBookingRequestMutation, 'createOne'> & {
+        createOne: GQLResolversParentTypes['UserCreateOneBookingRequestResponse'];
+    };
     UserBookingRequestQuery: GQLUserBookingRequestQuery;
     UserCookRatingQuery: GQLUserCookRatingQuery;
     UserCookVisitQuery: GQLUserCookVisitQuery;
-    UserCreateOneBookingRequestResponse: GQLUserCreateOneBookingRequestResponse;
+    UserCreateOneBookingRequestFailedResponse: GQLUserCreateOneBookingRequestFailedResponse;
+    UserCreateOneBookingRequestResponse: GQLResolversUnionParentTypes['UserCreateOneBookingRequestResponse'];
+    UserCreateOneBookingRequestSuccessResponse: GQLUserCreateOneBookingRequestSuccessResponse;
     UserEmailAddressUpdateMutation: Omit<GQLUserEmailAddressUpdateMutation, 'confirm'> & {
         confirm: GQLResolversParentTypes['UserEmailAddressUpdateMutationConfirmationResult'];
     };
@@ -3712,7 +3737,7 @@ export type GQLCookBookingRequestMutationResolvers<
     >;
     cookId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     createOne?: Resolver<
-        GQLResolversTypes['Boolean'],
+        GQLResolversTypes['UserCreateOneBookingRequestResponse'],
         ParentType,
         ContextType,
         RequireFields<GQLCookBookingRequestMutationCreateOneArgs, 'globalBookingRequestId'>
@@ -4601,6 +4626,7 @@ export type GQLGlobalBookingRequestResolvers<
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     globalBookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    status?: Resolver<GQLResolversTypes['GlobalBookingRequestStatus'], ParentType, ContextType>;
     user?: Resolver<GQLResolversTypes['User'], ParentType, ContextType>;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -5662,13 +5688,30 @@ export type GQLUserCookVisitQueryResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLUserCreateOneBookingRequestFailedResponseResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserCreateOneBookingRequestFailedResponse'] = GQLResolversParentTypes['UserCreateOneBookingRequestFailedResponse'],
+> = {
+    reason?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLUserCreateOneBookingRequestResponseResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['UserCreateOneBookingRequestResponse'] = GQLResolversParentTypes['UserCreateOneBookingRequestResponse'],
 > = {
+    __resolveType: TypeResolveFn<
+        'UserCreateOneBookingRequestFailedResponse' | 'UserCreateOneBookingRequestSuccessResponse',
+        ParentType,
+        ContextType
+    >;
+};
+
+export type GQLUserCreateOneBookingRequestSuccessResponseResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['UserCreateOneBookingRequestSuccessResponse'] = GQLResolversParentTypes['UserCreateOneBookingRequestSuccessResponse'],
+> = {
     bookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-    clientSecret?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-    success?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6362,7 +6405,9 @@ export type GQLResolvers<ContextType = any> = {
     UserBookingRequestQuery?: GQLUserBookingRequestQueryResolvers<ContextType>;
     UserCookRatingQuery?: GQLUserCookRatingQueryResolvers<ContextType>;
     UserCookVisitQuery?: GQLUserCookVisitQueryResolvers<ContextType>;
+    UserCreateOneBookingRequestFailedResponse?: GQLUserCreateOneBookingRequestFailedResponseResolvers<ContextType>;
     UserCreateOneBookingRequestResponse?: GQLUserCreateOneBookingRequestResponseResolvers<ContextType>;
+    UserCreateOneBookingRequestSuccessResponse?: GQLUserCreateOneBookingRequestSuccessResponseResolvers<ContextType>;
     UserEmailAddressUpdateMutation?: GQLUserEmailAddressUpdateMutationResolvers<ContextType>;
     UserEmailAddressUpdateMutationConfirmationFailedResult?: GQLUserEmailAddressUpdateMutationConfirmationFailedResultResolvers<ContextType>;
     UserEmailAddressUpdateMutationConfirmationResult?: GQLUserEmailAddressUpdateMutationConfirmationResultResolvers<ContextType>;

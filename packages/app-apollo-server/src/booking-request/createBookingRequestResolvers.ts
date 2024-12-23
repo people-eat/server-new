@@ -1,4 +1,5 @@
 import { type Authorization, type Service } from '@people-eat/server-domain';
+import { type UserCreateOneBookingRequestResponse } from '../../../domain/src/core/booking-request/CreateOneBookingRequestRequest';
 import {
     type GQLBookingRequest,
     type GQLBookingRequestQuery,
@@ -27,6 +28,7 @@ import {
     type GQLUserBookingRequestQuery,
     type GQLUserBookingRequestQueryChatMessagesArgs,
     type GQLUserBookingRequestQueryFindOneArgs,
+    type GQLUserCreateOneBookingRequestResponse,
 } from '../generated';
 import { type Resolvers } from '../Resolvers';
 
@@ -39,6 +41,7 @@ export function createBookingRequestResolvers(
     | 'CookBookingRequestMutation'
     | 'CookBookingRequestQuery'
     | 'BookingRequestQuery'
+    | 'UserCreateOneBookingRequestResponse'
 > {
     return {
         BookingRequest: {
@@ -69,14 +72,12 @@ export function createBookingRequestResolvers(
                 { userId }: GQLUserBookingRequestMutation,
                 { request }: GQLUserBookingRequestMutationCreateOneArgs,
                 context: Authorization.Context,
-            ): Promise<{
-                success: boolean;
-                clientSecret: string;
-                bookingRequestId: string;
-            }> => {
+            ): Promise<GQLUserCreateOneBookingRequestResponse> => {
                 if (request.cook) return service.bookingRequest.createOne(context, { userId, ...request.cook });
                 if (request.menu) return service.bookingRequest.createOne(context, { userId, ...request.menu });
-                return { success: false, clientSecret: '', bookingRequestId: '' };
+                return {
+                    reason: '',
+                };
             },
             accept: async (
                 { userId }: GQLUserBookingRequestMutation,
@@ -130,7 +131,7 @@ export function createBookingRequestResolvers(
                 { cookId }: GQLCookBookingRequestMutation,
                 { globalBookingRequestId, configuredMenu, price }: GQLCookBookingRequestMutationCreateOneArgs,
                 context: Authorization.Context,
-            ): Promise<boolean> =>
+            ): Promise<GQLUserCreateOneBookingRequestResponse> =>
                 service.bookingRequest.createOneByGlobalBookingRequestId(context, {
                     cookId,
                     globalBookingRequestId,
@@ -190,6 +191,15 @@ export function createBookingRequestResolvers(
                 { bookingRequestId }: GQLCookBookingRequestQueryFindOneArgs,
                 context: Authorization.Context,
             ): Promise<GQLBookingRequest | undefined> => service.bookingRequest.findOne(context, { bookingRequestId }) as any,
+        },
+
+        UserCreateOneBookingRequestResponse: {
+            __resolveType: (
+                obj: UserCreateOneBookingRequestResponse,
+            ): 'UserCreateOneBookingRequestSuccessResponse' | 'UserCreateOneBookingRequestFailedResponse' => {
+                if ('bookingRequestId' in obj) return 'UserCreateOneBookingRequestSuccessResponse';
+                return 'UserCreateOneBookingRequestFailedResponse';
+            },
         },
     };
 }

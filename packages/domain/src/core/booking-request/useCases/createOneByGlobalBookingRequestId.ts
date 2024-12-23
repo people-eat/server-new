@@ -10,6 +10,7 @@ import { findOne as findOnePublicMenu } from '../../public-menu/useCases/findOne
 import { routeBuilders } from '../../routeBuilder';
 import { type Runtime } from '../../Runtime';
 import { type NanoId, type Price } from '../../shared';
+import { type UserCreateOneBookingRequestResponse } from '../CreateOneBookingRequestRequest';
 
 interface PriceResult {
     totalAmountUser: number;
@@ -126,7 +127,11 @@ export interface CreateOneBookingRequestInput {
 }
 
 // eslint-disable-next-line max-statements
-export async function createOneByGlobalBookingRequestId({ runtime, context, request }: CreateOneBookingRequestInput): Promise<boolean> {
+export async function createOneByGlobalBookingRequestId({
+    runtime,
+    context,
+    request,
+}: CreateOneBookingRequestInput): Promise<UserCreateOneBookingRequestResponse> {
     const { dataSourceAdapter, webAppUrl, logger, klaviyoEmailAdapter, publisher } = runtime;
     const { cookId, globalBookingRequestId, configuredMenu, price } = request;
 
@@ -136,15 +141,27 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
         globalBookingRequestId,
     });
 
-    if (!globalBookingRequest) return false;
+    if (!globalBookingRequest) {
+        return {
+            reason: 'No global booking request found',
+        };
+    }
 
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: globalBookingRequest.userId });
 
-    if (!user) return false;
+    if (!user) {
+        return {
+            reason: 'No user found',
+        };
+    }
 
     const cookUser: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cookId });
 
-    if (!cookUser) return false;
+    if (!cookUser) {
+        return {
+            reason: 'No cook user found',
+        };
+    }
 
     const { userId, adultParticipants, children, dateTime, duration, occasion, message, latitude, longitude, locationText } =
         globalBookingRequest;
@@ -183,7 +200,11 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
         },
     });
 
-    if (!success) return false;
+    if (!success) {
+        return {
+            reason: 'Persisting booking request failed',
+        };
+    }
 
     let configuredMenuTitle: string | undefined;
 
@@ -299,5 +320,7 @@ export async function createOneByGlobalBookingRequestId({ runtime, context, requ
 
     await dataSourceAdapter.globalBookingRequestRepository.deleteOne({ globalBookingRequestId });
 
-    return true;
+    return {
+        bookingRequestId,
+    };
 }

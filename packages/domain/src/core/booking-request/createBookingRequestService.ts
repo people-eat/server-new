@@ -3,7 +3,7 @@ import { type CreateOneConfiguredMenuRequest } from '../configured-menu';
 import { type Runtime } from '../Runtime';
 import { type FindManyRequest, type NanoId, type Price } from '../shared';
 import { type BookingRequest } from './BookingRequest';
-import { type CreateOneBookingRequestRequest } from './CreateOneBookingRequestRequest';
+import { type CreateOneBookingRequestRequest, type UserCreateOneBookingRequestResponse } from './CreateOneBookingRequestRequest';
 import { acceptOneByCookId } from './useCases/acceptOneByCookId';
 import { acceptOneByUserId } from './useCases/acceptOneByUserId';
 import { confirmPaymentSetup } from './useCases/confirmPaymentSetup';
@@ -38,15 +38,11 @@ export interface BookingRequestService {
     createOne(
         context: Authorization.Context,
         request: CreateOneBookingRequestRequest & { userId: NanoId },
-    ): Promise<{
-        success: boolean;
-        clientSecret: string;
-        bookingRequestId: string;
-    }>;
+    ): Promise<UserCreateOneBookingRequestResponse>;
     createOneByGlobalBookingRequestId(
         context: Authorization.Context,
         request: { cookId: NanoId; globalBookingRequestId: NanoId; configuredMenu?: CreateOneConfiguredMenuRequest; price?: Price },
-    ): Promise<boolean>;
+    ): Promise<UserCreateOneBookingRequestResponse>;
     acceptOneByCookId(context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }): Promise<boolean>;
     declineOneByCookId(context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }): Promise<boolean>;
     acceptOneByUserId(context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }): Promise<boolean>;
@@ -83,12 +79,7 @@ export function createBookingRequestService(runtime: Runtime): BookingRequestSer
             createOne({ runtime, context, request }),
         createOneByGlobalBookingRequestId: (
             context: Authorization.Context,
-            request: {
-                cookId: NanoId;
-                globalBookingRequestId: NanoId;
-                configuredMenu?: CreateOneConfiguredMenuRequest;
-                price?: Price;
-            },
+            request: { cookId: NanoId; globalBookingRequestId: NanoId; configuredMenu?: CreateOneConfiguredMenuRequest; price?: Price },
         ) => createOneByGlobalBookingRequestId({ runtime, context, request }),
         acceptOneByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }) =>
             acceptOneByCookId({ runtime, context, request }),

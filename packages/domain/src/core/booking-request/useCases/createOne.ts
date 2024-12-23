@@ -13,6 +13,7 @@ import {
     isCreateOneMenuBookingRequestRequest,
     type CreateOneBookingRequestRequest,
     type CreateOneMenuBookingRequestRequest,
+    type UserCreateOneBookingRequestResponse,
 } from '../CreateOneBookingRequestRequest';
 
 export interface CreateOneBookingRequestInput {
@@ -191,11 +192,7 @@ async function persistMenuBookingRequest(
 }
 
 // eslint-disable-next-line max-statements
-export async function createOne({ runtime, context, request }: CreateOneBookingRequestInput): Promise<{
-    success: boolean;
-    clientSecret: string;
-    bookingRequestId: string;
-}> {
+export async function createOne({ runtime, context, request }: CreateOneBookingRequestInput): Promise<UserCreateOneBookingRequestResponse> {
     const fee: number = 22;
     const { dataSourceAdapter, paymentAdapter, logger, publisher } = runtime;
     const bookingRequestId: NanoId = createNanoId();
@@ -207,21 +204,27 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
 
     if (daysUntilEventStart < 1) {
         logger.info('Received booking request. Is in less than 1 day. Declined the request creation.');
-        return { success: false, clientSecret: '', bookingRequestId };
+        return {
+            reason: 'Received booking request. Is in less than 1 day. Declined the request creation.',
+        };
     }
 
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
 
     if (!user) {
         logger.info('Received booking request. Could not find customer user. Declined the request creation.');
-        return { success: false, clientSecret: '', bookingRequestId };
+        return {
+            reason: 'Received booking request. Could not find customer user. Declined the request creation.',
+        };
     }
 
     const cookUser: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: cookId });
 
     if (!cookUser) {
         logger.info('Received booking request. Could not find cook user. Declined the request creation.');
-        return { success: false, clientSecret: '', bookingRequestId };
+        return {
+            reason: 'Received booking request. Could not find cook user. Declined the request creation.',
+        };
     }
 
     const paymentData: { setupIntentId: string; clientSecret: string } | undefined = await paymentAdapter.STRIPE.createSetupIntent({
@@ -230,10 +233,10 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
 
     if (!paymentData) {
         logger.info('Received booking request. Could not create payment data. Declined the request creation.');
-        return { success: false, clientSecret: JSON.stringify(paymentData), bookingRequestId };
+        return {
+            reason: 'Received booking request. Could not create payment data. Declined the request creation.',
+        };
     }
-
-    const { clientSecret } = paymentData;
 
     const persistSuccess: boolean = isCreateOneMenuBookingRequestRequest(request)
         ? await persistMenuBookingRequest(runtime, context, bookingRequestId, request, paymentData)
@@ -258,13 +261,15 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
               fee: 22,
               occasion: occasion.trim(),
               kitchenId: request.kitchenId,
-              createdAt: new Date(),
               paymentData: { ...paymentData, provider: 'STRIPE', confirmed: false, unlocked: false },
+              createdAt: new Date(),
           });
 
     if (!persistSuccess) {
         logger.info('Received booking request. Could not store booking request. Declined the request creation.');
-        return { success: false, clientSecret, bookingRequestId };
+        return {
+            reason: 'Received booking request. Could not store booking request. Declined the request creation.',
+        };
     }
 
     await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
@@ -284,5 +289,7 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
         if (!messageSuccess) logger.error('Creating message did fail for booking request with id: ' + bookingRequestId);
     }
 
-    return { success: true, clientSecret, bookingRequestId };
+    return {
+        bookingRequestId,
+    };
 }

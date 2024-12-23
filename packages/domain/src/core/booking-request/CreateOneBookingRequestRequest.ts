@@ -37,3 +37,13 @@ export function isCreateOneMenuBookingRequestRequest(
 }
 
 export type CreateOneBookingRequestRequest = CreateOneCookBookingRequestRequest | CreateOneMenuBookingRequestRequest;
+
+export type UserCreateOneBookingRequestResponse = UserCreateOneBookingRequestSuccessResponse | UserCreateOneBookingRequestFailedResponse;
+
+export interface UserCreateOneBookingRequestSuccessResponse {
+    bookingRequestId: string;
+}
+
+export interface UserCreateOneBookingRequestFailedResponse {
+    reason: string;
+}
