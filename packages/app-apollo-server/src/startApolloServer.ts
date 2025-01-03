@@ -96,6 +96,7 @@ export interface StartApolloServerAppOptions {
 }
 
 export interface StartApolloServerAppResult {
+    start: () => Promise<void>;
     path: string;
 }
 
@@ -313,111 +314,116 @@ export async function startApolloServerApp({
 
     const server: ApolloServer = new ApolloServer({ plugins, schema });
 
-    await server.start();
+    return {
+        async start(): Promise<void> {
+            await server.start();
 
-    expressApp.use(
-        path,
-        cors<cors.CorsRequest>({ origin: true, credentials: true }),
-        bodyParser.json(),
-        cookieParser(),
-        graphqlUploadExpress({ maxFileSize: undefined, maxFiles: 10 }),
-        expressMiddleware(server, {
-            context: async ({ req, res }: ExpressContextFunctionArgument): Promise<Authorization.Context> => {
-                const peopleEatClientType: string | string[] | undefined = req.headers['people-eat-client-type'];
-                const sessionId: string | undefined = req.cookies[sessionIdCookie.name];
+            expressApp.use(
+                path,
+                cors<cors.CorsRequest>({ origin: true, credentials: true }),
+                bodyParser.json(),
+                cookieParser(),
+                graphqlUploadExpress({ maxFileSize: undefined, maxFiles: 10 }),
+                expressMiddleware(server, {
+                    context: async ({ req, res }: ExpressContextFunctionArgument): Promise<Authorization.Context> => {
+                        const peopleEatClientType: string | string[] | undefined = req.headers['people-eat-client-type'];
+                        const sessionId: string | undefined = req.cookies[sessionIdCookie.name];
 
-                // todo: match peopleEatClientType with real enum or so
+                        // todo: match peopleEatClientType with real enum or so
 
-                // if (!peopleEatClientType) {
-                //     return {
-                //         ...req,
-                //         sessionId: undefined,
-                //         userId: undefined,
-                //         requestingClientType: 'UNKNOWN',
-                //     };
-                // }
+                        // if (!peopleEatClientType) {
+                        //     return {
+                        //         ...req,
+                        //         sessionId: undefined,
+                        //         userId: undefined,
+                        //         requestingClientType: 'UNKNOWN',
+                        //     };
+                        // }
 
-                // request from ssr for a browser without session id -> first time visitor
-                if (!sessionId && peopleEatClientType === 'WEB_SSR') {
-                    return {
-                        ...req,
-                        sessionId: undefined,
-                        userId: undefined,
-                        requestingClientType: 'WEB_SSR',
-                    };
+                        // request from ssr for a browser without session id -> first time visitor
+                        if (!sessionId && peopleEatClientType === 'WEB_SSR') {
+                            return {
+                                ...req,
+                                sessionId: undefined,
+                                userId: undefined,
+                                requestingClientType: 'WEB_SSR',
+                            };
+                        }
+
+                        // EITHER a request from a web client with or without sessionId OR from ssr with a passed trough sessionId
+
+                        const result: Authorization.AuthorizeSessionOutput | undefined = await Authorization.authorizeSession({
+                            dataSourceAdapter,
+                            logger,
+                            sessionId,
+                        });
+
+                        if (!result) throw new Error();
+
+                        res.cookie(sessionIdCookie.name, result.sessionId, {
+                            expires: result.expirationDate,
+                            httpOnly: true,
+                            sameSite: sessionIdCookie.secure ? 'none' : 'lax',
+                            secure: sessionIdCookie.secure,
+                            domain: sessionIdCookie.domainScope,
+                        });
+
+                        return {
+                            ...req,
+                            sessionId: result.sessionId,
+                            userId: result.userId,
+                            requestingClientType: 'WEB_BROWSER',
+                        };
+                    },
+                }),
+            );
+
+            expressApp.get('/profile-pictures/:profilePictureId', async function (request: Request, response: Response): Promise<void> {
+                const { profilePictureId } = request.params;
+                const edgeLength: string = (request.query.el as string) ?? '1024';
+                const filePath: string = join(process.cwd(), `images/profile-pictures/${edgeLength}x${edgeLength}/${profilePictureId}.png`);
+                const originalFilePath: string = join(process.cwd(), `images/profile-pictures/original/${profilePictureId}.png`);
+
+                if (!existsSync(filePath) && existsSync(originalFilePath)) {
+                    await new Promise<boolean>((resolve: (success: boolean) => void, reject: (success: boolean) => void) =>
+                        sharp(originalFilePath)
+                            .resize(Number(edgeLength))
+                            .pipe(
+                                createWriteStream(
+                                    join(process.cwd(), `images/profile-pictures/${edgeLength}x${edgeLength}/${profilePictureId}.png`),
+                                ),
+                            )
+                            .on('finish', () => resolve(true))
+                            .on('error', () => reject(false)),
+                    );
                 }
 
-                // EITHER a request from a web client with or without sessionId OR from ssr with a passed trough sessionId
+                response.sendFile(filePath);
+            });
 
-                const result: Authorization.AuthorizeSessionOutput | undefined = await Authorization.authorizeSession({
-                    dataSourceAdapter,
-                    logger,
-                    sessionId,
-                });
+            expressApp.get('/meal-images/:mealImageId', async function (request: Request, response: Response): Promise<void> {
+                const { mealImageId } = request.params;
+                const edgeLength: string = (request.query.el as string) ?? '1024';
+                const filePath: string = join(process.cwd(), `images/meal-images/${edgeLength}x${edgeLength}/${mealImageId}.png`);
+                const originalFilePath: string = join(process.cwd(), `images/meal-images/original/${mealImageId}.png`);
 
-                if (!result) throw new Error();
+                if (!existsSync(filePath) && existsSync(originalFilePath)) {
+                    await new Promise<boolean>((resolve: (success: boolean) => void, reject: (success: boolean) => void) =>
+                        sharp(originalFilePath)
+                            .resize(Number(edgeLength))
+                            .pipe(
+                                createWriteStream(join(process.cwd(), `images/meal-images/${edgeLength}x${edgeLength}/${mealImageId}.png`)),
+                            )
+                            .on('finish', () => resolve(true))
+                            .on('error', () => reject(false)),
+                    );
+                }
 
-                res.cookie(sessionIdCookie.name, result.sessionId, {
-                    expires: result.expirationDate,
-                    httpOnly: true,
-                    sameSite: sessionIdCookie.secure ? 'none' : 'lax',
-                    secure: sessionIdCookie.secure,
-                    domain: sessionIdCookie.domainScope,
-                });
+                response.sendFile(filePath);
+            });
 
-                return {
-                    ...req,
-                    sessionId: result.sessionId,
-                    userId: result.userId,
-                    requestingClientType: 'WEB_BROWSER',
-                };
-            },
-        }),
-    );
-
-    expressApp.get('/profile-pictures/:profilePictureId', async function (request: Request, response: Response): Promise<void> {
-        const { profilePictureId } = request.params;
-        const edgeLength: string = (request.query.el as string) ?? '1024';
-        const filePath: string = join(process.cwd(), `images/profile-pictures/${edgeLength}x${edgeLength}/${profilePictureId}.png`);
-        const originalFilePath: string = join(process.cwd(), `images/profile-pictures/original/${profilePictureId}.png`);
-
-        if (!existsSync(filePath) && existsSync(originalFilePath)) {
-            await new Promise<boolean>((resolve: (success: boolean) => void, reject: (success: boolean) => void) =>
-                sharp(originalFilePath)
-                    .resize(Number(edgeLength))
-                    .pipe(
-                        createWriteStream(
-                            join(process.cwd(), `images/profile-pictures/${edgeLength}x${edgeLength}/${profilePictureId}.png`),
-                        ),
-                    )
-                    .on('finish', () => resolve(true))
-                    .on('error', () => reject(false)),
-            );
-        }
-
-        response.sendFile(filePath);
-    });
-
-    expressApp.get('/meal-images/:mealImageId', async function (request: Request, response: Response): Promise<void> {
-        const { mealImageId } = request.params;
-        const edgeLength: string = (request.query.el as string) ?? '1024';
-        const filePath: string = join(process.cwd(), `images/meal-images/${edgeLength}x${edgeLength}/${mealImageId}.png`);
-        const originalFilePath: string = join(process.cwd(), `images/meal-images/original/${mealImageId}.png`);
-
-        if (!existsSync(filePath) && existsSync(originalFilePath)) {
-            await new Promise<boolean>((resolve: (success: boolean) => void, reject: (success: boolean) => void) =>
-                sharp(originalFilePath)
-                    .resize(Number(edgeLength))
-                    .pipe(createWriteStream(join(process.cwd(), `images/meal-images/${edgeLength}x${edgeLength}/${mealImageId}.png`)))
-                    .on('finish', () => resolve(true))
-                    .on('error', () => reject(false)),
-            );
-        }
-
-        response.sendFile(filePath);
-    });
-
-    httpServer.listen(port, () => undefined);
-
-    return { path: `http://localhost:${port}${path}` };
+            httpServer.listen(port, () => undefined);
+        },
+        path: `http://localhost:${port}${path}`,
+    };
 }

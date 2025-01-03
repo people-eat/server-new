@@ -94,5 +94,5 @@ enum MealType {
 }
 
 type Query {
-    stripePublishableKey: String
+    stripePublishableKey: String!
 }

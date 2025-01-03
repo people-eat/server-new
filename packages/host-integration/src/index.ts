@@ -96,7 +96,7 @@ async function bootstrap(): Promise<void> {
 
     logger.setService(service);
 
-    const { path } = await startApolloServerApp({
+    const { start, path } = await startApolloServerApp({
         dataSourceAdapter,
         logger,
         mockSchema: false,
@@ -109,6 +109,8 @@ async function bootstrap(): Promise<void> {
         service,
         stripePublishableKey: environmentVariables.payment.stripePublishableKey,
     });
+
+    await start();
 
     logger.info(`🚀 Apollo server started at ${path}`);
 }

@@ -1944,7 +1944,7 @@ export type GQLQuery = {
     publicTermsUpdates: GQLPublicTermsUpdateQuery;
     searchRequests: GQLSearchRequestQuery;
     sessions: GQLSessionQuery;
-    stripePublishableKey?: Maybe<Scalars['String']>;
+    stripePublishableKey: Scalars['String'];
     supportRequests: GQLSupportRequestQuery;
     termsUpdates: GQLTermsUpdateQuery;
     users: GQLUserQuery;
@@ -5290,7 +5290,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
     publicTermsUpdates?: Resolver<GQLResolversTypes['PublicTermsUpdateQuery'], ParentType, ContextType>;
     searchRequests?: Resolver<GQLResolversTypes['SearchRequestQuery'], ParentType, ContextType>;
     sessions?: Resolver<GQLResolversTypes['SessionQuery'], ParentType, ContextType>;
-    stripePublishableKey?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+    stripePublishableKey?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     supportRequests?: Resolver<GQLResolversTypes['SupportRequestQuery'], ParentType, ContextType>;
     termsUpdates?: Resolver<GQLResolversTypes['TermsUpdateQuery'], ParentType, ContextType>;
     users?: Resolver<GQLResolversTypes['UserQuery'], ParentType, ContextType>;
