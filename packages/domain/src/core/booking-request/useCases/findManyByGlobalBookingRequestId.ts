@@ -5,24 +5,28 @@ import { type FindManyRequest, type NanoId } from '../../shared';
 import { type BookingRequest } from '../BookingRequest';
 import { toBookingRequestStatus } from './toBookingRequestStatus';
 
-export interface FindManyBookingRequestInput {
+export interface FindManyByGlobalBookingRequestIdInput {
     runtime: Runtime;
     context: Authorization.Context;
-    request: FindManyRequest & { userId: NanoId };
+    request: FindManyRequest & { userId: NanoId; globalBookingRequestId: NanoId };
 }
 
-export async function findManyByUserId({ runtime, context, request }: FindManyBookingRequestInput): Promise<BookingRequest[] | undefined> {
+export async function findManyByGlobalBookingRequestId({
+    runtime,
+    context,
+    request,
+}: FindManyByGlobalBookingRequestIdInput): Promise<BookingRequest[]> {
     const { dataSourceAdapter, logger } = runtime;
-    const { userId } = request;
+    const { userId, globalBookingRequestId } = request;
 
     await Authorization.canQueryUserData({ context, dataSourceAdapter, logger, userId });
 
     const bookingRequests: DBBookingRequest[] | undefined = await dataSourceAdapter.bookingRequestRepository.findMany({
         userId,
-        globalBookingRequestId: undefined,
+        globalBookingRequestId,
     });
 
-    if (!bookingRequests) return;
+    if (!bookingRequests) return [];
 
     bookingRequests.sort((a: DBBookingRequest, b: DBBookingRequest) => b.createdAt.getTime() - a.createdAt.getTime());
 

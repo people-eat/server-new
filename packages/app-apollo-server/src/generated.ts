@@ -346,7 +346,6 @@ export type GQLCookBookingRequestMutation = {
     cookId: Scalars['String'];
     createOne: GQLUserCreateOneBookingRequestResponse;
     decline: Scalars['Boolean'];
-    updatePrice: Scalars['Boolean'];
     updateSuggestedMenu: Scalars['Boolean'];
 };
 
@@ -366,11 +365,6 @@ export type GQLCookBookingRequestMutationCreateOneArgs = {
 
 export type GQLCookBookingRequestMutationDeclineArgs = {
     bookingRequestId: Scalars['String'];
-};
-
-export type GQLCookBookingRequestMutationUpdatePriceArgs = {
-    bookingRequestId: Scalars['String'];
-    price: GQLPriceInput;
 };
 
 export type GQLCookBookingRequestMutationUpdateSuggestedMenuArgs = {
@@ -1268,6 +1262,11 @@ export type GQLCreateOneUserSuccessResult = {
 
 export type GQLCurrencyCode = 'EUR' | 'USD';
 
+export type GQLCurrentSessionWrapper = {
+    __typename?: 'CurrentSessionWrapper';
+    currentSession: GQLSession;
+};
+
 export type GQLCustomerFeeUpdate = {
     __typename?: 'CustomerFeeUpdate';
     adminId: Scalars['String'];
@@ -1433,6 +1432,7 @@ export type GQLGiftCardStatus = 'CREATED' | 'PAYED';
 
 export type GQLGlobalBookingRequest = {
     __typename?: 'GlobalBookingRequest';
+    bookingRequests: Array<GQLBookingRequest>;
     conditions: GQLGlobalBookingRequestConditions;
     createdAt: Scalars['DateTime'];
     globalBookingRequestId: Scalars['String'];
@@ -2043,7 +2043,7 @@ export type GQLSubscription = {
     bookingRequestChatMessageCreations: GQLChatMessage;
     bookingRequestUpdatesByCookId: GQLBookingRequest;
     bookingRequestUpdatesByUserId: GQLBookingRequest;
-    sessionUpdates: GQLSession;
+    sessionUpdates: GQLCurrentSessionWrapper;
 };
 
 export type GQLSubscriptionBookingRequestChatMessageCreationsArgs = {
@@ -2242,7 +2242,9 @@ export type GQLUserBookingRequestMutation = {
     createPaymentSetup: GQLUserBookingRequestCreatePaymentSetupResponse;
     decline: Scalars['Boolean'];
     updateConfiguredMenu: Scalars['Boolean'];
-    updatePrice: Scalars['Boolean'];
+    updateDateTime: Scalars['Boolean'];
+    updateLocation: Scalars['Boolean'];
+    updateParticipants: Scalars['Boolean'];
     userId: Scalars['String'];
 };
 
@@ -2275,9 +2277,20 @@ export type GQLUserBookingRequestMutationUpdateConfiguredMenuArgs = {
     configuredMenu: GQLCreateConfiguredMenuRequest;
 };
 
-export type GQLUserBookingRequestMutationUpdatePriceArgs = {
+export type GQLUserBookingRequestMutationUpdateDateTimeArgs = {
     bookingRequestId: Scalars['String'];
-    price: GQLPriceInput;
+    dateTime: Scalars['DateTime'];
+};
+
+export type GQLUserBookingRequestMutationUpdateLocationArgs = {
+    bookingRequestId: Scalars['String'];
+    location: GQLLocationInput;
+};
+
+export type GQLUserBookingRequestMutationUpdateParticipantsArgs = {
+    adults: Scalars['UInt'];
+    bookingRequestId: Scalars['String'];
+    children: Scalars['UInt'];
 };
 
 export type GQLUserBookingRequestQuery = {
@@ -2975,6 +2988,7 @@ export type GQLResolversTypes = {
     CreateOneUserResult: ResolverTypeWrapper<GQLResolversUnionTypes['CreateOneUserResult']>;
     CreateOneUserSuccessResult: ResolverTypeWrapper<GQLCreateOneUserSuccessResult>;
     CurrencyCode: GQLCurrencyCode;
+    CurrentSessionWrapper: ResolverTypeWrapper<GQLCurrentSessionWrapper>;
     CustomerFeeUpdate: ResolverTypeWrapper<GQLCustomerFeeUpdate>;
     CustomerFeeUpdateMutation: ResolverTypeWrapper<GQLCustomerFeeUpdateMutation>;
     CustomerFeeUpdateQuery: ResolverTypeWrapper<GQLCustomerFeeUpdateQuery>;
@@ -3235,6 +3249,7 @@ export type GQLResolversParentTypes = {
     CreateOneUserRequest: GQLCreateOneUserRequest;
     CreateOneUserResult: GQLResolversUnionParentTypes['CreateOneUserResult'];
     CreateOneUserSuccessResult: GQLCreateOneUserSuccessResult;
+    CurrentSessionWrapper: GQLCurrentSessionWrapper;
     CustomerFeeUpdate: GQLCustomerFeeUpdate;
     CustomerFeeUpdateMutation: GQLCustomerFeeUpdateMutation;
     CustomerFeeUpdateQuery: GQLCustomerFeeUpdateQuery;
@@ -3782,12 +3797,6 @@ export type GQLCookBookingRequestMutationResolvers<
         ParentType,
         ContextType,
         RequireFields<GQLCookBookingRequestMutationDeclineArgs, 'bookingRequestId'>
-    >;
-    updatePrice?: Resolver<
-        GQLResolversTypes['Boolean'],
-        ParentType,
-        ContextType,
-        RequireFields<GQLCookBookingRequestMutationUpdatePriceArgs, 'bookingRequestId' | 'price'>
     >;
     updateSuggestedMenu?: Resolver<
         GQLResolversTypes['Boolean'],
@@ -4482,6 +4491,14 @@ export type GQLCreateOneUserSuccessResultResolvers<
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLCurrentSessionWrapperResolvers<
+    ContextType = any,
+    ParentType extends GQLResolversParentTypes['CurrentSessionWrapper'] = GQLResolversParentTypes['CurrentSessionWrapper'],
+> = {
+    currentSession?: Resolver<GQLResolversTypes['Session'], ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLCustomerFeeUpdateResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['CustomerFeeUpdate'] = GQLResolversParentTypes['CustomerFeeUpdate'],
@@ -4657,6 +4674,7 @@ export type GQLGlobalBookingRequestResolvers<
     ContextType = any,
     ParentType extends GQLResolversParentTypes['GlobalBookingRequest'] = GQLResolversParentTypes['GlobalBookingRequest'],
 > = {
+    bookingRequests?: Resolver<Array<GQLResolversTypes['BookingRequest']>, ParentType, ContextType>;
     conditions?: Resolver<GQLResolversTypes['GlobalBookingRequestConditions'], ParentType, ContextType>;
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     globalBookingRequestId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -5423,7 +5441,7 @@ export type GQLSubscriptionResolvers<
         ContextType,
         RequireFields<GQLSubscriptionBookingRequestUpdatesByUserIdArgs, 'bookingRequestId'>
     >;
-    sessionUpdates?: SubscriptionResolver<GQLResolversTypes['Session'], 'sessionUpdates', ParentType, ContextType>;
+    sessionUpdates?: SubscriptionResolver<GQLResolversTypes['CurrentSessionWrapper'], 'sessionUpdates', ParentType, ContextType>;
 };
 
 export type GQLSupportRequestResolvers<
@@ -5702,11 +5720,23 @@ export type GQLUserBookingRequestMutationResolvers<
         ContextType,
         RequireFields<GQLUserBookingRequestMutationUpdateConfiguredMenuArgs, 'bookingRequestId' | 'configuredMenu'>
     >;
-    updatePrice?: Resolver<
+    updateDateTime?: Resolver<
         GQLResolversTypes['Boolean'],
         ParentType,
         ContextType,
-        RequireFields<GQLUserBookingRequestMutationUpdatePriceArgs, 'bookingRequestId' | 'price'>
+        RequireFields<GQLUserBookingRequestMutationUpdateDateTimeArgs, 'bookingRequestId' | 'dateTime'>
+    >;
+    updateLocation?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserBookingRequestMutationUpdateLocationArgs, 'bookingRequestId' | 'location'>
+    >;
+    updateParticipants?: Resolver<
+        GQLResolversTypes['Boolean'],
+        ParentType,
+        ContextType,
+        RequireFields<GQLUserBookingRequestMutationUpdateParticipantsArgs, 'adults' | 'bookingRequestId' | 'children'>
     >;
     userId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -6380,6 +6410,7 @@ export type GQLResolvers<ContextType = any> = {
     CreateOneUserFailedResult?: GQLCreateOneUserFailedResultResolvers<ContextType>;
     CreateOneUserResult?: GQLCreateOneUserResultResolvers<ContextType>;
     CreateOneUserSuccessResult?: GQLCreateOneUserSuccessResultResolvers<ContextType>;
+    CurrentSessionWrapper?: GQLCurrentSessionWrapperResolvers<ContextType>;
     CustomerFeeUpdate?: GQLCustomerFeeUpdateResolvers<ContextType>;
     CustomerFeeUpdateMutation?: GQLCustomerFeeUpdateMutationResolvers<ContextType>;
     CustomerFeeUpdateQuery?: GQLCustomerFeeUpdateQueryResolvers<ContextType>;

@@ -37,7 +37,7 @@ export async function confirmPaymentSetup({
 
     if (!success) return false;
 
-    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    await publisher.publish([bookingRequest.userId, bookingRequest.cookId], { sessionUpdates: {} });
 
     // const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId: bookingRequest.userId });
 

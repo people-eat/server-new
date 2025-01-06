@@ -32,7 +32,7 @@ export async function update({
         },
     );
 
-    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    if (success) await publisher.publish(userId, { sessionUpdates: {} });
 
     return success;
 }

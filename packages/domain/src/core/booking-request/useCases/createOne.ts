@@ -241,7 +241,7 @@ export async function createOne({ runtime, context, request }: CreateOneBookingR
         };
     }
 
-    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    await publisher.publish([userId, cookId], { sessionUpdates: {} });
 
     const clearedMessage: string = message.trim();
 

@@ -21,7 +21,7 @@ export async function deleteOne({
 
     if (!success) return false;
 
-    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    await publisher.publish(userId, { sessionUpdates: {} });
 
     return success;
 }

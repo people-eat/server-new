@@ -2,17 +2,17 @@ import { Authorization } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type Runtime } from '../../Runtime';
-import { type NanoId, type Price } from '../../shared';
+import { type NanoId } from '../../shared';
 
-export interface UpdateBookingRequestPriceByUserIdInput {
+export interface UpdateBookingRequestDateTimeInput {
     runtime: Runtime;
     context: Authorization.Context;
-    request: { userId: NanoId; bookingRequestId: NanoId; price: Price };
+    request: { userId: NanoId; bookingRequestId: NanoId; dateTime: Date };
 }
 
-export async function updatePriceByUserId({ runtime, context, request }: UpdateBookingRequestPriceByUserIdInput): Promise<boolean> {
+export async function updateDateTime({ runtime, context, request }: UpdateBookingRequestDateTimeInput): Promise<boolean> {
     const { dataSourceAdapter, logger, publisher } = runtime;
-    const { userId, bookingRequestId, price } = request;
+    const { userId, bookingRequestId, dateTime } = request;
 
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
 
@@ -27,17 +27,17 @@ export async function updatePriceByUserId({ runtime, context, request }: UpdateB
 
     const success: boolean = await dataSourceAdapter.bookingRequestRepository.updateOne(
         { userId, bookingRequestId },
-        { userAccepted: true, cookAccepted: undefined, ...price },
+        { userAccepted: true, cookAccepted: undefined, dateTime },
     );
 
     if (!success) return false;
 
-    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    await publisher.publish([bookingRequest.userId, bookingRequest.cookId], { sessionUpdates: {} });
 
     await dataSourceAdapter.chatMessageRepository.insertOne({
         chatMessageId: createNanoId(),
         bookingRequestId,
-        message: `Suggested ${price.amount} ${price.currencyCode} instead of ${bookingRequest.totalAmountUser} ${bookingRequest.currencyCode}`,
+        message: `Das Datum wurde vom ${bookingRequest.dateTime} zum ${dateTime} geändert.`,
         generated: true,
         createdBy: userId,
         createdAt: new Date(),

@@ -1,7 +1,7 @@
 import { type Authorization } from '../..';
 import { type CreateOneConfiguredMenuRequest } from '../configured-menu';
 import { type Runtime } from '../Runtime';
-import { type FindManyRequest, type NanoId, type Price } from '../shared';
+import { type FindManyRequest, type Location, type NanoId, type Price } from '../shared';
 import { type BookingRequest } from './BookingRequest';
 import { type CreateOneBookingRequestRequest, type UserCreateOneBookingRequestResponse } from './CreateOneBookingRequestRequest';
 import { acceptOneByCookId } from './useCases/acceptOneByCookId';
@@ -14,13 +14,15 @@ import { declineOneByCookId } from './useCases/declineOneByCookId';
 import { declineOneByUserId } from './useCases/declineOneByUserId';
 import { findMany } from './useCases/findMany';
 import { findManyByCookId } from './useCases/findManyByCookId';
+import { findManyByGlobalBookingRequestId } from './useCases/findManyByGlobalBookingRequestId';
 import { findManyByUserId } from './useCases/findManyByUserId';
 import { findOne } from './useCases/findOne';
 import { findOneByCookId } from './useCases/findOneByCookId';
 import { findOneByUserId } from './useCases/findOneByUserId';
 import { unlockPayment } from './useCases/unlockPayment';
-import { updatePriceByCookId } from './useCases/updatePriceByCookId';
-import { updatePriceByUserId } from './useCases/updatePriceByUserId';
+import { updateDateTime } from './useCases/updateDateTime';
+import { updateLocation } from './useCases/updateLocation';
+import { updateParticipants } from './useCases/updateParticipants';
 import { updateSuggestedMenu } from './useCases/updateSuggestedMenu';
 
 export interface BookingRequestService {
@@ -36,6 +38,10 @@ export interface BookingRequestService {
     findMany(context: Authorization.Context, request: FindManyRequest): Promise<BookingRequest[] | undefined>;
     findManyByCookId(context: Authorization.Context, request: FindManyRequest & { cookId: NanoId }): Promise<BookingRequest[] | undefined>;
     findManyByUserId(context: Authorization.Context, request: FindManyRequest & { userId: NanoId }): Promise<BookingRequest[] | undefined>;
+    findManyByGlobalBookingRequestId(
+        context: Authorization.Context,
+        request: FindManyRequest & { userId: NanoId; globalBookingRequestId: NanoId },
+    ): Promise<BookingRequest[]>;
     createOne(
         context: Authorization.Context,
         request: CreateOneBookingRequestRequest & { userId: NanoId },
@@ -48,14 +54,15 @@ export interface BookingRequestService {
     declineOneByCookId(context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId }): Promise<boolean>;
     acceptOneByUserId(context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }): Promise<boolean>;
     declineOneByUserId(context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }): Promise<boolean>;
-    updatePriceByCookId(
+    updateLocation(
         context: Authorization.Context,
-        request: { cookId: NanoId; bookingRequestId: NanoId; price: Price },
+        request: { userId: NanoId; bookingRequestId: NanoId; location: Location },
     ): Promise<boolean>;
-    updatePriceByUserId(
+    updateParticipants(
         context: Authorization.Context,
-        request: { userId: NanoId; bookingRequestId: NanoId; price: Price },
+        request: { userId: NanoId; bookingRequestId: NanoId; adults: number; children: number },
     ): Promise<boolean>;
+    updateDateTime(context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId; dateTime: Date }): Promise<boolean>;
     confirmPaymentSetup(context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }): Promise<boolean>;
     createPaymentSetup(
         context: Authorization.Context,
@@ -80,6 +87,10 @@ export function createBookingRequestService(runtime: Runtime): BookingRequestSer
             findManyByCookId({ runtime, context, request }),
         findManyByUserId: (context: Authorization.Context, request: FindManyRequest & { userId: NanoId }) =>
             findManyByUserId({ runtime, context, request }),
+        findManyByGlobalBookingRequestId: (
+            context: Authorization.Context,
+            request: FindManyRequest & { userId: NanoId; globalBookingRequestId: NanoId },
+        ) => findManyByGlobalBookingRequestId({ runtime, context, request }),
         createOne: (context: Authorization.Context, request: CreateOneBookingRequestRequest & { userId: NanoId }) =>
             createOne({ runtime, context, request }),
         createOneByGlobalBookingRequestId: (
@@ -94,10 +105,14 @@ export function createBookingRequestService(runtime: Runtime): BookingRequestSer
             acceptOneByUserId({ runtime, context, request }),
         declineOneByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
             declineOneByUserId({ runtime, context, request }),
-        updatePriceByCookId: (context: Authorization.Context, request: { cookId: NanoId; bookingRequestId: NanoId; price: Price }) =>
-            updatePriceByCookId({ runtime, context, request }),
-        updatePriceByUserId: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId; price: Price }) =>
-            updatePriceByUserId({ runtime, context, request }),
+        updateDateTime: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId; dateTime: Date }) =>
+            updateDateTime({ runtime, context, request }),
+        updateLocation: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId; location: Location }) =>
+            updateLocation({ runtime, context, request }),
+        updateParticipants: (
+            context: Authorization.Context,
+            request: { userId: NanoId; bookingRequestId: NanoId; adults: number; children: number },
+        ) => updateParticipants({ runtime, context, request }),
         confirmPaymentSetup: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>
             confirmPaymentSetup({ runtime, context, request }),
         createPaymentSetup: (context: Authorization.Context, request: { userId: NanoId; bookingRequestId: NanoId }) =>

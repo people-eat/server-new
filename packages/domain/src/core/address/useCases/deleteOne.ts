@@ -19,7 +19,7 @@ export async function deleteOne({
 
     const success: boolean = await dataSourceAdapter.addressRepository.deleteOne({ userId, addressId });
 
-    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    if (success) await publisher.publish(userId, { sessionUpdates: {} });
 
     return success;
 }

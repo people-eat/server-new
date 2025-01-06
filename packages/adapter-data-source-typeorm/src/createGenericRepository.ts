@@ -1,13 +1,15 @@
 import { type DataSource, type Logger } from '@people-eat/server-domain';
-import { type DeleteResult, type ObjectLiteral, type Repository, type UpdateResult } from 'typeorm';
+import { IsNull, type DeleteResult, type ObjectLiteral, type Repository, type UpdateResult } from 'typeorm';
 
 export default function createGenericRepository<Entity extends ObjectLiteral>(
     genericRepository: Repository<Entity>,
     logger: Logger.Adapter,
 ): DataSource.Repository<Entity> {
     return {
-        findOne: async (criteria: DataSource.NonEmptyPartial<Entity>): Promise<Entity | undefined> => {
+        findOne: async (criteria: Partial<Entity>): Promise<Entity | undefined> => {
             try {
+                for (const key in criteria) if (criteria[key] === null || criteria[key] === undefined) criteria[key] = IsNull() as any;
+
                 const entity: Entity | null = await genericRepository.findOne({ where: criteria });
                 if (!entity) return undefined;
                 return entity;
@@ -16,8 +18,10 @@ export default function createGenericRepository<Entity extends ObjectLiteral>(
                 return undefined;
             }
         },
-        findMany: async (criteria: DataSource.NonEmptyPartial<Entity>): Promise<Entity[] | undefined> => {
+        findMany: async (criteria: Partial<Entity>): Promise<Entity[] | undefined> => {
             try {
+                for (const key in criteria) if (criteria[key] === null || criteria[key] === undefined) criteria[key] = IsNull() as any;
+
                 const entities: Entity[] = await genericRepository.find({ where: criteria });
                 return entities;
             } catch (error) {

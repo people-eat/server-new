@@ -15,11 +15,15 @@ enum UserLanguage {
     ENGLISH
 }
 
+type CurrentSessionWrapper {
+    currentSession: Session!
+}
+
 type Subscription {
     bookingRequestChatMessageCreations(bookingRequestId: String!): ChatMessage!
     bookingRequestUpdatesByUserId(bookingRequestId: String!): BookingRequest!
     bookingRequestUpdatesByCookId(bookingRequestId: String!): BookingRequest!
-    sessionUpdates: Session!
+    sessionUpdates: CurrentSessionWrapper!
 }
 
 enum Gender {

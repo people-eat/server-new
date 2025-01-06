@@ -39,7 +39,9 @@ export async function updateProfilePicture({
 
     const success: boolean = await dataSourceAdapter.userRepository.updateOne({ userId }, { profilePictureUrl });
 
-    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    if (!success) return false;
+
+    await publisher.publish(userId, { sessionUpdates: {} });
 
     return success;
 }

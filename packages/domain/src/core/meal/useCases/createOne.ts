@@ -54,7 +54,9 @@ export async function createOne({
         createdAt: new Date(),
     });
 
-    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    if (!success) return false;
+
+    await publisher.publish(cookId, { sessionUpdates: {} });
 
     return success;
 }

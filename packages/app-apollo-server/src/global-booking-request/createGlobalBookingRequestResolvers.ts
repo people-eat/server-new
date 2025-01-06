@@ -1,5 +1,6 @@
 import { type Authorization, type Service } from '@people-eat/server-domain';
 import {
+    type GQLBookingRequest,
     type GQLCookGlobalBookingRequest,
     type GQLCookGlobalBookingRequestQuery,
     type GQLCookGlobalBookingRequestQueryFindOneArgs,
@@ -37,8 +38,16 @@ export function createGlobalBookingRequestResolvers(
             ): Promise<GQLPublicUser> => service.publicUser.findOne(context, userId) as any,
         },
         GlobalBookingRequest: {
-            user: async ({ userId }: GQLGlobalBookingRequest, _: unknown, context: Authorization.Context): Promise<GQLUser> =>
-                service.user.findOneByUserId(context, { userId }) as any,
+            async user({ userId }: GQLGlobalBookingRequest, _: unknown, context: Authorization.Context): Promise<GQLUser> {
+                return service.user.findOneByUserId(context, { userId }) as any;
+            },
+            async bookingRequests(
+                { globalBookingRequestId, userId }: GQLGlobalBookingRequest,
+                _: unknown,
+                context: Authorization.Context,
+            ): Promise<GQLBookingRequest[]> {
+                return (await service.bookingRequest.findManyByGlobalBookingRequestId(context, { userId, globalBookingRequestId })) as any;
+            },
         },
         GlobalBookingRequestConditions: {
             priceClass: ({ priceClassType }: GQLGlobalBookingRequestConditions): GQLGlobalBookingRequestPriceClass => {

@@ -1,4 +1,5 @@
 import { Authorization, type ChatMessage } from '../../..';
+import { type DBBookingRequest } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type Runtime } from '../../Runtime';
 import { type NanoId } from '../../shared';
@@ -16,6 +17,13 @@ export async function updateSuggestedMenu({
 }: UpdateSuggestedMenuInput): Promise<boolean> {
     await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
+    const bookingRequest: DBBookingRequest | undefined = await dataSourceAdapter.bookingRequestRepository.findOne({
+        bookingRequestId,
+        cookId,
+    });
+
+    if (!bookingRequest) return false;
+
     const updateSuccess: boolean = await dataSourceAdapter.bookingRequestRepository.updateOne(
         { bookingRequestId, cookId },
         { suggestedMenuId },
@@ -23,7 +31,7 @@ export async function updateSuggestedMenu({
 
     if (!updateSuccess) return false;
 
-    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    await publisher.publish([bookingRequest.userId, bookingRequest.cookId], { sessionUpdates: {} });
 
     // Notifications
 

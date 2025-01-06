@@ -49,6 +49,8 @@ type GlobalBookingRequest {
 
     user: User!
     status: GlobalBookingRequestStatus!
+
+    bookingRequests: [BookingRequest!]!
 }
 
 input CreateOneGlobalBookingRequestRequest {

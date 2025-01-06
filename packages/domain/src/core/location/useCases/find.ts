@@ -25,7 +25,7 @@ export async function find({ runtime: { logger }, request: { searchText } }: Fin
     try {
         const { results }: { results: GoogleMapsPlacesResult[] } = await fetch(
             encodeURI(
-                'https://maps.googleapis.com/maps/api/place/textsearch/json?type=address&query="' +
+                'https://maps.googleapis.com/maps/api/place/textsearch/json?language=de&type=address&query="' +
                     searchText +
                     '"&key=' +
                     'AIzaSyCMfp2U9V3WfEbqd9u1UR0qgfk-1uVIit8',

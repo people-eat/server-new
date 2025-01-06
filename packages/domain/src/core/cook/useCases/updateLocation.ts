@@ -22,7 +22,9 @@ export async function updateLocation({ runtime, context, request }: UpdateCookLo
 
     const success: boolean = await dataSourceAdapter.cookRepository.updateOne({ cookId }, { latitude, longitude });
 
-    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    if (!success) return false;
 
-    return success;
+    await publisher.publish(cookId, { sessionUpdates: {} });
+
+    return true;
 }

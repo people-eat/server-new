@@ -85,11 +85,10 @@ async function bootstrap(): Promise<void> {
         serverUrl: 'http://localhost:4000',
         webAppUrl: 'http://localhost:4200',
         publisher: {
-            publish: async (key: string, payload: any) => {
-                await pubsub.publish(key, payload);
-            },
-            publishMultiple: async (keys: string[], payload: any) => {
-                await Promise.all(keys.map((key: string) => pubsub.publish(key, payload)));
+            publish: async (keys: string | string[], payload: any) => {
+                await (typeof keys === 'string'
+                    ? pubsub.publish(keys, payload)
+                    : Promise.all(keys.map((key: string) => pubsub.publish(key, payload))));
             },
             asyncIterator: (key: string): AsyncIterator<unknown> => pubsub.asyncIterator([key]),
         },

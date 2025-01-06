@@ -175,7 +175,7 @@ export async function createOneByGlobalBookingRequestId({
         cookId,
         userId,
         cookAccepted: true,
-        userAccepted: true,
+        userAccepted: undefined,
         latitude,
         longitude,
         locationText,
@@ -218,7 +218,7 @@ export async function createOneByGlobalBookingRequestId({
         configuredMenuTitle = result?.menuTitle;
     }
 
-    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    await publisher.publish([userId, cookId], { sessionUpdates: {} });
 
     const automatedMessage: DBChatMessage = {
         chatMessageId: createNanoId(),
@@ -313,7 +313,7 @@ export async function createOneByGlobalBookingRequestId({
         });
     }
 
-    await dataSourceAdapter.globalBookingRequestRepository.deleteOne({ globalBookingRequestId });
+    // await dataSourceAdapter.globalBookingRequestRepository.deleteOne({ globalBookingRequestId });
 
     return {
         bookingRequestId,

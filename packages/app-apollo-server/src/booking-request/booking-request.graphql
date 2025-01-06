@@ -118,7 +118,9 @@ type UserBookingRequestMutation {
     createOne(request: CreateBookingRequestRequest!): UserCreateOneBookingRequestResponse!
     accept(bookingRequestId: String!): Boolean!
     decline(bookingRequestId: String!): Boolean!
-    updatePrice(bookingRequestId: String!, price: PriceInput!): Boolean!
+    updateLocation(bookingRequestId: String!, location: LocationInput!): Boolean!
+    updateParticipants(bookingRequestId: String!, adults: UInt!, children: UInt!): Boolean!
+    updateDateTime(bookingRequestId: String!, dateTime: DateTime!): Boolean!
     createPaymentSetup(bookingRequestId: String!): UserBookingRequestCreatePaymentSetupResponse!
     confirmPaymentSetup(bookingRequestId: String!): Boolean!
     updateConfiguredMenu(bookingRequestId: String!, configuredMenu: CreateConfiguredMenuRequest!): Boolean!
@@ -158,7 +160,6 @@ type CookBookingRequestMutation {
     ): UserCreateOneBookingRequestResponse!
     accept(bookingRequestId: String!): Boolean!
     decline(bookingRequestId: String!): Boolean!
-    updatePrice(bookingRequestId: String!, price: PriceInput!): Boolean!
     updateSuggestedMenu(bookingRequestId: String!, suggestedMenuId: String!): Boolean!
 }
 

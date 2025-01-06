@@ -10,7 +10,6 @@ import {
     type GQLCookBookingRequestMutationChatMessagesArgs,
     type GQLCookBookingRequestMutationCreateOneArgs,
     type GQLCookBookingRequestMutationDeclineArgs,
-    type GQLCookBookingRequestMutationUpdatePriceArgs,
     type GQLCookBookingRequestMutationUpdateSuggestedMenuArgs,
     type GQLCookBookingRequestQuery,
     type GQLCookBookingRequestQueryChatMessagesArgs,
@@ -27,7 +26,9 @@ import {
     type GQLUserBookingRequestMutationCreateOneArgs,
     type GQLUserBookingRequestMutationCreatePaymentSetupArgs,
     type GQLUserBookingRequestMutationUpdateConfiguredMenuArgs,
-    type GQLUserBookingRequestMutationUpdatePriceArgs,
+    type GQLUserBookingRequestMutationUpdateDateTimeArgs,
+    type GQLUserBookingRequestMutationUpdateLocationArgs,
+    type GQLUserBookingRequestMutationUpdateParticipantsArgs,
     type GQLUserBookingRequestQuery,
     type GQLUserBookingRequestQueryChatMessagesArgs,
     type GQLUserBookingRequestQueryFindOneArgs,
@@ -93,11 +94,21 @@ export function createBookingRequestResolvers(
                 { bookingRequestId }: GQLUserBookingRequestMutationAcceptArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.bookingRequest.declineOneByUserId(context, { userId, bookingRequestId }),
-            updatePrice: async (
+            updateLocation: async (
                 { userId }: GQLUserBookingRequestMutation,
-                { bookingRequestId, price }: GQLUserBookingRequestMutationUpdatePriceArgs,
+                { bookingRequestId, location }: GQLUserBookingRequestMutationUpdateLocationArgs,
                 context: Authorization.Context,
-            ): Promise<boolean> => service.bookingRequest.updatePriceByUserId(context, { userId, bookingRequestId, price }),
+            ): Promise<boolean> => service.bookingRequest.updateLocation(context, { userId, bookingRequestId, location }),
+            updateParticipants: async (
+                { userId }: GQLUserBookingRequestMutation,
+                { bookingRequestId, adults, children }: GQLUserBookingRequestMutationUpdateParticipantsArgs,
+                context: Authorization.Context,
+            ): Promise<boolean> => service.bookingRequest.updateParticipants(context, { userId, bookingRequestId, adults, children }),
+            updateDateTime: async (
+                { userId }: GQLUserBookingRequestMutation,
+                { bookingRequestId, dateTime }: GQLUserBookingRequestMutationUpdateDateTimeArgs,
+                context: Authorization.Context,
+            ): Promise<boolean> => service.bookingRequest.updateDateTime(context, { userId, bookingRequestId, dateTime }),
             confirmPaymentSetup: (
                 { userId }: GQLUserBookingRequestMutation,
                 { bookingRequestId }: GQLUserBookingRequestMutationConfirmPaymentSetupArgs,
@@ -158,11 +169,6 @@ export function createBookingRequestResolvers(
                 { bookingRequestId }: GQLCookBookingRequestMutationDeclineArgs,
                 context: Authorization.Context,
             ): Promise<boolean> => service.bookingRequest.declineOneByCookId(context, { cookId, bookingRequestId }),
-            updatePrice: async (
-                { cookId }: GQLCookBookingRequestMutation,
-                { bookingRequestId, price }: GQLCookBookingRequestMutationUpdatePriceArgs,
-                context: Authorization.Context,
-            ): Promise<boolean> => service.bookingRequest.updatePriceByCookId(context, { cookId, bookingRequestId, price }),
             updateSuggestedMenu: async (
                 { cookId }: GQLCookBookingRequestMutation,
                 { bookingRequestId, suggestedMenuId }: GQLCookBookingRequestMutationUpdateSuggestedMenuArgs,

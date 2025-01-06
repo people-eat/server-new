@@ -2,22 +2,23 @@ import { Authorization } from '../../..';
 import { type DBBookingRequest } from '../../../data-source';
 import { createNanoId } from '../../../utils/createNanoId';
 import { type Runtime } from '../../Runtime';
-import { type NanoId, type Price } from '../../shared';
+import { type Location, type NanoId } from '../../shared';
 
-export interface UpdateBookingRequestPriceByCookIdInput {
+export interface UpdateBookingRequestLocationInput {
     runtime: Runtime;
     context: Authorization.Context;
-    request: { cookId: NanoId; bookingRequestId: NanoId; price: Price };
+    request: { userId: NanoId; bookingRequestId: NanoId; location: Location };
 }
 
-export async function updatePriceByCookId({ runtime, context, request }: UpdateBookingRequestPriceByCookIdInput): Promise<boolean> {
+export async function updateLocation({ runtime, context, request }: UpdateBookingRequestLocationInput): Promise<boolean> {
     const { dataSourceAdapter, logger, publisher } = runtime;
-    const { cookId, bookingRequestId, price } = request;
+    const { userId, bookingRequestId, location } = request;
+    const { text: locationText, latitude, longitude } = location;
 
-    await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId: cookId });
+    await Authorization.canMutateUserData({ context, dataSourceAdapter, logger, userId });
 
     const bookingRequest: DBBookingRequest | undefined = await dataSourceAdapter.bookingRequestRepository.findOne({
-        cookId,
+        userId,
         bookingRequestId,
     });
 
@@ -26,20 +27,20 @@ export async function updatePriceByCookId({ runtime, context, request }: UpdateB
     if (bookingRequest.cookAccepted === true && bookingRequest.userAccepted === true) return false;
 
     const success: boolean = await dataSourceAdapter.bookingRequestRepository.updateOne(
-        { cookId, bookingRequestId },
-        { cookAccepted: true, userAccepted: undefined, ...price },
+        { userId, bookingRequestId },
+        { cookAccepted: true, userAccepted: undefined, locationText, latitude, longitude },
     );
 
     if (!success) return false;
 
-    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    await publisher.publish([bookingRequest.userId, bookingRequest.cookId], { sessionUpdates: {} });
 
     await dataSourceAdapter.chatMessageRepository.insertOne({
         chatMessageId: createNanoId(),
         bookingRequestId,
-        message: `Suggested ${price.amount} ${price.currencyCode} instead of ${bookingRequest.totalAmountUser} ${bookingRequest.currencyCode}`,
+        message: `Die Adresse wurde von ${bookingRequest.locationText} zu ${locationText} geändert.`,
         generated: true,
-        createdBy: cookId,
+        createdBy: userId,
         createdAt: new Date(),
     });
 

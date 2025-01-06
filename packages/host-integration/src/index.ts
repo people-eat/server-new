@@ -83,11 +83,10 @@ async function bootstrap(): Promise<void> {
         serverUrl: 'https://api-integration.people-eat.com',
         webAppUrl: 'https://integration.people-eat.com',
         publisher: {
-            publish: async (key: string, payload: unknown) => {
-                await pubsub.publish(key, payload);
-            },
-            publishMultiple: async (keys: string[], payload: any) => {
-                await Promise.all(keys.map((key: string) => pubsub.publish(key, payload)));
+            publish: async (keys: string | string[], payload: any) => {
+                await (typeof keys === 'string'
+                    ? pubsub.publish(keys, payload)
+                    : Promise.all(keys.map((key: string) => pubsub.publish(key, payload))));
             },
             asyncIterator: (key: string): AsyncIterator<unknown> => pubsub.asyncIterator([key]),
         },

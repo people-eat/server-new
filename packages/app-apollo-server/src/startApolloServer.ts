@@ -50,7 +50,9 @@ import { createCustomerFeeUpdateResolvers } from './customer-fee-update/createCu
 import { createEmailAddressUpdateResolvers } from './email-address-update/createEmailAddressUpdateResolvers';
 import { createFollowingResolvers } from './following/createFollowingResolvers';
 import {
+    type GQLCurrentSessionWrapper,
     type GQLResolvers,
+    type GQLSession,
     type GQLSubscriptionBookingRequestChatMessageCreationsArgs,
     type GQLSubscriptionBookingRequestUpdatesByCookIdArgs,
     type GQLSubscriptionBookingRequestUpdatesByUserIdArgs,
@@ -177,11 +179,17 @@ export async function startApolloServerApp({
                 }),
             },
             sessionUpdates: {
-                subscribe: (_parent: any, _args: any, context: Authorization.Context) => ({
-                    [Symbol.asyncIterator]: (): AsyncIterator<any> =>
-                        service.publisher.asyncIterator(`session-update-${context.sessionId}`),
+                subscribe: (_parent: any, _input: unknown, context: Authorization.Context) => ({
+                    [Symbol.asyncIterator]: (): AsyncIterator<any> => service.publisher.asyncIterator(context.userId ?? ''),
                 }),
             },
+        },
+        CurrentSessionWrapper: {
+            currentSession: async (
+                _parent: GQLCurrentSessionWrapper,
+                _input: unknown,
+                context: Authorization.Context,
+            ): Promise<GQLSession> => service.session.findCurrent(context),
         },
         ...createLocationResolvers(service),
         ...createLanguageResolvers(service),

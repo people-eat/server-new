@@ -61,7 +61,7 @@ export async function createOne({ runtime, context, request }: CreateOneGlobalBo
 
     if (!success) return false;
 
-    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    await publisher.publish(userId, { sessionUpdates: {} });
 
     const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
 

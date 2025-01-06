@@ -19,7 +19,9 @@ export async function updateBiography({ runtime, context, request }: UpdateCookB
 
     const success: boolean = await dataSourceAdapter.cookRepository.updateOne({ cookId }, { biography: biography.trim() });
 
-    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    if (!success) return false;
 
-    return success;
+    await publisher.publish(cookId, { sessionUpdates: {} });
+
+    return true;
 }

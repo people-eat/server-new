@@ -34,7 +34,7 @@ export async function declineOneByCookId({ runtime, context, request }: FindMany
 
     if (!success) return false;
 
-    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    await publisher.publish([bookingRequest.userId, bookingRequest.cookId], { sessionUpdates: {} });
 
     // Notifications
 

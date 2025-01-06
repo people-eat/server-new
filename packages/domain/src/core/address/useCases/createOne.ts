@@ -23,7 +23,7 @@ export async function createOne({
 
     const success: boolean = await dataSourceAdapter.addressRepository.insertOne({
         addressId,
-        userId: userId.trim(),
+        userId,
         title: title.trim(),
         country: country.trim(),
         city: city.trim(),
@@ -35,7 +35,9 @@ export async function createOne({
         createdAt: new Date(),
     });
 
-    if (success) await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    if (!success) return false;
 
-    return success;
+    await publisher.publish(userId, { sessionUpdates: {} });
+
+    return true;
 }

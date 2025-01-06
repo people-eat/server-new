@@ -50,7 +50,7 @@ export async function acceptOneByUserId({ runtime, context, request }: AcceptOne
 
     if (!success) return false;
 
-    await publisher.publish(`session-update-${context.sessionId}`, { sessionUpdates: context });
+    await publisher.publish([bookingRequest.userId, bookingRequest.cookId], { sessionUpdates: {} });
 
     // Notifications
     const chatMessage: ChatMessage = {
