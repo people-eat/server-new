@@ -33,6 +33,7 @@ import {
     type GQLCookQueryMealsArgs,
     type GQLCookQueryMenusArgs,
     type GQLCookVisitStatistics,
+    type GQLGlobalBookingRequest,
     type GQLLanguage,
     type GQLMeal,
     type GQLMenu,
@@ -69,6 +70,11 @@ export function createCookResolvers(service: Service): Resolvers<'Cook' | 'CookM
                 const stats: CookVisitStatistics = await service.cookVisitService.findStatistics(context, { cookId });
                 return stats as any;
             },
+            globalBookingRequests: async (
+                { cookId }: GQLCook,
+                _input: unknown,
+                context: Authorization.Context,
+            ): Promise<GQLGlobalBookingRequest[]> => service.globalBookingRequest.findManyByCookId(context, { cookId }) as any,
             bookingRequests: async ({ cookId }: GQLCook, _input: unknown, context: Authorization.Context): Promise<GQLBookingRequest[]> =>
                 service.bookingRequest.findManyByCookId(context, { cookId }) as any,
             bookingRequest: async (

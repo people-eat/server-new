@@ -32,6 +32,8 @@ type Cook {
     menus: [Menu!]!
     menuCount: UInt!
 
+    globalBookingRequests: [GlobalBookingRequest!]!
+    globalBookingRequest(globalBookingRequestId: String!): GlobalBookingRequest
     bookingRequests: [BookingRequest!]!
     bookingRequest(bookingRequestId: String!): BookingRequest
 

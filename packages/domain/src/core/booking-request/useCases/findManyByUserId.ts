@@ -11,7 +11,7 @@ export interface FindManyBookingRequestInput {
     request: FindManyRequest & { userId: NanoId };
 }
 
-export async function findManyByUserId({ runtime, context, request }: FindManyBookingRequestInput): Promise<BookingRequest[] | undefined> {
+export async function findManyByUserId({ runtime, context, request }: FindManyBookingRequestInput): Promise<BookingRequest[]> {
     const { dataSourceAdapter, logger } = runtime;
     const { userId } = request;
 
@@ -22,7 +22,7 @@ export async function findManyByUserId({ runtime, context, request }: FindManyBo
         globalBookingRequestId: undefined,
     });
 
-    if (!bookingRequests) return;
+    if (!bookingRequests) return [];
 
     bookingRequests.sort((a: DBBookingRequest, b: DBBookingRequest) => b.createdAt.getTime() - a.createdAt.getTime());
 

@@ -291,6 +291,8 @@ export type GQLCook = {
     createdAt: Scalars['DateTime'];
     followerCount: Scalars['UInt'];
     followers: Array<GQLFollowing>;
+    globalBookingRequest?: Maybe<GQLGlobalBookingRequest>;
+    globalBookingRequests: Array<GQLGlobalBookingRequest>;
     hasStripePayoutMethodActivated: Scalars['Boolean'];
     isLocked: Scalars['Boolean'];
     isVisible: Scalars['Boolean'];
@@ -315,6 +317,10 @@ export type GQLCook = {
 
 export type GQLCookBookingRequestArgs = {
     bookingRequestId: Scalars['String'];
+};
+
+export type GQLCookGlobalBookingRequestArgs = {
+    globalBookingRequestId: Scalars['String'];
 };
 
 export type GQLCookBookingRequestChatMessageMutation = {
@@ -3716,6 +3722,13 @@ export type GQLCookResolvers<ContextType = any, ParentType extends GQLResolversP
     createdAt?: Resolver<GQLResolversTypes['DateTime'], ParentType, ContextType>;
     followerCount?: Resolver<GQLResolversTypes['UInt'], ParentType, ContextType>;
     followers?: Resolver<Array<GQLResolversTypes['Following']>, ParentType, ContextType>;
+    globalBookingRequest?: Resolver<
+        Maybe<GQLResolversTypes['GlobalBookingRequest']>,
+        ParentType,
+        ContextType,
+        RequireFields<GQLCookGlobalBookingRequestArgs, 'globalBookingRequestId'>
+    >;
+    globalBookingRequests?: Resolver<Array<GQLResolversTypes['GlobalBookingRequest']>, ParentType, ContextType>;
     hasStripePayoutMethodActivated?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     isLocked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
     isVisible?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;

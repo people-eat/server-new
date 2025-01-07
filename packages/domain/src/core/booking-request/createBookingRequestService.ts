@@ -36,8 +36,8 @@ export interface BookingRequestService {
         request: { userId: NanoId; bookingRequestId: NanoId },
     ): Promise<BookingRequest | undefined>;
     findMany(context: Authorization.Context, request: FindManyRequest): Promise<BookingRequest[] | undefined>;
-    findManyByCookId(context: Authorization.Context, request: FindManyRequest & { cookId: NanoId }): Promise<BookingRequest[] | undefined>;
-    findManyByUserId(context: Authorization.Context, request: FindManyRequest & { userId: NanoId }): Promise<BookingRequest[] | undefined>;
+    findManyByCookId(context: Authorization.Context, request: FindManyRequest & { cookId: NanoId }): Promise<BookingRequest[]>;
+    findManyByUserId(context: Authorization.Context, request: FindManyRequest & { userId: NanoId }): Promise<BookingRequest[]>;
     findManyByGlobalBookingRequestId(
         context: Authorization.Context,
         request: FindManyRequest & { userId: NanoId; globalBookingRequestId: NanoId },

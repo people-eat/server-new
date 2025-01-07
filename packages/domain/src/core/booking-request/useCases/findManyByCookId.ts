@@ -11,15 +11,18 @@ export interface FindManyBookingRequestInput {
     request: FindManyRequest & { cookId: NanoId };
 }
 
-export async function findManyByCookId({ runtime, context, request }: FindManyBookingRequestInput): Promise<BookingRequest[] | undefined> {
+export async function findManyByCookId({ runtime, context, request }: FindManyBookingRequestInput): Promise<BookingRequest[]> {
     const { dataSourceAdapter, logger } = runtime;
     const { cookId } = request;
 
     await Authorization.canQueryUserData({ context, dataSourceAdapter, logger, userId: cookId });
 
-    const bookingRequests: DBBookingRequest[] | undefined = await dataSourceAdapter.bookingRequestRepository.findMany({ cookId });
+    const bookingRequests: DBBookingRequest[] | undefined = await dataSourceAdapter.bookingRequestRepository.findMany({
+        cookId,
+        globalBookingRequestId: undefined,
+    });
 
-    if (!bookingRequests) return;
+    if (!bookingRequests) return [];
 
     bookingRequests.sort((a: DBBookingRequest, b: DBBookingRequest) => b.createdAt.getTime() - a.createdAt.getTime());
 
