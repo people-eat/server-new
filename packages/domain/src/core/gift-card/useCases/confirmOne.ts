@@ -69,6 +69,29 @@ export async function confirmOne({ runtime, request }: ConfirmOneGiftCardInput):
                 automaticDeliveryEnabledLabel: recipient.deliveryInformation ? 'Ja' : 'Nein',
             },
         });
+
+        await runtime.klaviyoEmailAdapter.sendGiftCardDelivery({
+            recipient: {
+                userId,
+                emailAddress: user.emailAddress,
+                phoneNumber: user.phoneNumber,
+                firstName: user.firstName,
+                lastName: user.lastName,
+            },
+            data: {
+                recipient: {
+                    firstName: recipient.firstName,
+                },
+                buyer: {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                },
+                message: giftCard.message,
+                formattedPrice,
+                redeemCode: giftCard.redeemCode,
+            },
+        });
+
         if (recipient.deliveryInformation) {
             await createOneTimeTriggeredTask(runtime, {
                 dueDate: new Date(recipient.deliveryInformation.date),
@@ -106,6 +129,23 @@ export async function confirmOne({ runtime, request }: ConfirmOneGiftCardInput):
                 automaticDeliveryEnabledLabel: recipient.deliveryInformation ? 'Ja' : 'Nein',
             },
         });
+
+        await runtime.klaviyoEmailAdapter.sendGiftCardDeliveryToEmailAddress({
+            emailAddress: buyer.emailAddress,
+            data: {
+                recipient: {
+                    firstName: recipient.firstName,
+                },
+                buyer: {
+                    firstName: buyer.firstName,
+                    lastName: buyer.lastName,
+                },
+                message: giftCard.message,
+                formattedPrice,
+                redeemCode: giftCard.redeemCode,
+            },
+        });
+
         if (recipient.deliveryInformation) {
             await createOneTimeTriggeredTask(runtime, {
                 dueDate: new Date(recipient.deliveryInformation.date),

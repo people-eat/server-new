@@ -1,4 +1,3 @@
-import { giftCardReceived } from '@people-eat/server-adapter-email-template';
 import moment, { type Moment } from 'moment';
 import { type DBBookingRequest, type DBCook, type DBGiftCard, type DBUser } from '../../../data-source';
 import { type Runtime } from '../../Runtime';
@@ -25,7 +24,7 @@ import { type TimeTriggeredTask } from '../TimeTriggeredTask';
 
 // eslint-disable-next-line max-statements
 export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTask: TimeTriggeredTask): Promise<void> {
-    const { dataSourceAdapter, paymentAdapter, emailAdapter } = runtime;
+    const { dataSourceAdapter, paymentAdapter } = runtime;
 
     // await handlers[timeTriggeredTask.task.type]?.(runtime, timeTriggeredTask.task);
 
@@ -121,7 +120,7 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
         const giftCard: DBGiftCard | undefined = await dataSourceAdapter.giftCardRepository.findOne({ giftCardId });
         if (!giftCard) return;
 
-        const { redeemCode, userId, buyer, occasion, recipient, message, initialBalanceAmount, expiresAt } = giftCard;
+        const { redeemCode, userId, buyer, recipient, message } = giftCard;
 
         const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
         const formattedPrice: string = formatPrice(giftCard.initialBalanceAmount, '€');
@@ -130,14 +129,8 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
             const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
             if (!user || !user.emailAddress) return;
 
-            await runtime.klaviyoEmailAdapter.sendGiftCardDelivery({
-                recipient: {
-                    userId,
-                    emailAddress: user.emailAddress,
-                    phoneNumber: user.phoneNumber,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                },
+            await runtime.klaviyoEmailAdapter.sendGiftCardDeliveryToEmailAddress({
+                emailAddress: recipient.deliveryInformation.emailAddress,
                 data: {
                     recipient: {
                         firstName: recipient.firstName,
@@ -151,26 +144,11 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
                     redeemCode,
                 },
             });
-
-            await emailAdapter.sendToOne(
-                'PeopleEat',
-                recipient.deliveryInformation.emailAddress,
-                `${user.firstName} hat dir ein Geschenk geschickt`,
-                giftCardReceived({
-                    buyer: { firstName: user.firstName, lastName: user.lastName },
-                    occasion,
-                    message,
-                    recipient,
-                    balance: initialBalanceAmount,
-                    redeemCode,
-                    formattedExpirationDate: moment(expiresAt).format('L'),
-                }),
-            );
         }
 
         if (buyer && recipient.deliveryInformation) {
             await runtime.klaviyoEmailAdapter.sendGiftCardDeliveryToEmailAddress({
-                emailAddress: buyer.emailAddress,
+                emailAddress: recipient.deliveryInformation.emailAddress,
                 data: {
                     recipient: {
                         firstName: recipient.firstName,
@@ -184,21 +162,6 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
                     redeemCode,
                 },
             });
-
-            await emailAdapter.sendToOne(
-                'PeopleEat',
-                recipient.deliveryInformation.emailAddress,
-                `${buyer.firstName} hat dir ein Geschenk geschickt`,
-                giftCardReceived({
-                    buyer,
-                    occasion,
-                    message,
-                    recipient,
-                    balance: initialBalanceAmount,
-                    redeemCode,
-                    formattedExpirationDate: moment(expiresAt).format('L'),
-                }),
-            );
         }
 
         await dataSourceAdapter.timeTriggeredTaskRepository.deleteOne({ timeTriggeredTaskId: timeTriggeredTask.timeTriggeredTaskId });
