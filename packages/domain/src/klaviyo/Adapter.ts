@@ -187,6 +187,7 @@ export interface KlaviyoAdapterSendGiftCardDelivery {
         message: string;
         formattedPrice: string;
         redeemCode: string;
+        expirationDate: string;
     };
 }
 
@@ -203,6 +204,7 @@ export interface KlaviyoAdapterSendGiftCardDeliveryToEmailAddress {
         message: string;
         formattedPrice: string;
         redeemCode: string;
+        expirationDate: string;
     };
 }
 

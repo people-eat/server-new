@@ -142,6 +142,9 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
                     message: message,
                     formattedPrice,
                     redeemCode,
+                    expirationDate: new Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin', dateStyle: 'long' }).format(
+                        new Date(giftCard.expiresAt),
+                    ),
                 },
             });
         }
@@ -160,6 +163,9 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
                     message: message,
                     formattedPrice,
                     redeemCode,
+                    expirationDate: new Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin', dateStyle: 'long' }).format(
+                        new Date(giftCard.expiresAt),
+                    ),
                 },
             });
         }

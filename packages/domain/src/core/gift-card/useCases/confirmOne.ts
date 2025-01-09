@@ -44,7 +44,7 @@ export async function confirmOne({ runtime, request }: ConfirmOneGiftCardInput):
         return false;
     }
 
-    const { initialBalanceAmount, userId, buyer, recipient, invoiceAddress } = giftCard;
+    const { initialBalanceAmount, userId, buyer, recipient, invoiceAddress, expiresAt } = giftCard;
 
     const formatPrice = (amount: number, currencyCode: string): string => Math.round(amount / 100).toFixed(2) + ' ' + currencyCode;
     const formattedPrice: string = formatPrice(giftCard.initialBalanceAmount, '€');
@@ -89,6 +89,9 @@ export async function confirmOne({ runtime, request }: ConfirmOneGiftCardInput):
                 message: giftCard.message,
                 formattedPrice,
                 redeemCode: giftCard.redeemCode,
+                expirationDate: new Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin', dateStyle: 'long' }).format(
+                    new Date(expiresAt),
+                ),
             },
         });
 
@@ -143,6 +146,9 @@ export async function confirmOne({ runtime, request }: ConfirmOneGiftCardInput):
                 message: giftCard.message,
                 formattedPrice,
                 redeemCode: giftCard.redeemCode,
+                expirationDate: new Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin', dateStyle: 'long' }).format(
+                    new Date(expiresAt),
+                ),
             },
         });
 
