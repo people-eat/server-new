@@ -66,16 +66,30 @@ export function createKlaviyoEmailAdapter({ logger, apiKey }: CreateEmailAdapter
             const metricId: string = 'booking-request-created-with-menu-for-cook';
             await sendToUser({ logger, profiles, events, recipient, metricId, data });
         },
-        sendGiftCardPurchaseConfirmation: async ({
+        sendGiftCardPurchaseConfirmationToUser: async ({
             recipient,
             data,
-        }: Klaviyo.KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest): Promise<void> => {
+        }: Klaviyo.KlaviyoAdapterSendGiftCardPurchaseConfirmationToUserRequest): Promise<void> => {
             const metricId: string = 'gift-card-purchase';
             await sendToUser({ logger, profiles, events, recipient, metricId, data });
+        },
+        sendGiftCardPurchaseConfirmationToEmailAddress: async ({
+            emailAddress,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendGiftCardPurchaseConfirmationToEmailAddress): Promise<void> => {
+            const metricId: string = 'gift-card-purchase';
+            await sendToEmail({ logger, profiles, events, email: emailAddress, metricId, data });
         },
         sendGiftCardDelivery: async ({ recipient, data }: Klaviyo.KlaviyoAdapterSendGiftCardDelivery): Promise<void> => {
             const metricId: string = 'gift-card-delivery';
             await sendToUser({ logger, profiles, events, recipient, metricId, data });
+        },
+        sendGiftCardDeliveryToEmailAddress: async ({
+            emailAddress,
+            data,
+        }: Klaviyo.KlaviyoAdapterSendGiftCardDeliveryToEmailAddress): Promise<void> => {
+            const metricId: string = 'gift-card-delivery';
+            await sendToEmail({ logger, profiles, events, email: emailAddress, metricId, data });
         },
         sendResetPassword: async ({ recipient, data }: Klaviyo.KlaviyoAdapterSendResetPassword): Promise<void> => {
             const metricId: string = 'reset-password';

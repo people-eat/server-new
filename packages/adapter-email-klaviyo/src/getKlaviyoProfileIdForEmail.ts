@@ -11,6 +11,8 @@ export async function getKlaviyoProfileIdForEmail({ logger, profiles, email }: G
     const { body: getResponseBodyByEmail } = await profiles.getProfiles({ filter: `equals(email,"${email}")` });
     const [existingProfileByEmail] = getResponseBodyByEmail.data;
 
+    console.log({ existingProfileByEmail });
+
     if (!existingProfileByEmail) {
         try {
             const { body: createResponseBody } = await profiles.createProfile({

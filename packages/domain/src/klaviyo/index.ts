@@ -1,5 +1,7 @@
 export {
     Adapter,
+    KlaviyoAdapterSendGiftCardDeliveryToEmailAddress,
+    KlaviyoAdapterSendGiftCardPurchaseConfirmationToEmailAddress,
     type KlaviyoAdapterSendBookingRequestCreatedWithMenuForCookConfirmation,
     type KlaviyoAdapterSendBookingRequestCreatedWithMenuForCustomerConfirmation,
     type KlaviyoAdapterSendBookingRequestPaymentAnnouncementForCustomer,
@@ -8,7 +10,7 @@ export {
     type KlaviyoAdapterSendCookDeclinedBookingRequest,
     type KlaviyoAdapterSendCookDeclinedBookingRequestForAdmins,
     type KlaviyoAdapterSendGiftCardDelivery,
-    type KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest,
+    type KlaviyoAdapterSendGiftCardPurchaseConfirmationToUserRequest,
     type KlaviyoAdapterSendGlobalBookingRequestCreatedForCustomerConfirmation,
     type KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCookRequest,
     type KlaviyoAdapterSendGlobalBookingRequestMatchedConfirmationForCustomerRequest,

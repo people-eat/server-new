@@ -150,8 +150,20 @@ export interface KlaviyoAdapterSendBookingRequestCreatedWithMenuForCookConfirmat
     };
 }
 
-export interface KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest {
+export interface KlaviyoAdapterSendGiftCardPurchaseConfirmationToUserRequest {
     recipient: Recipient;
+    data: {
+        occasion: string;
+        recipient: {
+            firstName: string;
+        };
+        formattedPrice: string;
+        automaticDeliveryEnabledLabel: string;
+    };
+}
+
+export interface KlaviyoAdapterSendGiftCardPurchaseConfirmationToEmailAddress {
+    emailAddress: string;
     data: {
         occasion: string;
         recipient: {
@@ -164,6 +176,22 @@ export interface KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest {
 
 export interface KlaviyoAdapterSendGiftCardDelivery {
     recipient: Recipient;
+    data: {
+        recipient: {
+            firstName: string;
+        };
+        buyer: {
+            firstName: string;
+            lastName: string;
+        };
+        message: string;
+        formattedPrice: string;
+        redeemCode: string;
+    };
+}
+
+export interface KlaviyoAdapterSendGiftCardDeliveryToEmailAddress {
+    emailAddress: string;
     data: {
         recipient: {
             firstName: string;
@@ -332,8 +360,10 @@ export interface Adapter {
     sendBookingRequestCreatedWithMenuForCookConfirmation(
         request: KlaviyoAdapterSendBookingRequestCreatedWithMenuForCookConfirmation,
     ): Promise<void>;
-    sendGiftCardPurchaseConfirmation(request: KlaviyoAdapterSendGiftCardPurchaseConfirmationRequest): Promise<void>;
+    sendGiftCardPurchaseConfirmationToUser(request: KlaviyoAdapterSendGiftCardPurchaseConfirmationToUserRequest): Promise<void>;
+    sendGiftCardPurchaseConfirmationToEmailAddress(request: KlaviyoAdapterSendGiftCardPurchaseConfirmationToEmailAddress): Promise<void>;
     sendGiftCardDelivery(request: KlaviyoAdapterSendGiftCardDelivery): Promise<void>;
+    sendGiftCardDeliveryToEmailAddress(request: KlaviyoAdapterSendGiftCardDeliveryToEmailAddress): Promise<void>;
     sendResetPassword(request: KlaviyoAdapterSendResetPassword): Promise<void>;
     sendNewChatMessageNotification(request: KlaviyoAdapterSendNewChatMessageNotification): Promise<void>;
     sendNewsletterSubscriptionConfirmation(request: KlaviyoAdapterSendNewsletterSubscriptionConfirmation): Promise<void>;

@@ -52,7 +52,7 @@ export async function confirmOne({ runtime, request }: ConfirmOneGiftCardInput):
     if (userId) {
         const user: DBUser | undefined = await dataSourceAdapter.userRepository.findOne({ userId });
         if (!user || !user.emailAddress) return false;
-        await klaviyoEmailAdapter.sendGiftCardPurchaseConfirmation({
+        await klaviyoEmailAdapter.sendGiftCardPurchaseConfirmationToUser({
             recipient: {
                 userId: user.userId,
                 emailAddress: user.emailAddress,
@@ -95,14 +95,8 @@ export async function confirmOne({ runtime, request }: ConfirmOneGiftCardInput):
     }
 
     if (buyer) {
-        await klaviyoEmailAdapter.sendGiftCardPurchaseConfirmation({
-            recipient: {
-                userId: 'during-gift-card-purchase',
-                emailAddress: buyer.emailAddress,
-                phoneNumber: undefined,
-                firstName: buyer.firstName,
-                lastName: buyer.lastName,
-            },
+        await klaviyoEmailAdapter.sendGiftCardPurchaseConfirmationToEmailAddress({
+            emailAddress: buyer.emailAddress,
             data: {
                 occasion: giftCard.occasion,
                 recipient: {

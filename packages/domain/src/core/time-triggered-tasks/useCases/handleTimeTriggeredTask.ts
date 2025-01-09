@@ -169,14 +169,8 @@ export async function handleTimeTriggeredTask(runtime: Runtime, timeTriggeredTas
         }
 
         if (buyer && recipient.deliveryInformation) {
-            await runtime.klaviyoEmailAdapter.sendGiftCardDelivery({
-                recipient: {
-                    userId: 'during-gift-card-purchase',
-                    emailAddress: buyer.emailAddress,
-                    phoneNumber: undefined,
-                    firstName: buyer.firstName,
-                    lastName: buyer.lastName,
-                },
+            await runtime.klaviyoEmailAdapter.sendGiftCardDeliveryToEmailAddress({
+                emailAddress: buyer.emailAddress,
                 data: {
                     recipient: {
                         firstName: recipient.firstName,
